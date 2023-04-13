@@ -1,0 +1,447 @@
+---
+layout: post
+toc: true
+title: Splatoon 2 (115)
+---
+
+This page describes the methods that are only seen in Splatoon 2.
+
+## Methods
+
+| Method ID | Method Name                                                  |
+| --------- | ------------------------------------------------------------ |
+| 47        | [CoconutRegisterMeta](#47-coconutregistermeta)               |
+| 48        | [CoconutRatePost](#48-coconutratepost)                       |
+| 49        | [CoconutGetObjectInfos](#49-coconutgetobjectinfos)           |
+| 50        | [CoconutReportViolation](#50-coconutreportviolation)         |
+| 51        | [UploadRegularMatchResult](#51-uploadregularmatchresult)     |
+| 52        | [UploadGachiMatchResult](#52-uploadgachimatchresult)         |
+| 53        | [UploadLeagueMatchResult](#53-uploadleaguematchresult)       |
+| 54        | [UploadFesMatchResult](#54-uploadfesmatchresult)             |
+| 55        | [GetOrderedGear](#55-getorderedgear)                         |
+| 56        | [PurchaseGear](#56-purchasegear)                             |
+| 57        | [UploadTimeAttack](#57-uploadtimeattack)                     |
+| 58        | [CoconutRegisterMetaByParam](#58-coconutregistermetabyparam) |
+| 59        | [UploadFesMatchResultV2](#59-uploadfesmatchresultv2)         |
+| 60        | UploadXMatchResult                                           |
+| 61        | UploadRegularMatchResultV2                                   |
+| 62        | UploadGachiMatchResultV2                                     |
+| 63        | UploadLeagueMatchResultV2                                    |
+| 64        | UploadFesMatchResultV3                                       |
+| 65        | UploadXMatchResultV2                                         |
+| 66        | [PreparePostPlayLog](#66-preparepostplaylog)                 |
+| 67        | [PrepareGetPlayLog](#67-preparegetplaylog)                   |
+| 68        | UploadFesMatchResultV4                                       |
+| 69        | UploadCoopResult                                             |
+
+### (47) CoconutRegisterMeta
+#### Request
+
+| Type          | Name |
+| ------------- | ---- |
+| [CoconutMeta] | meta |
+| [String]      | url  |
+
+#### Response
+This method does not return anything.
+
+### (48) CoconutRatePost
+#### Request
+
+| Type   | Name   |
+| ------ | ------ |
+| Uint64 | dataId |
+
+#### Response
+This method does not return anything.
+
+### (49) CoconutGetObjectInfos
+#### Request
+
+| Type              | Name  |
+| ----------------- | ----- |
+| [CoconutGetParam] | param |
+
+#### Response
+
+| Type                           | Name     |
+| ------------------------------ | -------- |
+| [List]&lt;[CoconutGetInfo]&gt; | pInfos   |
+| [List]&lt;[Result]&gt;         | pResults |
+
+### (50) CoconutReportViolation
+#### Request
+
+| Type               | Name      |
+| ------------------ | --------- |
+| [CoconutViolation] | violation |
+
+#### Response
+This method does not return anything.
+
+### (51) UploadRegularMatchResult
+#### Request
+
+| Type                 | Name  |
+| -------------------- | ----- |
+| [CalicoRegularStats] | stats |
+
+#### Response
+This method does not return anything.
+
+### (52) UploadGachiMatchResult
+#### Request
+
+| Type               | Name  |
+| ------------------ | ----- |
+| [CalicoGachiStats] | stats |
+
+#### Response
+This method does not return anything.
+
+### (53) UploadLeagueMatchResult
+#### Request
+
+| Type                | Name  |
+| ------------------- | ----- |
+| [CalicoLeagueStats] | stats |
+
+#### Response
+This method does not return anything.
+
+### (54) UploadFesMatchResult
+#### Request
+
+| Type             | Name  |
+| ---------------- | ----- |
+| [CalicoFesStats] | stats |
+
+#### Response
+This method does not return anything.
+
+### (55) GetOrderedGear
+#### Request
+This method does not take any parameters.
+
+#### Response
+
+| Type          | Name |
+| ------------- | ---- |
+| [OrderedInfo] | info |
+
+### (56) PurchaseGear
+#### Request
+
+| Type          | Name |
+| ------------- | ---- |
+| [OrderedInfo] | info |
+
+#### Response
+This method does not return anything.
+
+### (57) UploadTimeAttack
+#### Request
+
+| Type             | Name |
+| ---------------- | ---- |
+| [TimeAttackInfo] | info |
+
+#### Response
+This method does not return anything.
+
+### (58) CoconutRegisterMetaByParam
+#### Request
+
+| Type          | Name    |
+| ------------- | ------- |
+| [CoconutMeta] | meta    |
+| [String]      | snsName |
+| [String]      | postId  |
+
+#### Response
+This method does not return anything.
+
+### (59) UploadFesMatchResultV2
+#### Request
+
+| Type               | Name  |
+| ------------------ | ----- |
+| [CalicoFesStatsV2] | stats |
+
+#### Response
+This method does not return anything.
+
+### (66) PreparePostPlayLog
+#### Request
+
+| Type                                                          | Description |
+| ------------------------------------------------------------- | ----------- |
+| [PlayLogPreparePostParam](#playlogpreparepostparam-structure) | Param       |
+
+#### Response
+
+| Type                   | Description       |
+| ---------------------- | ----------------- |
+| [DataStoreReqPostInfo] | POST request info |
+
+### (67) PrepareGetPlayLog
+#### Request
+
+| Type                                                        | Description |
+| ----------------------------------------------------------- | ----------- |
+| [PlayLogPrepareGetParam](#playlogpreparegetparam-structure) | Param       |
+
+#### Response
+
+| Type                  | Description      |
+| --------------------- | ---------------- |
+| [DataStoreReqGetInfo] | GET request info |
+
+## Types
+### CalicoFesStats ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [CalicoRegularStats]
+{: .prompt-info }
+
+| Type   | Name                  |
+| ------ | --------------------- |
+| Uint32 | fesId                 |
+| Uint8  | themeId               |
+| Sint32 | fesGrade              |
+| Sint32 | fesPoint              |
+| Uint32 | fesPower              |
+| Uint32 | maxFesPower           |
+| Sint32 | myEstimateFesPower    |
+| Sint32 | otherEstimateFesPower |
+
+### CalicoFesStatsV2 ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [CalicoFesStats]
+{: .prompt-info }
+
+| Type  | Name         |
+| ----- | ------------ |
+| Uint8 | otherThemeId |
+
+### CalicoGachiStats ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [CalicoStatsBase]
+{: .prompt-info }
+
+| Type   | Name               |
+| ------ | ------------------ |
+| Sint32 | elapsedTime        |
+| Sint8  | myTeamCount        |
+| Sint8  | otherTeamCount     |
+| Sint32 | udemae             |
+| Sint32 | estimateGachiPower |
+
+### CalicoLeagueStats ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [CalicoGachiStats]
+{: .prompt-info }
+
+| Type     | Name                     |
+| -------- | ------------------------ |
+| [String] | leagueId                 |
+| Uint64   | tagId                    |
+| Sint32   | leaguePoint              |
+| Sint32   | maxLeaguePoint           |
+| Sint32   | myEstimateLeaguePoint    |
+| Sint32   | otherEstimateLeaguePoint |
+
+### CalicoPlayerResult ([Structure])
+
+| Type                 | Name           |
+| -------------------- | -------------- |
+| [CalicoPlayerSimple] | playerSimple   |
+| Sint32               | killCount      |
+| Sint32               | assistCount    |
+| Sint32               | deathCount     |
+| Sint32               | specialCount   |
+| Sint32               | gamePaintPoint |
+| Sint32               | sortScore      |
+
+### CalicoPlayerSimple ([Structure])
+
+| Type                 | Name            |
+| -------------------- | --------------- |
+| [PID]                | principalId     |
+| [String]             | name            |
+| Uint8                | playerType      |
+| Sint32               | udemae          |
+| Sint32               | playerRank      |
+| Sint32               | starRank        |
+| Sint32               | fesGrade        |
+| Sint32               | weaponId        |
+| Sint32               | headId          |
+| [List]&lt;Sint32&gt; | headSkillIds    |
+| Sint32               | clothesId       |
+| [List]&lt;Sint32&gt; | clothesSkillIds |
+| Sint32               | shoesId         |
+| [List]&lt;Sint32&gt; | shoesSkillIds   |
+
+### CalicoRegularStats ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [CalicoStatsBase]
+{: .prompt-info }
+
+| Type   | Name                |
+| ------ | ------------------- |
+| Sint32 | myTeamPercentage    |
+| Sint32 | otherTeamPercentage |
+| Sint32 | winMeter            |
+
+### CalicoStatsBase ([Structure])
+
+| Type                               | Name             |
+| ---------------------------------- | ---------------- |
+| Uint32                             | gameMode         |
+| Sint32                             | rule             |
+| Uint8                              | result           |
+| Sint32                             | stage            |
+| [CalicoPlayerResult]               | playerResult     |
+| [List]&lt;[CalicoPlayerResult]&gt; | myTeamMembers    |
+| [List]&lt;[CalicoPlayerResult]&gt; | otherTeamMembers |
+| Sint32                             | weaponPaintPoint |
+| [DateTime]                         | startTime        |
+| Uint64                             | battleNum        |
+| Sint32                             | playerRank       |
+| Sint32                             | starRank         |
+
+### CoconutGetInfo ([Structure])
+
+| Type                  | Name |
+| --------------------- | ---- |
+| [DataStoreReqGetInfo] | info |
+| [CoconutMeta]         | meta |
+
+### CoconutGetParam ([Structure])
+
+| Type                 | Name       |
+| -------------------- | ---------- |
+| [List]&lt;Uint64&gt; | uniqueIds  |
+| Uint8                | getType    |
+| Uint8                | region     |
+| Uint32               | festivalId |
+
+### CoconutMeta ([Structure])
+
+| Type      | Name       |
+| --------- | ---------- |
+| Uint64    | dataId     |
+| Uint64    | tweetId    |
+| Uint8     | region     |
+| Uint8     | postType   |
+| Uint8     | themeId    |
+| Uint32    | festivalId |
+| [String]  | language   |
+| [qBuffer] | binaryData |
+
+### CoconutViolation ([Structure])
+
+| Type     | Name         |
+| -------- | ------------ |
+| Uint64   | dataId       |
+| [String] | categoryCode |
+| [String] | reason       |
+
+### OrderedInfo ([Structure])
+
+| Type   | Name     |
+| ------ | -------- |
+| Sint32 | gearKind |
+| Sint32 | gearId   |
+| Sint32 | skillId  |
+| Sint32 | price    |
+
+### PlayLogEntry ([Structure])
+
+| Type                             | Description |
+| -------------------------------- | ----------- |
+| [PID]                            | User id     |
+| [String]                         | Player name |
+| Uint64                           | Unknown     |
+| [Map]&lt;[String], [Variant]&gt; | Properties  |
+
+### Property keys
+
+| Key      | Description |
+| -------- | ----------- |
+| `save`   |             |
+| `udemae` |             |
+
+### PlayLogPrepareGetParam ([Structure])
+
+| Type       | Description |
+| ---------- | ----------- |
+| Uint64     | Unknown     |
+| [DateTime] | Unknown     |
+| Uint32     | Unknown     |
+
+### PlayLogPreparePostParam ([Structure])
+
+| Type                                        | Description |
+| ------------------------------------------- | ----------- |
+| [List]&lt;[PlayLogEntry](#playlogentry)&gt; | Entries     |
+| [DateTime]                                  | Play time   |
+| Uint32                                      | Stage id    |
+| Uint32                                      | Unknown     |
+| [Map]&lt;[String], [Variant]&gt;            | Properties  |
+
+### Property keys
+| Key              | Description |
+| ---------------- | ----------- |
+| `app_version`    |             |
+| `game_mode`      |             |
+| `game_rule`      |             |
+| `replay_version` |             |
+| `stage_id`       |             |
+| `stage_name`     |             |
+
+### StageTimeAttackInfo ([Structure])
+
+| Type                                         | Name         |
+| -------------------------------------------- | ------------ |
+| [Map]&lt;Sint32, [StageTimeAttackWeapon]&gt; | clearWeapons |
+
+### StageTimeAttackWeapon ([Structure])
+
+| Type   | Name        |
+| ------ | ----------- |
+| Sint32 | weaponLevel |
+| Sint32 | clearTime   |
+
+### TimeAttackInfo ([Structure])
+
+| Type                                       | Name       |
+| ------------------------------------------ | ---------- |
+| [Map]&lt;Sint32, [StageTimeAttackInfo]&gt; | stageInfos |
+
+[Result]: /docs/nex/types#result
+[String]: /docs/nex/types#string
+[Buffer]: /docs/nex/types#buffer
+[qBuffer]: /docs/nex/types#qbuffer
+[List]: /docs/nex/types#list
+[Map]: /docs/nex/types#map
+[DateTime]: /docs/nex/types#date-time
+[Structure]: /docs/nex/types#structure
+[Data]: /docs/nex/types#any-data-holder
+[PID]: /docs/nex/types#pid
+[Variant]: /docs/nex/types#variant
+
+[CoconutMeta]: #coconutmeta-structure
+[CoconutGetParam]: #coconutgetparam-structure
+[CoconutGetInfo]: #coconutgetinfo-structure
+[CoconutViolation]: #coconutviolation-structure
+[CalicoRegularStats]: #calicoregularstats-structure
+[CalicoGachiStats]: #calicogachistats-structure
+[CalicoLeagueStats]: #calicoleaguestats-structure
+[CalicoFesStats]: #calicofesstats-structure
+[OrderedInfo]: #orderedinfo-structure
+[TimeAttackInfo]: #timeattackinfo-structure
+[CalicoFesStatsV2]: #calicofesstatsv2-structure
+[DataStoreReqGetInfo]: /docs/nex/protocols/datastore#datastorereqgetinfo-structure
+[CalicoPlayerSimple]: #calicoplayersimple-structure
+[CalicoPlayerResult]: #calicoplayerresult-structure
+[CalicoStatsBase]: #calicostatsbase-structure
+[StageTimeAttackWeapon]: #stagetimeattackweapon-structure
+[StageTimeAttackInfo]: #stagetimeattackinfo-structure
+
+[DataStoreReqGetInfo]: /docs/nex/protocols/datastore#datastorereqgetinfo-structure
+[DataStoreReqPostInfo]: /docs/nex/protocols/datastore#datastorereqpostinfo-structure

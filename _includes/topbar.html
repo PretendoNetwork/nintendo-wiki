@@ -7,6 +7,7 @@
     <span id="breadcrumb">
 
     {% assign paths = page.url | split: '/' %}
+    {% assign current_crumb = paths[0] %}
 
     {% if paths.size == 0 or page.layout == 'home' %}
       <!-- index page -->
@@ -31,12 +32,15 @@
             <span>{{ page.title }}</span>
           {% endif %}
 
-        {% elsif page.layout == 'category' or page.layout == 'tag' %}
+        {% else %}
+          {% assign current_crumb = current_crumb | append: '/' %}
+          {% assign current_crumb = current_crumb | append: item %}
           <span>
-            <a href="{{ item | relative_url }}">
-              {{ site.data.locales[site.lang].tabs[item] | default: page.title }}
+            <a href="{{ current_crumb }}">
+              {{ item }}
             </a>
           </span>
+
         {% endif %}
 
       {% endfor %}
@@ -57,14 +61,6 @@
         {{- site.data.locales[site.lang].layout[page.layout] | default: page.layout | capitalize -}}
       {% endif %}
     </div>
-
-    <i id="search-trigger" class="fas fa-search fa-fw"></i>
-    <span id="search-wrapper" class="align-items-center">
-      <i class="fas fa-search fa-fw"></i>
-      <input class="form-control" id="search-input" type="search"
-        aria-label="search" autocomplete="off" placeholder="{{ site.data.locales[site.lang].search.hint | capitalize }}...">
-    </span>
-    <span id="search-cancel" >{{ site.data.locales[site.lang].search.cancel }}</span>
   </div>
 
 </div>
