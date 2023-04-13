@@ -15,10 +15,10 @@ Every platform has its own way to find a game server. A list of game server ids 
 
 <table>
   <tr>
-    <td><b>3DS</b></td><td>The game server location is requested from the [NASC server](/docs/3ds/nasc) (LOGIN)</td>
+    <td><b>3DS</b></td><td>The game server location is requested from the <a href="/docs/3ds/nasc">NASC server</a> (LOGIN)</td>
   </tr>
   <tr>
-    <td><b>Wii U</b></td><td>The game server location is requested from the [account server](/docs/wiiu/account) (/provider/nex_token/@me)</td>
+    <td><b>Wii U</b></td><td>The game server location is requested from the <a href="/docs/wiiu/account">account server</a> (/provider/nex_token/@me)</td>
   </tr>
   <tr>
     <td><b>Switch</b></td><td>The game server is found by DNS lookup: g<code>&lt;game server id&gt;</code>-lp1.s.n.srv.nintendo.net</td>
