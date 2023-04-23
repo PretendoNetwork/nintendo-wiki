@@ -7,6 +7,7 @@ title: Ranking (112)
 ## Extended Protocols
 
 The following games have additional methods in the ranking protocol:
+* [Mario Kart 7](/docs/nex/protocols/ranking/mario-kart-7)
 * [Mario Kart 8](/docs/nex/protocols/ranking/mario-kart-8)
 * [Mario Kart 8 Deluxe](/docs/nex/protocols/ranking/mario-kart-8-deluxe)
 * [Super Smash Bros. 4](/docs/nex/protocols/ranking/super-smash-bros-4)
