@@ -59,35 +59,42 @@ No RMC response is sent.
 
 ## Friend Events
 
-| Type | Method | Data Type                          | Description                                                                       |
-| ---- | ------ | ---------------------------------- | --------------------------------------------------------------------------------- |
-| 10   | 1      | [NintendoNotificationEventGeneral] | A friend went offline                                                             |
-| 21   | 2      | [NNAInfo]                          | A friend changed or edited their mii                                              |
-| 22   |        |                                    | Mii related                                                                       |
-| 23   |        | [PrincipalPreference]              | A friend updated their preferences                                                |
-| 24   | 2      | [NintendoPresenceV2]               | A friend started a game/app                                                       |
-| 25   |        |                                    | Friend request related                                                            |
-| 26   | 1      | [NintendoNotificationEventGeneral] | A friend removed you from their from friend list or canceled their friend request |
-| 27   | 2      | [FriendRequest]                    | You received a friend request                                                     |
-| 28   |        |                                    | Friend request related                                                            |
-| 29   |        |                                    | Blacklist related                                                                 |
-| 30   | 1      | [FriendInfo]                       | You became friends                                                                |
-| 31   |        |                                    | Blacklist related                                                                 |
-| 32   |        |                                    | Blacklist related                                                                 |
-| 33   | 1      | [NintendoNotificationEventGeneral] | A friend changed their status message                                             |
-| 34   |        |                                    |                                                                                   |
-| 35   |        |                                    | Related to friend relationships                                                   |
-| 36   |        | [PersistentNotificationList]       | This seems to delete persistent notifications                                     |
+| Type | Method | Data Type                          | Description                                                                               |
+| ---- | ------ | ---------------------------------- | ----------------------------------------------------------------------------------------- |
+| 1    | 1      | [NintendoPresence]                 | (3DS) A friend updated their presence                                                     |
+| 2    | 1      | [GameKey]                          | (3DS) A friend changed their favorite game                                                |
+| 3    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed their comment                                                      |
+| 5    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed or edited their mii                                                |
+| 7    | 1      | [NintendoNotificationEventGeneral] | (3DS) You became friends                                                                  |
+| 10   | 1      | [NintendoNotificationEventGeneral] | (3DS & Wii U) A friend went offline                                                       |
+| 21   | 2      | [NNAInfo]                          | (Wii U) A friend changed or edited their mii                                              |
+| 22   |        |                                    | (Wii U) Mii related                                                                       |
+| 23   |        | [PrincipalPreference]              | (Wii U) A friend updated their preferences                                                |
+| 24   | 2      | [NintendoPresenceV2]               | (Wii U) A friend started a game/app                                                       |
+| 25   |        |                                    | (Wii U) Friend request related                                                            |
+| 26   | 1      | [NintendoNotificationEventGeneral] | (Wii U) A friend removed you from their from friend list or canceled their friend request |
+| 27   | 2      | [FriendRequest]                    | (Wii U) You received a friend request                                                     |
+| 28   |        |                                    | (Wii U) Friend request related                                                            |
+| 29   |        |                                    | (Wii U) Blacklist related                                                                 |
+| 30   | 1      | [FriendInfo]                       | (Wii U) You became friends                                                                |
+| 31   |        |                                    | (Wii U) Blacklist related                                                                 |
+| 32   |        |                                    | (Wii U) Blacklist related                                                                 |
+| 33   | 1      | [NintendoNotificationEventGeneral] | (Wii U) A friend changed their status message                                             |
+| 34   |        |                                    |                                                                                           |
+| 35   |        |                                    | (Wii U) Related to friend relationships                                                   |
+| 36   |        | [PersistentNotificationList]       | (Wii U) This seems to delete persistent notifications                                     |
 
 [Data]: /docs/nex/types#anydataholder
 [PID]: /docs/nex/types#pid
 [Structure]: /docs/nex/types#structure
 [String]: /docs/nex/types#string
-[FriendRequest]: /docs/nex/protocols/friends-wiiu#friendrequest
-[NintendoPresenceV2]: /docs/nex/protocols/friends-wiiu#nintendopresencev2
-[FriendInfo]: /docs/nex/protocols/friends-wiiu#friendinfo
-[NNAInfo]: /docs/nex/protocols/friends-wiiu#nnainfo
-[MiiV2]: /docs/nex/protocols/friends-wiiu#miiv2
-[PrincipalPreference]: /docs/nex/protocols/friends-wiiu#principalpreference
-[PersistentNotificationList]: /docs/nex/protocols/friends-wiiu#persistentnotificationlist
+[NintendoPresence]: /docs/nex/protocols/friends-3ds#nintendopresence-structure
+[GameKey]: /docs/nex/protocols/friends-3ds#gamekey-structure
+[FriendRequest]: /docs/nex/protocols/friends-wiiu#friendrequest-structure
+[NintendoPresenceV2]: /docs/nex/protocols/friends-wiiu#nintendopresencev2-structure
+[FriendInfo]: /docs/nex/protocols/friends-wiiu#friendinfo-structure
+[NNAInfo]: /docs/nex/protocols/friends-wiiu#nnainfo-structure
+[MiiV2]: /docs/nex/protocols/friends-wiiu#miiv2-structure
+[PrincipalPreference]: /docs/nex/protocols/friends-wiiu#principalpreference-structure
+[PersistentNotificationList]: /docs/nex/protocols/friends-wiiu#persistentnotificationlist-structure
 [NintendoNotificationEventGeneral]: #nintendonotificationeventgeneral-structure
