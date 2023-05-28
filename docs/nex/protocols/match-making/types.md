@@ -65,7 +65,7 @@ In NEX version 3.0, the session key was added:
 | -------- | ------------ |
 | [Buffer] | m_SessionKey |
 
-In NEX version 3.5, two more fields were added. Note that the progress score field was inserted before the session key field:
+In NEX version 3.4, a progress score field was added. Note that this field was inserted before the session key field:
 
 | Type                 | Name                  |
 | -------------------- | --------------------- |
@@ -77,6 +77,11 @@ In NEX version 3.5, two more fields were added. Note that the progress score fie
 | Uint32               | m_ParticipationCount  |
 | Uint8                | m_ProgressScore       |
 | [Buffer]             | m_SessionKey          |
+
+In NEX version 3.5, one more field was added:
+
+| Type                 | Name                  |
+| -------------------- | --------------------- |
 | Uint32               | m_Option0             |
 
 In NEX version 3.6, the revision number was increased to 1 and two more fields were added:
@@ -107,7 +112,7 @@ In NEX version 4.0, the revision number was set back to 0 and one more field was
 | [String] | m_Codeword | NEX v4.0.0 and later |
 
 ## MatchmakeSessionSearchCriteria ([Structure])
-Up to NEX version 3.4, this structure looks as follows:
+Up to NEX version 3.3, this structure looks as follows:
 
 | Type                   | Name                  |
 | ---------------------- | --------------------- |
@@ -121,7 +126,7 @@ Up to NEX version 3.4, this structure looks as follows:
 | Bool                   | m_ExcludeNonHostPid   |
 | Uint32                 | m_SelectionMethod     |
 
-In NEX version 3.5, one more field was added:
+In NEX version 3.4, one more field was added:
 
 | Type   | Name                 |
 | ------ | -------------------- |
