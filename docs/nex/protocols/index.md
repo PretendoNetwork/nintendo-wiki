@@ -78,7 +78,7 @@ Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX.
 | 47  | Ubi friends                                                                  |
 | 48  | Skill rating                                                                 |
 | 49  | [Uplay win](/docs/nex/protocols/uplay-win)                                   |
-| 51  | Title storage                                                                |
+| 51  | [Title storage](/docs/nex/protocols/title-storage)                           |
 | 53  | [User storage](/docs/nex/protocols/user-storage)                             |
 | 55  | [Player stats](/docs/nex/protocols/player-stats)                             |
 | 60  | Spark                                                                        |
@@ -86,4 +86,6 @@ Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX.
 | 72  | [User account management](/docs/nex/protocols/user-account-management)       |
 | 84  | Siege admin                                                                  |
 | ?   | [Web notifications storage](/docs/nex/protocols/web-notifications-storage)   |
+| ?   | [Title storage admin](/docs/nex/protocols/title-storage-admin)               |
 | ?   | [User storage admin](/docs/nex/protocols/user-storage-admin)                 |
+| ?   | [OLS storage](/docs/nex/protocols/ols-storage)                               |

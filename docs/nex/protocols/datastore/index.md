@@ -691,6 +691,11 @@ This method does not return anything.
 | Uint32                       | lockId            |
 | [DataStorePersistenceTarget] | persistenceTarget |
 | Uint64                       | accessPassword    |
+
+In NEX version 3.5, one more field was added:
+
+| Type                         | Name              |
+| ---------------------------- | ----------------- |
 | [List]&lt;[String]&gt;       | extraData         |
 
 ### DataStoreReqGetInfoV1 ([Structure])
@@ -710,6 +715,11 @@ This method does not return anything.
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
 | Uint32                            | size           |
 | [Buffer]                          | rootCaCert     |
+
+In NEX version 3.5, one more field was added:
+
+| Type                              | Name           |
+| --------------------------------- | -------------- |
 | Uint64                            | dataId         |
 
 ### DataStoreReqGetAdditionalMeta ([Structure])
@@ -753,6 +763,11 @@ This method does not return anything.
 | [List]&lt;[String]&gt;                           | tags                 |
 | [List]&lt;[DataStoreRatingInitParamWithSlot]&gt; | ratingInitParams     |
 | [DataStorePersistenceInitParam]                  | persistenceInitParam |
+
+In NEX version 3.5, one more field was added:
+
+| Type                                             | Name                 |
+| ------------------------------------------------ | -------------------- |
 | [List]&lt;[String]&gt;                           | extraData            |
 
 ### DataStoreReqPostInfoV1 ([Structure])
@@ -827,6 +842,11 @@ This method does not return anything.
 | Uint16                            | dataType          |
 | Uint8                             | status            |
 | [DataStoreChangeMetaCompareParam] | compareParam      |
+
+Revision 1:
+
+| Type                              | Name              |
+| --------------------------------- | ----------------- |
 | [DataStorePersistenceTarget]      | persistenceTarget |
 
 ### DataStoreGetMetaParam ([Structure])
@@ -890,6 +910,11 @@ Result option flags:
 | Uint64                 | dataId         |
 | Uint32                 | size           |
 | Uint64                 | updatePassword |
+
+In NEX version 3.5, one more field was added:
+
+| Type                   | Name           |
+| ---------------------- | -------------- |
 | [List]&lt;[String]&gt; | extraData      |
 
 ### DataStoreReqUpdateInfo ([Structure])
@@ -930,6 +955,11 @@ Result option flags:
 | [ResultRange]          | resultRange            |
 | Uint8                  | resultOption           |
 | Uint32                 | minimalRatingFrequency |
+
+In NEX version 3.5, one more field was added:
+
+| Type                   | Name                   |
+| ---------------------- | ---------------------- |
 | Bool                   | useCache               |
 
 Only present on Switch:

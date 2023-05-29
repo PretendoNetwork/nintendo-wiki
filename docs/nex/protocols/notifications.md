@@ -24,7 +24,7 @@ No RMC response is sent.
 ### NotificationEvent ([Structure])
 Most notification types are predefined. However, some games also implement their own notification types (see [libeagle](/docs/switch/eagle) for example).
 
-**Wii U:**
+**Wii U and 3DS:**
 
 | Type     | Name        |
 | -------- | ----------- |
@@ -33,6 +33,12 @@ Most notification types are predefined. However, some games also implement their
 | Uint32   | m_uiParam1  |
 | Uint32   | m_uiParam2  |
 | [String] | m_strParam  |
+
+In NEX version 3.5, a new field was added:
+
+| Type     | Name       |
+| -------- | ---------- |
+| Uint32   | m_uiParam3 |
 
 **Switch:**
 
@@ -67,6 +73,7 @@ The following field is only present in revision 1:
 | 4000   | Ownership changed               |
 | 109000 | Gathering unregistered          |
 | 110000 | Host changed                    |
+| 115000 | Service item request completed  |
 | 116000 | Matchmake referee round started |
 | 120000 | System password changed         |
 | 121000 | System password cleared         |
@@ -106,6 +113,14 @@ The following field is only present in revision 1:
 | ----------- | ------------ |
 | m_pidSource | Principal id |
 | m_uiParam1  | Gathering id |
+
+### Notification type 115000:
+
+| Field       | Description                     |
+| ----------- | ------------------------------- |
+| m_pidSource | Principal that made the request |
+| m_uiParam1  | Request id                      |
+| m_uiParam2  | Unknown                         |
 
 ### Notification type 116000:
 

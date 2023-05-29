@@ -40,9 +40,9 @@ Official name: `NintendoFriendPresenceProtocol`
 ### (1) UpdateProfile
 #### Request
 
-| Type                    | Description  |
-| ----------------------- | ------------ |
-| [MyProfile](#myprofile) | Profile data |
+| Type                              | Description  |
+| --------------------------------- | ------------ |
+| [MyProfile](#myprofile-structure) | Profile data |
 
 #### Response
 This method does not return anything
@@ -50,9 +50,9 @@ This method does not return anything
 ### (2) UpdateMii
 #### Request
 
-| Type        | Description |
-| ----------- | ----------- |
-| [Mii](#mii) | Mii         |
+| Type                  | Description |
+| --------------------- | ----------- |
+| [Mii](#mii-structure) | Mii         |
 
 #### Response
 This method does not return anything
@@ -60,9 +60,9 @@ This method does not return anything
 ### (3) UpdateMiiList
 #### Request
 
-| Type                | Description |
-| ------------------- | ----------- |
-| [MiiList](#miilist) | Mii list    |
+| Type                          | Description |
+| ----------------------------- | ----------- |
+| [MiiList](#miilist-structure) | Mii list    |
 
 #### Response
 This method does not return anything.
@@ -70,9 +70,9 @@ This method does not return anything.
 ### (4) UpdatePlayedGames
 #### Request
 
-| Type                                    | Description  |
-| --------------------------------------- | ------------ |
-| [List]&lt;[PlayedGame](#playedgame)&gt; | Played games |
+| Type                                              | Description  |
+| ------------------------------------------------- | ------------ |
+| [List]&lt;[PlayedGame](#playedgame-structure)&gt; | Played games |
 
 #### Response
 This method does not return anything.
@@ -80,11 +80,11 @@ This method does not return anything.
 ### (5) UpdatePreference
 #### Request
 
-| Type | Description |
-| ---- | ----------- |
-| Bool | Unknown     |
-| Bool | Unknown     |
-| Bool | Unknown     |
+| Type | Description                  |
+| ---- | ---------------------------- |
+| Bool | Show online presence         |
+| Bool | Show currently playing title |
+| Bool | Show played titles           |
 
 #### Response
 This method does not return anything
@@ -92,97 +92,97 @@ This method does not return anything
 ### (6) GetFriendMii
 #### Request
 
-| Type                                    | Description |
-| --------------------------------------- | ----------- |
-| [List]&lt;[FriendInfo](#friendinfo)&gt; | Friends     |
+| Type                                              | Description |
+| ------------------------------------------------- | ----------- |
+| [List]&lt;[FriendInfo](#friendinfo-structure)&gt; | Friends     |
 
 #### response
 
-| Type                                  | Description |
-| ------------------------------------- | ----------- |
-| [List]&lt;[FriendMii](#friendmii)&gt; | Miis        |
+| Type                                            | Description |
+| ----------------------------------------------- | ----------- |
+| [List]&lt;[FriendMii](#friendmii-structure)&gt; | Miis        |
 
 ### (7) GetFriendMiiList
 #### Request
 
-| Type                                    | Description |
-| --------------------------------------- | ----------- |
-| [List]&lt;[FriendInfo](#friendinfo)&gt; | Friends     |
+| Type                                              | Description |
+| ------------------------------------------------- | ----------- |
+| [List]&lt;[FriendInfo](#friendinfo-structure)&gt; | Friends     |
 
 #### Response
 
-| Type                                          | Description |
-| --------------------------------------------- | ----------- |
-| [List]&lt;[FriendMiiList](#friendmiilist)&gt; | Mii lists   |
+| Type                                                    | Description |
+| ------------------------------------------------------- | ----------- |
+| [List]&lt;[FriendMiiList](#friendmiilist-structure)&gt; | Mii lists   |
 
 ### (8) IsActiveGame
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
-| [GameKey](#gamekey)  | Game key    |
+| Type                          | Description   |
+| ----------------------------- | ------------- |
+| [List]&lt;[PID]&gt;           | Principal ids |
+| [GameKey](#gamekey-structure) | Game key      |
 
 #### Response
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
+| Type                | Description   |
+| ------------------- | ------------- |
+| [List]&lt;[PID]&gt; | Principal ids |
 
 ### (9) GetPrincipalIDByLocalFriendCode
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| Uint64               | Unknown     |
-| [List]&lt;Uint64&gt; | Unknown     |
+| Type                 | Description        |
+| -------------------- | ------------------ |
+| Uint64               | Local friend code  |
+| [List]&lt;Uint64&gt; | Local friend codes |
 
 #### Response
 
-| Type                                                    | Description          |
-| ------------------------------------------------------- | -------------------- |
-| [List]&lt;[FriendRelationship](#friendrelationship)&gt; | Friend relationships |
+| Type                                                              | Description          |
+| ----------------------------------------------------------------- | -------------------- |
+| [List]&lt;[FriendRelationship](#friendrelationship-structure)&gt; | Friend relationships |
 
 ### (10) GetFriendRelationships
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
-
-#### Response
-
-| Type                                                    | Description          |
-| ------------------------------------------------------- | -------------------- |
-| [List]&lt;[FriendRelationship](#friendrelationship)&gt; | Friend relationships |
-
-### (11) AddFriendByPrincipalID
-#### Request
-
-| Type   | Description  |
-| ------ | ------------ |
-| Uint64 | Unknown      |
-| [PID]  | Principal id |
-
-#### Response
-
-| Type                                      | Description         |
-| ----------------------------------------- | ------------------- |
-| [FriendRelationship](#friendrelationship) | Friend relationship |
-
-### (12) AddFriendBylstPrincipalID
-#### Request
-
 | Type                | Description   |
 | ------------------- | ------------- |
-| Uint64              | Unknown       |
 | [List]&lt;[PID]&gt; | Principal ids |
 
 #### Response
 
-| Type                                                    | Description          |
-| ------------------------------------------------------- | -------------------- |
-| [List]&lt;[FriendRelationship](#friendrelationship)&gt; | Friend relationships |
+| Type                                                              | Description          |
+| ----------------------------------------------------------------- | -------------------- |
+| [List]&lt;[FriendRelationship](#friendrelationship-structure)&gt; | Friend relationships |
+
+### (11) AddFriendByPrincipalID
+#### Request
+
+| Type   | Description       |
+| ------ | ----------------- |
+| Uint64 | Local friend code |
+| [PID]  | Principal id      |
+
+#### Response
+
+| Type                                                | Description         |
+| --------------------------------------------------- | ------------------- |
+| [FriendRelationship](#friendrelationship-structure) | Friend relationship |
+
+### (12) AddFriendBylstPrincipalID
+#### Request
+
+| Type                | Description       |
+| ------------------- | ----------------- |
+| Uint64              | Local friend code |
+| [List]&lt;[PID]&gt; | Principal ids     |
+
+#### Response
+
+| Type                                                              | Description          |
+| ----------------------------------------------------------------- | -------------------- |
+| [List]&lt;[FriendRelationship](#friendrelationship-structure)&gt; | Friend relationships |
 
 ### (13) RemoveFriendByLocalFriendCode
 #### Request
@@ -210,9 +210,9 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                    | Description          |
-| ------------------------------------------------------- | -------------------- |
-| [List]&lt;[FriendRelationship](#friendrelationship)&gt; | Friend relationships |
+| Type                                                              | Description          |
+| ----------------------------------------------------------------- | -------------------- |
+| [List]&lt;[FriendRelationship](#friendrelationship-structure)&gt; | Friend relationships |
 
 ### (16) UpdateBlackList
 #### Request
@@ -227,25 +227,25 @@ This method does not return anything.
 ### (17) SyncFriend
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| Uint64               | Unknown     |
-| [List]&lt;Uint32&gt; | Unknown     |
-| [List]&lt;Uint64&gt; | Unknown     |
+| Type                 | Description        |
+| -------------------- | ------------------ |
+| Uint64               | Local friend code  |
+| [List]&lt;[PID]&gt;  | Principal ids      |
+| [List]&lt;Uint64&gt; | Local friend codes |
 
 #### Response
 
-| Type                                                    | Description |
-| ------------------------------------------------------- | ----------- |
-| [List]&lt;[FriendRelationship](#friendrelationship)&gt; | Friend list |
+| Type                                                              | Description |
+| ----------------------------------------------------------------- | ----------- |
+| [List]&lt;[FriendRelationship](#friendrelationship-structure)&gt; | Friend list |
 
 ### (18) UpdatePresence
 #### Request
 
-| Type                                  | Description   |
-| ------------------------------------- | ------------- |
-| [NintendoPresence](#nintendopresence) | Presence info |
-| Bool                                  | Unknown       |
+| Type                                            | Description                  |
+| ----------------------------------------------- | ---------------------------- |
+| [NintendoPresence](#nintendopresence-structure) | Presence info                |
+| Bool                                            | Show currently playing title |
 
 #### Response
 This method does not return anything
@@ -253,9 +253,9 @@ This method does not return anything
 ### (19) UpdateFavoriteGameKey
 #### Request
 
-| Type                | Description |
-| ------------------- | ----------- |
-| [GameKey](#gamekey) | Game key    |
+| Type                          | Description |
+| ----------------------------- | ----------- |
+| [GameKey](#gamekey-structure) | Game key    |
 
 #### Response
 This method does not return anything.
@@ -284,28 +284,28 @@ This method does not return anything
 ### (22) GetFriendPresence
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
+| Type                | Description   |
+| ------------------- | ------------- |
+| [List]&lt;[PID]&gt; | Principal ids |
 
 #### Response
 
-| Type                                            | Description          |
-| ----------------------------------------------- | -------------------- |
-| [List]&lt;[FriendPresence](#friendpresence)&gt; | Friend presence list |
+| Type                                                      | Description          |
+| --------------------------------------------------------- | -------------------- |
+| [List]&lt;[FriendPresence](#friendpresence-structure)&gt; | Friend presence list |
 
 ### (23) GetFriendComment
 #### Request
 
-| Type                                    | Description |
-| --------------------------------------- | ----------- |
-| [List]&lt;[FriendInfo](#friendinfo)&gt; | Friend info |
+| Type                                              | Description |
+| ------------------------------------------------- | ----------- |
+| [List]&lt;[FriendInfo](#friendinfo-structure)&gt; | Friend info |
 
 #### Response
 
-| Type                                          | Description |
-| --------------------------------------------- | ----------- |
-| [List]&lt;[FriendComment](#friendcomment)&gt; | Comments    |
+| Type                                                    | Description |
+| ------------------------------------------------------- | ----------- |
+| [List]&lt;[FriendComment](#friendcomment-structure)&gt; | Comments    |
 
 ### (24) GetFriendPicture
 #### Request
@@ -316,29 +316,29 @@ This method does not return anything
 
 #### Response
 
-| Type                                          | Description     |
-| --------------------------------------------- | --------------- |
-| [List]&lt;[FriendPicture](#friendpicture)&gt; | Friend pictures |
+| Type                                                    | Description     |
+| ------------------------------------------------------- | --------------- |
+| [List]&lt;[FriendPicture](#friendpicture-structure)&gt; | Friend pictures |
 
 ### (25) GetFriendPersistentInfo
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
+| Type                | Description   |
+| ------------------- | ------------- |
+| [List]&lt;[PID]&gt; | Principal ids |
 
 #### Response
 
-| Type                                                        | Description     |
-| ----------------------------------------------------------- | --------------- |
-| [List]&lt;[FriendPersistentInfo](#friendpersistentinfo)&gt; | Persistent info |
+| Type                                                                  | Description     |
+| --------------------------------------------------------------------- | --------------- |
+| [List]&lt;[FriendPersistentInfo](#friendpersistentinfo-structure)&gt; | Persistent info |
 
 ### (26) SendInvitation
 #### Request
 
-| Type                 | Description |
-| -------------------- | ----------- |
-| [List]&lt;Uint32&gt; | Unknown     |
+| Type                | Description   |
+| ------------------- | ------------- |
+| [List]&lt;[PID]&gt; | Principal ids |
 
 #### Response
 This method does not return anything
@@ -348,56 +348,56 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type       | Description |
-| ---------- | ----------- |
-| Uint32     | Unknown     |
-| [String]   | Comment     |
-| [DateTime] | Unknown     |
+| Type       | Description  |
+| ---------- | ------------ |
+| [PID]      | Principal id |
+| [String]   | Comment      |
+| [DateTime] | Modified at  |
 
 ### FriendInfo ([Structure])
 
-| Type       | Description |
-| ---------- | ----------- |
-| Uint32     | Unknown     |
-| [DateTime] | Unknown     |
+| Type       | Description  |
+| ---------- | ------------ |
+| [PID]      | Principal id |
+| [DateTime] | Unknown      |
 
 ### FriendMii ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type        | Description |
-| ----------- | ----------- |
-| Uint32      | Unknown     |
-| [Mii](#mii) | Mii         |
-| [DateTime]  | Unknown     |
+| Type                  | Description  |
+| --------------------- | ------------ |
+| [PID]                 | Principal id |
+| [Mii](#mii-structure) | Mii          |
+| [DateTime]            | Modified at  |
 
 ### FriendMiiList ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type                | Description |
-| ------------------- | ----------- |
-| Uint32              | Unknown     |
-| [MiiList](#miilist) | Mii list    |
-| [DateTime]          | Unknown     |
+| Type                          | Description |
+| ----------------------------- | ----------- |
+| Uint32                        | Unknown     |
+| [MiiList](#miilist-structure) | Mii list    |
+| [DateTime]                    | Unknown     |
 
 ### FriendPersistentInfo ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type                | Description        |
-| ------------------- | ------------------ |
-| [PID]               | User id            |
-| Uint8               | Region             |
-| Uint8               | Country            |
-| Uint8               | Area               |
-| Uint8               | Language           |
-| Uint8               | Platform           |
-| [GameKey](#gamekey) | Game key           |
-| [String]            | Message            |
-| [DateTime]          | Message updated at |
-| [DateTime]          | Friended at        |
-| [DateTime]          | Unknown            |
+| Type                          | Description        |
+| ----------------------------- | ------------------ |
+| [PID]                         | User id            |
+| Uint8                         | Region             |
+| Uint8                         | Country            |
+| Uint8                         | Area               |
+| Uint8                         | Language           |
+| Uint8                         | Platform           |
+| [GameKey](#gamekey-structure) | Game key           |
+| [String]                      | Message            |
+| [DateTime]                    | Message updated at |
+| [DateTime]                    | Friended at        |
+| [DateTime]                    | Last online at     |
 
 ### FriendPicture ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
@@ -413,29 +413,37 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type                                  | Description       |
-| ------------------------------------- | ----------------- |
-| Uint32                                | Unknown           |
-| [NintendoPresence](#nintendopresence) | Nintendo presence |
+| Type                                            | Description       |
+| ----------------------------------------------- | ----------------- |
+| [PID]                                           | Principal id      |
+| [NintendoPresence](#nintendopresence-structure) | Nintendo presence |
 
 ### FriendRelationship ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type   | Description |
-| ------ | ----------- |
-| Uint32 | Unknown     |
-| Uint64 | Unknown     |
-| Uint8  | Unknown     |
+| Type   | Description       |
+| ------ | ----------------- |
+| [PID]  | Principal id      |
+| Uint64 | Local friend code |
+| Uint8  | Relationship type |
+
+Relationship types:
+
+| Type   | Description           |
+| ------ | --------------------- |
+| 0      | Friendship incomplete |
+| 1      | Friendship complete   |
+| 2      | Friend does not exist |
 
 ### GameKey ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type   | Description   |
-| ------ | ------------- |
-| Uint64 | Title id      |
-| Uint16 | Title version |
+| Type   | Name          | Description   |
+| ------ | ------------- | ------------- |
+| Uint64 | m_gameCode    | Title id      |
+| Uint16 | m_gameVersion | Title version |
 
 ### Mii ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
@@ -443,7 +451,7 @@ This method does not return anything
 
 | Type     | Description |
 | -------- | ----------- |
-| [String] | Unknown     |
+| [String] | Name        |
 | Bool     | Unknown     |
 | Uint8    | Unknown     |
 | [Buffer] | Mii data    |
@@ -478,27 +486,27 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type                | Name                   |
-| ------------------- | ---------------------- |
-| Uint32              | m_changedBitFlag       |
-| [GameKey](#gamekey) | m_gameKey              |
-| [String]            | m_gameModeDescription  |
-| Uint32              | m_joinAvailabilityFlag |
-| Uint8               | m_matchmakeSystemType  |
-| Uint32              | m_joinGameID           |
-| Uint32              | m_joinGameMode         |
-| [PID]               | m_ownerPrincipalID     |
-| Uint32              | m_joinGroupID          |
-| [Buffer]            | m_applicationArg       |
+| Type                          | Name                   |
+| ----------------------------- | ---------------------- |
+| Uint32                        | m_changedBitFlag       |
+| [GameKey](#gamekey-structure) | m_gameKey              |
+| [String]                      | m_gameModeDescription  |
+| Uint32                        | m_joinAvailabilityFlag |
+| Uint8                         | m_matchmakeSystemType  |
+| Uint32                        | m_joinGameID           |
+| Uint32                        | m_joinGameMode         |
+| [PID]                         | m_ownerPrincipalID     |
+| Uint32                        | m_joinGroupID          |
+| [Buffer]                      | m_applicationArg       |
 
 ### PlayedGame ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type                | Description |
-| ------------------- | ----------- |
-| [GameKey](#gamekey) | Game key    |
-| [DateTime]          | Date time   |
+| Type                          | Description |
+| ----------------------------- | ----------- |
+| [GameKey](#gamekey-structure) | Game key    |
+| [DateTime]                    | Date time   |
 
 [Structure]: NEX-Common-Types#structure
 [Data]: NEX-Common-Types#data-structure

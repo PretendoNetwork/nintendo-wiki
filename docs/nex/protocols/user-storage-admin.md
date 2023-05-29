@@ -29,17 +29,17 @@ title: User Storage Admin
 
 #### Response
 
-| Type                                                                     | Name         |
-| ------------------------------------------------------------------------ | ------------ |
-| [List]&lt;[UserContent](/protocols/nex/protocols/user-content#usercontent-structure)&gt; | contents     |
-| Uint32                                                                   | totalResults |
+| Type                                                            | Name         |
+| --------------------------------------------------------------- | ------------ |
+| [List]&lt;[UserContent](user-storage#usercontent-structure)&gt; | contents     |
+| Uint32                                                          | totalResults |
 
 ### (2) FlagContentAsVerified
 #### Request
 
-| Type                                                             | Name       |
-| ---------------------------------------------------------------- | ---------- |
-| [UserContentKey](/protocols/nex/protocols/user-content#usercontentkey-structure) | contentKey |
+| Type                                                    | Name       |
+| ------------------------------------------------------- | ---------- |
+| [UserContentKey](user-storage#usercontentkey-structure) | contentKey |
 
 #### Response
 This method does not return anything.
@@ -47,9 +47,9 @@ This method does not return anything.
 ### (3) BanContent
 #### Request
 
-| Type                                                             | Name       |
-| ---------------------------------------------------------------- | ---------- |
-| [UserContentKey](/protocols/nex/protocols/user-content#usercontentkey-structure) | contentKey |
+| Type                                                    | Name       |
+| ------------------------------------------------------- | ---------- |
+| [UserContentKey](user-storage#usercontentkey-structure) | contentKey |
 
 #### Response
 This method does not return anything.
@@ -114,18 +114,18 @@ This method does not return anything.
 
 #### Response
 
-| Type                                                                     | Name         |
-| ------------------------------------------------------------------------ | ------------ |
-| [List]&lt;[UserContent](/protocols/nex/protocols/user-content#usercontent-structure)&gt; | contents     |
-| Uint32                                                                   | totalResults |
+| Type                                                            | Name         |
+| --------------------------------------------------------------- | ------------ |
+| [List]&lt;[UserContent](user-storage#usercontent-structure)&gt; | contents     |
+| Uint32                                                          | totalResults |
 
 ### (9) UpdateMetaData
 #### Request
 
-| Type                                                                             | Name       |
-| -------------------------------------------------------------------------------- | ---------- |
-| [UserContentKey](/protocols/nex/protocols/user-content#usercontentkey-structure)                 | contentKey |
-| [List]&lt;[ContentProperty](/protocols/nex/protocols/user-content#contentproperty-structure)&gt; | properties |
+| Type                                                                    | Name       |
+| ----------------------------------------------------------------------- | ---------- |
+| [UserContentKey](user-storage#usercontentkey-structure)                 | contentKey |
+| [List]&lt;[ContentProperty](user-storage#contentproperty-structure)&gt; | properties |
 
 #### Response
 This method does not return anything.
