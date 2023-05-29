@@ -8,7 +8,7 @@ This is the only protocol that's available on the authentication server. Other p
 
 ## Methods
 
-| Method ID | Name (Wii U)                            | Name (Switch)                                                             |
+| Method ID | Name (3DS / Wii U)                      | Name (Switch)                                                             |
 |-----------|-----------------------------------------|---------------------------------------------------------------------------|
 | 1         | [Login](#1-login)                       | [ValidateAndRequestTicket](#1-login)                                      |
 | 2         | [LoginEx](#2-loginex)                   | [ValidateAndRequestTicketWithCustomData](#2-loginex)                      |

@@ -66,7 +66,7 @@ No RMC response is sent.
 | 3    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed their comment                                                      |
 | 5    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed or edited their mii                                                |
 | 7    | 1      | [NintendoNotificationEventGeneral] | (3DS) You became friends                                                                  |
-| 10   | 1      | [NintendoNotificationEventGeneral] | (3DS & Wii U) A friend went offline                                                       |
+| 10   | 1      | [NintendoNotificationEventGeneral] | (3DS / Wii U) A friend went offline                                                       |
 | 21   | 2      | [NNAInfo]                          | (Wii U) A friend changed or edited their mii                                              |
 | 22   |        |                                    | (Wii U) Mii related                                                                       |
 | 23   |        | [PrincipalPreference]              | (Wii U) A friend updated their preferences                                                |

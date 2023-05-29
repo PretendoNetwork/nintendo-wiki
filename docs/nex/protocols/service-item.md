@@ -343,19 +343,19 @@ title: Service Item (119)
 
 ## Types
 
-## ServiceItemHttpGetParam ([Structure])
+### ServiceItemHttpGetParam ([Structure])
 
 | Type     | Name |
 | -------- | ---- |
 | [String] | url  |
 
-## ServiceItemHttpGetResponse ([Structure])
+### ServiceItemHttpGetResponse ([Structure])
 
 | Type      | Name     |
 | --------- | -------- |
 | [qBuffer] | response |
 
-## ServiceItemEShopResponse ([Structure])
+### ServiceItemEShopResponse ([Structure])
 
 | Type     | Name          |
 | -------- | ------------- |
@@ -363,7 +363,7 @@ title: Service Item (119)
 | Uint32   | errorCode     |
 | [String] | correlationId |
 
-## ServiceItemAmount ([Structure])
+### ServiceItemAmount ([Structure])
 
 | Type     | Name            |
 | -------- | --------------- |
@@ -371,7 +371,7 @@ title: Service Item (119)
 | [String] | currency        |
 | [String] | rawValue        |
 
-## ServiceItemPurchaseServiceItemParam ([Structure])
+### ServiceItemPurchaseServiceItemParam ([Structure])
 
 | Type     | Name           |
 | -------- | -------------- |
@@ -390,7 +390,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemPurchaseInfo ([Structure])
+### ServiceItemPurchaseInfo ([Structure])
 
 | Type                                    | Name             |
 | --------------------------------------- | ---------------- |
@@ -399,7 +399,7 @@ Revision 1:
 | [String]                                | itemCode         |
 | [ServiceItemAmount](#serviceitemamount) | postBalance      |
 
-## ServiceItemPurchaseServiceItemResponse ([Structure])
+### ServiceItemPurchaseServiceItemResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -407,7 +407,7 @@ Revision 1:
 | --------------------------------------------------------------------------- | -------------------- |
 | [List]&lt;[ServiceItemPurchaseInfo](#serviceitempurchaseinfo-structure)&gt; | nullablePurchaseInfo |
 
-## ServiceItemListServiceItemParam ([Structure])
+### ServiceItemListServiceItemParam ([Structure])
 
 | Type     | Name               |
 | -------- | ------------------ |
@@ -423,21 +423,21 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemLimitation ([Structure])
+### ServiceItemLimitation ([Structure])
 
 | Type   | Name            |
 | ------ | --------------- |
 | Uint32 | limitationType  |
 | Uint32 | limitationValue |
 
-## ServiceItemAttribute ([Structure])
+### ServiceItemAttribute ([Structure])
 
 | Type     | Name  |
 | -------- | ----- |
 | [String] | name  |
 | [String] | value |
 
-## ServiceItemListItem ([Structure])
+### ServiceItemListItem ([Structure])
 
 | Type                                                                  | Name                |
 | --------------------------------------------------------------------- | ------------------- |
@@ -448,7 +448,7 @@ Revision 1:
 | [ServiceItemLimitation](#serviceitemlimitation-structure)             | limitation          |
 | [List]&lt;[ServiceItemAttribute](#serviceitemattribute-structure)&gt; | attributes          |
 
-## ServiceItemCatalog ([Structure])
+### ServiceItemCatalog ([Structure])
 
 | Type                                                                | Name               |
 | ------------------------------------------------------------------- | ------------------ |
@@ -458,7 +458,7 @@ Revision 1:
 | Bool                                                                | isBalanceAvailable |
 | [ServiceItemAmount](#serviceitemamount-structure)                   | balance            |
 
-## ServiceItemListServiceItemResponse ([Structure])
+### ServiceItemListServiceItemResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -466,7 +466,7 @@ Revision 1:
 | ----------------------------------------------------------------- | --------------- |
 | [List]&lt;[ServiceItemCatalog](#serviceitemcatalog-structure)&gt; | nullableCatalog |
 
-## ServiceItemGetBalanceParam ([Structure])
+### ServiceItemGetBalanceParam ([Structure])
 
 | Type     | Name     |
 | -------- | -------- |
@@ -479,7 +479,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemGetBalanceResponse ([Structure])
+### ServiceItemGetBalanceResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -487,7 +487,7 @@ Revision 1:
 | --------------------------------------------------------------- | --------------- |
 | [List]&lt;[ServiceItemAmount](#serviceitemamount-structure)&gt; | nullableBalance |
 
-## ServiceItemGetPrepurchaseInfoParam ([Structure])
+### ServiceItemGetPrepurchaseInfoParam ([Structure])
 
 | Type                                                      | Name        |
 | --------------------------------------------------------- | ----------- |
@@ -503,7 +503,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemPrepurchaseRightInfo ([Structure])
+### ServiceItemPrepurchaseRightInfo ([Structure])
 
 | Type                 | Name           |
 | -------------------- | -------------- |
@@ -514,7 +514,7 @@ Revision 1:
 | Uint32               | expiredCount   |
 | [List]&lt;Uint32&gt; | expiryCounts   |
 
-## ServiceItemPrepurchaseInfo ([Structure])
+### ServiceItemPrepurchaseInfo ([Structure])
 
 | Type                                                                          | Name             |
 | ----------------------------------------------------------------------------- | ---------------- |
@@ -529,7 +529,7 @@ Revision 1:
 | [ServiceItemPrepurchaseRightInfo](#serviceitemprepurchaserightinfo-structure) | currentRightInfo |
 | [ServiceItemPrepurchaseRightInfo](#serviceitemprepurchaserightinfo-structure) | postRightInfo    |
 
-## ServiceItemGetPrepurchaseInfoResponse ([Structure])
+### ServiceItemGetPrepurchaseInfoResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -537,7 +537,7 @@ Revision 1:
 | --------------------------------------------------------------------------------- | ----------------------- |
 | [List]&lt;[ServiceItemPrepurchaseInfo](#serviceitemprepurchaseinfo-structure)&gt; | nullablePrepurchaseInfo |
 
-## ServiceItemGetServiceItemRightParam ([Structure])
+### ServiceItemGetServiceItemRightParam ([Structure])
 
 | Type     | Name        |
 | -------- | ----------- |
@@ -552,14 +552,14 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemRightBinary ([Structure])
+### ServiceItemRightBinary ([Structure])
 
 | Type      | Name        |
 | --------- | ----------- |
 | Uint8     | useType     |
 | [qBuffer] | rightBinary |
 
-## ServiceItemAccountRight ([Structure])
+### ServiceItemAccountRight ([Structure])
 
 | Type                                                                      | Name          |
 | ------------------------------------------------------------------------- | ------------- |
@@ -567,13 +567,13 @@ Revision 1:
 | [ServiceItemLimitation](#serviceitemlimitation-structure)                 | limitation    |
 | [List]&lt;[ServiceItemRightBinary](#serviceitemrightbinary-structure)&gt; | rightBinaries |
 
-## ServiceItemAccountRightTime ([Structure])
+### ServiceItemAccountRightTime ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemAccountRight](#serviceitemaccountright-structure)
 {: .prompt-info }
 
 This structure does not contain any fields.
 
-## ServiceItemAccountRightConsumption ([Structure])
+### ServiceItemAccountRightConsumption ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemAccountRight](#serviceitemaccountright-structure)
 {: .prompt-info }
 
@@ -583,30 +583,30 @@ This structure does not contain any fields.
 | Uint32               | expiredCount |
 | [List]&lt;Uint32&gt; | expiryCounts |
 
-## ServiceItemRightInfo ([Structure])
+### ServiceItemRightInfo ([Structure])
 
 | Type     | Name            |
 | -------- | --------------- |
 | [String] | referenceId     |
 | Uint32   | referenceIdType |
 
-## ServiceItemRightTimeInfo ([Structure])
-> This structure [inherits](/docs/nex/types#structure-inheritance) from [serviceitemaccountright](#ServiceItemRightInfo-structure)
+### ServiceItemRightTimeInfo ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemRightInfo](#serviceitemrightinfo-structure)
 {: .prompt-info }
 
 | Type                                                                                | Name          |
 | ----------------------------------------------------------------------------------- | ------------- |
 | [List]&lt;[ServiceItemAccountRightTime](#serviceitemaccountrighttime-structure)&gt; | accountRights |
 
-## ServiceItemRightConsumptionInfo ([Structure])
-> This structure [inherits](/docs/nex/types#structure-inheritance) from [serviceitemaccountright](#ServiceItemRightInfo-structure)
+### ServiceItemRightConsumptionInfo ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemRightInfo](#serviceitemrightinfo-structure)
 {: .prompt-info }
 
 | Type                                                                                              | Name          |
 | ------------------------------------------------------------------------------------------------- | ------------- |
 | [List]&lt;[ServiceItemAccountRightConsumption](#serviceitemaccountrightconsumption-structure)&gt; | accountRights |
 
-## ServiceItemRightInfos ([Structure])
+### ServiceItemRightInfos ([Structure])
 
 | Type                                                                                        | Name                            |
 | ------------------------------------------------------------------------------------------- | ------------------------------- |
@@ -616,7 +616,7 @@ This structure does not contain any fields.
 | [List]&lt;[ServiceItemRightTimeInfo](#serviceitemrighttimeinfo-structure)&gt;               | permanentRightInfos             |
 | Bool                                                                                        | alreadyPurchasedInitialOnlyItem |
 
-## ServiceItemGetServiceItemRightResponse ([Structure])
+### ServiceItemGetServiceItemRightResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -624,7 +624,7 @@ This structure does not contain any fields.
 | ----------------------------------------------------------------------- | ------------------ |
 | [List]&lt;[ServiceItemRightInfos](#serviceitemrightinfos-structure)&gt; | nullableRightInfos |
 
-## ServiceItemGetPurchaseHistoryParam ([Structure])
+### ServiceItemGetPurchaseHistoryParam ([Structure])
 
 | Type     | Name     |
 | -------- | -------- |
@@ -639,7 +639,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemTransaction ([Structure])
+### ServiceItemTransaction ([Structure])
 
 | Type                                                      | Name                   |
 | --------------------------------------------------------- | ---------------------- |
@@ -653,7 +653,7 @@ Revision 1:
 | [String]                                                  | referenceId            |
 | [ServiceItemLimitation](#serviceitemlimitation-structure) | limitation             |
 
-## ServiceItemPurchaseHistory ([Structure])
+### ServiceItemPurchaseHistory ([Structure])
 
 | Type                                                                      | Name         |
 | ------------------------------------------------------------------------- | ------------ |
@@ -661,7 +661,7 @@ Revision 1:
 | Uint32                                                                    | offset       |
 | [List]&lt;[ServiceItemTransaction](#serviceitemtransaction-structure)&gt; | transactions |
 
-## ServiceItemGetPurchaseHistoryResponse ([Structure])
+### ServiceItemGetPurchaseHistoryResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -669,14 +669,14 @@ Revision 1:
 | --------------------------------------------------------------------------------- | ----------------------- |
 | [List]&lt;[ServiceItemPurchaseHistory](#serviceitempurchasehistory-structure)&gt; | nullablePurchaseHistory |
 
-## ServiceItemLawMessage ([Structure])
+### ServiceItemLawMessage ([Structure])
 
 | Type     | Name              |
 | -------- | ----------------- |
 | Bool     | isMessageRequired |
 | [String] | lawMessage        |
 
-## ServiceItemGetLawMessageParam ([Structure])
+### ServiceItemGetLawMessageParam ([Structure])
 
 | Type     | Name     |
 | -------- | -------- |
@@ -689,7 +689,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemGetLawMessageResponse ([Structure])
+### ServiceItemGetLawMessageResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -697,7 +697,7 @@ Revision 1:
 | ----------------------------------------------------------------------- | ------------------ |
 | [List]&lt;[ServiceItemLawMessage](#serviceitemlawmessage-structure)&gt; | nullableLawMessage |
 
-## ServiceItemPostRightBinaryByAccountParam ([Structure])
+### ServiceItemPostRightBinaryByAccountParam ([Structure])
 
 | Type      | Name        |
 | --------- | ----------- |
@@ -713,13 +713,13 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemPostRightBinaryResponse ([Structure])
+### ServiceItemPostRightBinaryResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
 This structure does not contain any fields.
 
-## ServiceItemUseServiceItemByAccountParam ([Structure])
+### ServiceItemUseServiceItemByAccountParam ([Structure])
 
 | Type      | Name                      |
 | --------- | ------------------------- |
@@ -737,14 +737,14 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemUsedInfo ([Structure])
+### ServiceItemUsedInfo ([Structure])
 
 | Type   | Name          |
 | ------ | ------------- |
 | Uint32 | acquiredCount |
 | Uint32 | usedCount     |
 
-## ServiceItemUseServiceItemResponse ([Structure])
+### ServiceItemUseServiceItemResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
@@ -752,7 +752,7 @@ Revision 1:
 | ------------------------------------------------------------------- | ---------------- |
 | [List]&lt;[ServiceItemUsedInfo](#serviceitemusedinfo-structure)&gt; | nullableUsedInfo |
 
-## ServiceItemAcquireServiceItemByAccountParam ([Structure])
+### ServiceItemAcquireServiceItemByAccountParam ([Structure])
 
 | Type      | Name                      |
 | --------- | ------------------------- |
@@ -771,7 +771,7 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemAcquireServiceItemResponse ([Structure])
+### ServiceItemAcquireServiceItemResponse ([Structure])
 
 | Type                 | Name           |
 | -------------------- | -------------- |
@@ -782,7 +782,7 @@ Revision 1:
 | Uint32               | expiredCount   |
 | [List]&lt;Uint32&gt; | expiryCounts   |
 
-## ServiceItemGetSupportIdParam ([Structure])
+### ServiceItemGetSupportIdParam ([Structure])
 
 | Type   | Name     |
 | ------ | -------- |
@@ -794,13 +794,13 @@ Revision 1:
 | ----- | -------- |
 | Uint8 | platform |
 
-## ServiceItemGetNoticeParam ([Structure])
+### ServiceItemGetNoticeParam ([Structure])
 
 | Type   | Name         |
 | ------ | ------------ |
 | Uint32 | scheduleType |
 
-## ServiceItemNotice ([Structure])
+### ServiceItemNotice ([Structure])
 
 | Type       | Name         |
 | ---------- | ------------ |
@@ -812,7 +812,7 @@ Revision 1:
 | [DateTime] | timeBegin    |
 | [DateTime] | timeEnd      |
 
-## ServiceItemUserInfo ([Structure])
+### ServiceItemUserInfo ([Structure])
 
 | Type      | Name              |
 | --------- | ----------------- |
