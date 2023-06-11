@@ -82,15 +82,15 @@ This method does not return anything.
 ## Types
 ### SimpleSearchObject ([Structure])
 
-| Type                            | Description        |
-| ------------------------------- | ------------------ |
-| Uint32                          | Unknown            |
-| [PID]                           | Unknown            |
-| [List]&lt;Uint32&gt;            | Attributes         |
-| [qBuffer]                       | Unknown            |
-| Uint32                          | Unknown            |
-| [String]                        | Unknown            |
-| [SimpleSearchDateTimeAttribute] | Datetime attribute |
+| Type                            | Description             |
+| ------------------------------- | ----------------------- |
+| Uint32                          | Object ID               |
+| [PID]                           | Owner PID               |
+| [List]&lt;Uint32&gt;            | Attributes              |
+| [qBuffer]                       | Metadata                |
+| Uint32                          | Community ID (Miiverse) |
+| [String]                        | Community Code          |
+| [SimpleSearchDateTimeAttribute] | Datetime attribute      |
 
 ### SimpleSearchDateTimeAttribute ([Structure])
 
@@ -100,8 +100,8 @@ This method does not return anything.
 | Uint32     | Unknown     |
 | Uint32     | Unknown     |
 | Uint32     | Unknown     |
-| [DateTime] | Unknown     |
-| [DateTime] | Unknown     |
+| [DateTime] | Start time  |
+| [DateTime] | End time    |
 
 ### SimpleSearchParam ([Structure])
 
@@ -120,6 +120,17 @@ This method does not return anything.
 | ------ | ------------------- |
 | Uint32 | Value               |
 | Uint32 | Comparison operator |
+
+#### Comparison operators
+
+| Value | Description |
+| ----- | ----------- |
+| 0     | Any |
+| 1     | == |
+| 2     | > |
+| 3     | < |
+| 4     | >= |
+| 5     | <= |
 
 [String]: /docs/nex/types#string
 [Data]: /docs/nex/types#anydataholder

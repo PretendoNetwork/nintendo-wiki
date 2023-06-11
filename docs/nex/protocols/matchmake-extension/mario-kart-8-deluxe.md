@@ -156,15 +156,15 @@ This method does not take any parameters.
 ## Types
 ### SimpleSearchObject ([Structure])
 
-| Type | Description |
-| --- | --- |
-| Uint32 | Object id |
-| [PID] | Owner |
-| [List]&lt;Uint32&gt; | Attributes |
-| [qBuffer] | Metadata |
-| Uint32 | Unknown |
-| [String] | Code |
-| [SimpleSearchDateTimeAttribute] | Datetime attribute |
+| Type                            | Description             |
+| ------------------------------- | ----------------------- |
+| Uint32                          | Object ID               |
+| [PID]                           | Owner PID               |
+| [List]&lt;Uint32&gt;            | Attributes              |
+| [qBuffer]                       | Metadata                |
+| Uint32                          | Community ID (Miiverse) |
+| [String]                        | Community Code          |
+| [SimpleSearchDateTimeAttribute] | Datetime attribute      |
 
 Revision 1:
 
@@ -201,6 +201,17 @@ Revision 1:
 | --- | --- |
 | Uint32 | Value |
 | Uint32 | Comparison operator |
+
+#### Comparison operators
+
+| Value | Description |
+| ----- | ----------- |
+| 0     | Any |
+| 1     | == |
+| 2     | > |
+| 3     | < |
+| 4     | >= |
+| 5     | <= |
 
 [SimpleSearchObject]: #simplesearchobject-structure
 [SimpleSearchDateTimeAttribute]: #simplesearchdatetimeattribute-structure
