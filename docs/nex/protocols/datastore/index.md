@@ -956,18 +956,43 @@ In NEX version 3.5, one more field was added:
 | Uint8                  | resultOption           |
 | Uint32                 | minimalRatingFrequency |
 
-In NEX version 3.5, one more field was added:
+Revision 1:
 
-| Type                   | Name                   |
-| ---------------------- | ---------------------- |
-| Bool                   | useCache               |
+| Type | Name     |
+| ---- | -------- |
+| Bool | useCache |
 
-Only present on Switch:
+Revision 2:
 
 | Type                 | Name              |
 | -------------------- | ----------------- |
-| Bool                 | totalCountEnabled |
 | [List]&lt;Uint16&gt; | dataTypes         |
+
+In revision 3, a total count enabled field was added. Note that this field was inserted before the data types field:
+
+| Type                   | Name                   |
+| ---------------------- | ---------------------- |
+| Uint8                  | searchTarget           |
+| [List]&lt;[PID]&gt;    | ownerIds               |
+| Uint8                  | ownerType              |
+| [List]&lt;Uint64&gt;   | destinationIds         |
+| Uint16                 | dataType               |
+| [DateTime]             | createdAfter           |
+| [DateTime]             | createdBefore          |
+| [DateTime]             | updatedAfter           |
+| [DateTime]             | updatedBefore          |
+| Uint32                 | referDataId            |
+| [List]&lt;[String]&gt; | tags                   |
+| Uint8                  | resultOrderColumn      |
+| Uint8                  | resultOrder            |
+| [ResultRange]          | resultRange            |
+| Uint8                  | resultOption           |
+| Uint32                 | minimalRatingFrequency |
+| Bool                   | useCache               |
+| Bool                   | totalCountEnabled      |
+| [List]&lt;Uint16&gt;   | dataTypes              |
+
+In NEX version 4.0, the revision number was set back to 0 with no other changes.
 
 ### DataStoreSearchResult ([Structure])
 
@@ -976,6 +1001,14 @@ Only present on Switch:
 | Uint32                            | totalCount     |
 | [List]&lt;[DataStoreMetaInfo]&gt; | result         |
 | Uint8                             | totalCountType |
+
+Total count types:
+
+| Type   | Description                                               |
+| ------ | --------------------------------------------------------- |
+| 0      | Total number of results (if all results are returned)     |
+| 1      | Total number of results (if not all results are returned) |
+| 3      | Disabled                                                  |
 
 ### DataStoreGetNotificationUrlParam ([Structure])
 
