@@ -35,7 +35,7 @@ All peer-to-peer packets are sent through UDP. The packet format is described [h
 * [Unreliable Protocol](/docs/pia/protocols/unreliable)
 * [Reliable Protocol](/docs/pia/protocols/reliable)
 * Stream Broadcast Reliable Protocol
-* (Clone Protocol)[/docs/pia/protocols/clone]
+* [Clone Protocol](/docs/pia/protocols/clone)
 * Sync Protocol
 
 ### Session management

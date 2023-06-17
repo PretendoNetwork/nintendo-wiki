@@ -40,7 +40,7 @@ Also, the clone protocol used to be single protocol, but was split into several 
 |        | 0x80        | Broadcast Reliable Protocol                                     |
 |        | 0x81        | Stream Broadcast Reliable Protocol                              |
 | 0x7000 | 0x84        | Reliable Broadcast Protocol                                     |
-| 0x7200 | 0x94        | [[Session Protocol]]                                            |
+| 0x7200 | 0x94        | [Session Protocol](/docs/pia/protocols/session)                 |
 |        | 0x98        | Lobby Protocol                                                  |
 |        | 0xA0        | NAT Traversal Result Protocol                                   |
 | 0x8000 | 0xA4        | [Monitoring Data Protocol](/docs/pia/protocols/monitoring-data) |

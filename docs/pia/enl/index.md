@@ -11,6 +11,7 @@ To transmit game-data, games can register content transporters to ENL. ENL also 
 A message consists of one or more records, terminated by a record with type 255. No byte swapping is done on the fields. The endianness depends on the system.
 
 ## Record Header
+
 | Type   | Description |
 |--------|-------------|
 | Uint8  | Record type |
