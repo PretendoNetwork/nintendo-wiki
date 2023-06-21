@@ -115,6 +115,7 @@ On error, the server sends the following response:
 Sometimes, `returncd` is set to `null` instead of an error code.
 
 ### Known Errors
+
 | Code  | Description                               |
 |-------|-------------------------------------------|
 | `001` | Success                                   |

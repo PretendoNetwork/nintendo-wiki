@@ -70,6 +70,7 @@ These flags indicate which fields are compared against the active session to det
 | 0x800 | Last attribute list            |
 
 #### Range
+
 | Offset | Size | Description |
 | ------ | ---- | ----------- |
 | 0x0    | 2    | Maximum     |

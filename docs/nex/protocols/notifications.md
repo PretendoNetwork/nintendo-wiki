@@ -34,7 +34,7 @@ Most notification types are predefined. However, some games also implement their
 | Uint32   | m_uiParam2  |
 | [String] | m_strParam  |
 
-In NEX version 3.5, a new field was added:
+In NEX version 3.4, a new field was added:
 
 | Type     | Name       |
 | -------- | ---------- |

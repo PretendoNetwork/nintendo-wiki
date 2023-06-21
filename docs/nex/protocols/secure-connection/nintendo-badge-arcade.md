@@ -8,9 +8,9 @@ This page describes the methods that are only seen in Nintendo Badge Arcade.
 
 ## Methods
 
-| Method ID | Name                 |
-| --------- | -------------------- |
-| 9         | GetMaintenanceStatus |
+| Method ID | Name                                            |
+| --------- | ----------------------------------------------- |
+| 9         | [GetMaintenanceStatus](#9-getmaintenancestatus) |
 
 ## (9) GetMaintenanceStatus
 ### Request
