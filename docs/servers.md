@@ -66,7 +66,7 @@ For development servers, lp1 is replaced by one of the following:
 * `nncs1-lp1.n.n.srv.nintendo.net`
 * `nncs2-lp1.n.n.srv.nintendo.net`
 
-#### Eagle Relay ([docs](/docs/server/switch/eagle))
+#### Eagle Relay ([docs](/docs/switch/eagle))
 * `d7d-<server name>.g.lp1.e.srv.nintendo.net`
 
 #### Game Server Availability ([docs](Service-Status-Server))
@@ -129,7 +129,7 @@ For development servers, lp1 is replaced by one of the following:
 
 #### Other Services
 * https://mii-secure-lp1.cdn.nintendo.net (mii images)
-* https://idbe-hac.cdn.nintendo.net ([icon data](/docs/servers/idbe))
+* https://idbe-hac.cdn.nintendo.net ([icon data](/docs/idbe))
 * https://lp1.nso.nintendo.net (NSO applet)
 * https://fw-api.lp1.nso.nintendo.net (NSO rewards)
 * https://capi.lp1.op2.nintendo.net ([NSO membership verification](NSO-Verification-Server))
@@ -154,7 +154,7 @@ For development servers, lp1 is replaced by one of the following:
 | - cas.wup.shop.nintendo.net<br>- ecs.wup.shop.nintendo.net<br>- ias.wup.shop.nintendo.net<br>- nus.wup.shop.nintendo.net                                                                                                                                                                                                                                                                          | [eShop services](SOAP-Services)                     |
 | - ccs.wup.shop.nintendo.net<br>- pls.wup.shop.nintendo.net<br>- pushmo.wup.shop.nintendo.net<br>- pushmore.wup.shop.nintendo.net<br>- samurai.wup.shop.nintendo.net<br>- samurai-wup.cdn.nintendo.net<br>- kanzashi-wup.cdn.nintendo.net<br>- kanzashi-movie-wup.cdn.nintendo.net<br>- samuraicdndev1-wup.cdn.nintendo.net<br>- geishacdndev1-wup.cdn.nintendo.net<br>- gw.sgks.shop.nintendo.net | eShop                                               |
 | - npvk.app.nintendo.net<br>- npvk-dev.app.nintendo.net<br>- npts.app.nintendo.net<br>- nppl.app.nintendo.net                                                                                                                                                                                                                                                                                      | BOSS                                                |
-| - idbe-wup.cdn.nintendo.net<br>- idbe-ctr.cdn.nintendo.net                                                                                                                                                                                                                                                                                                                                        | [Icon data](/docs/servers/idbe)                     |
+| - idbe-wup.cdn.nintendo.net<br>- idbe-ctr.cdn.nintendo.net                                                                                                                                                                                                                                                                                                                                        | [Icon data](/docs/idbe)                     |
 | - m1.nintendo.net                                                                                                                                                                                                                                                                                                                                                                                 | [VC Manuals](VC-Manual-Server)                      |
 | - nintendojp.d1.sc.omtrdc.net<br>- wiiu-ssl-static.ubi.com                                                                                                                                                                                                                                                                                                                                        |                                                     |
 
