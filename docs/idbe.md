@@ -67,9 +67,9 @@ Wii U files are encoded in big-endian byte order, 3DS files in little-endian byt
 | 0x2050 | 0x480  | 24x24 pixel RGB565 icon |
 | 0x24D0 | 0x1200 | 48x48 pixel RGB565 icon |
 
-The RGB565 icons use the same tiling method used in SMDH files, much like the rest of the 3DS. The IDBE format is likely based on the SMDH format. For more information on how this tiling system works, see https://3dbrew.org/wiki/SMDH#Icon_graphics
+The RGB565 icons use the same tiling method used in SMDH files, much like the rest of the 3DS. The IDBE format is likely based on the SMDH format. For more information on how this tiling system works, see [https://3dbrew.org/wiki/SMDH#Icon_graphics](https://3dbrew.org/wiki/SMDH#Icon_graphics)
 
-Although now explicitly stated to be made for the 3DS, this Node.js module works for these icons and is said to be based on existing SMDH tools https://npmjs.com/package/tiled-image-tools
+Although now explicitly stated to be made for the 3DS, this Node.js module works for these icons and is said to be based on existing SMDH tools [https://npmjs.com/package/tiled-image-tools](https://npmjs.com/package/tiled-image-tools)
 
 ### Title Strings
 
