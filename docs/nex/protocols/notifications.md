@@ -7,14 +7,14 @@ title: Notification Events (14)
 ## Methods
 
 | Method ID | Method Name                                             |
-| --------- | ------------------------------------------------------- |
+|-----------|---------------------------------------------------------|
 | 1         | [ProcessNotificationEvent](#1-processnotificationevent) |
 
 ### (1) ProcessNotificationEvent
 #### Request
 
 | Type                                              | Name   | Description  |
-| ------------------------------------------------- | ------ | ------------ |
+|---------------------------------------------------|--------|--------------|
 | [NotificationEvent](#notificationevent-structure) | oEvent | Event object |
 
 #### Response
@@ -27,7 +27,7 @@ Most notification types are predefined. However, some games also implement their
 **Wii U and 3DS:**
 
 | Type     | Name        |
-| -------- | ----------- |
+|----------|-------------|
 | [PID]    | m_pidSource |
 | Uint32   | m_uiType    |
 | Uint32   | m_uiParam1  |
@@ -36,16 +36,16 @@ Most notification types are predefined. However, some games also implement their
 
 In NEX version 3.4, a new field was added:
 
-| Type     | Name       |
-| -------- | ---------- |
-| Uint32   | m_uiParam3 |
+| Type   | Name       |
+|--------|------------|
+| Uint32 | m_uiParam3 |
 
 **Switch:**
 
 The following fields are always present (revision 0 and 1):
 
 | Type     | Name        |
-| -------- | ----------- |
+|----------|-------------|
 | [PID]    | m_pidSource |
 | Uint32   | m_uiType    |
 | Uint64   | m_uiParam1  |
@@ -56,33 +56,47 @@ The following fields are always present (revision 0 and 1):
 The following field is only present in revision 1:
 
 | Type                             | Name       |
-| -------------------------------- | ---------- |
+|----------------------------------|------------|
 | [Map]&lt;[String], [Variant]&gt; | m_mapParam |
 
 ## Notification Types
+Notification types are a combined value made up of a category and a subtype. The final type sent in notifications is calculated using `(category * 1000) + subtype`. Not all categories seem to have subtypes, as such they seem to only have one function
+
 * Type 3001 - 3008 are sent to the owner of the gathering.
 * Type 4000 and 109000 are sent to all participants of the gathering.
+* Type 101000 and 102000 are sent to all participants of the gathering who are not the owner.
 * Type 116000 is sent to all participants of the round.
 
-| Type   | Description                     |
-| ------ | ------------------------------- |
-| 3001   | New participant                 |
-| 3002   | Participation cancelled         |
-| 3007   | Participant disconnected        |
-| 3008   | Participation ended             |
-| 4000   | Ownership changed               |
-| 109000 | Gathering unregistered          |
-| 110000 | Host changed                    |
-| 115000 | Service item request completed  |
-| 116000 | Matchmake referee round started |
-| 120000 | System password changed         |
-| 121000 | System password cleared         |
-| 122000 | Switch gathering                |
+## Notification Categories
+
+| Category | Description                     | Notes                                                  |
+|----------|---------------------------------|--------------------------------------------------------|
+| 3        | Participation                   |                                                        |
+| 4        | Ownership changed               | Does not seem to have subtypes                         |
+| 101      | Request join gathering          | Only seen in WiiU Chat. Does not seem to have subtypes |
+| 102      | End gathering                   | Only seen in WiiU Chat. Does not seem to have subtypes |
+| 109      | Gathering unregistered          | Does not seem to have subtypes                         |
+| 110      | Host changed                    | Does not seem to have subtypes                         |
+| 115      | Service item request completed  | Does not seem to have subtypes                         |
+| 116      | Matchmake referee round started | Does not seem to have subtypes                         |
+| 120      | System password changed         | Does not seem to have subtypes                         |
+| 121      | System password cleared         | Does not seem to have subtypes                         |
+| 122      | Switch gathering                | Does not seem to have subtypes                         |
+
+## Notification Subtypes
+
+| Category | Subtype | Description              |
+|----------|---------|--------------------------|
+| 3        | 1       | New participant          |
+| 3        | 2       | Participation cancelled  |
+| 3        | 7       | Participant disconnected |
+| 3        | 8       | Participation ended      |
+
 
 ### Notification type 3001:
 
 | Field       | Description            |
-| ----------- | ---------------------- |
+|-------------|------------------------|
 | m_pidSource | Principal id           |
 | m_uiParam1  | Gathering id           |
 | m_uiParam2  | Principal id           |
@@ -92,7 +106,7 @@ The following field is only present in revision 1:
 ### Notification type 3002, 3007 and 3008:
 
 | Field       | Description  |
-| ----------- | ------------ |
+|-------------|--------------|
 | m_pidSource | Principal id |
 | m_uiParam1  | Gathering id |
 | m_uiParam2  | Principal id |
@@ -101,23 +115,32 @@ The following field is only present in revision 1:
 ### Notification type 4000:
 
 | Field       | Description    |
-| ----------- | -------------- |
+|-------------|----------------|
 | m_pidSource | Previous owner |
 | m_uiParam1  | Gathering id   |
 | m_uiParam2  | New owner      |
 | m_strParam  | Unknown        |
 
+### Notification type 101000 and 102000:
+
+| Field       | Description   |
+|-------------|---------------|
+| m_pidSource | Sender PID    |
+| m_uiParam1  | Gathering ID  |
+| m_uiParam2  | Recipient PID |
+| m_strParam  | Message       |
+
 ### Notification type 109000:
 
 | Field       | Description  |
-| ----------- | ------------ |
+|-------------|--------------|
 | m_pidSource | Principal id |
 | m_uiParam1  | Gathering id |
 
 ### Notification type 115000:
 
 | Field       | Description                     |
-| ----------- | ------------------------------- |
+|-------------|---------------------------------|
 | m_pidSource | Principal that made the request |
 | m_uiParam1  | Request id                      |
 | m_uiParam2  | Unknown                         |
@@ -125,14 +148,14 @@ The following field is only present in revision 1:
 ### Notification type 116000:
 
 | Field       | Description                      |
-| ----------- | -------------------------------- |
+|-------------|----------------------------------|
 | m_pidSource | Principal that started the round |
 | m_uiParam1  | Round id                         |
 
 ### Notification type 122000:
 
 | Field       | Description      |
-| ----------- | ---------------- |
+|-------------|------------------|
 | m_pidSource | Host pid         |
 | m_uiParam1  | New gathering id |
 | m_uiParam2  | Client pid       |
