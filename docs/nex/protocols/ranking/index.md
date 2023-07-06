@@ -260,7 +260,7 @@ This method does not return anything.
 | [List]&lt;byte&gt; | groups      | Filters         |
 | Uint64             | param       | Additional info |
 | [Buffer]           | commonData  | Additional data |
-| [DateTime]         | updateTime  | NEX 4.0.0+      |
+| [DateTime]         | updateTime  | NEX 3.6.0+      |
 
 ### RankingResult ([Structure])
 
