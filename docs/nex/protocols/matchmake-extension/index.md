@@ -152,10 +152,10 @@ This method does not return anything.
 
 #### Response
 
-| Type     | Name       |
-| -------- | ---------- |
-| Uint32   | gid        |
-| [Buffer] | sessionKey |
+| Type     | Name       | Only present in      |
+| -------- | ---------- | -------------------- |
+| Uint32   | gid        |                      |
+| [Buffer] | sessionKey | NEX v3.0.0 and later |
 
 ### (7) JoinMatchmakeSession
 #### Request
@@ -167,9 +167,9 @@ This method does not return anything.
 
 #### Response
 
-| Type     | Name       |
-| -------- | ---------- |
-| [Buffer] | sessionKey |
+| Type     | Name       | Only present in      |
+| -------- | ---------- | -------------------- |
+| [Buffer] | sessionKey | NEX v3.0.0 and later |
 
 ### (8) ModifyCurrentGameAttribute
 #### Request
@@ -185,7 +185,7 @@ This method does not return anything.
 
 ### (9) UpdateNotificationData
 #### Request
-**Wii U:**
+**Wii U and 3DS:**
 
 | Type     | Name     |
 | -------- | -------- |
