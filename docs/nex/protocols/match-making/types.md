@@ -95,7 +95,7 @@ In NEX version 3.7, the revision number was increased to 2 and one more field wa
 
 | Type     | Name           |
 | -------- | -------------- |
-| [String] | m_UserPassword | NEX v4.0.0 and later |
+| [String] | m_UserPassword |
 
 In NEX version 3.8, the revision number was increased to 3 and three more fields were added:
 
@@ -109,10 +109,10 @@ In NEX version 4.0, the revision number was set back to 0 and one more field was
 
 | Type     | Name       |
 | -------- | ---------- |
-| [String] | m_Codeword | NEX v4.0.0 and later |
+| [String] | m_Codeword |
 
 ## MatchmakeSessionSearchCriteria ([Structure])
-Up to NEX version 3.3, this structure looks as follows:
+Up to NEX version 2.x, this structure looks as follows:
 
 | Type                   | Name                  |
 | ---------------------- | --------------------- |
@@ -124,7 +124,12 @@ Up to NEX version 3.3, this structure looks as follows:
 | Bool                   | m_VacantOnly          |
 | Bool                   | m_ExcludeLocked       |
 | Bool                   | m_ExcludeNonHostPid   |
-| Uint32                 | m_SelectionMethod     |
+
+In NEX version 3.0, one more field was added:
+
+| Type   | Name              |
+| ------ | ----------------- |
+| Uint32 | m_SelectionMethod |
 
 In NEX version 3.4, one more field was added:
 

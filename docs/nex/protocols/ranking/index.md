@@ -4,10 +4,11 @@ toc: true
 title: Ranking (112)
 ---
 
+To view the old version of the Ranking protocol, check [Ranking Legacy](/docs/nex/protocols/ranking/legacy).
+
 ## Extended Protocols
 
 The following games have additional methods in the ranking protocol:
-* [Mario Kart 7](/docs/nex/protocols/ranking/mario-kart-7)
 * [Mario Kart 8](/docs/nex/protocols/ranking/mario-kart-8)
 * [Mario Kart 8 Deluxe](/docs/nex/protocols/ranking/mario-kart-8-deluxe)
 * [Super Smash Bros. 4](/docs/nex/protocols/ranking/super-smash-bros-4)
@@ -260,7 +261,12 @@ This method does not return anything.
 | [List]&lt;byte&gt; | groups      | Filters         |
 | Uint64             | param       | Additional info |
 | [Buffer]           | commonData  | Additional data |
-| [DateTime]         | updateTime  | NEX 3.6.0+      |
+
+Revision 1:
+
+| Type       | Name       | Description |
+|------------|------------|-------------|
+| [DateTime] | updateTime | NEX 3.6.0+  |
 
 ### RankingResult ([Structure])
 
@@ -311,6 +317,7 @@ This method does not return anything.
 |-------|-----------------------------------------------------|
 | 0     | Global, only the top 1000 entries can be downloaded |
 | 1     | Global rankings around own entry                    |
+| 2     | Friends rankings around own entry                   |
 | 4     | Own ranking only                                    |
 
 ## Flags
