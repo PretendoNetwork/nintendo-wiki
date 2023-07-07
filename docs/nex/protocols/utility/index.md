@@ -4,10 +4,11 @@ toc: true
 title: Utility (110)
 ---
 
+To view the old version of the Utility protocol, check [Storage Manager](/docs/nex/protocols/storage-manager).
+
 ## Extended protocols
 
 The following games have additional methods in the utility protocol:
-* [Mario Kart 7](/docs/nex/protocols/utility/mario-kart-7)
 * [Mario Strikers: Battle League](/docs/nex/protocols/utility/mario-strikers-battle-league)
 * [Splatoon 2](/docs/nex/protocols/utility/splatoon-2)
 * [Super Smash Bros. Ultimate](/docs/nex/protocols/utility/super-smash-bros-ultimate)

@@ -31,22 +31,22 @@ See also: [RMC Protocol](/docs/rmc)
 
 ## Nintendo Only
 
-| ID  | Protocol                                                                   |
-| --- | -------------------------------------------------------------------------- |
-| 100 | [Nintendo notification events](/docs/nex/protocols/nintendo-notifications) |
-| 101 | [Friends (3DS)](/docs/nex/protocols/friends-3ds)                           |
-| 102 | [Friends (Wii U)](/docs/nex/protocols/friends-wiiu)                        |
-| 109 | [Matchmake extension](/docs/nex/protocols/matchmake-extension)             |
-| 110 | [Utility](/docs/nex/protocols/utility)                                     |
-| 112 | [Ranking](/docs/nex/protocols/ranking)                                     |
-| 115 | [Data store](/docs/nex/protocols/datastore)                                |
-| 116 | [Debug](/docs/nex/protocols/debug)                                         |
-| 119 | [Service item](/docs/nex/protocols/service-item)                           |
-| 120 | [Matchmake referee](/docs/nex/protocols/matchmake-referee)                 |
-| 121 | [Subscriber](/docs/nex/protocols/subscriber)                               |
-| 122 | [Ranking 2](/docs/nex/protocols/ranking-2)                                 |
-| 123 | [AA user](/docs/nex/protocols/aa-user)                                     |
-| 124 | [Screening](/docs/nex/protocols/screening)                                 |
+| ID  | Protocol                                                                                        |
+| --- | ----------------------------------------------------------------------------------------------- |
+| 100 | [Nintendo notification events](/docs/nex/protocols/nintendo-notifications)                      |
+| 101 | [Friends (3DS)](/docs/nex/protocols/friends-3ds)                                                |
+| 102 | [Friends (Wii U)](/docs/nex/protocols/friends-wiiu)                                             |
+| 109 | [Matchmake extension](/docs/nex/protocols/matchmake-extension)                                  |
+| 110 | [Utility](/docs/nex/protocols/utility) / [Storage manager](/docs/nex/protocols/storage-manager) |
+| 112 | [Ranking](/docs/nex/protocols/ranking)                                                          |
+| 115 | [Data store](/docs/nex/protocols/datastore)                                                     |
+| 116 | [Debug](/docs/nex/protocols/debug)                                                              |
+| 119 | [Service item](/docs/nex/protocols/service-item)                                                |
+| 120 | [Matchmake referee](/docs/nex/protocols/matchmake-referee)                                      |
+| 121 | [Subscriber](/docs/nex/protocols/subscriber)                                                    |
+| 122 | [Ranking 2](/docs/nex/protocols/ranking-2)                                                      |
+| 123 | [AA user](/docs/nex/protocols/aa-user)                                                          |
+| 124 | [Screening](/docs/nex/protocols/screening)                                                      |
 
 ## Game-Specific
 
