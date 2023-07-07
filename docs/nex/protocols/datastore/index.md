@@ -904,6 +904,14 @@ Result option flags:
 | [List]&lt;[DataStoreRatingInfoWithSlot]&gt; | ratings       |
 
 ### DataStorePrepareUpdateParam ([Structure])
+Up to NEX version 2.x, this structure looks as follows:
+
+| Type                   | Name           |
+| ---------------------- | -------------- |
+| Uint32                 | dataId         |
+| Uint32                 | size           |
+
+In NEX version 3.0, the data ID was set to a Uint64 and one more field was added:
 
 | Type                   | Name           |
 | ---------------------- | -------------- |
@@ -918,6 +926,17 @@ In NEX version 3.5, one more field was added:
 | [List]&lt;[String]&gt; | extraData      |
 
 ### DataStoreReqUpdateInfo ([Structure])
+Up to NEX version 2.x, this structure looks as follows:
+
+| Type                              | Name           |
+| --------------------------------- | -------------- |
+| Uint16                            | version        |
+| [String]                          | url            |
+| [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
+| [List]&lt;[DataStoreKeyValue]&gt; | formFields     |
+| [Buffer]                          | rootCaCert     |
+
+In NEX version 3.0, the version was set to a Uint32:
 
 | Type                              | Name           |
 | --------------------------------- | -------------- |
@@ -928,6 +947,15 @@ In NEX version 3.5, one more field was added:
 | [Buffer]                          | rootCaCert     |
 
 ### DataStoreCompleteUpdateParam ([Structure])
+Up to NEX version 2.x, this structure looks as follows:
+
+| Type   | Name      |
+| ------ | --------- |
+| Uint32 | dataId    |
+| Uint16 | version   |
+| Bool   | isSuccess |
+
+In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a Uint32:
 
 | Type   | Name      |
 | ------ | --------- |
@@ -964,9 +992,9 @@ Revision 1:
 
 Revision 2:
 
-| Type                 | Name              |
-| -------------------- | ----------------- |
-| [List]&lt;Uint16&gt; | dataTypes         |
+| Type                 | Name      |
+| -------------------- | --------- |
+| [List]&lt;Uint16&gt; | dataTypes |
 
 In revision 3, a total count enabled field was added. Note that this field was inserted before the data types field:
 
