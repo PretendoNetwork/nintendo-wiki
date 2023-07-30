@@ -12,7 +12,7 @@ For development servers, lp1 is replaced by one of the following:
 | lp1                                         | Live production |
 | dd1, dp1, jd1, sd1, sp1, td1, xd1, yd1, zd1 | Development     |
 
-#### Connection Test ([docs](Connection-Test))
+#### Connection Test ([docs](/docs/switch/connection-test))
 * http://ctest.cdn.nintendo.net
 * http://ctest-ul-lp1.cdn.nintendo.net
 * http://ctest-dl-lp1.cdn.nintendo.net
@@ -62,24 +62,24 @@ For development servers, lp1 is replaced by one of the following:
 * `g<game server id>-lp1.r.n.srv.nintendo.net` (P2P relay)
 * `g<game server id>-lp1.p.srv.nintendo.net` ([P2P monitoring](/docs/pia/protocols/monitoring-data))
 
-#### NAT Check ([docs](NAT-Check-Server))
+#### NAT Check ([docs](/docs/nat-check))
 * `nncs1-lp1.n.n.srv.nintendo.net`
 * `nncs2-lp1.n.n.srv.nintendo.net`
 
 #### Eagle Relay ([docs](/docs/switch/eagle))
 * `d7d-<server name>.g.lp1.e.srv.nintendo.net`
 
-#### Game Server Availability ([docs](Service-Status-Server))
+#### Game Server Availability ([docs](/docs/switch/service-status))
 * https://Service-status-lp1.cdn.nintendo.net
 
-#### Online Play Invitations ([docs](Online-Play-Invitation-Server))
+#### Online Play Invitations ([docs](/docs/switch/online-play-invitations))
 * https://app.lp1.five.nintendo.net
 
-#### Smartphone Services ([docs](ZNC-Server))
+#### Smartphone Services ([docs](/docs/switch/znc))
 * https://api-lp1.znc.srv.nintendo.net
 * https://web-lp1.znc.srv.nintendo.net
 
-#### Online Save Storage ([docs](OLSC-Servers))
+#### Online Save Storage ([docs](/docs/switch/olsc))
 * https://storage.lp1.scsi.srv.nintendo.net
 * https://migration.lp1.scsi.srv.nintendo.net
 * https://storage.lp1.sata.srv.nintendo.net
@@ -87,15 +87,15 @@ For development servers, lp1 is replaced by one of the following:
 * https://pp.lp1.sata.srv.nintendo.net
 * https://scsi-policy-lp1.cdn.nintendo.net
 
-#### eShop Services ([docs](REST-Services))
+#### eShop Services ([docs](/docs/switch/rest))
 * https://ecs-lp1.hac.shop.nintendo.net
 * https://ias-lp1.hac.shop.nintendo.net
 
-#### eShop Applet ([docs](eShop-Applet-(Switch)))
+#### eShop Applet ([docs](/docs/switch/eshop-applet)))
 * https://bugyo.hac.lp1.eshop.nintendo.net
 * https://tagaya.hac.lp1.eshop.nintendo.net
 
-#### Title Installation ([docs](NIM-Servers))
+#### Title Installation ([docs](/docs/switch/nim))
 * https://aqua.hac.lp1.d4c.nintendo.net
 * https://atum.hac.lp1.d4c.nintendo.net
 * https://atumn.hac.lp1.d4c.nintendo.net
@@ -106,24 +106,24 @@ For development servers, lp1 is replaced by one of the following:
 * https://superfly.hac.lp1.d4c.nintendo.net
 * https://veer.hac.%.d4c.nintendo.net
 
-#### Push Notifications ([docs](NPNS-Servers))
+#### Push Notifications ([docs](/docs/switch/npns))
 * https://consumer.lp1.npns.srv.nintendo.net
 * https://broker.lp1.npns.srv.nintendo.net
 * https://provider-lp1.npns.srv.nintendo.net
 * https://app-a03.lp1.npns.srv.nintendo.net
 * https://app-b01.lp1.npns.srv.nintendo.net
 
-#### Telemetry ([docs](Telemetry-Servers))
+#### Telemetry ([docs](/docs/switch/telemetry))
 * https://receive-lp1.dg.srv.nintendo.net (play reports)
 * https://receive-lp1.er.srv.nintendo.net (error reports)
 * https://sprofile-lp1.cdn.nintendo.net
 
-#### News ([docs](BCAT-Servers))
+#### News ([docs](/docs/switch/bcat))
 * https://bcat-topics-lp1.cdn.nintendo.net
 * https://bcat-list-lp1.cdn.nintendo.net
 * https://bcat-data-lp1.cdn.nintendo.net
 
-#### Parental Controls ([docs](Parental-Controls))
+#### Parental Controls ([docs](/docs/switch/parental-controls))
 * https://api-lp1.pctl.srv.nintendo.net
 * https://parentalcontrols-movie-lp1.cdn.nintendo.net
 
@@ -132,46 +132,46 @@ For development servers, lp1 is replaced by one of the following:
 * https://idbe-hac.cdn.nintendo.net ([icon data](/docs/idbe))
 * https://lp1.nso.nintendo.net (NSO applet)
 * https://fw-api.lp1.nso.nintendo.net (NSO rewards)
-* https://capi.lp1.op2.nintendo.net ([NSO membership verification](NSO-Verification-Server))
-* https://api-lp1.frs.srv.nintendo.net ([friends](Friends-API))
-* https://api.hac.lp1.acbaa.srv.nintendo.net ([Animal Crossing API](https://github.com/Kinnay/NintendoClients/wiki/AC:NH-Server))
+* https://capi.lp1.op2.nintendo.net ([NSO membership verification](/docs/switch/nso-verification))
+* https://api-lp1.frs.srv.nintendo.net ([friends](/docs/switch/friends-api))
+* https://api.hac.lp1.acbaa.srv.nintendo.net ([Animal Crossing API](/docs/switch/animal-cross-new-horizons))
 * https://web-lp1.share.srv.nintendo.net
 * https://bvc-hac-lp1.cdn.nintendo.net
 * https://api.sect.srv.nintendo.net
 
 ## Wii U
 
-| Server                                                                                                                                                                                                                                                                                                                                                                                            | Description                                         |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Server                                                                                                                                                                                                                                                                                                                                                                                            | Description                                 |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
 | - account.nintendo.net<br>- game-dev.account.nintendo.net<br>- system-dev.account.nintendo.net<br>- library-dev.account.nintendo.net<br>- staging.account.nintendo.net                                                                                                                                                                                                                            | [Account Server (NNID)](/docs/wiiu/account) |
-| - mii-secure.account.nintendo.net<br>- mii-secure.cdn.nintendo.net<br>- mii-images.cdn.nintendo.net<br>- game-dev-mii-images.cdn.nintendo.net<br>- system-dev-mii-images.cdn.nintendo.net<br>- library-dev-mii-images.cdn.nintendo.net<br>- staging-mii-images.cdn.nintendo.net                                                                                                                   | Mii images                                          |
-| - nncs1.app.nintendowifi.net<br>- nncs2.app.nintendowifi.net                                                                                                                                                                                                                                                                                                                                      | [NAT check server](NAT-Check-Server)                |
-| - hpp-&lt;game server id&gt;-&lt;environment&gt;.n.app.nintendo.net                                                                                                                                                                                                                                                                                                                               | [Hpp server](Hpp-Server)                            |
-| - discovery.olv.nintendo.net                                                                                                                                                                                                                                                                                                                                                                      | Miiverse                                            |
-| - tagaya.wup.shop.nintendo.net                                                                                                                                                                                                                                                                                                                                                                    | [Title version list](Tagaya-Server)                 |
-| - ninja.wup.shop.nintendo.net                                                                                                                                                                                                                                                                                                                                                                     | [eShop api](Ninja-Server)                           |
-| - geisha-wup.cdn.nintendo.net                                                                                                                                                                                                                                                                                                                                                                     | eShop website                                       |
-| - cas.wup.shop.nintendo.net<br>- ecs.wup.shop.nintendo.net<br>- ias.wup.shop.nintendo.net<br>- nus.wup.shop.nintendo.net                                                                                                                                                                                                                                                                          | [eShop services](SOAP-Services)                     |
-| - ccs.wup.shop.nintendo.net<br>- pls.wup.shop.nintendo.net<br>- pushmo.wup.shop.nintendo.net<br>- pushmore.wup.shop.nintendo.net<br>- samurai.wup.shop.nintendo.net<br>- samurai-wup.cdn.nintendo.net<br>- kanzashi-wup.cdn.nintendo.net<br>- kanzashi-movie-wup.cdn.nintendo.net<br>- samuraicdndev1-wup.cdn.nintendo.net<br>- geishacdndev1-wup.cdn.nintendo.net<br>- gw.sgks.shop.nintendo.net | eShop                                               |
-| - npvk.app.nintendo.net<br>- npvk-dev.app.nintendo.net<br>- npts.app.nintendo.net<br>- nppl.app.nintendo.net                                                                                                                                                                                                                                                                                      | BOSS                                                |
+| - mii-secure.account.nintendo.net<br>- mii-secure.cdn.nintendo.net<br>- mii-images.cdn.nintendo.net<br>- game-dev-mii-images.cdn.nintendo.net<br>- system-dev-mii-images.cdn.nintendo.net<br>- library-dev-mii-images.cdn.nintendo.net<br>- staging-mii-images.cdn.nintendo.net                                                                                                                   | Mii images                                  |
+| - nncs1.app.nintendowifi.net<br>- nncs2.app.nintendowifi.net                                                                                                                                                                                                                                                                                                                                      | [NAT check server](/docs/nat-check)         |
+| - hpp-&lt;game server id&gt;-&lt;environment&gt;.n.app.nintendo.net                                                                                                                                                                                                                                                                                                                               | [Hpp server](/docs/hpp)                     |
+| - discovery.olv.nintendo.net                                                                                                                                                                                                                                                                                                                                                                      | Miiverse                                    |
+| - tagaya.wup.shop.nintendo.net                                                                                                                                                                                                                                                                                                                                                                    | [Title version list](/docs/tagaya)          |
+| - ninja.wup.shop.nintendo.net                                                                                                                                                                                                                                                                                                                                                                     | [eShop api](/docs/ninja)                    |
+| - geisha-wup.cdn.nintendo.net                                                                                                                                                                                                                                                                                                                                                                     | eShop website                               |
+| - cas.wup.shop.nintendo.net<br>- ecs.wup.shop.nintendo.net<br>- ias.wup.shop.nintendo.net<br>- nus.wup.shop.nintendo.net                                                                                                                                                                                                                                                                          | [eShop services](/docs/soap)                |
+| - ccs.wup.shop.nintendo.net<br>- pls.wup.shop.nintendo.net<br>- pushmo.wup.shop.nintendo.net<br>- pushmore.wup.shop.nintendo.net<br>- samurai.wup.shop.nintendo.net<br>- samurai-wup.cdn.nintendo.net<br>- kanzashi-wup.cdn.nintendo.net<br>- kanzashi-movie-wup.cdn.nintendo.net<br>- samuraicdndev1-wup.cdn.nintendo.net<br>- geishacdndev1-wup.cdn.nintendo.net<br>- gw.sgks.shop.nintendo.net | eShop                                       |
+| - npvk.app.nintendo.net<br>- npvk-dev.app.nintendo.net<br>- npts.app.nintendo.net<br>- nppl.app.nintendo.net                                                                                                                                                                                                                                                                                      | BOSS                                        |
 | - idbe-wup.cdn.nintendo.net<br>- idbe-ctr.cdn.nintendo.net                                                                                                                                                                                                                                                                                                                                        | [Icon data](/docs/idbe)                     |
-| - m1.nintendo.net                                                                                                                                                                                                                                                                                                                                                                                 | [VC Manuals](VC-Manual-Server)                      |
-| - nintendojp.d1.sc.omtrdc.net<br>- wiiu-ssl-static.ubi.com                                                                                                                                                                                                                                                                                                                                        |                                                     |
+| - m1.nintendo.net                                                                                                                                                                                                                                                                                                                                                                                 | [VC Manuals](/docs/vc-manuals)              |
+| - nintendojp.d1.sc.omtrdc.net<br>- wiiu-ssl-static.ubi.com                                                                                                                                                                                                                                                                                                                                        |                                             |
 
 ## 3DS
 
-| Server                                                                                                                                                              | Description                   |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-| - conntest.nintendowifi.net                                                                                                                                         | Connection test               |
-| - nasc.nintendowifi.net<br>- nasc.dev.nintendowifi.net<br>- nasc.test.nintendowifi.net                                                                              | [Account server](NASC-Server) |
-| - hpp-&lt;game server id&gt;-&lt;environment&gt;.n.app.nintendo.net                                                                                                 | [Hpp server](Hpp-Server)      |
-| - ccs.c.shop.nintendowifi.net<br>- nus.c.shop.nintendowifi.net<br>- pls.c.shop.nintendowifi.net                                                                     | eShop                         |
-| - l-npns.app.nintendowifi.net<br>- npns-dev.c.app.nintendowifi.net<br>- nppl.c.app.nintendowifi.net<br>- npul.c.app.nintendowifi.net<br>- npvk.app.nintendowifi.net | SpotPass                      |
-| - ctr-o2fgs.cdn.nintendo.net                                                                                                                                        |                               |
+| Server                                                                                                                                                              | Description                      |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| - conntest.nintendowifi.net                                                                                                                                         | Connection test                  |
+| - nasc.nintendowifi.net<br>- nasc.dev.nintendowifi.net<br>- nasc.test.nintendowifi.net                                                                              | [Account server](/docs/3ds/nasc) |
+| - hpp-&lt;game server id&gt;-&lt;environment&gt;.n.app.nintendo.net                                                                                                 | [Hpp server](/docs/hpp)          |
+| - ccs.c.shop.nintendowifi.net<br>- nus.c.shop.nintendowifi.net<br>- pls.c.shop.nintendowifi.net                                                                     | eShop                            |
+| - l-npns.app.nintendowifi.net<br>- npns-dev.c.app.nintendowifi.net<br>- nppl.c.app.nintendowifi.net<br>- npul.c.app.nintendowifi.net<br>- npvk.app.nintendowifi.net | SpotPass                         |
+| - ctr-o2fgs.cdn.nintendo.net                                                                                                                                        |                                  |
 
 ## Other
 
-| Server                                                       | Description                                                  |
-|--------------------------------------------------------------|--------------------------------------------------------------|
-| - nexred.nintendo.co.jp                                      | Redmine issue tracker for [NEX](NEX-Overview-(Game-Servers)) |
-| - devbts30.nintendo.co.jp<br>- devhipchat.boy.nintendo.co.jp | Internal dev servers                                         |
+| Server                                                       | Description                                |
+|--------------------------------------------------------------|--------------------------------------------|
+| - nexred.nintendo.co.jp                                      | Redmine issue tracker for [NEX](/docs/nex) |
+| - devbts30.nintendo.co.jp<br>- devhipchat.boy.nintendo.co.jp | Internal dev servers                       |
