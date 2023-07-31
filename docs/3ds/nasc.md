@@ -75,8 +75,8 @@ This action provides the location of the game server and a token.
 
 Then, either:
 
-| Param     | Description                                                                                                                                       |
-|-----------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| Param     | Description                                                                                                   |
+|-----------|---------------------------------------------------------------------------------------------------------------|
 | `uidhmac` | PID HMAC, received during [account creation](/docs/nex/protocols/account-management#27-nintendocreateaccount) |
 | `userid`  | PID, received during [account creation](/docs/nex/protocols/account-management#27-nintendocreateaccount)      |
 
@@ -120,11 +120,15 @@ Sometimes, `returncd` is set to `null` instead of an error code.
 |-------|-------------------------------------------|
 | `001` | Success                                   |
 | `102` | Device is banned                          |
+| `107` | Product code is invalid                   |
 | `109` | Missing or malformed parameter in request |
 | `110` | Game server is no longer available        |
+| `111` | Game server is under maintenance          |
 | `119` | FPD version is invalid                    |
+| `120` | Ttile version is invalid                  |
 | `121` | Device certificate is invalid             |
 | `122` | PID HMAC is invalid                       |
+| `123` | Rom id is banned                          |
 | `125` | Game id is invalid                        |
 
 ## Examples
