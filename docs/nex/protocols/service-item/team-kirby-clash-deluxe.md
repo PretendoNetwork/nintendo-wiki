@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title: Service Item (119)
+title: Team Kirby Clash Deluxe (119)
 ---
 
 ## Methods
