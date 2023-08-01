@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title: Service Item (119)
+title: Team Kirby Clash Deluxe (119)
 ---
 
 ## Methods
@@ -523,9 +523,9 @@ Revision 1:
 | [ServiceItemAmount](#serviceitemamount-structure)                             | regularPrice     |
 | Bool                                                                          | isTaxAvailable   |
 | [ServiceItemAmount](#serviceitemamount-structure)                             | taxAmount        |
-| [ServiceItemAmount](#serviceitemamount-structure3)                            | totalAmount      |
+| [ServiceItemAmount](#serviceitemamount-structure)                             | totalAmount      |
 | [ServiceItemAmount](#serviceitemamount-structure)                             | currentBalance   |
-| [ServiceItemAmount](#serviceitemamount-structure3)                            | postBalance      |
+| [ServiceItemAmount](#serviceitemamount-structure)                             | postBalance      |
 | [ServiceItemPrepurchaseRightInfo](#serviceitemprepurchaserightinfo-structure) | currentRightInfo |
 | [ServiceItemPrepurchaseRightInfo](#serviceitemprepurchaserightinfo-structure) | postRightInfo    |
 

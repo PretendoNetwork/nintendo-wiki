@@ -13,6 +13,7 @@ This protocol is the old version of the [Ranking](/docs/nex/protocols/ranking) p
 | 5         | [UploadCommonData](#5-uploadcommondata)                    |
 | 14        | [UnknownMethod0xE](#14-unknownmethod0xe)                   |
 | 15        | [UnknownMethod0xF](#15-unknownmethod0xf)                   |
+| 16        | [GetTotal](#16-gettotal)                                   |
 | 17        | [UploadScoreWithLimit](#17-uploadscorewithlimit)           |
 | 20        | [UploadSpecificPeriodScore](#20-uploadspecificperiodscore) |
 | 22        | [GetSpecificPeriodDataList](#22-getspecificperioddatalist) |
@@ -78,6 +79,24 @@ This protocol is the old version of the [Ranking](/docs/nex/protocols/ranking) p
 |-----------------------------|----------------|
 | Uint16                      | Unknown        |
 | [List]&lt;[RankingData]&gt; | Rank data list |
+
+### (16) GetTotal
+#### Request
+
+| Type   | Description            |
+|--------|------------------------|
+| Uint32 | Category               |
+| Uint8  | Unknown (1)            |
+| Uint8  | Unknown (2)            |
+| Uint8  | Unknown (3)            |
+| Uint32 | Unknown (4)            |
+
+#### Response
+
+| Type   | Description |
+|--------|-------------|
+| Uint16 | Unknown     |
+| Uint32 | Total count |
 
 ### (17) UploadScoreWithLimit
 #### Request

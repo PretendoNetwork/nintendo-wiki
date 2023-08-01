@@ -219,9 +219,9 @@ This method does not return anything.
 
 #### Response
 
-| Type                                                               | Name    |
-|--------------------------------------------------------------------|---------|
-| [RankingCachedResult](#rankingcachedresult-inherits-rankingresult) | pResult |
+| Type                                                  | Name    |
+|-------------------------------------------------------|---------|
+| [RankingCachedResult](#rankingcachedresult-structure) | pResult |
 
 ### (15) GetCachedTopXRankings
 #### Request
@@ -233,9 +233,9 @@ This method does not return anything.
 
 #### Response
 
-| Type                                                                             | Name     |
-|----------------------------------------------------------------------------------|----------|
-| [List]&lt;[RankingCachedResult](#rankingcachedresult-inherits-rankingresult)&gt; | pResults |
+| Type                                                                | Name     |
+|---------------------------------------------------------------------|----------|
+| [List]&lt;[RankingCachedResult](#rankingcachedresult-structure)&gt; | pResults |
 
 ## Types
 ### RankingOrderParam ([Structure])
