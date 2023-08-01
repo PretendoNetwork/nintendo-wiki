@@ -125,7 +125,7 @@ Sometimes, `returncd` is set to `null` instead of an error code.
 | `110` | Game server is no longer available        |
 | `111` | Game server is under maintenance          |
 | `119` | FPD version is invalid                    |
-| `120` | Ttile version is invalid                  |
+| `120` | Title version is invalid                  |
 | `121` | Device certificate is invalid             |
 | `122` | PID HMAC is invalid                       |
 | `123` | Rom id is banned                          |
