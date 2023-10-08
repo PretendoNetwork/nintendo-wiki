@@ -396,7 +396,7 @@ This method does not return anything
 | [GameKey](#gamekey-structure) | Game key           |
 | [String]                      | Message            |
 | [DateTime]                    | Message updated at |
-| [DateTime]                    | Friended at        |
+| [DateTime]                    | Mii modified at    |
 | [DateTime]                    | Last online at     |
 
 ### FriendPicture ([Structure])
