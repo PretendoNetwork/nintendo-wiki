@@ -855,7 +855,7 @@ Revision 1:
 |------------------------------|--------------------------------|
 | Uint64                       | dataId                         |
 | [DataStorePersistenceTarget] | persistenceTarget              |
-| Uint8                        | [resultOption](#result-option) |
+| Uint8                        | [resultOption](#result-options) |
 | Uint64                       | accessPassword                 |
 
 ### DataStoreRatingInfo ([Structure])
@@ -975,7 +975,7 @@ In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a
 | Uint8                  | resultOrderColumn              |
 | Uint8                  | resultOrder                    |
 | [ResultRange]          | resultRange                    |
-| Uint8                  | [resultOption](#result-option) |
+| Uint8                  | [resultOption](#result-options) |
 | Uint32                 | minimalRatingFrequency         |
 
 Revision 1:
@@ -1008,7 +1008,7 @@ In revision 3, a total count enabled field was added. Note that this field was i
 | Uint8                  | resultOrderColumn              |
 | Uint8                  | resultOrder                    |
 | [ResultRange]          | resultRange                    |
-| Uint8                  | [resultOption](#result-option) |
+| Uint8                  | [resultOption](#result-options) |
 | Uint32                 | minimalRatingFrequency         |
 | Bool                   | useCache                       |
 | Bool                   | totalCountEnabled              |
