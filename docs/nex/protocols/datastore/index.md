@@ -1168,6 +1168,15 @@ Total count types:
 | Uint8               | permission   |
 | [List]&lt;[PID]&gt; | recipientIds |
 
+Permission types:
+
+| Value | Description   |
+|-------|---------------|
+| 0     | Everyone      |
+| 1     | Friends       |
+| 2     | Recipient IDs |
+| 3     | Owner only    |
+
 ### DataStoreRatingInitParamWithSlot ([Structure])
 
 | Type                       | Name  |
