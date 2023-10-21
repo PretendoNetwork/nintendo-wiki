@@ -858,12 +858,6 @@ Revision 1:
 | Uint8                        | [resultOption](#resultOption) |
 | Uint64                       | accessPassword                |
 
-Result option flags:
-
-| Flag | Field      |
-|------|------------|
-| 0x4  | metaBinary |
-
 ### DataStoreRatingInfo ([Structure])
 
 | Type   | Name         |
