@@ -851,12 +851,12 @@ Revision 1:
 
 ### DataStoreGetMetaParam ([Structure])
 
-| Type                         | Name                          |
-|------------------------------|-------------------------------|
-| Uint64                       | dataId                        |
-| [DataStorePersistenceTarget] | persistenceTarget             |
-| Uint8                        | [resultOption](#resultOption) |
-| Uint64                       | accessPassword                |
+| Type                         | Name                           |
+|------------------------------|--------------------------------|
+| Uint64                       | dataId                         |
+| [DataStorePersistenceTarget] | persistenceTarget              |
+| Uint8                        | [resultOption](#result-option) |
+| Uint64                       | accessPassword                 |
 
 ### DataStoreRatingInfo ([Structure])
 
@@ -959,24 +959,24 @@ In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a
 
 ### DataStoreSearchParam ([Structure])
 
-| Type                   | Name                          |
-|------------------------|-------------------------------|
-| Uint8                  | searchTarget                  |
-| [List]&lt;[PID]&gt;    | ownerIds                      |
-| Uint8                  | ownerType                     |
-| [List]&lt;Uint64&gt;   | destinationIds                |
-| Uint16                 | dataType                      |
-| [DateTime]             | createdAfter                  |
-| [DateTime]             | createdBefore                 |
-| [DateTime]             | updatedAfter                  |
-| [DateTime]             | updatedBefore                 |
-| Uint32                 | referDataId                   |
-| [List]&lt;[String]&gt; | tags                          |
-| Uint8                  | resultOrderColumn             |
-| Uint8                  | resultOrder                   |
-| [ResultRange]          | resultRange                   |
-| Uint8                  | [resultOption](#resultOption) |
-| Uint32                 | minimalRatingFrequency        |
+| Type                   | Name                           |
+|------------------------|--------------------------------|
+| Uint8                  | searchTarget                   |
+| [List]&lt;[PID]&gt;    | ownerIds                       |
+| Uint8                  | ownerType                      |
+| [List]&lt;Uint64&gt;   | destinationIds                 |
+| Uint16                 | dataType                       |
+| [DateTime]             | createdAfter                   |
+| [DateTime]             | createdBefore                  |
+| [DateTime]             | updatedAfter                   |
+| [DateTime]             | updatedBefore                  |
+| Uint32                 | referDataId                    |
+| [List]&lt;[String]&gt; | tags                           |
+| Uint8                  | resultOrderColumn              |
+| Uint8                  | resultOrder                    |
+| [ResultRange]          | resultRange                    |
+| Uint8                  | [resultOption](#result-option) |
+| Uint32                 | minimalRatingFrequency         |
 
 Revision 1:
 
@@ -992,27 +992,27 @@ Revision 2:
 
 In revision 3, a total count enabled field was added. Note that this field was inserted before the data types field:
 
-| Type                   | Name                          |
-|------------------------|-------------------------------|
-| Uint8                  | searchTarget                  |
-| [List]&lt;[PID]&gt;    | ownerIds                      |
-| Uint8                  | ownerType                     |
-| [List]&lt;Uint64&gt;   | destinationIds                |
-| Uint16                 | dataType                      |
-| [DateTime]             | createdAfter                  |
-| [DateTime]             | createdBefore                 |
-| [DateTime]             | updatedAfter                  |
-| [DateTime]             | updatedBefore                 |
-| Uint32                 | referDataId                   |
-| [List]&lt;[String]&gt; | tags                          |
-| Uint8                  | resultOrderColumn             |
-| Uint8                  | resultOrder                   |
-| [ResultRange]          | resultRange                   |
-| Uint8                  | [resultOption](#resultOption) |
-| Uint32                 | minimalRatingFrequency        |
-| Bool                   | useCache                      |
-| Bool                   | totalCountEnabled             |
-| [List]&lt;Uint16&gt;   | dataTypes                     |
+| Type                   | Name                           |
+|------------------------|--------------------------------|
+| Uint8                  | searchTarget                   |
+| [List]&lt;[PID]&gt;    | ownerIds                       |
+| Uint8                  | ownerType                      |
+| [List]&lt;Uint64&gt;   | destinationIds                 |
+| Uint16                 | dataType                       |
+| [DateTime]             | createdAfter                   |
+| [DateTime]             | createdBefore                  |
+| [DateTime]             | updatedAfter                   |
+| [DateTime]             | updatedBefore                  |
+| Uint32                 | referDataId                    |
+| [List]&lt;[String]&gt; | tags                           |
+| Uint8                  | resultOrderColumn              |
+| Uint8                  | resultOrder                    |
+| [ResultRange]          | resultRange                    |
+| Uint8                  | [resultOption](#result-option) |
+| Uint32                 | minimalRatingFrequency         |
+| Bool                   | useCache                       |
+| Bool                   | totalCountEnabled              |
+| [List]&lt;Uint16&gt;   | dataTypes                      |
 
 In NEX version 4.0, the revision number was set back to 0 with no other changes.
 
@@ -1219,7 +1219,7 @@ Permission types:
 | Sint8  | periodHour     |
 | Sint16 | periodDuration |
 
-### resultOption
+### Result options
 
 In DataStore `resultOption` is a set of flags which determine what extra data gets returned when requesting an objects metadata. The following flags are used
 
