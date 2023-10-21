@@ -21,7 +21,7 @@ This remainder of this page describes the methods that are not specific to any g
 ## Methods
 
 | Method ID | Method Name                                                      |
-| --------- | ---------------------------------------------------------------- |
+|-----------|------------------------------------------------------------------|
 | 1         | [PrepareGetObjectV1](#1-preparegetobjectv1)                      |
 | 2         | [PreparePostObjectV1](#2-preparepostobjectv1)                    |
 | 3         | [CompletePostObjectV1](#3-completepostobjectv1)                  |
@@ -73,33 +73,33 @@ This remainder of this page describes the methods that are not specific to any g
 #### Request
 
 | Type                         | Name  |
-| ---------------------------- | ----- |
+|------------------------------|-------|
 | [DataStorePrepareGetParamV1] | param |
 
 #### Response
 
 | Type                    | Name        |
-| ----------------------- | ----------- |
+|-------------------------|-------------|
 | [DataStoreReqGetInfoV1] | pReqGetInfo |
 
 ### (2) PreparePostObjectV1
 #### Request
 
 | Type                          | Name  |
-| ----------------------------- | ----- |
+|-------------------------------|-------|
 | [DataStorePreparePostParamV1] | param |
 
 #### Response
 
 | Type                     | Name         |
-| ------------------------ | ------------ |
+|--------------------------|--------------|
 | [DataStoreReqPostInfoV1] | pReqPostInfo |
 
 ### (3) CompletePostObjectV1
 #### Request
 
 | Type                           | Name  |
-| ------------------------------ | ----- |
+|--------------------------------|-------|
 | [DataStoreCompletePostParamV1] | param |
 
 #### Response
@@ -109,7 +109,7 @@ This method does not return anything.
 #### Request
 
 | Type                   | Name  |
-| ---------------------- | ----- |
+|------------------------|-------|
 | [DataStoreDeleteParam] | param |
 
 #### Response
@@ -119,21 +119,21 @@ This method does not return anything.
 #### Request
 
 | Type                                 | Name          |
-| ------------------------------------ | ------------- |
+|--------------------------------------|---------------|
 | [List]&lt;[DataStoreDeleteParam]&gt; | params        |
 | Bool                                 | transactional |
 
 #### Response
 
 | Type                   | Name     |
-| ---------------------- | -------- |
+|------------------------|----------|
 | [List]&lt;[Result]&gt; | pResults |
 
 ### (6) ChangeMetaV1
 #### Request
 
 | Type                         | Name  |
-| ---------------------------- | ----- |
+|------------------------------|-------|
 | [DataStoreChangeMetaParamV1] | param |
 
 #### Response
@@ -143,7 +143,7 @@ This method does not return anything.
 #### Request
 
 | Type                                       | Name          |
-| ------------------------------------------ | ------------- |
+|--------------------------------------------|---------------|
 | [List]&lt;Uint64&gt;                       | dataIds       |
 | [List]&lt;[DataStoreChangeMetaParamV1]&gt; | params        |
 | Bool                                       | transactional |
@@ -151,34 +151,34 @@ This method does not return anything.
 #### Response
 
 | Type                   | Name     |
-| ---------------------- | -------- |
+|------------------------|----------|
 | [List]&lt;[Result]&gt; | pResults |
 
 ### (8) GetMeta
 #### Request
 
 | Type                    | Name  |
-| ----------------------- | ----- |
+|-------------------------|-------|
 | [DataStoreGetMetaParam] | param |
 
 #### Response
 
 | Type                | Name      |
-| ------------------- | --------- |
+|---------------------|-----------|
 | [DataStoreMetaInfo] | pMetaInfo |
 
 ### (9) GetMetas
 #### Request
 
 | Type                    | Name    |
-| ----------------------- | ------- |
+|-------------------------|---------|
 | [List]&lt;Uint64&gt;    | dataIds |
 | [DataStoreGetMetaParam] | param   |
 
 #### Response
 
 | Type                              | Name      |
-| --------------------------------- | --------- |
+|-----------------------------------|-----------|
 | [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
 | [List]&lt;[Result]&gt;            | pResults  |
 
@@ -186,20 +186,20 @@ This method does not return anything.
 #### Request
 
 | Type                          | Name  |
-| ----------------------------- | ----- |
+|-------------------------------|-------|
 | [DataStorePrepareUpdateParam] | param |
 
 #### Response
 
 | Type                     | Name           |
-| ------------------------ | -------------- |
+|--------------------------|----------------|
 | [DataStoreReqUpdateInfo] | pReqUpdateInfo |
 
 ### (11) CompleteUpdateObject
 #### Request
 
 | Type                           | Name  |
-| ------------------------------ | ----- |
+|--------------------------------|-------|
 | [DataStoreCompleteUpdateParam] | param |
 
 #### Response
@@ -209,39 +209,39 @@ This method does not return anything.
 #### Request
 
 | Type                   | Name  |
-| ---------------------- | ----- |
+|------------------------|-------|
 | [DataStoreSearchParam] | param |
 
 #### Response
 
 | Type                    | Name          |
-| ----------------------- | ------------- |
+|-------------------------|---------------|
 | [DataStoreSearchResult] | pSearchResult |
 
 ### (13) GetNotificationUrl
 #### Request
 
 | Type                               | Name  |
-| ---------------------------------- | ----- |
+|------------------------------------|-------|
 | [DataStoreGetNotificationUrlParam] | param |
 
 #### Response
 
 | Type                                 | Name |
-| ------------------------------------ | ---- |
+|--------------------------------------|------|
 | [DataStoreReqGetNotificationUrlInfo] | info |
 
 ### (14) GetNewArrivedNotificationsV1
 #### Request
 
 | Type                                       | Name  |
-| ------------------------------------------ | ----- |
+|--------------------------------------------|-------|
 | [DataStoreGetNewArrivedNotificationsParam] | param |
 
 #### Response
 
 | Type                                    | Name     |
-| --------------------------------------- | -------- |
+|-----------------------------------------|----------|
 | [List]&lt;[DataStoreNotificationV1]&gt; | pResult  |
 | Bool                                    | pHasNext |
 
@@ -249,7 +249,7 @@ This method does not return anything.
 #### Request
 
 | Type                       | Name         |
-| -------------------------- | ------------ |
+|----------------------------|--------------|
 | [DataStoreRatingTarget]    | target       |
 | [DataStoreRateObjectParam] | param        |
 | Bool                       | fetchRatings |
@@ -257,35 +257,35 @@ This method does not return anything.
 #### Response
 
 | Type                  | Name    |
-| --------------------- | ------- |
+|-----------------------|---------|
 | [DataStoreRatingInfo] | pRating |
 
 ### (16) GetRating
 #### Request
 
 | Type                    | Name           |
-| ----------------------- | -------------- |
+|-------------------------|----------------|
 | [DataStoreRatingTarget] | target         |
 | Uint64                  | accessPassword |
 
 #### Response
 
 | Type                  | Name    |
-| --------------------- | ------- |
+|-----------------------|---------|
 | [DataStoreRatingInfo] | pRating |
 
 ### (17) GetRatings
 #### Request
 
 | Type                 | Name           |
-| -------------------- | -------------- |
+|----------------------|----------------|
 | [List]&lt;Uint64&gt; | dataIds        |
 | Uint64               | accessPassword |
 
 #### Response
 
 | Type                                                      | Name     |
-| --------------------------------------------------------- | -------- |
+|-----------------------------------------------------------|----------|
 | [List]&lt;[List]&lt;[DataStoreRatingInfoWithSlot]&gt;&gt; | pRatings |
 | [List]&lt;[Result]&gt;                                    | pResults |
 
@@ -293,7 +293,7 @@ This method does not return anything.
 #### Request
 
 | Type                    | Name           |
-| ----------------------- | -------------- |
+|-------------------------|----------------|
 | [DataStoreRatingTarget] | target         |
 | Uint64                  | updatePassword |
 
@@ -304,47 +304,47 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name          |
-| -------------------- | ------------- |
+|----------------------|---------------|
 | [List]&lt;Uint64&gt; | dataIds       |
 | Bool                 | transactional |
 
 #### Response
 
 | Type                   | Name     |
-| ---------------------- | -------- |
+|------------------------|----------|
 | [List]&lt;[Result]&gt; | pResults |
 
 ### (20) GetSpecificMetaV1
 #### Request
 
 | Type                              | Name  |
-| --------------------------------- | ----- |
+|-----------------------------------|-------|
 | [DataStoreGetSpecificMetaParamV1] | param |
 
 #### Response
 
 | Type                                        | Name       |
-| ------------------------------------------- | ---------- |
+|---------------------------------------------|------------|
 | [List]&lt;[DataStoreSpecificMetaInfoV1]&gt; | pMetaInfos |
 
 ### (21) PostMetaBinary
 #### Request
 
 | Type                        | Name  |
-| --------------------------- | ----- |
+|-----------------------------|-------|
 | [DataStorePreparePostParam] | param |
 
 #### Response
 
 | Type   | Name   |
-| ------ | ------ |
+|--------|--------|
 | Uint64 | dataId |
 
 ### (22) TouchObject
 #### Request
 
 | Type                        | Name  |
-| --------------------------- | ----- |
+|-----------------------------|-------|
 | [DataStoreTouchObjectParam] | param |
 
 #### Response
@@ -354,14 +354,14 @@ This method does not return anything.
 #### Request
 
 | Type                    | Name           |
-| ----------------------- | -------------- |
+|-------------------------|----------------|
 | [DataStoreRatingTarget] | target         |
 | Uint64                  | accessPassword |
 
 #### Response
 
 | Type                  | Name       |
-| --------------------- | ---------- |
+|-----------------------|------------|
 | [DataStoreRatingInfo] | pRating    |
 | [DataStoreRatingLog]  | pRatingLog |
 
@@ -369,33 +369,33 @@ This method does not return anything.
 #### Request
 
 | Type                        | Name  |
-| --------------------------- | ----- |
+|-----------------------------|-------|
 | [DataStorePreparePostParam] | param |
 
 #### Response
 
 | Type                   | Name         |
-| ---------------------- | ------------ |
+|------------------------|--------------|
 | [DataStoreReqPostInfo] | pReqPostInfo |
 
 ### (25) PrepareGetObject
 #### Request
 
 | Type                       | Name  |
-| -------------------------- | ----- |
+|----------------------------|-------|
 | [DataStorePrepareGetParam] | param |
 
 #### Response
 
 | Type                  | Name        |
-| --------------------- | ----------- |
+|-----------------------|-------------|
 | [DataStoreReqGetInfo] | pReqGetInfo |
 
 ### (26) CompletePostObject
 #### Request
 
 | Type                         | Name  |
-| ---------------------------- | ----- |
+|------------------------------|-------|
 | [DataStoreCompletePostParam] | param |
 
 #### Response
@@ -405,13 +405,13 @@ This method does not return anything.
 #### Request
 
 | Type                                       | Name  |
-| ------------------------------------------ | ----- |
+|--------------------------------------------|-------|
 | [DataStoreGetNewArrivedNotificationsParam] | param |
 
 #### Response
 
 | Type                                  | Name     |
-| ------------------------------------- | -------- |
+|---------------------------------------|----------|
 | [List]&lt;[DataStoreNotification]&gt; | pResult  |
 | Bool                                  | pHasNext |
 
@@ -419,41 +419,41 @@ This method does not return anything.
 #### Request
 
 | Type                            | Name  |
-| ------------------------------- | ----- |
+|---------------------------------|-------|
 | [DataStoreGetSpecificMetaParam] | param |
 
 #### Response
 
 | Type                                      | Name       |
-| ----------------------------------------- | ---------- |
+|-------------------------------------------|------------|
 | [List]&lt;[DataStoreSpecificMetaInfo]&gt; | pMetaInfos |
 
 ### (29) GetPersistenceInfo
 #### Request
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | [PID]  | ownerId           |
 | Uint16 | persistenceSlotId |
 
 #### Response
 
 | Type                       | Name             |
-| -------------------------- | ---------------- |
+|----------------------------|------------------|
 | [DataStorePersistenceInfo] | pPersistenceInfo |
 
 ### (30) GetPersistenceInfos
 #### Request
 
 | Type                 | Name               |
-| -------------------- | ------------------ |
+|----------------------|--------------------|
 | [PID]                | ownerId            |
 | [List]&lt;Uint16&gt; | persistenceSlotIds |
 
 #### Response
 
 | Type                                     | Name             |
-| ---------------------------------------- | ---------------- |
+|------------------------------------------|------------------|
 | [List]&lt;[DataStorePersistenceInfo]&gt; | pPersistenceInfo |
 | [List]&lt;[Result]&gt;                   | pResults         |
 
@@ -461,7 +461,7 @@ This method does not return anything.
 #### Request
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | Uint16 | persistenceSlotId |
 | Uint64 | dataId            |
 | Bool   | deleteLastObject  |
@@ -473,7 +473,7 @@ This method does not return anything.
 #### Request
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | Uint16 | persistenceSlotId |
 | Bool   | deleteLastObject  |
 
@@ -484,13 +484,13 @@ This method does not return anything.
 #### Request
 
 | Type                       | Name  |
-| -------------------------- | ----- |
+|----------------------------|-------|
 | [DataStorePrepareGetParam] | param |
 
 #### Response
 
 | Type                            | Name                  |
-| ------------------------------- | --------------------- |
+|---------------------------------|-----------------------|
 | [DataStoreReqGetInfo]           | pReqGetInfo           |
 | [DataStoreReqGetAdditionalMeta] | pReqGetAdditionalMeta |
 
@@ -498,26 +498,26 @@ This method does not return anything.
 #### Request
 
 | Type   | Name   |
-| ------ | ------ |
+|--------|--------|
 | Uint64 | dataId |
 
 #### Response
 
 | Type                    | Name          |
-| ----------------------- | ------------- |
+|-------------------------|---------------|
 | [DataStorePasswordInfo] | pPasswordInfo |
 
 ### (35) GetPasswordInfos
 #### Request
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | [List]&lt;Uint64&gt; | dataIds |
 
 #### Response
 
 | Type                                  | Name           |
-| ------------------------------------- | -------------- |
+|---------------------------------------|----------------|
 | [List]&lt;[DataStorePasswordInfo]&gt; | pPasswordInfos |
 | [List]&lt;[Result]&gt;                | pResults       |
 
@@ -525,13 +525,13 @@ This method does not return anything.
 #### Request
 
 | Type                                  | Name   |
-| ------------------------------------- | ------ |
+|---------------------------------------|--------|
 | [List]&lt;[DataStoreGetMetaParam]&gt; | params |
 
 #### Response
 
 | Type                              | Name      |
-| --------------------------------- | --------- |
+|-----------------------------------|-----------|
 | [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
 | [List]&lt;[Result]&gt;            | pResults  |
 
@@ -539,7 +539,7 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | [List]&lt;Uint64&gt; | dataIds |
 
 #### Response
@@ -549,7 +549,7 @@ This method does not return anything.
 #### Request
 
 | Type                       | Name  |
-| -------------------------- | ----- |
+|----------------------------|-------|
 | [DataStoreChangeMetaParam] | param |
 
 #### Response
@@ -559,7 +559,7 @@ This method does not return anything.
 #### Request
 
 | Type                                     | Name          |
-| ---------------------------------------- | ------------- |
+|------------------------------------------|---------------|
 | [List]&lt;Uint64&gt;                     | dataIds       |
 | [List]&lt;[DataStoreChangeMetaParam]&gt; | params        |
 | Bool                                     | transactional |
@@ -567,14 +567,14 @@ This method does not return anything.
 #### Response
 
 | Type                   | Name     |
-| ---------------------- | -------- |
+|------------------------|----------|
 | [List]&lt;[Result]&gt; | pResults |
 
 ### (40) RateObjects
 #### Request
 
 | Type                                     | Name          |
-| ---------------------------------------- | ------------- |
+|------------------------------------------|---------------|
 | [List]&lt;[DataStoreRatingTarget]&gt;    | targets       |
 | [List]&lt;[DataStoreRateObjectParam]&gt; | params        |
 | Bool                                     | transactional |
@@ -583,7 +583,7 @@ This method does not return anything.
 #### Response
 
 | Type                                | Name     |
-| ----------------------------------- | -------- |
+|-------------------------------------|----------|
 | [List]&lt;[DataStoreRatingInfo]&gt; | pRatings |
 | [List]&lt;[Result]&gt;              | pResults |
 
@@ -591,7 +591,7 @@ This method does not return anything.
 #### Request
 
 | Type                        | Name   |
-| --------------------------- | ------ |
+|-----------------------------|--------|
 | Uint64                      | dataId |
 | [DataStorePreparePostParam] | param  |
 
@@ -602,7 +602,7 @@ This method does not return anything.
 #### Request
 
 | Type                                      | Name          |
-| ----------------------------------------- | ------------- |
+|-------------------------------------------|---------------|
 | [List]&lt;Uint64&gt;                      | dataIds       |
 | [List]&lt;[DataStorePreparePostParam]&gt; | params        |
 | Bool                                      | transactional |
@@ -610,14 +610,14 @@ This method does not return anything.
 #### Response
 
 | Type                   | Name     |
-| ---------------------- | -------- |
+|------------------------|----------|
 | [List]&lt;[Result]&gt; | pResults |
 
 ### (43) RateObjectWithPosting
 #### Request
 
 | Type                        | Name         |
-| --------------------------- | ------------ |
+|-----------------------------|--------------|
 | [DataStoreRatingTarget]     | target       |
 | [DataStoreRateObjectParam]  | rateParam    |
 | [DataStorePreparePostParam] | postParam    |
@@ -626,14 +626,14 @@ This method does not return anything.
 #### Response
 
 | Type                  | Name    |
-| --------------------- | ------- |
+|-----------------------|---------|
 | [DataStoreRatingInfo] | pRating |
 
 ### (44) RateObjectsWithPosting
 #### Request
 
 | Type                                      | Name          |
-| ----------------------------------------- | ------------- |
+|-------------------------------------------|---------------|
 | [List]&lt;[DataStoreRatingTarget]&gt;     | targets       |
 | [List]&lt;[DataStoreRateObjectParam]&gt;  | rateParams    |
 | [List]&lt;[DataStorePreparePostParam]&gt; | postParams    |
@@ -643,7 +643,7 @@ This method does not return anything.
 #### Response
 
 | Type                                | Name     |
-| ----------------------------------- | -------- |
+|-------------------------------------|----------|
 | [List]&lt;[DataStoreRatingInfo]&gt; | pRatings |
 | [List]&lt;[Result]&gt;              | pResults |
 
@@ -651,13 +651,13 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | [List]&lt;Uint64&gt; | dataIds |
 
 #### Response
 
 | Type                                | Name     |
-| ----------------------------------- | -------- |
+|-------------------------------------|----------|
 | [List]&lt;[DataStoreReqGetInfo]&gt; | pInfos   |
 | [List]&lt;[Result]&gt;              | pResults |
 
@@ -665,13 +665,13 @@ This method does not return anything.
 #### Request
 
 | Type                   | Name  |
-| ---------------------- | ----- |
+|------------------------|-------|
 | [DataStoreSearchParam] | param |
 
 #### Response
 
 | Type                    | Name          |
-| ----------------------- | ------------- |
+|-------------------------|---------------|
 | [DataStoreSearchResult] | pSearchResult |
 
 
@@ -679,14 +679,14 @@ This method does not return anything.
 ### DataStorePrepareGetParamV1 ([Structure])
 
 | Type   | Name   |
-| ------ | ------ |
+|--------|--------|
 | Uint32 | dataId |
 | Uint32 | lockId |
 
 ### DataStorePrepareGetParam ([Structure])
 
 | Type                         | Name              |
-| ---------------------------- | ----------------- |
+|------------------------------|-------------------|
 | Uint64                       | dataId            |
 | Uint32                       | lockId            |
 | [DataStorePersistenceTarget] | persistenceTarget |
@@ -694,14 +694,14 @@ This method does not return anything.
 
 In NEX version 3.5, one more field was added:
 
-| Type                         | Name              |
-| ---------------------------- | ----------------- |
-| [List]&lt;[String]&gt;       | extraData         |
+| Type                   | Name      |
+|------------------------|-----------|
+| [List]&lt;[String]&gt; | extraData |
 
 ### DataStoreReqGetInfoV1 ([Structure])
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
 | Uint32                            | size           |
@@ -710,7 +710,7 @@ In NEX version 3.5, one more field was added:
 ### DataStoreReqGetInfo ([Structure])
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
 | Uint32                            | size           |
@@ -718,14 +718,14 @@ In NEX version 3.5, one more field was added:
 
 In NEX version 3.5, one more field was added:
 
-| Type                              | Name           |
-| --------------------------------- | -------------- |
-| Uint64                            | dataId         |
+| Type   | Name   |
+|--------|--------|
+| Uint64 | dataId |
 
 ### DataStoreReqGetAdditionalMeta ([Structure])
 
 | Type      | Name       |
-| --------- | ---------- |
+|-----------|------------|
 | [PID]     | ownerId    |
 | Uint16    | dataType   |
 | Uint16    | version    |
@@ -734,7 +734,7 @@ In NEX version 3.5, one more field was added:
 ### DataStorePreparePostParamV1 ([Structure])
 
 | Type                                             | Name             |
-| ------------------------------------------------ | ---------------- |
+|--------------------------------------------------|------------------|
 | Uint32                                           | size             |
 | [String]                                         | name             |
 | Uint16                                           | dataType         |
@@ -750,7 +750,7 @@ In NEX version 3.5, one more field was added:
 ### DataStorePreparePostParam ([Structure])
 
 | Type                                             | Name                 |
-| ------------------------------------------------ | -------------------- |
+|--------------------------------------------------|----------------------|
 | Uint32                                           | size                 |
 | [String]                                         | name                 |
 | Uint16                                           | dataType             |
@@ -766,14 +766,14 @@ In NEX version 3.5, one more field was added:
 
 In NEX version 3.5, one more field was added:
 
-| Type                                             | Name                 |
-| ------------------------------------------------ | -------------------- |
-| [List]&lt;[String]&gt;                           | extraData            |
+| Type                   | Name      |
+|------------------------|-----------|
+| [List]&lt;[String]&gt; | extraData |
 
 ### DataStoreReqPostInfoV1 ([Structure])
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | Uint32                            | dataId         |
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
@@ -783,7 +783,7 @@ In NEX version 3.5, one more field was added:
 ### DataStoreReqPostInfo ([Structure])
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | Uint64                            | dataId         |
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
@@ -793,28 +793,28 @@ In NEX version 3.5, one more field was added:
 ### DataStoreCompletePostParamV1 ([Structure])
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint32 | dataId    |
 | Bool   | isSuccess |
 
 ### DataStoreCompletePostParam ([Structure])
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint64 | dataId    |
 | Bool   | isSuccess |
 
 ### DataStoreDeleteParam ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint64 | dataId         |
 | Uint64 | updatePassword |
 
 ### DataStoreChangeMetaParamV1 ([Structure])
 
 | Type                   | Name           |
-| ---------------------- | -------------- |
+|------------------------|----------------|
 | Uint64                 | dataId         |
 | Uint32                 | modifiesFlag   |
 | [String]               | name           |
@@ -827,47 +827,47 @@ In NEX version 3.5, one more field was added:
 
 ### DataStoreChangeMetaParam ([Structure])
 
-| Type                              | Name              |
-| --------------------------------- | ----------------- |
-| Uint64                            | dataId            |
-| Uint32                            | modifiesFlag      |
-| [String]                          | name              |
-| [DataStorePermission]             | permission        |
-| [DataStorePermission]             | delPermission     |
-| Uint16                            | period            |
-| [qBuffer]                         | metaBinary        |
-| [List]&lt;[String]&gt;            | tags              |
-| Uint64                            | updatePassword    |
-| Uint32                            | referredCnt       |
-| Uint16                            | dataType          |
-| Uint8                             | status            |
-| [DataStoreChangeMetaCompareParam] | compareParam      |
+| Type                              | Name           |
+|-----------------------------------|----------------|
+| Uint64                            | dataId         |
+| Uint32                            | modifiesFlag   |
+| [String]                          | name           |
+| [DataStorePermission]             | permission     |
+| [DataStorePermission]             | delPermission  |
+| Uint16                            | period         |
+| [qBuffer]                         | metaBinary     |
+| [List]&lt;[String]&gt;            | tags           |
+| Uint64                            | updatePassword |
+| Uint32                            | referredCnt    |
+| Uint16                            | dataType       |
+| Uint8                             | status         |
+| [DataStoreChangeMetaCompareParam] | compareParam   |
 
 Revision 1:
 
-| Type                              | Name              |
-| --------------------------------- | ----------------- |
-| [DataStorePersistenceTarget]      | persistenceTarget |
+| Type                         | Name              |
+|------------------------------|-------------------|
+| [DataStorePersistenceTarget] | persistenceTarget |
 
 ### DataStoreGetMetaParam ([Structure])
 
-| Type                         | Name              |
-| ---------------------------- | ----------------- |
-| Uint64                       | dataId            |
-| [DataStorePersistenceTarget] | persistenceTarget |
-| Uint8                        | resultOption      |
-| Uint64                       | accessPassword    |
+| Type                         | Name                          |
+|------------------------------|-------------------------------|
+| Uint64                       | dataId                        |
+| [DataStorePersistenceTarget] | persistenceTarget             |
+| Uint8                        | [resultOption](#resultOption) |
+| Uint64                       | accessPassword                |
 
 Result option flags:
 
 | Flag | Field      |
-| ---- | ---------- |
+|------|------------|
 | 0x4  | metaBinary |
 
 ### DataStoreRatingInfo ([Structure])
 
 | Type   | Name         |
-| ------ | ------------ |
+|--------|--------------|
 | Sint64 | totalValue   |
 | Uint32 | count        |
 | Sint64 | initialValue |
@@ -875,14 +875,14 @@ Result option flags:
 ### DataStoreRatingInfoWithSlot ([Structure])
 
 | Type                  | Name   |
-| --------------------- | ------ |
+|-----------------------|--------|
 | Sint8                 | slot   |
 | [DataStoreRatingInfo] | rating |
 
 ### DataStoreMetaInfo ([Structure])
 
 | Type                                        | Name          |
-| ------------------------------------------- | ------------- |
+|---------------------------------------------|---------------|
 | Uint64                                      | dataId        |
 | [PID]                                       | ownerId       |
 | Uint32                                      | size          |
@@ -906,30 +906,30 @@ Result option flags:
 ### DataStorePrepareUpdateParam ([Structure])
 Up to NEX version 2.x, this structure looks as follows:
 
-| Type                   | Name           |
-| ---------------------- | -------------- |
-| Uint32                 | dataId         |
-| Uint32                 | size           |
+| Type   | Name   |
+|--------|--------|
+| Uint32 | dataId |
+| Uint32 | size   |
 
 In NEX version 3.0, the data ID was set to a Uint64 and one more field was added:
 
-| Type                   | Name           |
-| ---------------------- | -------------- |
-| Uint64                 | dataId         |
-| Uint32                 | size           |
-| Uint64                 | updatePassword |
+| Type   | Name           |
+|--------|----------------|
+| Uint64 | dataId         |
+| Uint32 | size           |
+| Uint64 | updatePassword |
 
 In NEX version 3.5, one more field was added:
 
-| Type                   | Name           |
-| ---------------------- | -------------- |
-| [List]&lt;[String]&gt; | extraData      |
+| Type                   | Name      |
+|------------------------|-----------|
+| [List]&lt;[String]&gt; | extraData |
 
 ### DataStoreReqUpdateInfo ([Structure])
 Up to NEX version 2.x, this structure looks as follows:
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | Uint16                            | version        |
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
@@ -939,7 +939,7 @@ Up to NEX version 2.x, this structure looks as follows:
 In NEX version 3.0, the version was set to a Uint32:
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | Uint32                            | version        |
 | [String]                          | url            |
 | [List]&lt;[DataStoreKeyValue]&gt; | requestHeaders |
@@ -950,7 +950,7 @@ In NEX version 3.0, the version was set to a Uint32:
 Up to NEX version 2.x, this structure looks as follows:
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint32 | dataId    |
 | Uint16 | version   |
 | Bool   | isSuccess |
@@ -958,96 +958,96 @@ Up to NEX version 2.x, this structure looks as follows:
 In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a Uint32:
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint64 | dataId    |
 | Uint32 | version   |
 | Bool   | isSuccess |
 
 ### DataStoreSearchParam ([Structure])
 
-| Type                   | Name                   |
-| ---------------------- | ---------------------- |
-| Uint8                  | searchTarget           |
-| [List]&lt;[PID]&gt;    | ownerIds               |
-| Uint8                  | ownerType              |
-| [List]&lt;Uint64&gt;   | destinationIds         |
-| Uint16                 | dataType               |
-| [DateTime]             | createdAfter           |
-| [DateTime]             | createdBefore          |
-| [DateTime]             | updatedAfter           |
-| [DateTime]             | updatedBefore          |
-| Uint32                 | referDataId            |
-| [List]&lt;[String]&gt; | tags                   |
-| Uint8                  | resultOrderColumn      |
-| Uint8                  | resultOrder            |
-| [ResultRange]          | resultRange            |
-| Uint8                  | resultOption           |
-| Uint32                 | minimalRatingFrequency |
+| Type                   | Name                          |
+|------------------------|-------------------------------|
+| Uint8                  | searchTarget                  |
+| [List]&lt;[PID]&gt;    | ownerIds                      |
+| Uint8                  | ownerType                     |
+| [List]&lt;Uint64&gt;   | destinationIds                |
+| Uint16                 | dataType                      |
+| [DateTime]             | createdAfter                  |
+| [DateTime]             | createdBefore                 |
+| [DateTime]             | updatedAfter                  |
+| [DateTime]             | updatedBefore                 |
+| Uint32                 | referDataId                   |
+| [List]&lt;[String]&gt; | tags                          |
+| Uint8                  | resultOrderColumn             |
+| Uint8                  | resultOrder                   |
+| [ResultRange]          | resultRange                   |
+| Uint8                  | [resultOption](#resultOption) |
+| Uint32                 | minimalRatingFrequency        |
 
 Revision 1:
 
 | Type | Name     |
-| ---- | -------- |
+|------|----------|
 | Bool | useCache |
 
 Revision 2:
 
 | Type                 | Name      |
-| -------------------- | --------- |
+|----------------------|-----------|
 | [List]&lt;Uint16&gt; | dataTypes |
 
 In revision 3, a total count enabled field was added. Note that this field was inserted before the data types field:
 
-| Type                   | Name                   |
-| ---------------------- | ---------------------- |
-| Uint8                  | searchTarget           |
-| [List]&lt;[PID]&gt;    | ownerIds               |
-| Uint8                  | ownerType              |
-| [List]&lt;Uint64&gt;   | destinationIds         |
-| Uint16                 | dataType               |
-| [DateTime]             | createdAfter           |
-| [DateTime]             | createdBefore          |
-| [DateTime]             | updatedAfter           |
-| [DateTime]             | updatedBefore          |
-| Uint32                 | referDataId            |
-| [List]&lt;[String]&gt; | tags                   |
-| Uint8                  | resultOrderColumn      |
-| Uint8                  | resultOrder            |
-| [ResultRange]          | resultRange            |
-| Uint8                  | resultOption           |
-| Uint32                 | minimalRatingFrequency |
-| Bool                   | useCache               |
-| Bool                   | totalCountEnabled      |
-| [List]&lt;Uint16&gt;   | dataTypes              |
+| Type                   | Name                          |
+|------------------------|-------------------------------|
+| Uint8                  | searchTarget                  |
+| [List]&lt;[PID]&gt;    | ownerIds                      |
+| Uint8                  | ownerType                     |
+| [List]&lt;Uint64&gt;   | destinationIds                |
+| Uint16                 | dataType                      |
+| [DateTime]             | createdAfter                  |
+| [DateTime]             | createdBefore                 |
+| [DateTime]             | updatedAfter                  |
+| [DateTime]             | updatedBefore                 |
+| Uint32                 | referDataId                   |
+| [List]&lt;[String]&gt; | tags                          |
+| Uint8                  | resultOrderColumn             |
+| Uint8                  | resultOrder                   |
+| [ResultRange]          | resultRange                   |
+| Uint8                  | [resultOption](#resultOption) |
+| Uint32                 | minimalRatingFrequency        |
+| Bool                   | useCache                      |
+| Bool                   | totalCountEnabled             |
+| [List]&lt;Uint16&gt;   | dataTypes                     |
 
 In NEX version 4.0, the revision number was set back to 0 with no other changes.
 
 ### DataStoreSearchResult ([Structure])
 
 | Type                              | Name           |
-| --------------------------------- | -------------- |
+|-----------------------------------|----------------|
 | Uint32                            | totalCount     |
 | [List]&lt;[DataStoreMetaInfo]&gt; | result         |
 | Uint8                             | totalCountType |
 
 Total count types:
 
-| Type   | Description                                               |
-| ------ | --------------------------------------------------------- |
-| 0      | Total number of results (if all results are returned)     |
-| 1      | Total number of results (if not all results are returned) |
-| 3      | Disabled                                                  |
+| Type | Description                                               |
+|------|-----------------------------------------------------------|
+| 0    | Total number of results (if all results are returned)     |
+| 1    | Total number of results (if not all results are returned) |
+| 3    | Disabled                                                  |
 
 ### DataStoreGetNotificationUrlParam ([Structure])
 
 | Type     | Name        |
-| -------- | ----------- |
+|----------|-------------|
 | [String] | previousUrl |
 
 ### DataStoreReqGetNotificationUrlInfo ([Structure])
 
 | Type     | Name       |
-| -------- | ---------- |
+|----------|------------|
 | [String] | url        |
 | [String] | key        |
 | [String] | query      |
@@ -1056,54 +1056,54 @@ Total count types:
 ### DataStoreGetNewArrivedNotificationsParam ([Structure])
 
 | Type   | Name               |
-| ------ | ------------------ |
+|--------|--------------------|
 | Uint64 | lastNotificationId |
 | Uint16 | limit              |
 
 ### DataStoreNotificationV1 ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint64 | notificationId |
 | Uint32 | dataId         |
 
 ### DataStoreNotification ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint64 | notificationId |
 | Uint64 | dataId         |
 
 ### DataStoreRateObjectParam ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Sint32 | ratingValue    |
 | Uint64 | accessPassword |
 
 ### DataStoreRatingTarget ([Structure])
 
 | Type   | Name   |
-| ------ | ------ |
+|--------|--------|
 | Uint64 | dataId |
 | Sint8  | slot   |
 
 ### DataStoreGetSpecificMetaParamV1 ([Structure])
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | [List]&lt;Uint32&gt; | dataIds |
 
 ### DataStoreGetSpecificMetaParam ([Structure])
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | [List]&lt;Uint64&gt; | dataIds |
 
 ### DataStoreSpecificMetaInfoV1 ([Structure])
 
 | Type   | Name     |
-| ------ | -------- |
+|--------|----------|
 | Uint32 | dataId   |
 | [PID]  | ownerId  |
 | Uint32 | size     |
@@ -1113,7 +1113,7 @@ Total count types:
 ### DataStoreSpecificMetaInfo ([Structure])
 
 | Type   | Name     |
-| ------ | -------- |
+|--------|----------|
 | Uint64 | dataId   |
 | [PID]  | ownerId  |
 | Uint32 | size     |
@@ -1123,7 +1123,7 @@ Total count types:
 ### DataStoreTouchObjectParam ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint64 | dataId         |
 | Uint32 | lockId         |
 | Uint64 | accessPassword |
@@ -1131,7 +1131,7 @@ Total count types:
 ### DataStoreRatingLog ([Structure])
 
 | Type       | Name               |
-| ---------- | ------------------ |
+|------------|--------------------|
 | Bool       | isRated            |
 | [PID]      | pid                |
 | Sint32     | ratingValue        |
@@ -1140,7 +1140,7 @@ Total count types:
 ### DataStorePersistenceInfo ([Structure])
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | [PID]  | ownerId           |
 | Uint16 | persistenceSlotId |
 | Uint64 | dataId            |
@@ -1148,7 +1148,7 @@ Total count types:
 ### DataStorePasswordInfo ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint64 | dataId         |
 | Uint64 | accessPassword |
 | Uint64 | updatePassword |
@@ -1156,42 +1156,42 @@ Total count types:
 ### DataStorePersistenceTarget ([Structure])
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | [PID]  | ownerId           |
 | Uint16 | persistenceSlotId |
 
 ### DataStoreKeyValue ([Structure])
 
 | Type     | Name  |
-| -------- | ----- |
+|----------|-------|
 | [String] | key   |
 | [String] | value |
 
 ### DataStorePermission ([Structure])
 
 | Type                | Name         |
-| ------------------- | ------------ |
+|---------------------|--------------|
 | Uint8               | permission   |
 | [List]&lt;[PID]&gt; | recipientIds |
 
 ### DataStoreRatingInitParamWithSlot ([Structure])
 
 | Type                       | Name  |
-| -------------------------- | ----- |
+|----------------------------|-------|
 | Sint8                      | slot  |
 | [DataStoreRatingInitParam] | param |
 
 ### DataStorePersistenceInitParam ([Structure])
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | Uint16 | persistenceSlotId |
 | Bool   | deleteLastObject  |
 
 ### DataStoreChangeMetaCompareParam ([Structure])
 
 | Type                   | Name           |
-| ---------------------- | -------------- |
+|------------------------|----------------|
 | Uint32                 | comparisonFlag |
 | [String]               | name           |
 | [DataStorePermission]  | permission     |
@@ -1206,7 +1206,7 @@ Total count types:
 ### DataStoreRatingInitParam ([Structure])
 
 | Type   | Name           |
-| ------ | -------------- |
+|--------|----------------|
 | Uint8  | flag           |
 | Uint8  | internalFlag   |
 | Uint8  | lockType       |
@@ -1215,6 +1215,16 @@ Total count types:
 | Sint32 | rangeMax       |
 | Sint8  | periodHour     |
 | Sint16 | periodDuration |
+
+### resultOption
+
+In DataStore `resultOption` is a set of flags which determine what extra data gets returned when requesting an objects metadata. The following flags are used
+
+| Flag  | Description                             |
+|-------|-----------------------------------------|
+| `0x1` | Populate the objects `tags` field       |
+| `0x2` | Populate the objects `ratings` field    |
+| `0x4` | Populate the objects `metaBinary` field |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
