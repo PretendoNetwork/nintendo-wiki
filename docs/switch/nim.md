@@ -4,6 +4,10 @@ toc: true
 title: NIM (Title Installation)
 ---
 
+The sun servers have a dedicated page:
+* [Sun Server](/docs/switch/sun)
+* [Atumn Server](/docs/switch/atumn)
+
 ### aqua
 
 | URL                            |
@@ -22,16 +26,6 @@ title: NIM (Title Installation)
 | `/c1/<id>/c/c/<id>` |
 | `/c2/<id>/c/a/<id>` |
 | `/c2/<id>/c/c/<id>` |
-
-### atumn
-
-| URL              |
-|------------------|
-| `/c/a/<id>`      |
-| `/c/c/<id>`      |
-| `/c/s/<id>`      |
-| `/t/a/<id>/<id>` |
-| `/t/s/<id>/<id>` |
 
 ### beach
 
@@ -56,12 +50,6 @@ title: NIM (Title Installation)
 | URL                   |
 |-----------------------|
 | `/pushmo/d/<id>.json` |
-
-### sun
-
-| URL                      |
-|--------------------------|
-| `/v1/system_update_meta` |
 
 ### superfly
 

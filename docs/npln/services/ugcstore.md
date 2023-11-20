@@ -9,7 +9,7 @@ Full name: `nn.npln.ugcstore.v1.Ugcstore`
 * [Source code](https://github.com/kinnay/NPLN-Protocols/blob/master/latest/proto/ugcstore/v1/ugcstore.proto)
 
 ## Overview
-The ugcstore service managed user-generated content.
+The ugcstore service manages user-generated content.
 
 ## Methods
 * GetDocument

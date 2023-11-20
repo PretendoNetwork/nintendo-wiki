@@ -5,7 +5,6 @@ title: Servers List
 ---
 
 ## Switch
-For development servers, lp1 is replaced by one of the following:
 
 | Environment                                 | Description     |
 |---------------------------------------------|-----------------|
@@ -98,11 +97,11 @@ For development servers, lp1 is replaced by one of the following:
 #### Title Installation ([docs](/docs/switch/nim))
 * https://aqua.hac.lp1.d4c.nintendo.net
 * https://atum.hac.lp1.d4c.nintendo.net
-* https://atumn.hac.lp1.d4c.nintendo.net
+* https://atumn.hac.lp1.d4c.nintendo.net ([system update content](/docs/switch/atumn))
 * https://beach.hac.lp1.eshop.nintendo.net
 * https://pearljam.hac.lp1.eshop.nintendo.net
 * https://pushmo.hac.lp1.eshop.nintendo.net
-* https://sun.hac.lp1.d4c.nintendo.net
+* https://sun.hac.lp1.d4c.nintendo.net ([system update meta](/docs/switch/sun))
 * https://superfly.hac.lp1.d4c.nintendo.net
 * https://veer.hac.%.d4c.nintendo.net
 
