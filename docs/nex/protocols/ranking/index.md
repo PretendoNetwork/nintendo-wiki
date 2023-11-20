@@ -287,6 +287,7 @@ Revision 1:
 | Uint8      | maxLength   |
 
 ### RankingStats ([Structure])
+The statsList always has 5 entries. Depending on the flags given to [GetStats](#11-getstats), some entries may be 0.
 
 | Type                 | Name      |
 |----------------------|-----------|

@@ -36,13 +36,13 @@ The underlying protocol varies per game and platform. Originally, the purpose of
 
 <table>
   <tr>
-    <td><b>3DS</b></td><td>Packets are encoded using <a href="PRUDP-Protocol#v0-format">PRUDP V0</a> or <a href="PRUDP-Protocol#v1-format">PRUDP V1</a></td>
+    <td><b>3DS</b></td><td>Packets are encoded using <a href="/docs/prudp#v0-format">PRUDP V0</a> or <a href="/docs/prudp#v1-format">PRUDP V1</a></td>
   </tr>
   <tr>
-    <td><b>Wii U</b></td><td>Packets are normally encoded using <a href="PRUDP-Protocol#v1-format">PRUDP V1</a>. Only one server still uses <a href="PRUDP-Protocol#v0-format">PRUDP V0</a>: the friends server.</td>
+    <td><b>Wii U</b></td><td>Packets are normally encoded using <a href="/docs/prudp#v1-format">PRUDP V1</a>. Only one server still uses <a href="/docs/prudp#v0-format">PRUDP V0</a>: the friends server.</td>
   </tr>
   <tr>
-    <td><b>Switch</b></td><td>Switch games use <a href="PRUDP-Protocol#lite-format">PRUDP Lite</a> on top of WebSockets.</td>
+    <td><b>Switch</b></td><td>Switch games use <a href="/docs/prudp#lite-format">PRUDP Lite</a> on top of WebSockets.</td>
   </tr>
 </table>
 
