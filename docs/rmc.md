@@ -93,7 +93,7 @@ In all known cases, the method name string in responses ends with a `*`. Looking
 
 ## ClassVersionContainer
 
-The `ClassVersionContainer` is a [List](/docs/nex/types#list) of `ClassVersion` types. Unlike in the "packed" variations, where structure version information is optionally stored as a header on the structure, a `ClassVersion` defines this version only once before the rest of the message is parsed. Presumably this is done to not re-encode the same version information multiple times, though the cases where this is beneficial are few. Every *request* in the "verbose" variation begins with a `ClassVersionContainer`, even if it has 0 elements. Responses do not use a `ClassVersionContainer`, nor do they encode the structure header
+The `ClassVersionContainer` is a [List](/docs/nex/types#list) of [ClassVersion](#classversion) types. Unlike in the "packed" variations, where structure version information is optionally stored as a header on the structure, a [ClassVersion](#classversion) defines this version only once before the rest of the message is parsed. Presumably this is done to not re-encode the same version information multiple times, though the cases where this is beneficial are few. Every *request* in the "verbose" variation begins with a `ClassVersionContainer`, even if it has 0 elements. Responses do not use a `ClassVersionContainer`, nor do they encode the structure header
 
 ## ClassVersion
 
