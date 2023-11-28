@@ -125,7 +125,6 @@ A variant consists of an uint8 indicating the type followed by its value.
 | 6       | Uint64     |
 
 ## Structure
-
 When using the ["verbose" RMC variation](/docs/rmc) the structure version information is stored in the [ClassVersionContainer](/docs/rmc#classversioncontainer). When using the ["packed" RMC variation](/docs/rmc), and the client is using NEX v3.5.0 or above, the structures version information is encoded as a header before the structures contents. Before NEX v3.5.0, the structures contents are encoded directly into the stream without a version header
 
 ### Structure header

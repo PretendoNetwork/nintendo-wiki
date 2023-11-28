@@ -5,7 +5,6 @@ title: RMC Protocol
 ---
 
 # Overview
-
 [PRUDP](/docs/prudp) packets may have optional payloads. These payloads may be anything, however typically `DATA` packets use RMC. RMC is a standardized protocol for calling methods on remote services. RMC has been known to come in at least 3 different variations. The variation used is already know to both the server and client. These variations are:
 
 - "Packed" - Information about the service and method is tightly packed, such as using integers for protocol/method IDs
@@ -92,7 +91,6 @@ In all known cases, the method name string in responses ends with a `*`. Looking
 | Uint32 | Call id                                                                                                   |
 
 ## ClassVersionContainer
-
 The `ClassVersionContainer` is a [List](/docs/nex/types#list) of [ClassVersion](#classversion) types. Unlike in the "packed" variations, where structure version information is optionally stored as a header on the structure, a [ClassVersion](#classversion) defines this version only once before the rest of the message is parsed. Presumably this is done to not re-encode the same version information multiple times, though the cases where this is beneficial are few. Every *request* in the "verbose" variation begins with a `ClassVersionContainer`, even if it has 0 elements. Responses do not use a `ClassVersionContainer`, nor do they encode the structure header
 
 ## ClassVersion
