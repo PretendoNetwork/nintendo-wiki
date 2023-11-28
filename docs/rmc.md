@@ -12,7 +12,7 @@ title: RMC Protocol
 - "Packed" extended - The exact same as the previous "packed" variation, except an additional uint16 is added as the "true" protocol ID. In this case the uint8 "protocol ID" is `0x7F`
 - "Verbose" - Rather than tightly packing data, this variation opts to encode information about the remote service and method in a more verbose way, using strings in place of integer IDs. This variation also changes how [Structures](/docs/nex/types#structure) are encoded
 
-All NEX titles use one of the "packed" variations. Many Rendez-Vous titles also seem to use the "packed" variations. However some Rendez-Vous titles, such as Watch Dogs for the Wii U, use the "verbose" variation
+All NEX titles use one of the "packed" variations. Many Rendez-Vous titles also seem to use the "packed" variations. However, some Rendez-Vous titles use the "verbose" variation
 
 # "Packed" variations
 
