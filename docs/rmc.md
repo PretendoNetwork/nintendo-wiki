@@ -82,7 +82,7 @@ All NEX titles use one of the "packed" variations. Many Rendez-Vous titles also 
 | [String](/docs/nex/types#string) | Method name, with the protocol name as a prefix |
 | ...                              | Response data                                   |
 
-In all known cases, the method name string in responses ends with a `*`. Looking at the response handlers for Watch Dogs on the Wii U, this seems to be related to a "return value pointer", though it is not entirely clear at this time
+In all known cases, the method name string in responses ends with a `*`. Looking at the response handlers for some games, this seems to be related to a "return value pointer", though it is not entirely clear at this time
 
 **On error:**
 
