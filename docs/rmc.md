@@ -34,7 +34,7 @@ All NEX titles use one of the "packed" variations. Many Rendez-Vous titles also 
 | Uint32 | Size, excluding this field                                         |
 | Uint8  | [Protocol id](/docs/nex/protocols)                                 |
 | Uint16 | Extended protocol id. **Only present if the protocol id is 0x7F.** |
-| Bool  | "Is success"                                                  |
+| Bool   | "Is success"                                                       |
 
 **On success:**
 
