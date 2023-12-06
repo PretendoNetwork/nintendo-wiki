@@ -33,7 +33,7 @@ title: Subscription (117)
 | Type                                            | Description |
 |-------------------------------------------------|-------------|
 | Uint32                                          | Unknown     |
-| [SubscriptionData](#subscriptiondata-nulldata) | Param       |
+| [SubscriptionData](#subscriptiondata-structure) | Param       |
 
 #### Response
 This method does not return anything.
@@ -43,7 +43,7 @@ This method does not return anything.
 
 | Type                                            | Description |
 |-------------------------------------------------|-------------|
-| [SubscriptionData](#subscriptiondata-nulldata) | Param       |
+| [SubscriptionData](#subscriptiondata-structure) | Param       |
 
 #### Response
 This method does not return anything.
@@ -82,7 +82,7 @@ This method does not take any parameters.
 
 | Type                                                          | Description  |
 |---------------------------------------------------------------|--------------|
-| [List]&lt;[SubscriptionData](#subscriptiondata-nulldata)&gt; | Friends data |
+| [List]&lt;[SubscriptionData](#subscriptiondata-structure)&gt; | Friends data |
 
 ### (8) GetTargetSubscriptionData
 #### Request
@@ -92,7 +92,7 @@ This method does not take any parameters.
 
 | Type                                                          | Description  |
 |---------------------------------------------------------------|--------------|
-| [List]&lt;[SubscriptionData](#subscriptiondata-nulldata)&gt; | Targets data |
+| [List]&lt;[SubscriptionData](#subscriptiondata-structure)&gt; | Targets data |
 
 ### (9) GetActivePlayerSubscriptionData
 #### Request
@@ -105,9 +105,9 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                                                         | Description |
-|----------------------------------------------------------------------------------------------|-------------|
-| [List]&lt;[ActivePlayerSubscriptionData](#activeplayersubscriptiondata-subscriptiondata)&gt; | Unknown     |
+| Type                                                                                  | Description |
+|---------------------------------------------------------------------------------------|-------------|
+| [List]&lt;[ActivePlayerSubscriptionData](#activeplayersubscriptiondata-structure)&gt; | Unknown     |
 
 ### (10) GetSubscriptionData
 #### Request
@@ -120,7 +120,7 @@ This method does not take any parameters.
 
 | Type                                                          | Description   |
 |---------------------------------------------------------------|---------------|
-| [List]&lt;[SubscriptionData](#subscriptiondata-nulldata)&gt; | Data for PIDs |
+| [List]&lt;[SubscriptionData](#subscriptiondata-structure)&gt; | Data for PIDs |
 
 ### (11) ReplaceTargetAndGetSubscriptionData
 #### Request
@@ -133,7 +133,7 @@ This method does not take any parameters.
 
 | Type                                                          | Description   |
 |---------------------------------------------------------------|---------------|
-| [List]&lt;[SubscriptionData](#subscriptiondata-nulldata)&gt; | Data for PIDs |
+| [List]&lt;[SubscriptionData](#subscriptiondata-structure)&gt; | Data for PIDs |
 
 ### (12) SetPrivacyLevel
 #### Request
@@ -184,7 +184,7 @@ This method does not take any parameters.
 | Type                                            | Description |
 |-------------------------------------------------|-------------|
 | Uint32                                          | Unknown     |
-| [SubscriptionData](#subscriptiondata-nulldata) | Param       |
+| [SubscriptionData](#subscriptiondata-structure) | Param       |
 | Uint32                                          | Unknown     |
 | Uint32                                          | Unknown     |
 | [String]                                        | Unknown     |
@@ -197,7 +197,7 @@ This method does not return anything.
 
 | Type                                            | Description |
 |-------------------------------------------------|-------------|
-| [SubscriptionData](#subscriptiondata-nulldata) | Param       |
+| [SubscriptionData](#subscriptiondata-structure) | Param       |
 | Uint32                                          | Unknown     |
 | Uint32                                          | Unknown     |
 | [String]                                        | Unknown     |
@@ -218,20 +218,25 @@ This method does not return anything.
 This method does not return anything.
 
 ## Types
-### SubscriptionData ([NullData])
+### SubscriptionData ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [NullData]
+{: .prompt-info }
 
 | Type      | Description |
 |-----------|-------------|
 | Uint32    | Unknown     |
 | [qBuffer] | Unknown     |
 
-### ActivePlayerSubscriptionData ([SubscriptionData](#subscriptiondata-nulldata))
+### ActivePlayerSubscriptionData ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [SubscStructureriptionData](#subscriptiondata-structure)
+{: .prompt-info }
 
 | Type   | Description |
 |--------|-------------|
 | Uint8  | Unknown     |
 | Uint32 | Unknown     |
 
+[Structure]: /docs/nex/types#structure
 [String]: /docs/nex/types#string
 [PID]: /docs/nex/types#pid
 [NullData]: /docs/nex/types#data-structure
