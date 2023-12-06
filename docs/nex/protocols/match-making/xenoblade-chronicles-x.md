@@ -4,12 +4,12 @@ toc: true
 title: Xenoblade Chronicles X (112)
 ---
 
-At some point NEX was updated and both `MigrateGatheringOwnership` and `UpdateSessionHost` to have additional parameters. These then became the new `MigrateGatheringOwnership` and `UpdateSessionHost`, and the old methods without the additional parameters became `MigrateGatheringOwnershipV1` and `UpdateSessionHostV1`. Xenoblade Chronicles X uses the old versions of these methods
+At some point NEX was updated and both `MigrateGatheringOwnership` and `UpdateSessionHost` to have additional parameters. These then became the new `MigrateGatheringOwnership` and `UpdateSessionHost`, and the old methods without the additional parameters became `MigrateGatheringOwnershipV1` and `UpdateSessionHostV1`. Xenoblade Chronicles X uses the old versions of these methods.
 
 ## Methods
 
-| Method ID | Method Name                                                     |
-|-----------|-----------------------------------------------------------------|
+| Method ID | Method Name                                                |
+|-----------|------------------------------------------------------------|
 | 36        | [MigrateGatheringOwnership](#36-migrategatheringownership) |
 | 40        | [UpdateSessionHost](#40-updatesessionhost)                 |
 

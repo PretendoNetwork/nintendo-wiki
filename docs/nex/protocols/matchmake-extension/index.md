@@ -16,13 +16,14 @@ The following games have additional methods in the matchmake extension protocol:
 * [Super Mario Bros. 35](/docs/nex/protocols/matchmake-extension/super-mario-bros-35)
 * [Super Smash Bros. 4](/docs/nex/protocols/matchmake-extension/super-smash-bros-4)
 * [Super Smash Bros. Ultimate](/docs/nex/protocols/matchmake-extension/super-smash-bros-ultimate)
+* [Xenoblade Chronicles X](/docs/nex/protocols/matchmake-extension/xenoblade-chronicles-x)
 
 This remainder of this page describes the methods that are not specific to any game.
 
 ## Methods
 
 | Method ID | Method Name                                                                                                            |
-| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+|-----------|------------------------------------------------------------------------------------------------------------------------|
 | 1         | [CloseParticipation](#1-closeparticipation)                                                                            |
 | 2         | [OpenParticipation](#2-openparticipation)                                                                              |
 | 3         | [AutoMatchmake_Postpone](#3-automatchmake_postpone)                                                                    |
@@ -82,7 +83,7 @@ This remainder of this page describes the methods that are not specific to any g
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
@@ -92,7 +93,7 @@ This method does not return anything.
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
@@ -102,42 +103,42 @@ This method does not return anything.
 #### Request
 
 | Type                      | Name         |
-| ------------------------- | ------------ |
+|---------------------------|--------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering |
 | [String]                  | strMessage   |
 
 #### Response
 
 | Type                      | Name            |
-| ------------------------- | --------------- |
+|---------------------------|-----------------|
 | [Data]&lt;[Gathering]&gt; | joinedGathering |
 
 ### (4) BrowseMatchmakeSession
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 | [ResultRange]                    | resultRange    |
 
 #### Response
 
 | Type                                    | Name         |
-| --------------------------------------- | ------------ |
+|-----------------------------------------|--------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering |
 
 ### (5) BrowseMatchmakeSessionWithHostUrls
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 | [ResultRange]                    | resultRange    |
 
 #### Response
 
 | Type                                    | Name             |
-| --------------------------------------- | ---------------- |
+|-----------------------------------------|------------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering     |
 | [List]&lt;[GatheringURLs]&gt;           | lstGatheringUrls |
 
@@ -145,7 +146,7 @@ This method does not return anything.
 #### Request
 
 | Type                      | Name               | Only present in      |
-| ------------------------- | ------------------ | -------------------- |
+|---------------------------|--------------------|----------------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering       |                      |
 | [String]                  | strMessage         |                      |
 | Uint16                    | participationCount | NEX v3.5.0 and later |
@@ -153,7 +154,7 @@ This method does not return anything.
 #### Response
 
 | Type     | Name       | Only present in      |
-| -------- | ---------- | -------------------- |
+|----------|------------|----------------------|
 | Uint32   | gid        |                      |
 | [Buffer] | sessionKey | NEX v3.0.0 and later |
 
@@ -161,21 +162,21 @@ This method does not return anything.
 #### Request
 
 | Type     | Name       |
-| -------- | ---------- |
+|----------|------------|
 | Uint32   | gid        |
 | [String] | strMessage |
 
 #### Response
 
 | Type     | Name       | Only present in      |
-| -------- | ---------- | -------------------- |
+|----------|------------|----------------------|
 | [Buffer] | sessionKey | NEX v3.0.0 and later |
 
 ### (8) ModifyCurrentGameAttribute
 #### Request
 
 | Type   | Name        |
-| ------ | ----------- |
+|--------|-------------|
 | Uint32 | gid         |
 | Uint32 | attribIndex |
 | Uint32 | newValue    |
@@ -188,7 +189,7 @@ This method does not return anything.
 **Wii U and 3DS:**
 
 | Type     | Name     |
-| -------- | -------- |
+|----------|----------|
 | Uint32   | uiType   |
 | Uint32   | uiParam1 |
 | Uint32   | uiParam2 |
@@ -197,7 +198,7 @@ This method does not return anything.
 **Switch:**
 
 | Type     | Name     |
-| -------- | -------- |
+|----------|----------|
 | Uint32   | uiType   |
 | Uint64   | uiParam1 |
 | Uint64   | uiParam2 |
@@ -210,20 +211,20 @@ This method does not return anything.
 #### Request
 
 | Type   | Name   |
-| ------ | ------ |
+|--------|--------|
 | Sint32 | uiType |
 
 #### Response
 
 | Type                              | Name     |
-| --------------------------------- | -------- |
+|-----------------------------------|----------|
 | [List]&lt;[NotificationEvent]&gt; | dataList |
 
 ### (11) UpdateApplicationBuffer
 #### Request
 
 | Type     | Name              |
-| -------- | ----------------- |
+|----------|-------------------|
 | Uint32   | gid               |
 | [Buffer] | applicationBuffer |
 
@@ -234,7 +235,7 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name    |
-| -------------------- | ------- |
+|----------------------|---------|
 | Uint32               | gid     |
 | [List]&lt;Uint32&gt; | attribs |
 
@@ -245,20 +246,20 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name     |
-| -------------------- | -------- |
+|----------------------|----------|
 | [List]&lt;Uint32&gt; | lstTypes |
 
 #### Response
 
 | Type                              | Name     |
-| --------------------------------- | -------- |
+|-----------------------------------|----------|
 | [List]&lt;[NotificationEvent]&gt; | dataList |
 
 ### (14) UpdateMatchmakeSession
 #### Request
 
 | Type                      | Name         |
-| ------------------------- | ------------ |
+|---------------------------|--------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering |
 
 #### Response
@@ -268,7 +269,7 @@ This method does not return anything.
 #### Request
 
 | Type                                           | Name              |
-| ---------------------------------------------- | ----------------- |
+|------------------------------------------------|-------------------|
 | [List]&lt;[MatchmakeSessionSearchCriteria]&gt; | lstSearchCriteria |
 | [Data]&lt;[Gathering]&gt;                      | anyGathering      |
 | [String]                                       | strMessage        |
@@ -276,41 +277,41 @@ This method does not return anything.
 #### Response
 
 | Type                      | Name            |
-| ------------------------- | --------------- |
+|---------------------------|-----------------|
 | [Data]&lt;[Gathering]&gt; | joinedGathering |
 
 ### (16) GetPlayingSession
 #### Request
 
 | Type                | Name   |
-| ------------------- | ------ |
+|---------------------|--------|
 | [List]&lt;[PID]&gt; | lstPid |
 
 #### Response
 
 | Type                           | Name              |
-| ------------------------------ | ----------------- |
+|--------------------------------|-------------------|
 | [List]&lt;[PlayingSession]&gt; | lstPlayingSession |
 
 ### (17) CreateCommunity
 #### Request
 
 | Type                  | Name       |
-| --------------------- | ---------- |
+|-----------------------|------------|
 | [PersistentGathering] | community  |
 | [String]              | strMessage |
 
 #### Response
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 ### (18) UpdateCommunity
 #### Request
 
 | Type                  | Name      |
-| --------------------- | --------- |
+|-----------------------|-----------|
 | [PersistentGathering] | community |
 
 #### Response
@@ -320,7 +321,7 @@ This method does not return anything.
 #### Request
 
 | Type     | Name        |
-| -------- | ----------- |
+|----------|-------------|
 | Uint32   | gid         |
 | [String] | strMessage  |
 | [String] | strPassword |
@@ -332,48 +333,48 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name   |
-| -------------------- | ------ |
+|----------------------|--------|
 | [List]&lt;Uint32&gt; | lstGid |
 
 #### Response
 
 | Type                                | Name         |
-| ----------------------------------- | ------------ |
+|-------------------------------------|--------------|
 | [List]&lt;[PersistentGathering]&gt; | lstCommunity |
 
 ### (21) FindOfficialCommunity
 #### Request
 
 | Type          | Name            |
-| ------------- | --------------- |
+|---------------|-----------------|
 | Bool          | isAvailableOnly |
 | [ResultRange] | resultRange     |
 
 #### Response
 
 | Type                                | Name         |
-| ----------------------------------- | ------------ |
+|-------------------------------------|--------------|
 | [List]&lt;[PersistentGathering]&gt; | lstCommunity |
 
 ### (22) FindCommunityByParticipant
 #### Request
 
 | Type          | Name        |
-| ------------- | ----------- |
+|---------------|-------------|
 | [PID]         | pid         |
 | [ResultRange] | resultRange |
 
 #### Response
 
 | Type                                | Name         |
-| ----------------------------------- | ------------ |
+|-------------------------------------|--------------|
 | [List]&lt;[PersistentGathering]&gt; | lstCommunity |
 
 ### (23) UpdatePrivacySetting
 #### Request
 
 | Type | Name                   |
-| ---- | ---------------------- |
+|------|------------------------|
 | Bool | onlineStatus           |
 | Bool | participationCommunity |
 
@@ -387,14 +388,14 @@ This method does not take any parameters.
 #### Response
 
 | Type                | Name           |
-| ------------------- | -------------- |
+|---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
 ### (25) AddToBlockList
 #### Request
 
 | Type                | Name           |
-| ------------------- | -------------- |
+|---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
 #### Response
@@ -404,7 +405,7 @@ This method does not return anything.
 #### Request
 
 | Type                | Name           |
-| ------------------- | -------------- |
+|---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
 #### Response
@@ -421,7 +422,7 @@ This method does not return anything.
 #### Request
 
 | Type     | Name          |
-| -------- | ------------- |
+|----------|---------------|
 | [PID]    | pid           |
 | [String] | userName      |
 | Uint32   | violationCode |
@@ -436,7 +437,7 @@ This method does not take any parameters.
 #### Response
 
 | Type   | Name  |
-| ------ | ----- |
+|--------|-------|
 | Bool   | flag  |
 | Uint32 | score |
 
@@ -444,7 +445,7 @@ This method does not take any parameters.
 #### Request
 
 | Type     | Name                |
-| -------- | ------------------- |
+|----------|---------------------|
 | Uint32   | gid                 |
 | [String] | strMessage          |
 | Bool     | dontCareMyBlockList |
@@ -453,41 +454,41 @@ This method does not take any parameters.
 #### Response
 
 | Type     | Name       |
-| -------- | ---------- |
+|----------|------------|
 | [Buffer] | sessionKey |
 
 ### (31) GetSimplePlayingSession
 #### Request
 
 | Type                | Name             |
-| ------------------- | ---------------- |
+|---------------------|------------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId   |
 | Bool                | includeLoginUser |
 
 #### Response
 
 | Type                                 | Name                    |
-| ------------------------------------ | ----------------------- |
+|--------------------------------------|-------------------------|
 | [List]&lt;[SimplePlayingSession]&gt; | lstSimplePlayingSession |
 
 ### (32) GetSimpleCommunity
 #### Request
 
 | Type                 | Name            |
-| -------------------- | --------------- |
+|----------------------|-----------------|
 | [List]&lt;Uint32&gt; | gatheringIdList |
 
 #### Response
 
 | Type                            | Name                   |
-| ------------------------------- | ---------------------- |
+|---------------------------------|------------------------|
 | [List]&lt;[SimpleCommunity]&gt; | lstSimpleCommunityList |
 
 ### (33) AutoMatchmakeWithGatheringId_Postpone
 #### Request
 
 | Type                      | Name         |
-| ------------------------- | ------------ |
+|---------------------------|--------------|
 | [List]&lt;Uint32&gt;      | lstGid       |
 | [Data]&lt;[Gathering]&gt; | anyGathering |
 | [String]                  | strMessage   |
@@ -495,14 +496,14 @@ This method does not take any parameters.
 #### Response
 
 | Type                      | Name            |
-| ------------------------- | --------------- |
+|---------------------------|-----------------|
 | [Data]&lt;[Gathering]&gt; | joinedGathering |
 
 ### (34) UpdateProgressScore
 #### Request
 
 | Type   | Name          |
-| ------ | ------------- |
+|--------|---------------|
 | Uint32 | gid           |
 | Uint8  | progressScore |
 
@@ -513,7 +514,7 @@ This method does not return anything.
 #### Request
 
 | Type     | Name        |
-| -------- | ----------- |
+|----------|-------------|
 | [PID]    | pid         |
 | Uint32   | mainType    |
 | Uint32   | subType     |
@@ -528,20 +529,20 @@ This method does not return anything.
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
 
 | Type     | Name     |
-| -------- | -------- |
+|----------|----------|
 | [String] | password |
 
 ### (37) ClearMatchmakeSessionSystemPassword
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
@@ -551,80 +552,80 @@ This method does not return anything.
 #### Request
 
 | Type                          | Name                        |
-| ----------------------------- | --------------------------- |
+|-------------------------------|-----------------------------|
 | [CreateMatchmakeSessionParam] | createMatchmakeSessionParam |
 
 #### Response
 
 | Type               | Name                   |
-| ------------------ | ---------------------- |
+|--------------------|------------------------|
 | [MatchmakeSession] | joinedMatchmakeSession |
 
 ### (39) JoinMatchmakeSessionWithParam
 #### Request
 
 | Type                        | Name                      |
-| --------------------------- | ------------------------- |
+|-----------------------------|---------------------------|
 | [JoinMatchmakeSessionParam] | joinMatchmakeSessionParam |
 
 #### Response
 
 | Type               | Name                   |
-| ------------------ | ---------------------- |
+|--------------------|------------------------|
 | [MatchmakeSession] | joinedMatchmakeSession |
 
 ### (40) AutoMatchmakeWithParam_Postpone
 #### Request
 
 | Type                 | Name               |
-| -------------------- | ------------------ |
+|----------------------|--------------------|
 | [AutoMatchmakeParam] | autoMatchmakeParam |
 
 #### Response
 
 | Type               | Name                   |
-| ------------------ | ---------------------- |
+|--------------------|------------------------|
 | [MatchmakeSession] | joinedMatchmakeSession |
 
 ### (41) FindMatchmakeSessionByGatheringIdDetail
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
 
 | Type               | Name             |
-| ------------------ | ---------------- |
+|--------------------|------------------|
 | [MatchmakeSession] | matchmakeSession |
 
 ### (42) BrowseMatchmakeSessionNoHolder
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 | [ResultRange]                    | resultRange    |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 
 ### (43) BrowseMatchmakeSessionWithHostUrlsNoHolder
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 | [ResultRange]                    | resultRange    |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 | [List]&lt;[GatheringURLs]&gt;    | lstGatheringUrls    |
 
@@ -632,7 +633,7 @@ This method does not return anything.
 #### Request
 
 | Type                          | Name                        |
-| ----------------------------- | --------------------------- |
+|-------------------------------|-----------------------------|
 | [UpdateMatchmakeSessionParam] | updateMatchmakeSessionParam |
 
 #### Response
@@ -642,20 +643,20 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name               |
-| -------------------- | ------------------ |
+|----------------------|--------------------|
 | [AutoMatchmakeParam] | autoMatchmakeParam |
 
 #### Response
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint64 | requestId |
 
 ### (46) WithdrawMatchmaking
 #### Request
 
 | Type   | Name      |
-| ------ | --------- |
+|--------|-----------|
 | Uint64 | requestId |
 
 #### Response
@@ -672,79 +673,79 @@ This method does not return anything.
 #### Request
 
 | Type                 | Name   |
-| -------------------- | ------ |
+|----------------------|--------|
 | [List]&lt;Uint32&gt; | lstGid |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 
 ### (49) FindMatchmakeSessionBySingleGatheringId
 #### Request
 
 | Type   | Name |
-| ------ | ---- |
+|--------|------|
 | Uint32 | gid  |
 
 #### Response
 
 | Type               | Name             |
-| ------------------ | ---------------- |
+|--------------------|------------------|
 | [MatchmakeSession] | matchmakeSession |
 
 ### (50) FindMatchmakeSessionByOwner
 #### Request
 
 | Type          | Name        |
-| ------------- | ----------- |
+|---------------|-------------|
 | [PID]         | id          |
 | [ResultRange] | resultRange |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 
 ### (51) FindMatchmakeSessionByParticipant
 #### Request
 
 | Type                                     | Name  |
-| ---------------------------------------- | ----- |
+|------------------------------------------|-------|
 | [FindMatchmakeSessionByParticipantParam] | param |
 
 #### Response
 
 | Type                                                    | Name       |
-| ------------------------------------------------------- | ---------- |
+|---------------------------------------------------------|------------|
 | [List]&lt;[FindMatchmakeSessionByParticipantResult]&gt; | lstSession |
 
 ### (52) BrowseMatchmakeSessionNoHolderNoResultRange
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 
 ### (53) BrowseMatchmakeSessionWithHostUrlsNoHolderNoResultRange
 #### Request
 
 | Type                             | Name           |
-| -------------------------------- | -------------- |
+|----------------------------------|----------------|
 | [MatchmakeSessionSearchCriteria] | searchCriteria |
 
 #### Response
 
 | Type                             | Name                |
-| -------------------------------- | ------------------- |
+|----------------------------------|---------------------|
 | [List]&lt;[MatchmakeSession]&gt; | lstMatchmakeSession |
 | [List]&lt;[GatheringURLs]&gt;    | lstGatheringUrls    |
 
