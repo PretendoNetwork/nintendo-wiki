@@ -4,7 +4,13 @@ toc: true
 title: Xenoblade Chronicles X (115)
 ---
 
-This page describes the methods that are only seen in Xenoblade Chronicles X. Parts of the protocol has been renamed from `DataStoreProtocol` to `SocialDataStoreProtocol`.
+This page describes the methods that are only seen in Xenoblade Chronicles X.
+
+Methods 43-49, 52 and 58 belong to `RentalObjectProtocol`.
+
+Methods 50, 51, 56 and 57 belong to `PeriodicObjectProtocol`.
+
+Methods 53 and 54 belong to `ScheduledObjectProtocol`.
 
 ## Methods
 
