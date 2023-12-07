@@ -298,7 +298,6 @@ This method does not return anything.
 | Uint32 | Unknown |
 | Uint32 | Unknown |
 | Uint32 | Unknown |
-| Uint32 | Unknown |
 
 ### RentalObjectSearchParam ([Structure])
 
