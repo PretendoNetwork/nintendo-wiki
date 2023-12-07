@@ -23,7 +23,7 @@ For message types, see [Messaging Protocol](/docs/nex/protocols/messaging#types)
 ### (1) DeliverMessage
 #### Request
 
-| Type   | Name         |
+| Type   | Description  |
 |--------|--------------|
 | [Data] | oUserMessage |
 
@@ -33,10 +33,10 @@ This method does not return anything.
 ### (2) DeliverMessageMultiTarget
 #### Request
 
-| Type                | Name    |
-|---------------------|---------|
-| [List]&lt;[PID]&gt; | Targets |
-| [Data]              | Message |
+| Type                | Description |
+|---------------------|-------------|
+| [List]&lt;[PID]&gt; | Targets     |
+| [Data]              | Message     |
 
 #### Response
 This method does not return anything.

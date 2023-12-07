@@ -39,28 +39,28 @@ Methods 53 and 54 belong to `ScheduledObjectProtocol`.
 ### (43) SearchRentalObject
 #### Request
 
-| Type                                                          | Name  |
-|---------------------------------------------------------------|-------|
-| [RentalObjectSearchParam](#rentalobjectsearchparam-structure) | param |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| [RentalObjectSearchParam](#rentalobjectsearchparam-structure) | param       |
 
 #### Response
 
-| Type                                                            | Name    |
-|-----------------------------------------------------------------|---------|
-| [RentalObjectSearchResult](#rentalobjectsearchresult-structure) | results |
+| Type                                                            | Description |
+|-----------------------------------------------------------------|-------------|
+| [RentalObjectSearchResult](#rentalobjectsearchresult-structure) | results     |
 
 ### (44) UploadRentalObject
 #### Request
 
-| Type                                                          | Name  |
-|---------------------------------------------------------------|-------|
-| [RentalObjectUploadParam](#rentalobjectuploadparam-structure) | param |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| [RentalObjectUploadParam](#rentalobjectuploadparam-structure) | param       |
 
 #### Response
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Data ID |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Data ID     |
 
 ### (45) GetRentalObject
 #### Request
@@ -68,7 +68,7 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                            | Name          |
+| Type                                            | Description   |
 |-------------------------------------------------|---------------|
 | [RentalObjectInfo](#rentalobjectinfo-structure) | Rental object |
 
@@ -78,9 +78,9 @@ This method does not take any parameters and does not return anything.
 ### (47) BorrowRentalObject
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Data ID |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Data ID     |
 
 #### Response
 This method does not return anything.
@@ -91,17 +91,17 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                          | Name    |
-|---------------------------------------------------------------|---------|
-| [List]&lt;[RentalObjectInfo](#rentalobjectinfo-structure)&gt; | Unknown |
-| [List]&lt;Uint64&gt;                                          | Unknown |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| [List]&lt;[RentalObjectInfo](#rentalobjectinfo-structure)&gt; | Unknown     |
+| [List]&lt;Uint64&gt;                                          | Unknown     |
 
 ### (49) ReturnBorrowingRentalObject
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Data ID |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Data ID     |
 
 #### Response
 This method does not return anything.
@@ -109,157 +109,157 @@ This method does not return anything.
 ### (50) GetPeriodicRating
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Sint8  | Unknown |
-| Sint32 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Sint8  | Unknown     |
+| Sint32 | Unknown     |
 
 #### Response
 
-| Type                               | Name    |
-|------------------------------------|---------|
-| [List]&lt;[List]&lt;Uint64&gt;&gt; | Unknown |
-| [List]&lt;Uint64&gt;               | Unknown |
+| Type                               | Description |
+|------------------------------------|-------------|
+| [List]&lt;[List]&lt;Uint64&gt;&gt; | Unknown     |
+| [List]&lt;Uint64&gt;               | Unknown     |
 
 ### (51) RatePeriodicObject
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Sint8  | Unknown |
-| Sint8  | Unknown |
-| Sint32 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Sint8  | Unknown     |
+| Sint8  | Unknown     |
+| Sint32 | Unknown     |
 
 #### Response
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Unknown |
-| Uint64 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Unknown     |
+| Uint64 | Unknown     |
 
 ### (52) SearchRentalObjectByDataId
 #### Request
 
-| Type                                                          | Name    |
-|---------------------------------------------------------------|---------|
-| Uint64                                                        | Data ID |
-| [RentalObjectSearchParam](#rentalobjectsearchparam-structure) | param   |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| Uint64                                                        | Data ID     |
+| [RentalObjectSearchParam](#rentalobjectsearchparam-structure) | param       |
 
 #### Response
 
-| Type                                                            | Name    |
-|-----------------------------------------------------------------|---------|
-| [RentalObjectSearchResult](#rentalobjectsearchresult-structure) | results |
+| Type                                                            | Description |
+|-----------------------------------------------------------------|-------------|
+| [RentalObjectSearchResult](#rentalobjectsearchresult-structure) | results     |
 
 ### (53) SearchScheduledObject
 #### Request
 
-| Type                   | Name  |
-|------------------------|-------|
-| [DataStoreSearchParam] | param |
+| Type                   | Description |
+|------------------------|-------------|
+| [DataStoreSearchParam] | param       |
 
 #### Response
 
-| Type                              | Name    |
-|-----------------------------------|---------|
-| [List]&lt;[DataStoreMetaInfo]&gt; | Objects |
+| Type                              | Description |
+|-----------------------------------|-------------|
+| [List]&lt;[DataStoreMetaInfo]&gt; | Objects     |
 
 ### (54) PostScheduledObject
 #### Request
 
-| Type                        | Name           |
+| Type                        | Description    |
 |-----------------------------|----------------|
 | [DataStorePreparePostParam] | param          |
 | [DateTime]                  | Scheduled time |
 
 #### Response
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Data ID |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Data ID     |
 
 ### (55) RequestPost_Lazy
 #### Request
 
-| Type                                            | Name           |
+| Type                                            | Description    |
 |-------------------------------------------------|----------------|
 | [RequestPostParam](#requestpostparam-structure) | param          |
 | [DateTime]                                      | Scheduled time |
 
 #### Response
 
-| Type     | Name    |
-|----------|---------|
-| [String] | Unknown |
+| Type     | Description |
+|----------|-------------|
+| [String] | Unknown     |
 
 ### (56) GetPeriodicRatingWithOffset
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Uint32 | Unknown |
-| Sint32 | Unknown |
-| Sint32 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Uint32 | Unknown     |
+| Sint32 | Unknown     |
+| Sint32 | Unknown     |
 
 #### Response
 
-| Type                               | Name    |
-|------------------------------------|---------|
-| [List]&lt;[List]&lt;Uint64&gt;&gt; | Unknown |
-| [List]&lt;Uint64&gt;               | Unknown |
+| Type                               | Description |
+|------------------------------------|-------------|
+| [List]&lt;[List]&lt;Uint64&gt;&gt; | Unknown     |
+| [List]&lt;Uint64&gt;               | Unknown     |
 
 ### (57) RatePeriodicObjectWithOffset
 #### Request
 
-| Type   | Name    |
-|--------|---------|
-| Uint32 | Unknown |
-| Sint32 | Unknown |
-| Sint8  | Unknown |
-| Sint32 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Uint32 | Unknown     |
+| Sint32 | Unknown     |
+| Sint8  | Unknown     |
+| Sint32 | Unknown     |
 
 #### Response
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Unknown |
-| Uint64 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Unknown     |
+| Uint64 | Unknown     |
 
 ### (58) DebugUploadRentalObject
 #### Request
 
-| Type                                                          | Name    |
-|---------------------------------------------------------------|---------|
-| [RentalObjectUploadParam](#rentalobjectuploadparam-structure) | param   |
-| Uint32                                                        | Unknown |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| [RentalObjectUploadParam](#rentalobjectuploadparam-structure) | param       |
+| Uint32                                                        | Unknown     |
 
 #### Response
 
-| Type   | Name    |
-|--------|---------|
-| Uint64 | Data ID |
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Data ID     |
 
 ### (59) IsOliveCommunityExists
 #### Request
 
-| Type                 | Name                   |
+| Type                 | Description            |
 |----------------------|------------------------|
 | [List]&lt;Uint32&gt; | Miiverse community IDs |
 | Uint32               | Unknown                |
 
 #### Response
 
-| Type               | Name    |
-|--------------------|---------|
-| [List]&lt;Bool&gt; | Results |
+| Type               | Description |
+|--------------------|-------------|
+| [List]&lt;Bool&gt; | Results     |
 
 ### (60) ReplaceMetaBinaryWithDataId
 #### Request
 
-| Type                        | Name    |
-|-----------------------------|---------|
-| Uint64                      | Data ID |
-| [DataStorePreparePostParam] | param   |
+| Type                        | Description |
+|-----------------------------|-------------|
+| Uint64                      | Data ID     |
+| [DataStorePreparePostParam] | param       |
 
 #### Response
 This method does not return anything.
@@ -267,9 +267,9 @@ This method does not return anything.
 ### (61) DebugChangeMeta
 #### Request
 
-| Type                                                                      | Name  |
-|---------------------------------------------------------------------------|-------|
-| [DebugDataStoreChangeMetaParam](#debugdatastorechangemetaparam-structure) | param |
+| Type                                                                      | Description |
+|---------------------------------------------------------------------------|-------------|
+| [DebugDataStoreChangeMetaParam](#debugdatastorechangemetaparam-structure) | param       |
 
 #### Response
 This method does not return anything.
@@ -278,36 +278,36 @@ This method does not return anything.
 ## Types
 ### RentalObjectInfo ([Structure])
 
-| Type                 | Name    |
-|----------------------|---------|
-| Uint64               | Data ID |
-| Uint32               | Unknown |
-| Uint32               | Unknown |
-| [String]             | Unknown |
-| Uint16               | Unknown |
-| [qBuffer]            | Unknown |
-| [DateTime]           | Unknown |
-| [DateTime]           | Unknown |
-| Uint16               | Unknown |
-| Uint8                | Unknown |
-| Uint32               | Unknown |
-| Uint64               | Unknown |
-| Uint32               | Unknown |
-| [DateTime]           | Unknown |
-| [DateTime]           | Unknown |
-| [List]&lt;Uint32&gt; | Unknown |
+| Type                 | Description |
+|----------------------|-------------|
+| Uint64               | Data ID     |
+| Uint32               | Unknown     |
+| Uint32               | Unknown     |
+| [String]             | Unknown     |
+| Uint16               | Unknown     |
+| [qBuffer]            | Unknown     |
+| [DateTime]           | Unknown     |
+| [DateTime]           | Unknown     |
+| Uint16               | Unknown     |
+| Uint8                | Unknown     |
+| Uint32               | Unknown     |
+| Uint64               | Unknown     |
+| Uint32               | Unknown     |
+| [DateTime]           | Unknown     |
+| [DateTime]           | Unknown     |
+| [List]&lt;Uint32&gt; | Unknown     |
 
 ### RentalObjectSearchCondition ([Structure])
 
-| Type   | Name    |
-|--------|---------|
-| Uint32 | Unknown |
-| Uint32 | Unknown |
-| Uint32 | Unknown |
+| Type   | Description |
+|--------|-------------|
+| Uint32 | Unknown     |
+| Uint32 | Unknown     |
+| Uint32 | Unknown     |
 
 ### RentalObjectSearchParam ([Structure])
 
-| Type                                                                                | Name         |
+| Type                                                                                | Description  |
 |-------------------------------------------------------------------------------------|--------------|
 | [List]&lt;[RentalObjectSearchCondition](#rentalobjectsearchcondition-structure)&gt; | Conditions   |
 | [List]&lt;Uint32&gt;                                                                | Unknown      |
@@ -316,49 +316,49 @@ This method does not return anything.
 
 ### RentalObjectSearchResult ([Structure])
 
-| Type                                                          | Name    |
-|---------------------------------------------------------------|---------|
-| Uint32                                                        | Unknown |
-| [List]&lt;[RentalObjectInfo](#rentalobjectinfo-structure)&gt; | Results |
-| Uint8                                                         | Unknown |
+| Type                                                          | Description |
+|---------------------------------------------------------------|-------------|
+| Uint32                                                        | Unknown     |
+| [List]&lt;[RentalObjectInfo](#rentalobjectinfo-structure)&gt; | Results     |
+| Uint8                                                         | Unknown     |
 
 ### RentalObjectUploadParam ([Structure])
 
-| Type                 | Name    |
-|----------------------|---------|
-| [String]             | Unknown |
-| [qBuffer]            | Unknown |
-| [List]&lt;Uint32&gt; | Unknown |
+| Type                 | Description |
+|----------------------|-------------|
+| [String]             | Unknown     |
+| [qBuffer]            | Unknown     |
+| [List]&lt;Uint32&gt; | Unknown     |
 
 ### RequestPostParam ([Structure])
 
-| Type                   | Name    |
-|------------------------|---------|
-| Uint32                 | Unknown |
-| Sint32                 | Unknown |
-| [qBuffer]              | Unknown |
-| [String]               | Unknown |
-| Uint32                 | Unknown |
-| Uint32                 | Unknown |
-| Uint8                  | Unknown |
-| Uint8                  | Unknown |
-| [qBuffer]              | Unknown |
-| [qBuffer]              | Unknown |
-| [List]&lt;[String]&gt; | Unknown |
-| [String]               | Unknown |
+| Type                   | Description |
+|------------------------|-------------|
+| Uint32                 | Unknown     |
+| Sint32                 | Unknown     |
+| [qBuffer]              | Unknown     |
+| [String]               | Unknown     |
+| Uint32                 | Unknown     |
+| Uint32                 | Unknown     |
+| Uint8                  | Unknown     |
+| Uint8                  | Unknown     |
+| [qBuffer]              | Unknown     |
+| [qBuffer]              | Unknown     |
+| [List]&lt;[String]&gt; | Unknown     |
+| [String]               | Unknown     |
 
 ### DebugDataStoreChangeMetaParam ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [DataStoreChangeMetaParam]
 {: .prompt-info }
 
-| Type       | Name    |
-|------------|---------|
-| Uint32     | Unknown |
-| [DateTime] | Unknown |
-| [DateTime] | Unknown |
-| [DateTime] | Unknown |
-| [DateTime] | Unknown |
-| Uint32     | Unknown |
+| Type       | Description |
+|------------|-------------|
+| Uint32     | Unknown     |
+| [DateTime] | Unknown     |
+| [DateTime] | Unknown     |
+| [DateTime] | Unknown     |
+| [DateTime] | Unknown     |
+| Uint32     | Unknown     |
 
 [Structure]: /docs/nex/types#structure
 [String]: /docs/nex/types#string

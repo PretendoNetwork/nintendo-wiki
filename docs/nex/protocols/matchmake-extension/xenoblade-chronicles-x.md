@@ -27,14 +27,14 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                | Name           |
+| Type                | Description    |
 |---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
 ### (25) AddToBlackList
 #### Request
 
-| Type                | Name           |
+| Type                | Description    |
 |---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
@@ -44,7 +44,7 @@ This method does not return anything.
 ### (26) RemoveFromBlackList
 #### Request
 
-| Type                | Name           |
+| Type                | Description    |
 |---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
@@ -57,56 +57,56 @@ This method does not take any parameters and does not return anything.
 ### (36) JoinCommunityReturnJoinId
 #### Request
 
-| Type     | Name    |
-|----------|---------|
-| Uint32   | unknown |
-| [String] | unknown |
-| [String] | unknown |
+| Type     | Description |
+|----------|-------------|
+| Uint32   | unknown     |
+| [String] | unknown     |
+| [String] | unknown     |
 
 #### Response
 
-| Type   | Name |
-|--------|------|
-| Uint32 | ID   |
+| Type   | Description |
+|--------|-------------|
+| Uint32 | ID          |
 
 ### (37) SearchPersistentGathering
 #### Request
 
-| Type                                                                              | Name         |
+| Type                                                                              | Description  |
 |-----------------------------------------------------------------------------------|--------------|
 | [PersistentGatheringSearchCriteria](#persistentgatheringsearchcriteria-structure) | Search param |
 | [ResultRange]                                                                     | Result range |
 
 #### Response
 
-| Type                                                                                                      | Name       |
-|-----------------------------------------------------------------------------------------------------------|------------|
-| [List]&lt;[PersistentGathering](/docs/nex/protocols/match-making/types#persistentgathering-structure)&gt; | Gatherings |
+| Type                                                                                                      | Description |
+|-----------------------------------------------------------------------------------------------------------|-------------|
+| [List]&lt;[PersistentGathering](/docs/nex/protocols/match-making/types#persistentgathering-structure)&gt; | Gatherings  |
 
 ### (38) GetMatchmakeExtensionSetting
 #### Request
 
-| Type     | Name         |
+| Type     | Description  |
 |----------|--------------|
 | [String] | Setting name |
 
 #### Response
 
-| Type     | Name          |
+| Type     | Description   |
 |----------|---------------|
 | [String] | Setting value |
 
 ### (39) CustomAutoMatchmake_Postpone
 #### Request
 
-| Type                      | Name         |
+| Type                      | Description  |
 |---------------------------|--------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering |
 | [String]                  | strMessage   |
 
 #### Response
 
-| Type                      | Name            |
+| Type                      | Description     |
 |---------------------------|-----------------|
 | [Data]&lt;[Gathering]&gt; | joinedGathering |
 | Uint32                    | Unknown         |
@@ -114,7 +114,7 @@ This method does not take any parameters and does not return anything.
 ### (40) CustomAutoMatchmakeWithSearchCriteria_Postpone
 #### Request
 
-| Type                                           | Name              |
+| Type                                           | Description       |
 |------------------------------------------------|-------------------|
 | [List]&lt;[MatchmakeSessionSearchCriteria]&gt; | lstSearchCriteria |
 | [Data]&lt;[Gathering]&gt;                      | anyGathering      |
@@ -122,7 +122,7 @@ This method does not take any parameters and does not return anything.
 
 #### Response
 
-| Type                      | Name            |
+| Type                      | Description     |
 |---------------------------|-----------------|
 | [Data]&lt;[Gathering]&gt; | joinedGathering |
 | Uint32                    | Unknown         |
@@ -130,7 +130,7 @@ This method does not take any parameters and does not return anything.
 ### (41) CustomJoinMatchmakeSessionEx
 #### Request
 
-| Type     | Name               |
+| Type     | Description        |
 |----------|--------------------|
 | Uint32   | gid                |
 | [String] | strMessage         |
@@ -139,10 +139,10 @@ This method does not take any parameters and does not return anything.
 
 #### Response
 
-| Type     | Name       |
-|----------|------------|
-| [Buffer] | sessionKey |
-| Uint32   | Unknown    |
+| Type     | Description |
+|----------|-------------|
+| [Buffer] | sessionKey  |
+| Uint32   | Unknown     |
 
 ## Types
 ### PersistentGatheringSearchCriteria ([Structure])
