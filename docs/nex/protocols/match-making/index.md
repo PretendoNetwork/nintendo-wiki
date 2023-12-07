@@ -4,13 +4,6 @@ toc: true
 title: Match Making (21)
 ---
 
-## Extended protocols
-
-The following games have changed methods in the protocol:
-* [Xenoblade Chronicles X](/docs/nex/protocols/match-making/xenoblade-chronicles-x)
-
-This remainder of this page describes the methods that are not specific to any game.
-
 ## Methods
 
 | Method ID | Method Name                                                    |
@@ -540,6 +533,8 @@ This method does not take any parameters.
 | Bool | %retval% | Result      |
 
 ### (36) MigrateGatheringOwnershipV1
+Before NEX 3.7 this method was named `MigrateGatheringOwnership`. As of NEX 3.7 this has been renamed to `MigrateGatheringOwnershipV1` and a new `MigrateGatheringOwnership` method has been added with a different structure
+
 #### Request
 
 | Type                | Name                    | Description              |
@@ -590,6 +585,8 @@ This method does not return anything.
 This method does not return anything.
 
 ### (40) UpdateSessionHostV1
+Before NEX 3.7 this method was named `UpdateSessionHost`. As of NEX 3.7 this has been renamed to `UpdateSessionHostV1` and a new `UpdateSessionHost` method has been added with a different structure
+
 #### Request
 
 | Type   | Name | Description  |
@@ -613,6 +610,8 @@ This method does not return anything.
 | [List]&lt;[StationURL]&gt; | lstURLs | Session urls |
 
 ### (42) UpdateSessionHost
+Before NEX 3.7 this method did not exist, and the method currently named `UpdateSessionHostV1` was named `UpdateSessionHost`. As of NEX 3.7 the old method was renamed to `UpdateSessionHostV1` and this new `UpdateSessionHost` method was added with a different structure
+
 #### Request
 
 | Type   | Name           | Description   |
@@ -638,6 +637,8 @@ This method does not return anything.
 | Bool | %retval% | Result      |
 
 ### (44) MigrateGatheringOwnership
+Before NEX 3.7 this method did not exist, and the method currently named `MigrateGatheringOwnershipV1` was named `MigrateGatheringOwnership`. As of NEX 3.7 the old method was renamed to `MigrateGatheringOwnershipV1` and this new `MigrateGatheringOwnership` method was added with a different structure
+
 #### Request
 
 | Type                | Name                    | Description              |
