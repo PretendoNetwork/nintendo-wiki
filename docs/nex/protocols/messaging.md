@@ -7,7 +7,7 @@ title: Messaging (23)
 ## Methods
 
 | Method ID | Method Name                                                         |
-| --------- | ------------------------------------------------------------------- |
+|-----------|---------------------------------------------------------------------|
 | 1         | [DeliverMessage](#1-delivermessage)                                 |
 | 2         | [GetNumberOfMessages](#2-getnumberofmessages)                       |
 | 3         | [GetMessagesHeaders](#3-getmessagesheaders)                         |
@@ -15,19 +15,19 @@ title: Messaging (23)
 | 5         | [RetrieveMessages](#5-retrievemessages)                             |
 | 6         | [DeleteMessages](#6-deletemessages)                                 |
 | 7         | [DeleteAllMessages](#7-deleteallmessages)                           |
-| 8         | DeliverMessageMultiTarget                                           |
+| 8         | [DeliverMessageMultiTarget](#8-delivermessagemultitarget)           |
 
 ### (1) DeliverMessage
 #### Request
 
 | Type   | Name         |
-| ------ | ------------ |
+|--------|--------------|
 | [Data] | oUserMessage |
 
 #### Response
 
 | Type                 | Name             |
-| -------------------- | ---------------- |
+|----------------------|------------------|
 | [Data]               | oModifiedMessage |
 | [List]&lt;Uint32&gt; | lstSandboxNodeId |
 | [List]&lt;[PID]&gt;  | lstParticipants  |
@@ -36,48 +36,48 @@ title: Messaging (23)
 #### Request
 
 | Type                                            | Name      |
-| ----------------------------------------------- | --------- |
+|-------------------------------------------------|-----------|
 | [MessageRecipient](#messagerecipient-structure) | recipient |
 
 #### Response
 
 | Type   | Name         |
-| ------ | ------------ |
+|--------|--------------|
 | Uint32 | uiNbMessages |
 
 ### (3) GetMessagesHeaders
 #### Request
 
 | Type                                            | Name      |
-| ----------------------------------------------- | --------- |
+|-------------------------------------------------|-----------|
 | [MessageRecipient](#messagerecipient-structure) | recipient |
 | [ResultRange]                                   | range     |
 
 #### Response
 
 | Type                                                | Name          |
-| --------------------------------------------------- | ------------- |
+|-----------------------------------------------------|---------------|
 | [List]&lt;[UserMessage](#usermessage-structure)&gt; | lstMsgHeaders |
 
 ### (4) RetrieveAllMessagesWithinRange
 #### Request
 
 | Type                                            | Name      |
-| ----------------------------------------------- | --------- |
+|-------------------------------------------------|-----------|
 | [MessageRecipient](#messagerecipient-structure) | recipient |
 | [ResultRange]                                   | range     |
 
 #### Response
 
 | Type                 | Name        |
-| -------------------- | ----------- |
+|----------------------|-------------|
 | [List]&lt;[Data]&gt; | lstMessages |
 
 ### (5) RetrieveMessages
 #### Request
 
 | Type                                            | Name           |
-| ----------------------------------------------- | -------------- |
+|-------------------------------------------------|----------------|
 | [MessageRecipient](#messagerecipient-structure) | recipient      |
 | [List]&lt;Uint32&gt;                            | lstMsgIDs      |
 | Bool                                            | bLeaveOnServer |
@@ -85,14 +85,14 @@ title: Messaging (23)
 #### Response
 
 | Type                 | Name        |
-| -------------------- | ----------- |
+|----------------------|-------------|
 | [List]&lt;[Data]&gt; | lstMessages |
 
 ### (6) DeleteMessages
 #### Request
 
 | Type                                            | Name                |
-| ----------------------------------------------- | ------------------- |
+|-------------------------------------------------|---------------------|
 | [MessageRecipient](#messagerecipient-structure) | recipient           |
 | [List]&lt;Uint32&gt;                            | lstMessagesToDelete |
 
@@ -103,20 +103,36 @@ This method does not return anything.
 #### Request
 
 | Type                                            | Name      |
-| ----------------------------------------------- | --------- |
+|-------------------------------------------------|-----------|
 | [MessageRecipient](#messagerecipient-structure) | recipient |
 
 #### Response
 
 | Type   | Name                |
-| ------ | ------------------- |
+|--------|---------------------|
 | Uint32 | uiNbDeletedMessages |
+
+### (8) DeliverMessageMultiTarget
+#### Request
+
+| Type                | Name    |
+|---------------------|---------|
+| [List]&lt;[PID]&gt; | Targets |
+| [Data]              | Message |
+
+#### Response
+
+| Type                 | Name    |
+|----------------------|---------|
+| [Data]               | Unknown |
+| [List]&lt;Uint32&gt; | Unknown |
+| [List]&lt;Uint32&gt; | Unknown |
 
 ## Types
 ### MessageRecipient ([Structure])
 
 | Type   | Name              |
-| ------ | ----------------- |
+|--------|-------------------|
 | Uint32 | m_uiRecipientType |
 | [PID]  | m_principalId     |
 | Uint32 | m_gatheringId     |
@@ -124,7 +140,7 @@ This method does not return anything.
 Recipient type:
 
 | Type | Description  |
-| ---- | ------------ |
+|------|--------------|
 | 1    | Principal id |
 | 2    | Gathering id |
 
@@ -133,7 +149,7 @@ Recipient type:
 {: .prompt-info }
 
 | Type                                            | Name               |
-| ----------------------------------------------- | ------------------ |
+|-------------------------------------------------|--------------------|
 | Uint32                                          | m_uiID             |
 | Uint32                                          | m_uiParentID       |
 | [PID]                                           | m_pidSender        |
@@ -149,7 +165,7 @@ Recipient type:
 {: .prompt-info }
 
 | Type     | Name          |
-| -------- | ------------- |
+|----------|---------------|
 | [String] | m_strTextBody |
 
 ### BinaryMessage ([Structure])
@@ -157,7 +173,7 @@ Recipient type:
 {: .prompt-info }
 
 | Type      | Name         |
-| --------- | ------------ |
+|-----------|--------------|
 | [qBuffer] | m_binaryBody |
 
 [String]: /docs/nex/types#string

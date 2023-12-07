@@ -15,6 +15,7 @@ The following games have additional methods in the datastore protocol:
 * [Super Mario Odyssey](/docs/nex/protocols/datastore/super-mario-odyssey)
 * [Super Smash Bros. 4](/docs/nex/protocols/datastore/super-smash-bros-4)
 * [Super Smash Bros. Ultimate](/docs/nex/protocols/datastore/super-smash-bros-ultimate)
+* [Xenoblade Chronicles X](/docs/nex/protocols/datastore/xenoblade-chronicles-x)
 
 This remainder of this page describes the methods that are not specific to any game.
 

@@ -14,6 +14,7 @@ The following games have additional methods in the ranking protocol:
 * [Super Smash Bros. 4](/docs/nex/protocols/ranking/super-smash-bros-4)
 * [Splatoon](/docs/nex/protocols/ranking/splatoon)
 * [Splatoon 2](/docs/nex/protocols/ranking/splatoon-2)
+* [Xenoblade Chronicles X](/docs/nex/protocols/ranking/xenoblade-chronicles-x)
 
 This remainder of this page describes the methods that are not specific to any game.
 

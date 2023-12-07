@@ -7,7 +7,7 @@ title: Match Making (21)
 ## Methods
 
 | Method ID | Method Name                                                    |
-| --------- | -------------------------------------------------------------- |
+|-----------|----------------------------------------------------------------|
 | 1         | [RegisterGathering](#1-registergathering)                      |
 | 2         | [UnregisterGathering](#2-unregistergathering)                  |
 | 3         | [UnregisterGatherings](#3-unregistergatherings)                |
@@ -57,59 +57,59 @@ title: Match Making (21)
 #### Request
 
 | Type                      | Name         | Description |
-| ------------------------- | ------------ | ----------- |
+|---------------------------|--------------|-------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering | Gathering   |
 
 #### Response
 
 | Type   | Name     | Description  |
-| ------ | -------- | ------------ |
+|--------|----------|--------------|
 | Uint32 | %retval% | Gathering id |
 
 ### (2) UnregisterGathering
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (3) UnregisterGatherings
 #### Request
 
 | Type                 | Name          | Description   |
-| -------------------- | ------------- | ------------- |
+|----------------------|---------------|---------------|
 | [List]&lt;Uint32&gt; | lstGatherings | Gathering ids |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (4) UpdateGathering
 #### Request
 
 | Type                      | Name         | Description |
-| ------------------------- | ------------ | ----------- |
+|---------------------------|--------------|-------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering | Gathering   |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (5) Invite
 #### Request
 
 | Type                | Name          | Description       |
-| ------------------- | ------------- | ----------------- |
+|---------------------|---------------|-------------------|
 | Uint32              | idGathering   | Gathering id      |
 | [List]&lt;[PID]&gt; | lstPrincipals | Invited user pids |
 | [String]            | strMessage    | Message           |
@@ -117,42 +117,42 @@ title: Match Making (21)
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (6) AcceptInvitation
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strMessage  | Message      |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (7) DeclineInvitation
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strMessage  | Message      |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (8) CancelInvitation
 #### Request
 
 | Type                | Name          | Description  |
-| ------------------- | ------------- | ------------ |
+|---------------------|---------------|--------------|
 | Uint32              | idGathering   | Gathering id |
 | [List]&lt;[PID]&gt; | lstPrincipals | User pids    |
 | [String]            | strMessage    | Message      |
@@ -160,20 +160,20 @@ title: Match Making (21)
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (9) GetInvitationsSent
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type                       | Name           | Description |
-| -------------------------- | -------------- | ----------- |
+|----------------------------|----------------|-------------|
 | [List]&lt;[Invitation]&gt; | lstInvitations | Invitations |
 
 ### (10) GetInvitationsReceived
@@ -183,55 +183,55 @@ This method does not take any parameters.
 #### Response
 
 | Type                       | Name           | Description |
-| -------------------------- | -------------- | ----------- |
+|----------------------------|----------------|-------------|
 | [List]&lt;[Invitation]&gt; | lstInvitations | Invitations |
 
 ### (11) Participate
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strMessage  | Message      |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (12) CancelParticipation
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strMessage  | Message      |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (13) GetParticipants
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type                | Name            | Description      |
-| ------------------- | --------------- | ---------------- |
+|---------------------|-----------------|------------------|
 | [List]&lt;[PID]&gt; | lstParticipants | Participant pids |
 
 ### (14) AddParticipants
 #### Request
 
 | Type                | Name            | Description      |
-| ------------------- | --------------- | ---------------- |
+|---------------------|-----------------|------------------|
 | Uint32              | idGathering     | Gathering id     |
 | [List]&lt;[PID]&gt; | lstParticipants | Participant pids |
 | [String]            | strMessage      | Message          |
@@ -239,101 +239,101 @@ This method does not take any parameters.
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (15) GetDetailedParticipants
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type                               | Name            | Description         |
-| ---------------------------------- | --------------- | ------------------- |
+|------------------------------------|-----------------|---------------------|
 | [List]&lt;[ParticipantDetails]&gt; | lstParticipants | Participant details |
 
 ### (16) GetParticipantsURLs
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type                       | Name          | Description      |
-| -------------------------- | ------------- | ---------------- |
+|----------------------------|---------------|------------------|
 | [List]&lt;[StationURL]&gt; | lstStationURL | Participant urls |
 
 ### (17) FindByType
 #### Request
 
 | Type          | Name        | Description  |
-| ------------- | ----------- | ------------ |
+|---------------|-------------|--------------|
 | [String]      | strType     | Type         |
 | [ResultRange] | resultRange | Result range |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (18) FindByDescription
 #### Request
 
 | Type          | Name           | Description |
-| ------------- | -------------- | ----------- |
+|---------------|----------------|-------------|
 | [String]      | strDescription | Description |
 | [ResultRange] | resultRange    | ResultRange |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (19) FindByDescriptionRegex
 #### Request
 
 | Type          | Name                | Description       |
-| ------------- | ------------------- | ----------------- |
+|---------------|---------------------|-------------------|
 | [String]      | strDescriptionRegex | Description regex |
 | [ResultRange] | resultRange         | ResultRange       |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (20) FindByID
 #### Request
 
 | Type                 | Name  | Description   |
-| -------------------- | ----- | ------------- |
+|----------------------|-------|---------------|
 | [List]&lt;Uint32&gt; | lstID | Gathering ids |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (21) FindBySingleID
 #### Request
 
 | Type   | Name | Description  |
-| ------ | ---- | ------------ |
+|--------|------|--------------|
 | Uint32 | id   | Gathering id |
 
 #### Response
 
 | Type                      | Name       | Description |
-| ------------------------- | ---------- | ----------- |
+|---------------------------|------------|-------------|
 | Bool                      | bResult    | Result      |
 | [Data]&lt;[Gathering]&gt; | pGathering | Gathering   |
 
@@ -341,95 +341,95 @@ This method does not take any parameters.
 #### Request
 
 | Type          | Name        | Description |
-| ------------- | ----------- | ----------- |
+|---------------|-------------|-------------|
 | [PID]         | id          | Owner pid   |
 | [ResultRange] | resultRange | ResultRange |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (23) FindByParticipants
 #### Request
 
 | Type                | Name | Description      |
-| ------------------- | ---- | ---------------- |
+|---------------------|------|------------------|
 | [List]&lt;[PID]&gt; | pid  | Participant pids |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (24) FindInvitations
 #### Request
 
 | Type          | Name        | Description  |
-| ------------- | ----------- | ------------ |
+|---------------|-------------|--------------|
 | [ResultRange] | resultRange | Result range |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (25) FindBySQLQuery
 #### Request
 
 | Type          | Name        | Description  |
-| ------------- | ----------- | ------------ |
+|---------------|-------------|--------------|
 | [String]      | strQuery    | SQL query    |
 | [ResultRange] | resultRange | Result range |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (26) LaunchSession
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strURL      | Session url  |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (27) UpdateSessionURL
 #### Request
 
 | Type     | Name        | Description  |
-| -------- | ----------- | ------------ |
+|----------|-------------|--------------|
 | Uint32   | idGathering | Gathering id |
 | [String] | strURL      | Session url  |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (28) GetSessionURL
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type     | Name     | Description |
-| -------- | -------- | ----------- |
+|----------|----------|-------------|
 | Bool     | %retval% | Result      |
 | [String] | strURL   | Session url |
 
@@ -437,13 +437,13 @@ This method does not take any parameters.
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 
 #### Response
 
 | Type   | Name     | Description |
-| ------ | -------- | ----------- |
+|--------|----------|-------------|
 | Bool   | %retval% | Result      |
 | Uint32 | uiState  | State       |
 
@@ -451,35 +451,35 @@ This method does not take any parameters.
 #### Request
 
 | Type   | Name        | Description  |
-| ------ | ----------- | ------------ |
+|--------|-------------|--------------|
 | Uint32 | idGathering | Gathering id |
 | Uint32 | uiNewState  | New state    |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (31) ReportStats
 #### Request
 
 | Type                           | Name        | Description  |
-| ------------------------------ | ----------- | ------------ |
+|--------------------------------|-------------|--------------|
 | Uint32                         | idGathering | Gathering id |
 | [List]&lt;[GatheringStats]&gt; | lstStats    | Stats        |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (32) GetStats
 #### Request
 
 | Type                | Name            | Description      |
-| ------------------- | --------------- | ---------------- |
+|---------------------|-----------------|------------------|
 | Uint32              | idGathering     | Gathering id     |
 | [List]&lt;[PID]&gt; | lstParticipants | Participant pids |
 | [List]&lt;byte&gt;  | lstColumns      | Columns          |
@@ -487,7 +487,7 @@ This method does not take any parameters.
 #### Response
 
 | Type                           | Name      | Description |
-| ------------------------------ | --------- | ----------- |
+|--------------------------------|-----------|-------------|
 | Bool                           | %retval%  | Result      |
 | [List]&lt;[GatheringStats]&gt; | plstStats | Stats       |
 
@@ -495,27 +495,27 @@ This method does not take any parameters.
 #### Request
 
 | Type   | Name | Description  |
-| ------ | ---- | ------------ |
+|--------|------|--------------|
 | Uint32 | gid  | Gathering id |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (34) GetPendingDeletions
 #### Request
 
 | Type          | Name        | Description  |
-| ------------- | ----------- | ------------ |
+|---------------|-------------|--------------|
 | Uint32        | uiReason    | Reason       |
 | [ResultRange] | resultRange | Result range |
 
 #### Response
 
 | Type                          | Name         | Description |
-| ----------------------------- | ------------ | ----------- |
+|-------------------------------|--------------|-------------|
 | Bool                          | %retval%     | Result      |
 | [List]&lt;[DeletionEntry]&gt; | lstDeletions | Deletions   |
 
@@ -523,48 +523,50 @@ This method does not take any parameters.
 #### Request
 
 | Type                 | Name         | Description |
-| -------------------- | ------------ | ----------- |
+|----------------------|--------------|-------------|
 | [List]&lt;Uint32&gt; | lstDeletions | Deletions   |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (36) MigrateGatheringOwnershipV1
+Before NEX 3.7 this method was named `MigrateGatheringOwnership`. As of NEX 3.7 this has been renamed to `MigrateGatheringOwnershipV1` and a new `MigrateGatheringOwnership` method has been added with a different structure
+
 #### Request
 
 | Type                | Name                    | Description              |
-| ------------------- | ----------------------- | ------------------------ |
+|---------------------|-------------------------|--------------------------|
 | Uint32              | gid                     | Gathering id             |
 | [List]&lt;[PID]&gt; | lstPotentialNewOwnersID | Potential new owner pids |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (37) FindByDescriptionLike
 #### Request
 
 | Type          | Name               | Description      |
-| ------------- | ------------------ | ---------------- |
+|---------------|--------------------|------------------|
 | [String]      | strDescriptionLike | Description like |
 | [ResultRange] | resultRange        | Result range     |
 
 #### Response
 
 | Type                                    | Name         | Description |
-| --------------------------------------- | ------------ | ----------- |
+|-----------------------------------------|--------------|-------------|
 | [List]&lt;[Data]&lt;[Gathering]&gt;&gt; | lstGathering | Gatherings  |
 
 ### (38) RegisterLocalURL
 #### Request
 
 | Type         | Name | Description  |
-| ------------ | ---- | ------------ |
+|--------------|------|--------------|
 | Uint32       | gid  | Gathering id |
 | [StationURL] | url  | Url          |
 
@@ -575,7 +577,7 @@ This method does not return anything.
 #### Request
 
 | Type                       | Name    | Description  |
-| -------------------------- | ------- | ------------ |
+|----------------------------|---------|--------------|
 | Uint32                     | gid     | Gathering id |
 | [List]&lt;[StationURL]&gt; | lstUrls | Urls         |
 
@@ -583,10 +585,12 @@ This method does not return anything.
 This method does not return anything.
 
 ### (40) UpdateSessionHostV1
+Before NEX 3.7 this method was named `UpdateSessionHost`. As of NEX 3.7 this has been renamed to `UpdateSessionHostV1` and a new `UpdateSessionHost` method has been added with a different structure
+
 #### Request
 
 | Type   | Name | Description  |
-| ------ | ---- | ------------ |
+|--------|------|--------------|
 | Uint32 | gid  | Gathering id |
 
 #### Response
@@ -596,20 +600,22 @@ This method does not return anything.
 #### Request
 
 | Type   | Name | Description  |
-| ------ | ---- | ------------ |
+|--------|------|--------------|
 | Uint32 | gid  | Gathering id |
 
 #### Response
 
 | Type                       | Name    | Description  |
-| -------------------------- | ------- | ------------ |
+|----------------------------|---------|--------------|
 | [List]&lt;[StationURL]&gt; | lstURLs | Session urls |
 
 ### (42) UpdateSessionHost
+Before NEX 3.7 this method did not exist, and the method currently named `UpdateSessionHostV1` was named `UpdateSessionHost`. As of NEX 3.7 the old method was renamed to `UpdateSessionHostV1` and this new `UpdateSessionHost` method was added with a different structure
+
 #### Request
 
 | Type   | Name           | Description   |
-| ------ | -------------- | ------------- |
+|--------|----------------|---------------|
 | Uint32 | gid            | Gathering id  |
 | Bool   | isMigrateOwner | Migrate owner |
 
@@ -620,21 +626,23 @@ This method does not return anything.
 #### Request
 
 | Type   | Name             | Description       |
-| ------ | ---------------- | ----------------- |
+|--------|------------------|-------------------|
 | Uint32 | gid              | Gathering id      |
 | Bool   | participantsOnly | Participants only |
 
 #### Response
 
 | Type | Name     | Description |
-| ---- | -------- | ----------- |
+|------|----------|-------------|
 | Bool | %retval% | Result      |
 
 ### (44) MigrateGatheringOwnership
+Before NEX 3.7 this method did not exist, and the method currently named `MigrateGatheringOwnershipV1` was named `MigrateGatheringOwnership`. As of NEX 3.7 the old method was renamed to `MigrateGatheringOwnershipV1` and this new `MigrateGatheringOwnership` method was added with a different structure
+
 #### Request
 
 | Type                | Name                    | Description              |
-| ------------------- | ----------------------- | ------------------------ |
+|---------------------|-------------------------|--------------------------|
 | Uint32              | gid                     | Gathering id             |
 | [List]&lt;[PID]&gt; | lstPotentialNewOwnersID | Potential new owner pids |
 | Bool                | participantsOnly        | Participants only        |
