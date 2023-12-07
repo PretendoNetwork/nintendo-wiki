@@ -5,7 +5,7 @@ title: RMC Protocol
 ---
 
 # Overview
-[PRUDP](/docs/prudp) packets may have optional payloads. These payloads may be anything, however typically `DATA` packets use RMC. RMC is a standardized protocol for calling methods on remote services. RMC has been known to come in at least 3 different variations. The variation used is already know to both the server and client. These variations are:
+[PRUDP](/docs/prudp) packets may have optional payloads. These payloads may be anything, however typically `DATA` packets use RMC. RMC, presumably standing for "Remote Method Call", is a standardized protocol for calling methods on remote services. RMC has been known to come in at least 3 different variations. The variation used is already know to both the server and client. These variations are:
 
 - "Packed" - Information about the service and method is tightly packed, such as using integers for protocol/method IDs
 - "Packed" extended - The exact same as the previous "packed" variation, except an additional uint16 is added as the "true" protocol ID. In this case the uint8 "protocol ID" is `0x7F`
