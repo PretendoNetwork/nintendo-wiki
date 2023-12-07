@@ -6,8 +6,6 @@ title: NEX Protocols
 
 As explained on the [Game Server Overview](/docs/nex) page, NEX is based on Quazal Rendez-Vous. Many protocols come from the original Quazal Rendez-Vous library, but Nintendo also implemented some new protocols.
 
-The servers also seem to use some [internal protocols](/docs/nex/internal-protocols).
-
 See also: [RMC Protocol](/docs/rmc)
 
 ## Common Protocols
@@ -90,3 +88,12 @@ Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX.
 | ?  | [Title storage admin](/docs/nex/protocols/title-storage-admin)               |
 | ?  | [User storage admin](/docs/nex/protocols/user-storage-admin)                 |
 | ?  | [OLS storage](/docs/nex/protocols/ols-storage)                               |
+
+## Internal protocols
+These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [Debug](/docs/nex/protocols/debug) protocol. However some games implement subsets of these protocols
+
+| ID | Protocol                                                                        |
+|----|---------------------------------------------------------------------------------|
+| ?  | [Dummy](/docs/nex/protocols/dummy)                                              |
+| ?  | [SecureConnectionInternal](/docs/nex/protocols/secure-connection-internal)      |
+| ?  | [NATTraversalReportInternal](/docs/nex/protocols/nat-traversal-report-internal) |
