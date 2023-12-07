@@ -4,55 +4,18 @@ toc: true
 title: Xenoblade Chronicles X (109)
 ---
 
-This page describes the methods that are only seen in Xenoblade Chronicles X. The `BlackList` methods seem identical to the `BlockList` methods, just renamed.
+This page describes the methods that are only seen in Xenoblade Chronicles X
 
 ## Methods
 
 | Method ID | Method Name                                                                                          |
 |-----------|------------------------------------------------------------------------------------------------------|
-| 24        | [GetMyBlackList](#24-getmyblacklist)                                                                 |
-| 25        | [AddToBlackList](#25-addtoblacklist)                                                                 |
-| 26        | [RemoveFromBlackList](#26-removefromblacklist)                                                       |
-| 27        | [ClearMyBlackList](#27-clearmyblacklist)                                                             |
 | 36        | [JoinCommunityReturnJoinId](#36-joincommunityreturnjoinid)                                           |
 | 37        | [SearchPersistentGathering](#37-searchpersistentgathering)                                           |
 | 38        | [GetMatchmakeExtensionSetting](#38-getmatchmakeextensionsetting)                                     |
 | 39        | [CustomAutoMatchmake_Postpone](#39-customautomatchmake_postpone)                                     |
 | 40        | [CustomAutoMatchmakeWithSearchCriteria_Postpone](#40-customautomatchmakewithsearchcriteria_postpone) |
 | 41        | [CustomJoinMatchmakeSessionEx](#41-customjoinmatchmakesessionex)                                     |
-
-### (24) GetMyBlackList
-#### Request
-This method does not take any parameters.
-
-#### Response
-
-| Type                | Description    |
-|---------------------|----------------|
-| [List]&lt;[PID]&gt; | lstPrincipalId |
-
-### (25) AddToBlackList
-#### Request
-
-| Type                | Description    |
-|---------------------|----------------|
-| [List]&lt;[PID]&gt; | lstPrincipalId |
-
-#### Response
-This method does not return anything.
-
-### (26) RemoveFromBlackList
-#### Request
-
-| Type                | Description    |
-|---------------------|----------------|
-| [List]&lt;[PID]&gt; | lstPrincipalId |
-
-#### Response
-This method does not return anything.
-
-### (27) ClearMyBlackList
-This method does not take any parameters and does not return anything.
 
 ### (36) JoinCommunityReturnJoinId
 #### Request

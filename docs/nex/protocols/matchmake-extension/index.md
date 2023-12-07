@@ -47,10 +47,10 @@ This remainder of this page describes the methods that are not specific to any g
 | 21        | [FindOfficialCommunity](#21-findofficialcommunity)                                                                     |
 | 22        | [FindCommunityByParticipant](#22-findcommunitybyparticipant)                                                           |
 | 23        | [UpdatePrivacySetting](#23-updateprivacysetting)                                                                       |
-| 24        | [GetMyBlockList](#24-getmyblocklist)                                                                                   |
-| 25        | [AddToBlockList](#25-addtoblocklist)                                                                                   |
-| 26        | [RemoveFromBlockList](#26-removefromblocklist)                                                                         |
-| 27        | [ClearMyBlockList](#27-clearmyblocklist)                                                                               |
+| 24        | [GetMyBlackList](#24-getmyblacklist)                                                                                   |
+| 25        | [AddToBlackList](#25-addtoblacklist)                                                                                   |
+| 26        | [RemoveFromBlackList](#26-removefromblacklist)                                                                         |
+| 27        | [ClearMyBlackList](#27-clearmyblacklist)                                                                               |
 | 28        | [ReportViolation](#28-reportviolation)                                                                                 |
 | 29        | [IsViolationUser](#29-isviolationuser)                                                                                 |
 | 30        | [JoinMatchmakeSessionEx](#30-joinmatchmakesessionex)                                                                   |
@@ -381,7 +381,7 @@ This method does not return anything.
 #### Response
 This method does not return anything.
 
-### (24) GetMyBlockList
+### (24) GetMyBlackList
 #### Request
 This method does not take any parameters.
 
@@ -391,7 +391,7 @@ This method does not take any parameters.
 |---------------------|----------------|
 | [List]&lt;[PID]&gt; | lstPrincipalId |
 
-### (25) AddToBlockList
+### (25) AddToBlackList
 #### Request
 
 | Type                | Name           |
@@ -401,7 +401,7 @@ This method does not take any parameters.
 #### Response
 This method does not return anything.
 
-### (26) RemoveFromBlockList
+### (26) RemoveFromBlackList
 #### Request
 
 | Type                | Name           |
@@ -411,7 +411,7 @@ This method does not return anything.
 #### Response
 This method does not return anything.
 
-### (27) ClearMyBlockList
+### (27) ClearMyBlackList
 #### Request
 This method does not take any parameters.
 
@@ -448,7 +448,7 @@ This method does not take any parameters.
 |----------|---------------------|
 | Uint32   | gid                 |
 | [String] | strMessage          |
-| Bool     | dontCareMyBlockList |
+| Bool     | dontCareMyBlackList |
 | Uint16   | participationCount  |
 
 #### Response
