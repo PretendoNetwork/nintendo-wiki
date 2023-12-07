@@ -188,39 +188,35 @@ The following techniques are used to achieve reliability:
 
 **Lite**: Since the underlying connection is SSL-encrypted anyway, no encryption is used by PRUDP.
 
-<details><summary>Details on substreams and unreliable packets</summary><br>
-
 It would be a bad idea to encrypt all reliable substreams with the same key, because that would make it easy to break the encryption. PRUDP encrypts the first reliable substream with the session key. A new key is generated for all other reliable substreams by modifying the key of the previous substream with the following algorithm:
 
 ```python
 def modify_key(key):
-    # Only the first half of the key is modified
-    add = len(key) // 2 + 1
-    for i in range(len(key) // 2):
-        key[i] = (key[i] + add - i) & 0xFF
+  # Only the first half of the key is modified
+  add = len(key) // 2 + 1
+  for i in range(len(key) // 2):
+    key[i] = (key[i] + add - i) & 0xFF
 ```
 
 Unreliable packets also have another issue: it's not possible to use a single RC4 stream to encrypt them, because the decryption would fail if the packets arrive in the wrong order. To solve this, a unique RC4 stream is used for each unreliable data packet. The key is generated as follows:
 
 ```python
 def make_unreliable_key(packet, session_key):
-    # Generate a new key from the session key
-    part1 = combine_keys(session_key, bytes.fromhex("18d8233437e4e3fe"))
-    part2 = combine_keys(session_key, bytes.fromhex("233e600123cdab80"))
-    base_key = part1 + part2
+  # Generate a new key from the session key
+  part1 = combine_keys(session_key, bytes.fromhex("18d8233437e4e3fe"))
+  part2 = combine_keys(session_key, bytes.fromhex("233e600123cdab80"))
+  base_key = part1 + part2
 
-    # Modify the key such that no two packets use the same key
-    key = list(base_key)
-    key[0] = (key[0] + packet.sequence_id) & 0xFF
-    key[1] = (key[1] + (packet.sequence_id >> 8)) & 0xFF
-    key[31] = (key[31] + packet.session_id) & 0xFF
-    return bytes(key)
+  # Modify the key such that no two packets use the same key
+  key = list(base_key)
+  key[0] = (key[0] + packet.sequence_id) & 0xFF
+  key[1] = (key[1] + (packet.sequence_id >> 8)) & 0xFF
+  key[31] = (key[31] + packet.session_id) & 0xFF
+  return bytes(key)
 
 def combine_keys(key1, key2):
-    return hashlib.md5(key1 + key2).digest()
+  return hashlib.md5(key1 + key2).digest()
 ```
-
-</details>
 
 ### Sandbox access key
 Every game server has a unique sandbox access key. This is used to calculate the [packet signature](#packet-signature) and [packet checksum](#checksum). All NEX titles use access keys which are 8 lowercase hex characters, with the sole exception of the Friends server whose access key is `ridfebb9`. This limitation is only imposed by NEX, however. Rendez-Vous clients do not limit themselves to 8 lowercase hex characters, and may also use uppercase and non-hex characters. It seems that the access key may also be allowed to be up to 128 characters long, though no games are currently known to use anything larger than 8
