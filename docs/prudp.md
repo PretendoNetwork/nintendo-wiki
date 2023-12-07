@@ -26,7 +26,7 @@ This format is only used by the friends server and some 3DS games.
 | 0x9    | 2    | [Sequence id](#sequence-id)           |
 | 0xB    |      | Packet-specific data                  |
 |        |      | Payload                               |
-|        | 1    | [Checksum](#checksum)                 |
+|        | 1/4  | [Checksum](#checksum)                 |
 
 Packet-specific data:
 
@@ -56,29 +56,48 @@ In DATA and DISCONNECT packets the packet signature is the first 4 bytes of the 
 In all other packets the signature is the connection signature that has been received while the connection was made.
 
 ### Checksum
-The checksum is calculated over the whole packet (both header and encrypted payload), and uses the following algorithm:
+The checksum is calculated over the whole packet (both header and encrypted payload). A checksum can be either 1 byte or 4 bytes long. By default checksums are 1 byte long, but games have the option to enable the 4 byte checksum instead. All NEX titles use 1 byte checksums, though Rendez-Vous titles may be seen with either. The following algorithms are used, where `ACCESS_KEY` is the server [access key](#sandbox-access-key) bytes:
+
+#### 1 Byte
 ```python
+ACCESS_KEY = "12345678".encode() # Example dummy key
+
 def calc_checksum(data):
-    words = struct.unpack_from("<%iI" %(len(data) // 4), data)
-    temp = sum(words) & 0xFFFFFFFF #32-bit
-    
-    checksum = sum(ACCESS_KEY)
-    checksum += sum(data[len(data) & ~3:])
-    checksum += sum(struct.pack("I", temp))
-    return checksum & 0xFF #8-bit checksum
+  """
+  Split the data into a list of little endian uint32's
+  If there is not enough data for a uint32, discard it
+  EX: b"abcdefghijk" (0x6162636465666768696A6B)
+  becomes (1684234849, 1751606885), aka (0x64636261, 0x68676665)
+  """
+  words = struct.unpack_from("<%iI" %(len(data) // 4), data)
+  temp = sum(words) & 0xFFFFFFFF # Add the values and truncate to a uint32
+  main = struct.pack("I", temp) # Pack the sum of the main data back into bytes
+  remaining = data[len(data) & ~3:] # The data left over from the above
+
+  checksum = sum(ACCESS_KEY) # Checksum base
+  checksum += sum(remaining) # Add the remaining data first
+  checksum += sum(main) # Add the main data last
+  return checksum & 0xFF # Truncate to a uint8
 ```
 
-<details><summary>The original Quazal Rendez-Vous library uses a different checksum algorithm.</summary><br>
-
+#### 4 Byte
 ```python
-def calc_checksum(checksum, data):
-    data += b"\0" * (4 - len(data) % 4)
-    words = struct.unpack("<%iI" %(len(data) // 4), data)
-    return ((sum(ACCESS_KEY) & 0xFF) + sum(words)) & 0xFFFFFFFF
-```
+ACCESS_KEY = "12345678".encode() # Example dummy key
 
-This checksum takes up 4 bytes instead of 1.
-</details>
+def calc_checksum(checksum, data):
+  data += b"\0" * (4 - len(data) % 4) # Pad data to nearest multiple of 4
+
+  """
+  Split the data into a list of little endian uint32's
+  EX: b"abcdefgh" (0x6162636465666768)
+  becomes (1684234849, 1751606885), aka (0x64636261, 0x68676665)
+  """
+  words = struct.unpack("<%iI" %(len(data) // 4), data)
+  checksum = sum(ACCESS_KEY) & 0xFF # Checksum base, truncated to uint8
+  checksum += sum(words) # Add the packet data sum
+
+  return checksum & 0xFFFFFFFF # Truncate to a uint32
+```
 
 ## V1 Format
 This format is used by all Wii U games and apps except for friends services, and some 3DS games.
@@ -204,9 +223,11 @@ def combine_keys(key1, key2):
 </details>
 
 ### Sandbox access key
-Every game server has a unique sandbox access key. This is used to calculate the [packet signature](#packet-signature). The only way to find the access key of a server is by disassembling a game that connects to this server.
+Every game server has a unique sandbox access key. This is used to calculate the [packet signature](#packet-signature) and [packet checksum](#checksum). All NEX titles use access keys which are 8 lowercase hex characters, with the sole exception of the Friends server whose access key is `ridfebb9`. This limitation is only imposed by NEX, however. Rendez-Vous clients do not limit themselves to 8 lowercase hex characters, and may also use uppercase and non-hex characters. It seems that the access key may also be allowed to be up to 128 characters long, though no games are currently known to use anything larger than 8
 
-A list of game servers and their access keys can be found [here](/docs/game-servers).
+The only way to find the access key of a server is by checking the client. In most cases this involves disassembling the game, however some games have been known to store their access keys in external files. For NEX titles, tools such as [this](https://github.com/PretendoNetwork/access-key-extractor) exist to automate the extraction of these keys. A key may often times also be brute forced, as many valid keys exist for all servers due to their small size
+
+A partial list of game servers and their access keys can be found [here](/docs/game-servers).
 
 ### Secure server connection
 As explained on the [Game Server Overview](/docs/nex) page, every game server consists of an authentication server and a secure server. If a client wants to connect to the secure server it must first request a [ticket](/docs/nex/kerberos) from the authentication server. The ticket contains the session key that's used in the secure server connection, among other information.
