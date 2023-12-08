@@ -1246,7 +1246,7 @@ In DataStore `modifiesFlag` is a set of flags which determine what data gets upd
 | `0x200` | Update objects `status` field. Anything besides `0` seems to result in `DataStore::NotFound` on future requests |
 
 ### Period
-DataStore objects are really just S3 objects. The `period` field of an object is the number of *days* the object is valid for before it expires and is deleted from S3. Objects can be "refreshed" to update their expire time, which also updates the objects `updatedTime` field. Not all games respect this value, however, and will either set their own expire time or never expire objects even if a `period` is set for them
+DataStore objects are really just S3 objects. The `period` field of an object is the number of *days* the object is valid for before it expires and is deleted from S3. Objects can be "refreshed" to update their expire time, which also updates the objects `updatedTime` field. Not all games respect this value, however, and will either set their own expire time or never expire objects even if a `period` is set for them.
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
