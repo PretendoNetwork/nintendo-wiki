@@ -814,35 +814,35 @@ In NEX version 3.5, one more field was added:
 
 ### DataStoreChangeMetaParamV1 ([Structure])
 
-| Type                   | Name           |
-|------------------------|----------------|
-| Uint64                 | dataId         |
-| Uint32                 | modifiesFlag   |
-| [String]               | name           |
-| [DataStorePermission]  | permission     |
-| [DataStorePermission]  | delPermission  |
-| Uint16                 | period         |
-| [qBuffer]              | metaBinary     |
-| [List]&lt;[String]&gt; | tags           |
-| Uint64                 | updatePassword |
+| Type                   | Name                           |
+|------------------------|--------------------------------|
+| Uint64                 | dataId                         |
+| Uint32                 | [modifiesFlag](#modifies-flag) |
+| [String]               | name                           |
+| [DataStorePermission]  | permission                     |
+| [DataStorePermission]  | delPermission                  |
+| Uint16                 | period                         |
+| [qBuffer]              | metaBinary                     |
+| [List]&lt;[String]&gt; | tags                           |
+| Uint64                 | updatePassword                 |
 
 ### DataStoreChangeMetaParam ([Structure])
 
-| Type                              | Name           |
-|-----------------------------------|----------------|
-| Uint64                            | dataId         |
-| Uint32                            | modifiesFlag   |
-| [String]                          | name           |
-| [DataStorePermission]             | permission     |
-| [DataStorePermission]             | delPermission  |
-| Uint16                            | period         |
-| [qBuffer]                         | metaBinary     |
-| [List]&lt;[String]&gt;            | tags           |
-| Uint64                            | updatePassword |
-| Uint32                            | referredCnt    |
-| Uint16                            | dataType       |
-| Uint8                             | status         |
-| [DataStoreChangeMetaCompareParam] | compareParam   |
+| Type                              | Name                           |
+|-----------------------------------|--------------------------------|
+| Uint64                            | dataId                         |
+| Uint32                            | [modifiesFlag](#modifies-flag) |
+| [String]                          | name                           |
+| [DataStorePermission]             | permission                     |
+| [DataStorePermission]             | delPermission                  |
+| Uint16                            | period                         |
+| [qBuffer]                         | metaBinary                     |
+| [List]&lt;[String]&gt;            | tags                           |
+| Uint64                            | updatePassword                 |
+| Uint32                            | referredCnt                    |
+| Uint16                            | dataType                       |
+| Uint8                             | status                         |
+| [DataStoreChangeMetaCompareParam] | compareParam                   |
 
 Revision 1:
 
@@ -852,12 +852,12 @@ Revision 1:
 
 ### DataStoreGetMetaParam ([Structure])
 
-| Type                         | Name                           |
-|------------------------------|--------------------------------|
-| Uint64                       | dataId                         |
-| [DataStorePersistenceTarget] | persistenceTarget              |
+| Type                         | Name                            |
+|------------------------------|---------------------------------|
+| Uint64                       | dataId                          |
+| [DataStorePersistenceTarget] | persistenceTarget               |
 | Uint8                        | [resultOption](#result-options) |
-| Uint64                       | accessPassword                 |
+| Uint64                       | accessPassword                  |
 
 ### DataStoreRatingInfo ([Structure])
 
@@ -960,24 +960,24 @@ In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a
 
 ### DataStoreSearchParam ([Structure])
 
-| Type                   | Name                           |
-|------------------------|--------------------------------|
-| Uint8                  | searchTarget                   |
-| [List]&lt;[PID]&gt;    | ownerIds                       |
-| Uint8                  | ownerType                      |
-| [List]&lt;Uint64&gt;   | destinationIds                 |
-| Uint16                 | dataType                       |
-| [DateTime]             | createdAfter                   |
-| [DateTime]             | createdBefore                  |
-| [DateTime]             | updatedAfter                   |
-| [DateTime]             | updatedBefore                  |
-| Uint32                 | referDataId                    |
-| [List]&lt;[String]&gt; | tags                           |
-| Uint8                  | resultOrderColumn              |
-| Uint8                  | resultOrder                    |
-| [ResultRange]          | resultRange                    |
+| Type                   | Name                            |
+|------------------------|---------------------------------|
+| Uint8                  | searchTarget                    |
+| [List]&lt;[PID]&gt;    | ownerIds                        |
+| Uint8                  | ownerType                       |
+| [List]&lt;Uint64&gt;   | destinationIds                  |
+| Uint16                 | dataType                        |
+| [DateTime]             | createdAfter                    |
+| [DateTime]             | createdBefore                   |
+| [DateTime]             | updatedAfter                    |
+| [DateTime]             | updatedBefore                   |
+| Uint32                 | referDataId                     |
+| [List]&lt;[String]&gt; | tags                            |
+| Uint8                  | resultOrderColumn               |
+| Uint8                  | resultOrder                     |
+| [ResultRange]          | resultRange                     |
 | Uint8                  | [resultOption](#result-options) |
-| Uint32                 | minimalRatingFrequency         |
+| Uint32                 | minimalRatingFrequency          |
 
 Revision 1:
 
@@ -993,27 +993,27 @@ Revision 2:
 
 In revision 3, a total count enabled field was added. Note that this field was inserted before the data types field:
 
-| Type                   | Name                           |
-|------------------------|--------------------------------|
-| Uint8                  | searchTarget                   |
-| [List]&lt;[PID]&gt;    | ownerIds                       |
-| Uint8                  | ownerType                      |
-| [List]&lt;Uint64&gt;   | destinationIds                 |
-| Uint16                 | dataType                       |
-| [DateTime]             | createdAfter                   |
-| [DateTime]             | createdBefore                  |
-| [DateTime]             | updatedAfter                   |
-| [DateTime]             | updatedBefore                  |
-| Uint32                 | referDataId                    |
-| [List]&lt;[String]&gt; | tags                           |
-| Uint8                  | resultOrderColumn              |
-| Uint8                  | resultOrder                    |
-| [ResultRange]          | resultRange                    |
+| Type                   | Name                            |
+|------------------------|---------------------------------|
+| Uint8                  | searchTarget                    |
+| [List]&lt;[PID]&gt;    | ownerIds                        |
+| Uint8                  | ownerType                       |
+| [List]&lt;Uint64&gt;   | destinationIds                  |
+| Uint16                 | dataType                        |
+| [DateTime]             | createdAfter                    |
+| [DateTime]             | createdBefore                   |
+| [DateTime]             | updatedAfter                    |
+| [DateTime]             | updatedBefore                   |
+| Uint32                 | referDataId                     |
+| [List]&lt;[String]&gt; | tags                            |
+| Uint8                  | resultOrderColumn               |
+| Uint8                  | resultOrder                     |
+| [ResultRange]          | resultRange                     |
 | Uint8                  | [resultOption](#result-options) |
-| Uint32                 | minimalRatingFrequency         |
-| Bool                   | useCache                       |
-| Bool                   | totalCountEnabled              |
-| [List]&lt;Uint16&gt;   | dataTypes                      |
+| Uint32                 | minimalRatingFrequency          |
+| Bool                   | useCache                        |
+| Bool                   | totalCountEnabled               |
+| [List]&lt;Uint16&gt;   | dataTypes                       |
 
 In NEX version 4.0, the revision number was set back to 0 with no other changes.
 
@@ -1221,7 +1221,6 @@ Permission types:
 | Sint16 | periodDuration |
 
 ### Result options
-
 In DataStore `resultOption` is a set of flags which determine what extra data gets returned when requesting an objects metadata. The following flags are used
 
 | Flag  | Description                             |
@@ -1229,6 +1228,22 @@ In DataStore `resultOption` is a set of flags which determine what extra data ge
 | `0x1` | Populate the objects `tags` field       |
 | `0x2` | Populate the objects `ratings` field    |
 | `0x4` | Populate the objects `metaBinary` field |
+
+### Modifies flag
+In DataStore `modifiesFlag` is a set of flags which determine what data gets updated when changing an objects metadata. The following flags are used. None of these changes update the objects `updatedTime` field besides flag `0x40`, which updates the S3 object itself. `updatedTime` likely refers to only the object, then, and not the metadata.
+
+| Flag    | Description                                                                                                     |
+|---------|-----------------------------------------------------------------------------------------------------------------|
+| `0x001` | Update objects `name` field                                                                                     |
+| `0x002` | Update objects access permission field                                                                          |
+| `0x004` | Update objects delete permission field                                                                          |
+| `0x008` | Update objects `period` field                                                                                   |
+| `0x010` | Update objects `metaBinary` field                                                                               |
+| `0x020` | Update objects `tags` field. Replaced, not appended                                                             |
+| `0x040` | Refresh objects expire time using the `period` field. If also using flag `0x8`, this uses the NEW `period`      |
+| `0x080` | Update objects `name` field                                                                                     |
+| `0x100` | Update objects `referredCnt` field. Set, not added                                                              |
+| `0x200` | Update objects `status` field. Anything besides `0` seems to result in `DataStore::NotFound` on future requests |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
