@@ -743,7 +743,7 @@ In NEX version 3.5, one more field was added:
 | [DataStorePermission]                            | permission       |
 | [DataStorePermission]                            | delPermission    |
 | Uint32                                           | flag             |
-| Uint16                                           | period           |
+| Uint16                                           | [period](#period)           |
 | Uint32                                           | referDataId      |
 | [List]&lt;[String]&gt;                           | tags             |
 | [List]&lt;[DataStoreRatingInitParamWithSlot]&gt; | ratingInitParams |
@@ -759,7 +759,7 @@ In NEX version 3.5, one more field was added:
 | [DataStorePermission]                            | permission           |
 | [DataStorePermission]                            | delPermission        |
 | Uint32                                           | flag                 |
-| Uint16                                           | period               |
+| Uint16                                           | [period](#period)    |
 | Uint32                                           | referDataId          |
 | [List]&lt;[String]&gt;                           | tags                 |
 | [List]&lt;[DataStoreRatingInitParamWithSlot]&gt; | ratingInitParams     |
@@ -821,7 +821,7 @@ In NEX version 3.5, one more field was added:
 | [String]               | name                           |
 | [DataStorePermission]  | permission                     |
 | [DataStorePermission]  | delPermission                  |
-| Uint16                 | period                         |
+| Uint16                 | [period](#period)                         |
 | [qBuffer]              | metaBinary                     |
 | [List]&lt;[String]&gt; | tags                           |
 | Uint64                 | updatePassword                 |
@@ -835,7 +835,7 @@ In NEX version 3.5, one more field was added:
 | [String]                          | name                           |
 | [DataStorePermission]             | permission                     |
 | [DataStorePermission]             | delPermission                  |
-| Uint16                            | period                         |
+| Uint16                            | [period](#period)                         |
 | [qBuffer]                         | metaBinary                     |
 | [List]&lt;[String]&gt;            | tags                           |
 | Uint64                            | updatePassword                 |
@@ -888,7 +888,7 @@ Revision 1:
 | [DataStorePermission]                       | delPermission |
 | [DateTime]                                  | createdTime   |
 | [DateTime]                                  | updatedTime   |
-| Uint16                                      | period        |
+| Uint16                                      | [period](#period)        |
 | Uint8                                       | status        |
 | Uint32                                      | referredCnt   |
 | Uint32                                      | referDataId   |
@@ -1200,7 +1200,7 @@ Permission types:
 | [String]               | name           |
 | [DataStorePermission]  | permission     |
 | [DataStorePermission]  | delPermission  |
-| Uint16                 | period         |
+| Uint16                 | [period](#period)         |
 | [qBuffer]              | metaBinary     |
 | [List]&lt;[String]&gt; | tags           |
 | Uint32                 | referredCnt    |
@@ -1244,6 +1244,9 @@ In DataStore `modifiesFlag` is a set of flags which determine what data gets upd
 | `0x080` | Update objects `name` field                                                                                     |
 | `0x100` | Update objects `referredCnt` field. Set, not added                                                              |
 | `0x200` | Update objects `status` field. Anything besides `0` seems to result in `DataStore::NotFound` on future requests |
+
+### Period
+DataStore objects are really just S3 objects. The `period` field of an object is the number of *days* the object is valid for before it expires and is deleted from S3. Objects can be "refreshed" to update their expire time, which also updates the objects `updatedTime` field. Not all games respect this value, however, and will either set their own expire time or never expire objects even if a `period` is set for them
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
