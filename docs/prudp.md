@@ -16,17 +16,17 @@ On the Nintendo Switch, NEX uses a WebSocket connection instead of UDP and the '
 ## V0 Format
 This format is only used by the friends server and some 3DS games.
 
-| Offset | Size | Description                           |
-|--------|------|---------------------------------------|
-| 0x0    | 1    | [Source](#virtual-ports)              |
-| 0x1    | 1    | [Destination](#virtual-ports)         |
-| 0x2    | 2    | [Type and flags](#type-and-flags)     |
-| 0x4    | 1    | [Session id](#session-id)             |
-| 0x5    | 4    | [Packet signature](#packet-signature) |
-| 0x9    | 2    | [Sequence id](#sequence-id)           |
-| 0xB    |      | Packet-specific data                  |
-|        |      | Payload                               |
-|        | 1/4  | [Checksum](#checksum)                 |
+| Offset | Size   | Description                           |
+|--------|--------|---------------------------------------|
+| 0x0    | 1      | [Source](#virtual-ports)              |
+| 0x1    | 1      | [Destination](#virtual-ports)         |
+| 0x2    | 2      | [Type and flags](#type-and-flags)     |
+| 0x4    | 1      | [Session id](#session-id)             |
+| 0x5    | 4      | [Packet signature](#packet-signature) |
+| 0x9    | 2      | [Sequence id](#sequence-id)           |
+| 0xB    |        | Packet-specific data                  |
+|        |        | Payload                               |
+|        | 1 or 4 | [Checksum](#checksum)                 |
 
 Packet-specific data:
 
@@ -54,6 +54,10 @@ In DATA and DISCONNECT packets the packet signature is the first 4 bytes of the 
 |             | Encrypted payload                                                                     |
 
 In all other packets the signature is the connection signature that has been received while the connection was made.
+
+**Quazal Rendez-Vous:**
+
+In all Rendez-Vous packets the signature is the connection signature that has been received while the connection was made.
 
 ### Checksum
 The checksum is calculated over the whole packet (both header and encrypted payload). A checksum can be either 1 byte or 4 bytes long. By default checksums are 1 byte long, but games have the option to enable the 4 byte checksum instead. All NEX titles use 1 byte checksums, though Rendez-Vous titles may be seen with either. The following algorithms are used, where `ACCESS_KEY` is the server [access key](#sandbox-access-key) bytes:
@@ -184,9 +188,11 @@ The following techniques are used to achieve reliability:
 * To keep the connection alive, both client and server may send PING packets to each other after a certain amount of time has passed.
 
 ### Encryption
-**V0 and V1**: All payloads are encrypted using RC4, with separate streams for client-to-server packets and server-to-client packets. The connection to the authentication server is encrypted using a default key that's always the same: `CD&ML`. The connection to the secure server is encrypted using the session key from the [Kerberos ticket](/docs/nex/kerberos).
+**V0 and V1**: All payloads are encrypted using RC4, with separate streams for client-to-server packets and server-to-client packets. The connection to the authentication server is encrypted using a default key that's always the same: `CD&ML`. The connection to the secure server is encrypted using the session key from the [Kerberos ticket](/docs/nex/kerberos). On Quazal Rendez-Vous, the streams are reset for each payload.
 
 **Lite**: Since the underlying connection is SSL-encrypted anyway, no encryption is used by PRUDP.
+
+#### Substreams and unreliable packets
 
 It would be a bad idea to encrypt all reliable substreams with the same key, because that would make it easy to break the encryption. PRUDP encrypts the first reliable substream with the session key. A new key is generated for all other reliable substreams by modifying the key of the previous substream with the following algorithm:
 
@@ -219,9 +225,9 @@ def combine_keys(key1, key2):
 ```
 
 ### Sandbox access key
-Every game server has a unique sandbox access key. This is used to calculate the [packet signature](#packet-signature) and [packet checksum](#checksum). All NEX titles use access keys which are 8 lowercase hex characters, with the sole exception of the Friends server whose access key is `ridfebb9`. This limitation is only imposed by NEX, however. Rendez-Vous clients do not limit themselves to 8 lowercase hex characters, and may also use uppercase and non-hex characters. It seems that the access key may also be allowed to be up to 128 characters long, though no games are currently known to use anything larger than 8
+Every game server has a unique sandbox access key. This is used to calculate the [packet signature](#packet-signature) and [packet checksum](#checksum). All NEX titles use access keys which are 8 lowercase hex characters, with the sole exception of the Friends server whose access key is `ridfebb9`. This limitation is only imposed by NEX, however. Rendez-Vous clients do not limit themselves to 8 lowercase hex characters, and may also use uppercase and non-hex characters. It seems that the access key may also be allowed to be up to 128 characters long, though no games are currently known to use anything larger than 8.
 
-The only way to find the access key of a server is by checking the client. In most cases this involves disassembling the game, however some games have been known to store their access keys in external files. For NEX titles, tools such as [this](https://github.com/PretendoNetwork/access-key-extractor) exist to automate the extraction of these keys. A key may often times also be brute forced, as many valid keys exist for all servers due to their small size
+The only way to find the access key of a server is by checking the client. In most cases this involves disassembling the game, however some games have been known to store their access keys in external files. For NEX titles, tools such as [this](https://github.com/PretendoNetwork/access-key-extractor) exist to automate the extraction of these keys. A key may often times also be brute forced, as many valid keys exist for all servers due to their small size.
 
 A partial list of game servers and their access keys can be found [here](/docs/game-servers).
 
