@@ -734,19 +734,19 @@ In NEX version 3.5, one more field was added:
 
 ### DataStorePreparePostParamV1 ([Structure])
 
-| Type                                             | Name             |
-|--------------------------------------------------|------------------|
-| Uint32                                           | size             |
-| [String]                                         | name             |
-| Uint16                                           | dataType         |
-| [qBuffer]                                        | metaBinary       |
-| [DataStorePermission]                            | permission       |
-| [DataStorePermission]                            | delPermission    |
-| Uint32                                           | flag             |
-| Uint16                                           | [period](#period)           |
-| Uint32                                           | referDataId      |
-| [List]&lt;[String]&gt;                           | tags             |
-| [List]&lt;[DataStoreRatingInitParamWithSlot]&gt; | ratingInitParams |
+| Type                                             | Name              |
+|--------------------------------------------------|-------------------|
+| Uint32                                           | size              |
+| [String]                                         | name              |
+| Uint16                                           | dataType          |
+| [qBuffer]                                        | metaBinary        |
+| [DataStorePermission]                            | permission        |
+| [DataStorePermission]                            | delPermission     |
+| Uint32                                           | flag              |
+| Uint16                                           | [period](#period) |
+| Uint32                                           | referDataId       |
+| [List]&lt;[String]&gt;                           | tags              |
+| [List]&lt;[DataStoreRatingInitParamWithSlot]&gt; | ratingInitParams  |
 
 ### DataStorePreparePostParam ([Structure])
 
@@ -821,7 +821,7 @@ In NEX version 3.5, one more field was added:
 | [String]               | name                           |
 | [DataStorePermission]  | permission                     |
 | [DataStorePermission]  | delPermission                  |
-| Uint16                 | [period](#period)                         |
+| Uint16                 | [period](#period)              |
 | [qBuffer]              | metaBinary                     |
 | [List]&lt;[String]&gt; | tags                           |
 | Uint64                 | updatePassword                 |
@@ -835,7 +835,7 @@ In NEX version 3.5, one more field was added:
 | [String]                          | name                           |
 | [DataStorePermission]             | permission                     |
 | [DataStorePermission]             | delPermission                  |
-| Uint16                            | [period](#period)                         |
+| Uint16                            | [period](#period)              |
 | [qBuffer]                         | metaBinary                     |
 | [List]&lt;[String]&gt;            | tags                           |
 | Uint64                            | updatePassword                 |
@@ -876,27 +876,27 @@ Revision 1:
 
 ### DataStoreMetaInfo ([Structure])
 
-| Type                                        | Name          |
-|---------------------------------------------|---------------|
-| Uint64                                      | dataId        |
-| [PID]                                       | ownerId       |
-| Uint32                                      | size          |
-| [String]                                    | name          |
-| Uint16                                      | dataType      |
-| [qBuffer]                                   | metaBinary    |
-| [DataStorePermission]                       | permission    |
-| [DataStorePermission]                       | delPermission |
-| [DateTime]                                  | createdTime   |
-| [DateTime]                                  | updatedTime   |
-| Uint16                                      | [period](#period)        |
-| Uint8                                       | status        |
-| Uint32                                      | referredCnt   |
-| Uint32                                      | referDataId   |
-| Uint32                                      | flag          |
-| [DateTime]                                  | referredTime  |
-| [DateTime]                                  | expireTime    |
-| [List]&lt;[String]&gt;                      | tags          |
-| [List]&lt;[DataStoreRatingInfoWithSlot]&gt; | ratings       |
+| Type                                        | Name              |
+|---------------------------------------------|-------------------|
+| Uint64                                      | dataId            |
+| [PID]                                       | ownerId           |
+| Uint32                                      | size              |
+| [String]                                    | name              |
+| Uint16                                      | dataType          |
+| [qBuffer]                                   | metaBinary        |
+| [DataStorePermission]                       | permission        |
+| [DataStorePermission]                       | delPermission     |
+| [DateTime]                                  | createdTime       |
+| [DateTime]                                  | updatedTime       |
+| Uint16                                      | [period](#period) |
+| Uint8                                       | status            |
+| Uint32                                      | referredCnt       |
+| Uint32                                      | referDataId       |
+| Uint32                                      | flag              |
+| [DateTime]                                  | referredTime      |
+| [DateTime]                                  | expireTime        |
+| [List]&lt;[String]&gt;                      | tags              |
+| [List]&lt;[DataStoreRatingInfoWithSlot]&gt; | ratings           |
 
 ### DataStorePrepareUpdateParam ([Structure])
 Up to NEX version 2.x, this structure looks as follows:
@@ -1194,18 +1194,18 @@ Permission types:
 
 ### DataStoreChangeMetaCompareParam ([Structure])
 
-| Type                   | Name           |
-|------------------------|----------------|
-| Uint32                 | comparisonFlag |
-| [String]               | name           |
-| [DataStorePermission]  | permission     |
-| [DataStorePermission]  | delPermission  |
-| Uint16                 | [period](#period)         |
-| [qBuffer]              | metaBinary     |
-| [List]&lt;[String]&gt; | tags           |
-| Uint32                 | referredCnt    |
-| Uint16                 | dataType       |
-| Uint8                  | status         |
+| Type                   | Name              |
+|------------------------|-------------------|
+| Uint32                 | comparisonFlag    |
+| [String]               | name              |
+| [DataStorePermission]  | permission        |
+| [DataStorePermission]  | delPermission     |
+| Uint16                 | [period](#period) |
+| [qBuffer]              | metaBinary        |
+| [List]&lt;[String]&gt; | tags              |
+| Uint32                 | referredCnt       |
+| Uint16                 | dataType          |
+| Uint8                  | status            |
 
 ### DataStoreRatingInitParam ([Structure])
 
