@@ -170,12 +170,12 @@ The second parse tree item is always the same as the first parse tree item. I do
 
 ## Parameter
 
-| Type             | Description              |
-|------------------|--------------------------|
-| [Variable]       | Variable                 |
-| [DeclarationUse] | Declaration use          |
-| Uint32           | Array size               |
-| Uint8            | Type (1=input, 2=output) |
+| Type             | Description                      |
+|------------------|----------------------------------|
+| [Variable]       | Variable                         |
+| [DeclarationUse] | Declaration use                  |
+| Uint32           | Array size                       |
+| Uint8            | Type (1=input, 2=output, 3=both) |
 
 ## ReturnValue
 

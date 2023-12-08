@@ -34,7 +34,10 @@ title: Ubi Account Management (29)
 
 ### (1) CreateAccount
 #### Request
-This method does not take any parameters.
+
+| Type         | Name       |
+|--------------|------------|
+| [UbiAccount] | ubiAccount |
 
 #### Response
 
@@ -45,7 +48,10 @@ This method does not take any parameters.
 
 ### (2) UpdateAccount
 #### Request
-This method does not take any parameters.
+
+| Type         | Name       |
+|--------------|------------|
+| [UbiAccount] | ubiAccount |
 
 #### Response
 
