@@ -4,31 +4,13 @@ toc: true
 title: Message Delivery (27)
 ---
 
-## Extended protocols
-
-The following games have changed methods in the protocol:
-* [Xenoblade Chronicles X](/docs/nex/protocols/message-delivery/xenoblade-chronicles-x)
-
-This remainder of this page describes the methods that are not specific to any game.
-
-For message types, see [Messaging Protocol](/docs/nex/protocols/messaging#types).
+This page describes the methods that are only seen in Xenoblade Chronicles X.
 
 ## Methods
 
 | Method ID | Method Name                                               |
 |-----------|-----------------------------------------------------------|
-| 1         | [DeliverMessage](#1-delivermessage)                       |
 | 2         | [DeliverMessageMultiTarget](#2-delivermessagemultitarget) |
-
-### (1) DeliverMessage
-#### Request
-
-| Type   | Description  |
-|--------|--------------|
-| [Data] | oUserMessage |
-
-#### Response
-This method does not return anything.
 
 ### (2) DeliverMessageMultiTarget
 #### Request

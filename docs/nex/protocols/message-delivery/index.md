@@ -27,6 +27,6 @@ For message types, see [Messaging Protocol](/docs/nex/protocols/messaging#types)
 | [Data] | oUserMessage |
 
 #### Response
-No RMC response is sent.
+This method does not return anything.
 
 [Data]: /docs/nex/types#anydataholder
