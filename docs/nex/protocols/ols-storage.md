@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title: OLS Storage
+title: OLS Storage (200)
 ---
 
 ## Methods
@@ -19,11 +19,12 @@ title: OLS Storage
 | 9         | [QueryLeaderboard](#9-queryleaderboard)                  |
 | 10        | [QuerySmartSelection](#10-querysmartselection)           |
 | 11        | [SaveScore](#11-savescore)                               |
-| 12        | [SaveGhost](#12-saveghost)                               |
-| 13        | [QueryCompetitionsInfos](#13-querycompetitionsinfos)     |
-| 14        | [QueryCompetitionsHistory](#14-querycompetitionshistory) |
-| 15        | [QueryCompetitionOfTheDay](#15-querycompetitionoftheday) |
-| 16        | [QueryCompetition](#16-querycompetition)                 |
+| 12        | [SaveScoreInvasion](#12-savescoreinvasion)               |
+| 13        | [SaveGhost](#13-saveghost)                               |
+| 14        | [QueryCompetitionsInfos](#14-querycompetitionsinfos)     |
+| 15        | [QueryCompetitionsHistory](#15-querycompetitionshistory) |
+| 16        | [QueryCompetitionOfTheDay](#16-querycompetitionoftheday) |
+| 17        | [SaveLevelProgression](#17-savelevelprogression)         |
 
 ### (1) LoadVersion
 
@@ -32,10 +33,11 @@ This method does not take any parameters
 
 #### Response
 
-| Type     | Name        |
-| -------- | ----------- |
-| Sint32   | version     |
-| [String] | sandboxName |
+| Type     | Name            |
+| -------- | --------------- |
+| Sint32   | version         |
+| [String] | sandboxName     |
+| Uint32   | applicationMask |
 
 ### (2) SaveLocale
 
@@ -44,6 +46,7 @@ This method does not take any parameters
 | Type     | Name       |
 | -------- | ---------- |
 | [String] | localeCode |
+| [String] | playerName |
 
 #### Response
 This method does not return anything
@@ -52,22 +55,20 @@ This method does not return anything
 
 #### Request
 
-| Type   | Name              |
-| ------ | ----------------- |
-| Uint32 | update_bitfield   |
-| Sint8  | level             |
-| Sint32 | currency          |
-| Uint32 | costume           |
-| Uint16 | bronze_medals     |
-| Uint16 | silver_medals     |
-| Uint16 | gold_medals       |
-| Uint16 | diamond_medals    |
-| Uint32 | run_distance      |
-| Uint16 | teensies_freed    |
-| Uint32 | jumps             |
-| Uint16 | unlocked_pets     |
-| Uint64 | pets              |
-| Uint16 | unlocked_costumes |
+| Type   | Name            |
+| ------ | --------------- |
+| Uint32 | update_bitfield |
+| Sint8  | level           |
+| Sint32 | currency        |
+| Uint32 | costume         |
+| Uint16 | bronze_medals   |
+| Uint16 | silver_medals   |
+| Uint16 | gold_medals     |
+| Uint16 | diamond_medals  |
+| Uint32 | run_distance    |
+| Uint16 | kills           |
+| Uint32 | jumps           |
+| Uint16 | deaths          |
 
 #### Response
 
@@ -77,6 +78,7 @@ This method does not return anything
 | Uint16 | competition_medals_1 |
 | Uint16 | competition_medals_2 |
 | Uint16 | competition_medals_3 |
+| Bool   | demoProfile          |
 
 ### (4) LoadIDCard
 
@@ -157,7 +159,6 @@ This method does not take any parameters
 | [List]&#x3C;Float&#x3E;                             | graduations  |
 | [List]&#x3C;Uint32&#x3E;                            | envelope     |
 | Uint32                                              | unit         |
-| Uint32                                              | my_country   |
 | Uint32                                              | participants |
 | Bool                                                | cacheable    |
 
@@ -171,10 +172,11 @@ This method does not take any parameters
 
 #### Response
 
-| Type                                                            | Name   |
-| --------------------------------------------------------------- | ------ |
-| [List]&#x3C;[OLSSelectionRow](#olsselectionrow-structure)&#x3E; | ghosts |
-| [List]&#x3C;[OLSTomb](#olstomb-structure)&#x3E;                 | tombs  |
+| Type                                                            | Name            |
+| --------------------------------------------------------------- | --------------- |
+| [List]&#x3C;[OLSSelectionRow](#olsselectionrow-structure)&#x3E; | ghosts          |
+| [List]&#x3C;[OLSTomb](#olstomb-structure)&#x3E;                 | tombs           |
+| Uint32                                                          | numParticipants |
 
 ### (11) SaveScore
 
@@ -200,7 +202,19 @@ This method does not take any parameters
 | [String] | message_medal   |
 | [String] | message_friends |
 
-### (12) SaveGhost
+### (12) SaveScoreInvasion
+
+#### Request
+
+| Type   | Name           |
+| ------ | -------------- |
+| Uint32 | id_leaderboard |
+| Float  | score          |
+
+#### Response
+This method does not return anything
+
+### (13) SaveGhost
 
 #### Request
 
@@ -214,7 +228,7 @@ This method does not take any parameters
 #### Response
 This method does not return anything
 
-### (13) QueryCompetitionsInfos
+### (14) QueryCompetitionsInfos
 
 #### Request
 This method does not take any parameters
@@ -225,7 +239,7 @@ This method does not take any parameters
 | ----------------------------------------------------------------------- | ----- |
 | [List]&#x3C;[OLSCompetitionInfos](#olscompetitioninfos-structure)&#x3E; | infos |
 
-### (14) QueryCompetitionsHistory
+### (15) QueryCompetitionsHistory
 
 #### Request
 
@@ -242,7 +256,7 @@ This method does not take any parameters
 | [List]&#x3C;[OLSCompetitionResult](#olscompetitionresult-structure)&#x3E; | history |
 | Uint32                                                                    | total   |
 
-### (15) QueryCompetitionOfTheDay
+### (16) QueryCompetitionOfTheDay
 
 #### Request
 
@@ -252,25 +266,22 @@ This method does not take any parameters
 
 #### Response
 
-| Type                                        | Name            |
-| ------------------------------------------- | --------------- |
-| [OLSCompetition](#olscompetition-structure) | competition     |
-| Uint32                                      | remaningSeconds |
-| [OLSCompetition](#olscompetition-structure) | tomorrow        |
+| Type                                                | Name            |
+| --------------------------------------------------- | --------------- |
+| [OLSCompetition](#olscompetition-structure)         | competition     |
+| Uint32                                              | remaningSeconds |
+| [List]&#x3C;[OLSLdbRow](#olsldbrow-structure)&#x3E; | friendsRanking  |
 
-### (16) QueryCompetition
+### (17) SaveLevelProgression
 
 #### Request
 
-| Type   | Name           |
-| ------ | -------------- |
-| Uint32 | id_competition |
+| Type                                              | Name   |
+| ------------------------------------------------- | ------ |
+| [List]&#x3C;[OLSLevel](#olslevel-structure)&#x3E; | levels |
 
 #### Response
-
-| Type                                        | Name        |
-| ------------------------------------------- | ----------- |
-| [OLSCompetition](#olscompetition-structure) | competition |
+This method does not return anything
 
 ## Types
 
@@ -279,7 +290,6 @@ This method does not take any parameters
 | Type     | Name       |
 | -------- | ---------- |
 | Sint32   | PID        |
-| [String] | PlatformID |
 | [String] | Name       |
 | Uint32   | costume    |
 | Uint32   | country    |
@@ -287,11 +297,10 @@ This method does not take any parameters
 
 ### OLSRichProfile ([Structure])
 
-| Type | Name |
-| --- | --- |
+| Type     | Name                 |
+| -------- | -------------------- |
 | Sint32   | PID                  |
 | [String] | Name                 |
-| [String] | PlatformID           |
 | Sint16   | Country              |
 | Uint32   | StatusIcon           |
 | Uint32   | lastCostume          |
@@ -310,14 +319,12 @@ This method does not take any parameters
 | Uint32   | rank_distanceRun     |
 | Float    | lums                 |
 | Uint32   | rank_lums            |
-| Float    | pets                 |
-| Uint32   | rank_pets            |
-| Float    | teensies             |
-| Uint32   | rank_teensies        |
+| Float    | deaths               |
+| Uint32   | rank_deaths          |
 | Float    | jumps                |
 | Uint32   | rank_jumps           |
-| Float    | costumes             |
-| Uint32   | rank_costumes        |
+| Float    | kills                |
+| Uint32   | rank_kills           |
 | Float    | stat_daily           |
 | Uint32   | rank_daily           |
 | Sint8    | unit_daily           |
@@ -368,15 +375,20 @@ This method does not take any parameters
 
 ### OLSCompetition ([Structure])
 
-| Type                                                    | Name             |
-| ------------------------------------------------------- | ---------------- |
-| [OLSCompetitionResult](#olscompetitionresult-structure) | result           |
-| [String]                                                | message          |
-| Uint32                                                  | seed             |
-| Float                                                   | objective        |
-| Float                                                   | score_validation |
-| Uint32                                                  | id_bricks        |
-| Float                                                   | score            |
+| Type                                                    | Name              |
+| ------------------------------------------------------- | ----------------- |
+| [OLSCompetitionResult](#olscompetitionresult-structure) | result            |
+| [String]                                                | message           |
+| Uint32                                                  | seed              |
+| Float                                                   | objective         |
+| Float                                                   | score_validation  |
+| Uint64                                                  | id_bricks         |
+| Float                                                   | score             |
+| Float                                                   | medalThresholds_0 |
+| Float                                                   | medalThresholds_1 |
+| Float                                                   | medalThresholds_2 |
+| Float                                                   | medalThresholds_3 |
+
 
 ### OLSSelectionRow ([Structure])
 
@@ -388,6 +400,7 @@ This method does not take any parameters
 | Uint32   | id_costume |
 | Uint32   | country    |
 | Uint32   | level      |
+| Uint32   | rank       |
 | Float    | score      |
 
 ### OLSCompetitionInfos ([Structure])
@@ -411,6 +424,7 @@ This method does not take any parameters
 | Uint32   | ID         |
 | [String] | name       |
 | Float    | value      |
+| Uint32   | rank       |
 | Uint32   | costume    |
 | Uint32   | statusIcon |
 | Uint32   | country    |
@@ -432,6 +446,15 @@ This method does not take any parameters
 | ------ | ------------ |
 | Sint32 | pid          |
 | Uint32 | relationship |
+
+### OLSLevel ([Structure])
+
+| Type     | Name          |
+| -------- | ------------- |
+| Uint32   | level_id      |
+| Uint32   | lums_count    |
+| Uint32   | teensies_mask |
+| Float    | best_time     |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
