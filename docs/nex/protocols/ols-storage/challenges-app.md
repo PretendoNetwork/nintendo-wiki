@@ -1,8 +1,10 @@
 ---
 layout: post
 toc: true
-title: OLS Storage
+title: Rayman Legends Challenges App (200)
 ---
+
+This page contains an early version of the [OLS Storage](/docs/nex/protocols/ols-storage) protocol used in Rayman Legends Challenges App.
 
 ## Methods
 

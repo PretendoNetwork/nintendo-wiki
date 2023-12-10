@@ -44,9 +44,10 @@ This method does not return anything.
 ### (3) SendUserInfo
 #### Request
 
-| Type   | Name      |
-| ------ | --------- |
-| Uint32 | deltaTime |
+| Type                  | Name      |
+|-----------------------|-----------|
+| [TrackingInformation] | userInfo  |
+| Uint32                | deltaTime |
 
 #### Response
 

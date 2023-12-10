@@ -49,10 +49,11 @@ See also: [RMC Protocol](/docs/rmc)
 
 ## Game-Specific
 
-| ID  | Game                       | Protocol                                     |
-|-----|----------------------------|----------------------------------------------|
-| 200 | Pokemon Bank               | [Shop](/docs/nex/protocols/shop)             |
-| 201 | Super Smash Bros. Ultimate | [Tournament](/docs/nex/protocols/tournament) |
+| ID  | Game                       | Protocol                                       |
+|-----|----------------------------|------------------------------------------------|
+| 200 | Pokemon Bank               | [Shop](/docs/nex/protocols/shop)               |
+| 200 | Rayman Legends             | [OLS storage](/docs/nex/protocols/ols-storage) |
+| 201 | Super Smash Bros. Ultimate | [Tournament](/docs/nex/protocols/tournament)   |
 
 ## Not provided by NEX
 Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX. The following protocols are not implemented by NEX, but may seen in Ubisoft games:
@@ -87,7 +88,6 @@ Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX.
 | ?  | [Web notifications storage](/docs/nex/protocols/web-notifications-storage)   |
 | ?  | [Title storage admin](/docs/nex/protocols/title-storage-admin)               |
 | ?  | [User storage admin](/docs/nex/protocols/user-storage-admin)                 |
-| ?  | [OLS storage](/docs/nex/protocols/ols-storage)                               |
 
 ## Internal protocols
 These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [Debug](/docs/nex/protocols/debug) protocol. However some games implement subsets of these protocols

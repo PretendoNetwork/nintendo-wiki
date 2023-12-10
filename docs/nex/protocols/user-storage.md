@@ -78,6 +78,7 @@ This method does not return anything.
 | Type                            | Name       |
 | ------------------------------- | ---------- |
 | [List]&lt;[ContentProperty]&gt; | properties |
+| [UserContentKey]                | contentKey |
 
 #### Response
 
@@ -92,6 +93,7 @@ This method does not return anything.
 | ------------------------------- | ---------- |
 | [List]&lt;[ContentProperty]&gt; | properties |
 | [Buffer]                        | data       |
+| [UserContentKey]                | contentKey |
 
 #### Response
 
@@ -119,10 +121,11 @@ This method does not return anything.
 ### (7) UploadEnd
 #### Request
 
-| Type   | Name      |
-| ------ | --------- |
-| Uint64 | pendingID |
-| Bool   | result    |
+| Type             | Name       |
+| ---------------- | ---------- |
+| Uint64           | pendingID  |
+| Bool             | result     |
+| [UserContentKey] | contentKey |
 
 #### Response
 
