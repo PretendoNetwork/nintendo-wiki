@@ -207,32 +207,32 @@ This method does not take any parameters
 
 ### DataStoreGetMetaByOwnerIdParam ([Structure])
 
-| Type                                                 | Name         |
-| ---------------------------------------------------- | ------------ |
-| [List]&lt;Uint32&gt;                                 | ownerIds     |
-| [List]&lt;Uint16&gt;                                 | dataTypes    |
-| Uint8                                                | resultOption |
-| [ResultRange](/docs/nex/types#resultrange-structure) | resultRange  |
+| Type                 | Name         |
+| -------------------- | ------------ |
+| [List]&lt;Uint32&gt; | ownerIds     |
+| [List]&lt;Uint16&gt; | dataTypes    |
+| Uint8                | resultOption |
+| [ResultRange]        | resultRange  |
 
 ### DataStoreGetMetaByUniqueIdParam ([Structure])
 
-| Type                                                 | Name         |
-| ---------------------------------------------------- | ------------ |
-| [List]&lt;Uint64&gt;                                 | uniqueIds    |
-| [List]&lt;Uint16&gt;                                 | dataTypes    |
-| Uint8                                                | resultOption |
-| [ResultRange] | resultRange  |
+| Type                 | Name         |
+| -------------------- | ------------ |
+| [List]&lt;Uint64&gt; | uniqueIds    |
+| [List]&lt;Uint16&gt; | dataTypes    |
+| Uint8                | resultOption |
+| [ResultRange]        | resultRange  |
 
 ### DataStoreSearchHouseParam ([Structure])
 
-| Type | Name |
-| --- | --- |
-| Uint16 | dataType |
-| [Buffer] | resultOrderColumns |
-| [ResultRange] | resultRange |
-| Uint8 | resultOption |
-| Uint8 | region |
-| Uint8 | country |
+| Type          | Name               |
+| ------------- | ------------------ |
+| Uint16        | dataType           |
+| [Buffer]      | resultOrderColumns |
+| [ResultRange] | resultRange        |
+| Uint8         | resultOption       |
+| Uint8         | region             |
+| Uint8         | country            |
 
 ### BufferQueueParam ([Structure])
 
