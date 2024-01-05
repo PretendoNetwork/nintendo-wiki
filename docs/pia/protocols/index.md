@@ -16,14 +16,14 @@ Also, the clone protocol used to be single protocol, but was split into several 
 | 0x00C0 | 0x08        | Keep Alive Protocol                                             |
 | 0x0100 | 0x14        | [Station Protocol](/docs/pia/protocols/station)                 |
 | 0x0200 | 0x18        | [Mesh Protocol](/docs/pia/protocols/mesh)                       |
-| 0x0210 | 0x1C        | Sync Clock Protocol                                             |
+| 0x0210 | 0x1C        | [Sync Clock Protocol](/docs/pia/protocols/sync-clock)           |
 | 0x0300 | 0x24        | [Local Protocol](/docs/pia/protocols/local)                     |
 |        | 0x28        | Direct Protocol                                                 |
 |        | 0x2C        | Net Protocol                                                    |
 |        | 0x30        | Turn Protocol                                                   |
 | 0x0400 | 0x34        | [NAT Traversal Protocol](/docs/pia/protocols/nat-traversal)     |
 | 0x0410 |             | Gateway Protocol                                                |
-| 0x4400 | 0x44        | LAN Protocol                                                    |
+| 0x4400 | 0x44        | [LAN Protocol](/docs/pia/lan)                                   |
 | 0x0500 | 0x54        | Bandwidth Checker Protocol                                      |
 | 0x0600 | 0x58        | [RTT Protocol](/docs/pia/protocols/rtt)                         |
 | 0x1800 |             | Sync Protocol (old)                                             |

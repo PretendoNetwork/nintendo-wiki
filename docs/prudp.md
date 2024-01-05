@@ -39,12 +39,12 @@ Packet-specific data:
 ### Packet signature
 **Friends server:**
 * In DATA packets with an empty payload the packet signature is always set to 0x12345678.
-* In all other DATA packets the signature is the first 4 bytes of the HMAC of the encrypted payload, with the key being the MD5 hash of the [access key](#sandbox-access-key).
+* In all other DATA packets the signature is the first 4 bytes of the HMAC-MD5 of the encrypted payload, with the key being the MD5 hash of the [access key](#sandbox-access-key).
 * In all other packets the signature is the connection signature received during connection establishment.
 
 **Games:**
 
-In DATA and DISCONNECT packets the packet signature is the first 4 bytes of the HMAC of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key):
+In DATA and DISCONNECT packets the packet signature is the first 4 bytes of the HMAC-MD5 of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key):
 
 | Size        | Description                                                                           |
 |-------------|---------------------------------------------------------------------------------------|
@@ -129,7 +129,7 @@ This format is used by all Wii U games and apps except for friends services, and
 | 0xA    | 2    | [Sequence id](#sequence-id)       |
 
 ### Packet signature
-The packet signature is the HMAC of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key):
+The packet signature is the HMAC-MD5 of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key):
 
 | Size        | Description                                                                                             |
 |-------------|---------------------------------------------------------------------------------------------------------|
@@ -367,12 +367,12 @@ In old NEX versions, which only support PRUDP v0, the MTU is hardcoded to 1000 a
 Later, the MTU was increased to 1364, and the maximum payload size is seems to be 1300 bytes, unless PRUDP v0 is used, in which case it's 1264 bytes.
 
 ### Connection signature
-If present, the connection signature is the first part of a HMAC based on the perceived ip and port of the other end point. Neither server nor client can verify this signature.
+If present, the connection signature is the first part of a HMAC-MD5 based on the perceived ip and port of the other end point. Neither server nor client can verify this signature.
 
 The server sends its connection signature in its response to the client's SYN packet. The client sends its connection signature in the CONNECT packet. Other SYN/CONNECT packets have this field set to 0.
 
 ### Lite signature
-Unlike the connection signature, this signature is actually verified by the server. It's the HMAC of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key).
+Unlike the connection signature, this signature is actually verified by the server. It's the HMAC-MD5 of the following data, with the key being the MD5 hash of the [access key](#sandbox-access-key).
 
 | Offset | Size | Description                               |
 |--------|------|-------------------------------------------|

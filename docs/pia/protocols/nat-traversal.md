@@ -42,13 +42,13 @@ The following version numbers are advertised during the [connection request](/do
 
 | Offset | Size | Description                                                             |
 |--------|------|-------------------------------------------------------------------------|
-| 0x0    | 4    | [Service variable id](/docs/pia/terminology#service-variable-id)        |
+| 0x0    | 4    | [Service variable id](/docs/pia/types#service-variable-id)              |
 | 0x4    | 1    | Probe type (0=request 1=reply, 255=dummy)                               |
 | 0x5    | 3    | Padding                                                                 |
 | 0x8    | 8    | System time (OSGetSystemTime on Wii U, nn::os::GetSystemTick on Switch) |
 
 *5.11 - 5.43:*
 
-| Offset | Size | Description                                      |
-|--------|------|--------------------------------------------------|
-| 0x10   | 4    | [Variable id](/docs/pia/terminology#variable-id) |
+| Offset | Size | Description                                |
+|--------|------|--------------------------------------------|
+| 0x10   | 4    | [Variable id](/docs/pia/types#variable-id) |
