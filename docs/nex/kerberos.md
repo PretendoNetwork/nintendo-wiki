@@ -23,7 +23,7 @@ Game server accounts are separate from other Nintendo accounts. Username and pas
     <td><b>3DS</b></td><td>A game server account is created with <a href="https://github.com/kinnay/NintendoClients/wiki/Account-Management-Protocol#27-nintendocreateaccount">NintendoCreateAccount</a> the first time you go online.</td>
   </tr>
   <tr>
-    <td><b>Wii U</b></td><td>Username and password are requested from the [[account server]] (/provider/nex_token/@me)</td>
+    <td><b>Wii U</b></td><td>Username and password are requested from the <a href="/docs/wiiu/account">account server</a> (/provider/nex_token/@me)</td>
   </tr>
   <tr>
     <td><b>Switch</b></td><td>Normal user accounts don't have a password anymore. Instead, they must provide an id token to log in. This token (and your username) can be retrieved by logging in on the <a href="BAAS-Server">BAAS server</a> after acquiring a <a href="DAuth-Server">device token</a> and an <a href="AAuth-Server">application token</a>.</td>

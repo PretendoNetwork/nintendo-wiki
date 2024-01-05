@@ -28,6 +28,19 @@ NPLN allows you to create an arbitrary number of **users** on a tenant. Every us
 Every tenant also provides an anonymous user. This user is special because it does not belong to a specific account. Most services deny requests that are made by an anonymous user.
 
 ## Methods
+The following methods do not require an access token:
+
+* [CreateUser](#createuser)
+* [IssueToken](#issuetoken)
+* [RefreshToken](#refreshtoken)
+* [IssuePrearrangedUserToken](#issueprearrangedusertoken)
+* [IssueAnonymousUserToken](#issueanonymoususertoken)
+* [RefreshAnonymousUserToken](#refreshanonymoususertoken)
+* ValidateToken
+
+The following methods require an access token:
+* [ListUsers](#listusers)
+* [DeleteUser](#deleteuser)
 
 ### CreateUser
 This method creates a user on the given tenant.

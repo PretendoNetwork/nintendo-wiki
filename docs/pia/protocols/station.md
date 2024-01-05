@@ -4,7 +4,7 @@ toc: true
 title: Station
 ---
 
-The difference between the reliable and unreliable protocol is that the reliable protocol wraps messages in a [reliable sliding window](#reliable-sliding-window). The reliable protocol is not used by Pia however, and support for it was removed in version *5.6*.
+The difference between the reliable and unreliable protocol is that the reliable protocol wraps messages in a [reliable sliding window](/docs/pia/types#reliable-sliding-window). The reliable protocol is not used by Pia however, and support for it was removed in version *5.6*.
 
 | Port | Description |
 |------|-------------|
@@ -62,7 +62,7 @@ In version 5.19, the `StationProtocol` was renamed to `MeshStationProtocol` and 
 | Uint8                   | Connection id                      |
 | Uint8                   | [Version number](#version-numbers) |
 | Uint8                   | Is inverse connection request      |
-| Uint64                  | [Constant id]                      |
+| Uint64                  | Target [constant id]               |
 | [StationConnectionInfo] | Station connection info            |
 | Uint32                  | Ack id                             |
 
@@ -74,8 +74,8 @@ In version 5.19, the `StationProtocol` was renamed to `MeshStationProtocol` and 
 | Uint8                   | Connection id                      |
 | Uint8                   | [Version number](#version-numbers) |
 | Uint8                   | Is inverse connection request      |
-| Uint64                  | [Constant id]                      |
-| Uint32                  | [Variable id]                      |
+| Uint64                  | Target [constant id]               |
+| Uint32                  | Target [variable id]               |
 | Uint8                   | Inverse connection id              |
 | [StationConnectionInfo] | Station connection info            |
 | Uint32                  | Ack id                             |
@@ -88,8 +88,8 @@ In version 5.19, the `StationProtocol` was renamed to `MeshStationProtocol` and 
 | Uint8             | Connection id                      |
 | Uint8             | [Version number](#version-numbers) |
 | Uint8             | Is inverse connection request      |
-| Uint64            | [Constant id]                      |
-| Uint32            | [Variable id]                      |
+| Uint64            | Target [constant id]               |
+| Uint32            | Target [variable id]               |
 | Uint8             | Inverse connection id              |
 | [StationLocation] | Station location                   |
 | Uint32            | Ack id                             |
@@ -103,8 +103,8 @@ In version 5.19, the `StationProtocol` was renamed to `MeshStationProtocol` and 
 | Uint8 (N*2)       | [Protocol list](#protocol-list)   |
 | Uint8             | Connection id                     |
 | Uint8             | Is inverse connection request     |
-| Uint64            | [Constant id]                     |
-| Uint32            | [Variable id]                     |
+| Uint64            | Target [constant id]              |
+| Uint32            | Target [variable id]              |
 | Uint8             | Inverse connection id             |
 | [StationLocation] | Station location                  |
 | Uint32            | Ack id                            |
@@ -116,8 +116,8 @@ In version 5.19, the `StationProtocol` was renamed to `MeshStationProtocol` and 
 | Uint8                          | Message type (1)                                                                                                                                           |
 | Uint8                          | [Connection result](#connection-result) (always 0)                                                                                                         |
 | Uint8                          | [Platform id](#platform-id)                                                                                                                                |
-| Uint64                         | [Constant id]                                                                                                                                              |
-| Uint32                         | [Variable id]                                                                                                                                              |
+| Uint64                         | Target [constant id]                                                                                                                                       |
+| Uint32                         | Target [variable id]                                                                                                                                       |
 | Uint8                          | Number of available protocols (N)                                                                                                                          |
 | Uint8 (N*2)                    | [Protocol list](#protocol-list)                                                                                                                            |
 | Uint16                         | Size of station location                                                                                                                                   |
@@ -149,60 +149,60 @@ A connection response can either [accept](#accepted) or [deny](#denying) the con
 
 *5.2 - 5.6:*
 
-| Type                                 | Description                                                                                                                                                |
-|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Uint8                                | Message type (1)                                                                                                                                           |
-| Uint8                                | [Connection result](#connection-result) (accepted)                                                                                                         |
-| Uint8                                | [Version number](#version-numbers)                                                                                                                         |
-| Uint8                                | [Platform id](#platform-id)                                                                                                                                |
-| Uint8                                | [Fragment id](#fragment-id)                                                                                                                                |
-| Uint8 (32)                           | Identification token (ascii)                                                                                                                               |
-| Uint32                               | Session id                                                                                                                                                 |
-| Uint8                                | Number of players                                                                                                                                          |
-| Uint8                                | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
-| Uint8                                | Number of player infos (P)                                                                                                                                 |
-| [PlayerInfo](#player-info) (up to P) | Player info, may be [fragmented](#fragment-id).                                                                                                            |
-| Uint32                               | Ack id                                                                                                                                                     |
+| Type                                | Description                                                                                                                                                |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Uint8                               | Message type (2)                                                                                                                                           |
+| Uint8                               | [Connection result](#connection-result) (accepted)                                                                                                         |
+| Uint8                               | [Version number](#version-numbers)                                                                                                                         |
+| Uint8                               | [Platform id](#platform-id)                                                                                                                                |
+| Uint8                               | [Fragment id](#fragment-id)                                                                                                                                |
+| Uint8 (32)                          | Identification token (ascii)                                                                                                                               |
+| Uint32                              | Session id                                                                                                                                                 |
+| Uint8                               | Number of players                                                                                                                                          |
+| Uint8                               | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
+| Uint8                               | Number of player infos                                                                                                                                     |
+| [PlayerInfo](#player-info) (2 or 4) | Player info, may be [fragmented](#fragment-id).                                                                                                            |
+| Uint32                              | Ack id                                                                                                                                                     |
 
-*5.7 - 5.9:*
+*5.7 - 5.18:*
 
-| Type                                 | Description                                                                                                                                                |
-|--------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Uint8                                | Message type (1)                                                                                                                                           |
-| Uint8                                | [Connection result](#connection-result) (accepted)                                                                                                         |
-| Uint8                                | [Version number](#version-numbers)                                                                                                                         |
-| Uint8                                | [Platform id](#platform-id)                                                                                                                                |
-| Uint8                                | [Fragment id](#fragment-id)                                                                                                                                |
-| Uint64                               | [Constant id]                                                                                                                                              |
-| Uint32                               | [Variable id]                                                                                                                                              |
-| Uint8 (32)                           | Identification token (ascii)                                                                                                                               |
-| Uint32                               | Session id                                                                                                                                                 |
-| Uint8                                | Number of players                                                                                                                                          |
-| Uint8                                | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
-| Uint8                                | Number of player infos (P)                                                                                                                                 |
-| [PlayerInfo](#player-info) (up to P) | Player info, may be [fragmented](#fragment-id).                                                                                                            |
-| Uint32                               | Ack id                                                                                                                                                     |
+| Type                                | Description                                                                                                                                                |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Uint8                               | Message type (2)                                                                                                                                           |
+| Uint8                               | [Connection result](#connection-result) (accepted)                                                                                                         |
+| Uint8                               | [Version number](#version-numbers)                                                                                                                         |
+| Uint8                               | [Platform id](#platform-id)                                                                                                                                |
+| Uint8                               | [Fragment id](#fragment-id)                                                                                                                                |
+| Uint64                              | Target [constant id]                                                                                                                                       |
+| Uint32                              | Target [variable id]                                                                                                                                       |
+| Uint8 (32)                          | Identification token (ascii)                                                                                                                               |
+| Uint32                              | Session id                                                                                                                                                 |
+| Uint8                               | Number of players                                                                                                                                          |
+| Uint8                               | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
+| Uint8                               | Number of player infos                                                                                                                                     |
+| [PlayerInfo](#player-info) (2 or 4) | Player info, may be [fragmented](#fragment-id).                                                                                                            |
+| Uint32                              | Ack id                                                                                                                                                     |
 
 *5.27 - 5.43:*
 
-| Type                           | Description                                                                                                                                                |
-|--------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Uint8                          | Message type (1)                                                                                                                                           |
-| Uint8                          | [Connection result](#connection-result) (accepted)                                                                                                         |
-| Uint8                          | [Platform id](#platform-id)                                                                                                                                |
-| Uint64                         | [Constant id]                                                                                                                                              |
-| Uint32                         | [Variable id]                                                                                                                                              |
-| Uint8                          | Number of available protocols (N)                                                                                                                          |
-| Uint8 (N*2)                    | [Protocol list](#protocol-list)                                                                                                                            |
-| Uint16                         | Size of station location                                                                                                                                   |
-| [StationLocation]              | Station location                                                                                                                                           |
-| Uint8 (32)                     | Identification token (ascii)                                                                                                                               |
-| Uint32                         | Session id                                                                                                                                                 |
-| Uint8                          | Number of players                                                                                                                                          |
-| Uint8                          | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
-| Uint8                          | Number of player infos (P)                                                                                                                                 |
-| [PlayerInfo](#player-info) (P) | Player info                                                                                                                                                |
-| Uint32                         | Ack id                                                                                                                                                     |
+| Type                                | Description                                                                                                                                                |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Uint8                               | Message type (2)                                                                                                                                           |
+| Uint8                               | [Connection result](#connection-result) (accepted)                                                                                                         |
+| Uint8                               | [Platform id](#platform-id)                                                                                                                                |
+| Uint64                              | Target [constant id]                                                                                                                                       |
+| Uint32                              | Target [variable id]                                                                                                                                       |
+| Uint8                               | Number of available protocols (N)                                                                                                                          |
+| Uint8 (N*2)                         | [Protocol list](#protocol-list)                                                                                                                            |
+| Uint16                              | Size of station location                                                                                                                                   |
+| [StationLocation]                   | Station location                                                                                                                                           |
+| Uint8 (32)                          | Identification token (ascii)                                                                                                                               |
+| Uint32                              | Session id                                                                                                                                                 |
+| Uint8                               | Number of players                                                                                                                                          |
+| Uint8                               | Number of participants. This is either 1 or equal to the number of players, depending on whether each player should count as a participant in the session. |
+| Uint8                               | Number of player infos                                                                                                                                     |
+| [PlayerInfo](#player-info) (2 or 4) | Player info                                                                                                                                                |
+| Uint32                              | Ack id                                                                                                                                                     |
 
 ### Denying
 *3.3 - 5.6:*
@@ -344,7 +344,7 @@ The protocol list contains the following for every available protocol.
 | Uint8      | Language                                |
 | Bytes (64) | Play history registration key           |
 
-*5.7 - 5.9:*
+*5.7 - 5.19:*
 
 | Type       | Description                             |
 |------------|-----------------------------------------|
@@ -354,7 +354,7 @@ The protocol list contains the following for every available protocol.
 | Uint8      | Account name encoding (1=utf8, 2=utf16) |
 | Uint8      | Language                                |
 | Bytes (64) | Play history registration key           |
-| Uint64     | Unknown                                 |
+| Uint64     | Principal id                            |
 
 *5.27 - 5.43:*
 
@@ -366,10 +366,10 @@ The protocol list contains the following for every available protocol.
 | Bytes (40) | Account name                            |
 | Uint8      | Language                                |
 | Bytes (64) | Play history registration key           |
-| Uint64     | Unknown                                 |
+| Uint64     | Principal id                            |
 
-[Constant id]: /docs/pia/terminology#constant-id
-[Variable id]: /docs/pia/terminology#variable-id
+[Constant id]: /docs/pia/types#constant-id
+[Variable id]: /docs/pia/types#variable-id
 
 [StationConnectionInfo]: /docs/pia/types#stationconnectioninfo
 [StationLocation]: /docs/pia/types#stationlocation
