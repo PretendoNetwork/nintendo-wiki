@@ -11,6 +11,7 @@ The following games have additional methods in the datastore protocol:
 * [Miitopia (3DS)](/docs/nex/protocols/datastore/miitopia-3ds)
 * [Pokemon Bank](/docs/nex/protocols/datastore/pokemon-bank)
 * [Pokemon X / Y](/docs/nex/protocols/datastore/pokemon-x-y)
+* [Real Escape Game](/docs/nex/protocols/datastore/real-escape-game)
 * [Splatoon 2](/docs/nex/protocols/datastore/splatoon-2)
 * [Super Mario Maker](/docs/nex/protocols/datastore/super-mario-maker)
 * [Super Mario Maker 2](/docs/nex/protocols/datastore/super-mario-maker-2)
@@ -967,7 +968,7 @@ In NEX version 3.0, the data ID was set to a Uint64 and the version was set to a
 | Uint8                  | searchTarget                    |
 | [List]&lt;[PID]&gt;    | ownerIds                        |
 | Uint8                  | ownerType                       |
-| [List]&lt;Uint64&gt;   | destinationIds                  |
+| [List]&lt;[PID]&gt;    | destinationIds                  |
 | Uint16                 | dataType                        |
 | [DateTime]             | createdAfter                    |
 | [DateTime]             | createdBefore                   |
@@ -1000,7 +1001,7 @@ In revision 3, a total count enabled field was added. Note that this field was i
 | Uint8                  | searchTarget                    |
 | [List]&lt;[PID]&gt;    | ownerIds                        |
 | Uint8                  | ownerType                       |
-| [List]&lt;Uint64&gt;   | destinationIds                  |
+| [List]&lt;[PID]&gt;    | destinationIds                  |
 | Uint16                 | dataType                        |
 | [DateTime]             | createdAfter                    |
 | [DateTime]             | createdBefore                   |

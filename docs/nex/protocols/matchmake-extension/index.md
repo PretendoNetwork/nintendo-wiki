@@ -13,6 +13,7 @@ The following games have additional methods in the matchmake extension protocol:
 * [Monster Hunter XX (3DS)](/docs/nex/protocols/matchmake-extension/monster-hunter-xx)
 * [Nintendo Switch Sports](/docs/nex/protocols/matchmake-extension/switch-sports)
 * [Pokemon X / Y](/docs/nex/protocols/matchmake-extension/pokemon-x-y)
+* [Real Escape Game](/docs/nex/protocols/matchmake-extension/real-escape-game)
 * [Super Mario Bros. 35](/docs/nex/protocols/matchmake-extension/super-mario-bros-35)
 * [Super Smash Bros. 4](/docs/nex/protocols/matchmake-extension/super-smash-bros-4)
 * [Super Smash Bros. Ultimate](/docs/nex/protocols/matchmake-extension/super-smash-bros-ultimate)
