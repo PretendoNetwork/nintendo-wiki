@@ -20,15 +20,15 @@ title: Messaging (23)
 ### (1) DeliverMessage
 #### Request
 
-| Type   | Name         |
-|--------|--------------|
-| [Data] | oUserMessage |
+| Type  | Name         |
+|-------|--------------|
+| [Any] | oUserMessage |
 
 #### Response
 
 | Type                 | Name             |
 |----------------------|------------------|
-| [Data]               | oModifiedMessage |
+| [Any]                | oModifiedMessage |
 | [List]&lt;Uint32&gt; | lstSandboxNodeId |
 | [List]&lt;[PID]&gt;  | lstParticipants  |
 
@@ -69,9 +69,9 @@ title: Messaging (23)
 
 #### Response
 
-| Type                 | Name        |
-|----------------------|-------------|
-| [List]&lt;[Data]&gt; | lstMessages |
+| Type                | Name        |
+|---------------------|-------------|
+| [List]&lt;[Any]&gt; | lstMessages |
 
 ### (5) RetrieveMessages
 #### Request
@@ -84,9 +84,9 @@ title: Messaging (23)
 
 #### Response
 
-| Type                 | Name        |
-|----------------------|-------------|
-| [List]&lt;[Data]&gt; | lstMessages |
+| Type                | Name        |
+|---------------------|-------------|
+| [List]&lt;[Any]&gt; | lstMessages |
 
 ### (6) DeleteMessages
 #### Request
@@ -115,21 +115,28 @@ This method does not return anything.
 ### (8) DeliverMessageMultiTarget
 #### Request
 
-| Type                | Name    |
-|---------------------|---------|
-| [List]&lt;[PID]&gt; | Targets |
-| [Data]              | Message |
+| Type                | Name         |
+|---------------------|--------------|
+| [List]&lt;[PID]&gt; | lstTarget    |
+| [Any]               | oUserMessage |
 
 #### Response
 
-| Type                 | Name    |
-|----------------------|---------|
-| [Data]               | Unknown |
-| [List]&lt;Uint32&gt; | Unknown |
-| [List]&lt;Uint32&gt; | Unknown |
+| Type                 | Name             |
+|----------------------|------------------|
+| [Any]                | oModifiedMessage |
+| [List]&lt;Uint32&gt; | lstSandboxNodeId |
+| [List]&lt;[PID]&gt;  | lstParticipants  |
 
 ## Types
 ### MessageRecipient ([Structure])
+
+| Type   | Name              |
+|--------|-------------------|
+| Uint32 | m_idRecipient     |
+| Uint32 | m_uiRecipientType |
+
+In NEX version 4.0, the recipient id was split into the principal id and the gathering id:
 
 | Type   | Name              |
 |--------|-------------------|
@@ -147,6 +154,21 @@ Recipient type:
 ### UserMessage ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
+
+| Type       | Name              |
+|------------|-------------------|
+| Uint32     | m_uiID            |
+| Uint32     | m_idRecipient     |
+| Uint32     | m_uiRecipientType |
+| Uint32     | m_uiParentID      |
+| [PID]      | m_pidSender       |
+| [DateTime] | m_receptiontime   |
+| Uint32     | m_uiLifeTime      |
+| Uint32     | m_uiFlags         |
+| [String]   | m_strSubject      |
+| [String]   | m_strSender       |
+
+In NEX version 4.0, the `m_idRecipient` and `m_uiRecipientType` fields were removed and the message recipient was added:
 
 | Type                                            | Name               |
 |-------------------------------------------------|--------------------|
@@ -179,9 +201,9 @@ Recipient type:
 [String]: /docs/nex/types#string
 [qBuffer]: /docs/nex/types#qbuffer
 [DateTime]: /docs/nex/types#datetime
-[Data]: /docs/nex/types#anydataholder
+[Any]: /docs/nex/types#anydataholder
 [List]: /docs/nex/types#list
 [PID]: /docs/nex/types#pid
 [ResultRange]: /docs/nex/types#resultrange-structure
 [Structure]: /docs/nex/types#structure
-[Data]: /docs/nex/types#data
+[Data]: /docs/nex/types#data-structure
