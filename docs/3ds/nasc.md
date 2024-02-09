@@ -4,7 +4,7 @@ toc: true
 title: NASC
 ---
 
-This is the authentication server of the 3DS. A single endpoint (`ac`) is used for all requests. Other requests are redirected to http://www.nintendo.com.
+This is the authentication server of the 3DS. It is the succesor of the NAS and NASWII servers on the Nintendo DS(i) and the Wii. A single endpoint (`ac`) is used for all requests. Other requests are redirected to http://www.nintendo.com.
 
 ## General
 
@@ -42,13 +42,13 @@ All form values are encoded with a custom base64 character set, where `+/=` are 
 The type of request is specified by the `action` parameter. Other parameters depend on the type of action. The action name is case insensitive.
 
 * [LOGIN](#login)
-* SVCLOC
-* nzchk
+* [SVCLOC](#svcloc)
+* [nzchk](#nzchk)
 * parse
 * message
 
-### LOGIN
-This action provides the location of the game server and a token.
+### Base Request
+The following parameters are always set on a request:
 
 | Param        | Description                                                                               |
 |--------------|-------------------------------------------------------------------------------------------|
@@ -60,10 +60,10 @@ This action provides the location of the game server and a token.
 | `mediatype`  | 0=System, 1=Digital, 2=Cartridge                                                          |
 | `romid`      | Rom id, only present if the media type is 2                                               |
 | `makercd`    | Product maker code (company code)                                                         |
-| `unitcd`     | Always 2                                                                                  |
+| `unitcd`     | Unit code (0=NDS, 1=Wii, 2=3DS)                                                           |
 | `macadr`     | MAC address of the 3DS                                                                    |
 | `bssid`      | BSSID of active wifi network                                                              |
-| `apinfo`     | Not sure, looks like `01:0000000000`                                                      |
+| `apinfo`     | AP info, the number before the `:` represents the AP slot. Example: `01:0000000000`       |
 | `fcdcert`    | See [LocalFriendCodeSeed_B](https://www.3dbrew.org/wiki/Nandrw/sys/LocalFriendCodeSeed_B) |
 | `devname`    | Device name (UTF-16-LE)                                                                   |
 | `servertype` | Environment (`L1` for production)                                                         |
@@ -86,7 +86,8 @@ or:
 |----------|--------------------------|
 | `passwd` | Password for new account |
 
-Finally, the following parameters are always present:
+### LOGIN
+This action provides the location of the game server and a token.
 
 | Param      | Description                               |
 |------------|-------------------------------------------|
@@ -101,6 +102,44 @@ On success, the server sends the following response:
 | `retry`    | Always 0                             |
 | `returncd` | Always `001` (success)               |
 | `token`    | Token for logging in on game server  |
+| `datetime` | Current server time (`%Y%m%d%H%M%S`) |
+
+### SVCLOC
+This action provides a token for the service and its location.
+
+| Param     | Description                                                   |
+|-----------|---------------------------------------------------------------|
+| `action`  | `SVCLOC`                                                      |
+| `keyhash` | Key hash. Similar to `client_id` for service tokens on Wii U? |
+| `svc`     | [Service request type](#service-request-type)                 |
+
+On success, the server sends the following response:
+
+| Field          | Description                          |
+|----------------|--------------------------------------|
+| `retry`        | Always 0                             |
+| `returncd`     | Always `007` (success)               |
+| `servicetoken` | Token for logging in on service      |
+| `svchost`      | Host of target service               |
+| `datetime`     | Current server time (`%Y%m%d%H%M%S`) |
+
+#### Service Request Type
+The server response changes with this value:
+
+| Value  | Description                                                                                                          |
+|--------|----------------------------------------------------------------------------------------------------------------------|
+| `0000` | The `svchost` is populated as `n/a`                                                                                  |
+| `9001` | The `svchost` is populated as `dls1.nintendowifi.net`. This is likely a remnant from the original NAS/NASWII servers |
+
+### nzchk
+The purpose of this action is unknown, but it's possibly related to Nintendo Zone.
+
+It doesn't include any additional parameters, and on success, the server sends the following response:
+
+| Field      | Description                          |
+|------------|--------------------------------------|
+| `retry`    | Always 0                             |
+| `returncd` | Always `009` (success)               |
 | `datetime` | Current server time (`%Y%m%d%H%M%S`) |
 
 ## Errors
@@ -119,17 +158,19 @@ Sometimes, `returncd` is set to `null` instead of an error code.
 | Code  | Description                               |
 |-------|-------------------------------------------|
 | `001` | Success                                   |
+| `101` | Game server is under maintenance          |
 | `102` | Device is banned                          |
 | `107` | Product code is invalid                   |
 | `109` | Missing or malformed parameter in request |
 | `110` | Game server is no longer available        |
-| `111` | Game server is under maintenance          |
+| `112` | SVC is invalid                            |
 | `119` | FPD version is invalid                    |
 | `120` | Title version is invalid                  |
 | `121` | Device certificate is invalid             |
 | `122` | PID HMAC is invalid                       |
 | `123` | Rom id is banned                          |
 | `125` | Game id is invalid                        |
+| `127` | Key hash is invalid                       |
 
 ## Examples
 LOGIN request:
@@ -160,6 +201,34 @@ Connection: keep-alive
 locator=MzUuMTYzLjIuODk6NDA0NjA*&retry=MA**&returncd=MDAx&token=CJyBSE-auxaKzdxCnvLJoRicRYB0OnFLoA1wk7Kc34yHTItFZRx.44-DvizdksgEZf-BRyqNeHtUkjqzR3b69XftWqNdg7mZDg-P2rz0jqTTkujbTXwEXsDuqnYx30K2DrcY97F7m52HXBiJCCKnmQ**&datetime=MjAyMjAxMTgxMDUwMzc*
 ```
 
+SVCLOC request:
+
+```
+POST /ac HTTP/1.1
+Host: nasc.nintendowifi.net
+X-GameId: 00081100
+User-Agent: CTR FPD/0010
+Content-Type: application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 871
+
+gameid=MDAwODExMDA%2A&sdkver=MDAwMDAw&titleid=MDAwNDAwMDAwMDA4QTgwMA%2A%2A&gamecd=SkNSUA%2A%2A&gamever=MDAwMQ%2A%2A&mediatype=MQ%2A%2A&makercd=WEM%2A&unitcd=Mg%2A%2A&macadr=MDQxZDY3ZWQ4YmYw&bssid=NmM4ODUwYzJiYTdh&apinfo=MDI6MDAwMDAwMDAwMA%2A%2A&fcdcert=eGKuWyeaY08jt6Z8T9VzJKRtVk3k212--NVn1UmjsSMKDLzyEC0PvOIM6qVpKNQq3qcVvtlX542KrzTZ5UdxqZiCkaAMEZ0r8y5ygU8F-NBmFo30JFMHWz-JvQWzbNMBXYncbSayAbREdf9CjGOFp1sUGEpu-OCkbOPHyqgCloGo9iIWVIMzNzapjhuNsZSv3bPMkcXyf8KvLwAk-831y4JfPlu4DZKrCR3KNYt.jzZ-MGZFXSiElFSlCinlCnmpJR7UWvYHJOjxAAu0W9ShlbymJOPuTQJB-PzpVouSrQ3lcq7lQexJQ7l1znK1IoVssn0.XDCzDAPtCG9piIam6wAAAAAAAAAAIPX9AQAAAAA%2A&devname=aABlAGwAbABvAHcAbwByAGwAZAA%2A&servertype=TDE%2A&fpdver=MDAxMA%2A%2A&devtime=MjQwMjA5MTIxNTUx&lang=MDU%2A&region=MDI%2A&csnum=Q0VGMTEwNTQ2OTI%2A&uidhmac=ZThhMmE5MWU%2A&userid=MTAwMDg5NDY0&action=U1ZDTE9D&keyhash=ZjhiMGUzN2I%2A&svc=MDAwMA%2A%2A
+```
+
+SVCLOC response:
+
+```
+HTTP/1.1 200 OK
+Date: Fri, 09 Feb 2024 12:16:03 GMT
+Content-Type: text/plain;charset=ISO-8859-1
+Content-Length: 249
+Connection: close
+NODE: authserver-service.authserver.svc.cluster.local
+Server: Nintendo
+
+retry=MA**&returncd=MDA3&servicetoken=CJyBSE-auxaKzdxCnvLJoRicRYB0OnFLoA1wk7Kc34yHTItFZRx.44-DvizdksgEZf-BRyqNeHtUkjqzR3b69XftWqNdg7mZDg-P2rz0jqTTkujbTXwEXsDuqnYx30K2DrcY97F7m52HXBiJCCKnmQ**&statusdata=WQ**&svchost=bi9h&datetime=MjAyNDAyMDkxMjE2MDM*
+```
+
 Example error response:
 
 ```
@@ -170,7 +239,7 @@ Content-Length: 56
 Date: Wed, 19 Jan 2022 09:21:41 GMT
 Server: Nintendo Wii (http)
 
-retry=MA**&returncd=MDA5&datetime=MjAyMjAxMTkwOTIxNDE*
+retry=MA**&returncd=MTA5&datetime=MjAyMjAxMTkwOTIxNDE*
 ```
 
 Redirect to http://www.nintendo.com
