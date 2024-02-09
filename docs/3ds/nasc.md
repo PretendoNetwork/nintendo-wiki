@@ -4,17 +4,18 @@ toc: true
 title: NASC
 ---
 
-This is the authentication server of the 3DS. It is the succesor of the NAS and NASWII servers on the Nintendo DS(i) and the Wii. A single endpoint (`ac`) is used for all requests. Other requests are redirected to http://www.nintendo.com.
+This is the authentication server of the 3DS. It uses the same codebase as the NAS and NASWII servers for the Nintendo DS(i) and the Wii. Out of all of the original NAS/NASWII endpoints, only two are known to still exist: `ac` and `pr`. Other requests are redirected to http://www.nintendo.com.
 
 ## General
-
-Main server: https://nasc.nintendowifi.net/ac
+Main server: https://nasc.nintendowifi.net
 
 Other servers:
-* https://nasc.test.nintendowifi.net/ac
-* https://nasc.dev.nintendowifi.net/ac
+* https://nasc.test.nintendowifi.net
+* https://nasc.dev.nintendowifi.net
 
 The common client certificate (`ctr-common-1`) is required to access these servers. If it is not provided, the server rejects the TLS handshake.
+
+All form values are encoded with a custom base64 character set, where `+/=` are replaced by `.-*` respectively. This applies to both the request and the response.
 
 ## Headers
 
@@ -36,8 +37,8 @@ Note that the Content-Type header is included twice.
 | 11.15.0        | 15          |
 | 11.16.0        | 16          |
 
-## Actions
-All form values are encoded with a custom base64 character set, where `+/=` are replaced by `.-*` respectively. This applies to both the request and the response.
+## Actions (ac)
+This endpoint executes an action based on the type of request.
 
 The type of request is specified by the `action` parameter. Other parameters depend on the type of action. The action name is case insensitive.
 
@@ -140,6 +141,21 @@ It doesn't include any additional parameters, and on success, the server sends t
 |------------|--------------------------------------|
 | `retry`    | Always 0                             |
 | `returncd` | Always `009` (success)               |
+| `datetime` | Current server time (`%Y%m%d%H%M%S`) |
+
+## Profanity (pr)
+This endpoint was originally used on NAS/NASWII to check for profanity words, but this functionality seems to be stubbed now.
+
+| Field   | Description                                   |
+|---------|-----------------------------------------------|
+| `words` | List of words to check delimited by tabs `\t` |
+
+On success, the server sends the following response:
+
+| Field      | Description                          |
+|------------|--------------------------------------|
+| `prwords`  | Stubbed to always one `0`            |
+| `returncd` | Always `000` (success)               |
 | `datetime` | Current server time (`%Y%m%d%H%M%S`) |
 
 ## Errors
