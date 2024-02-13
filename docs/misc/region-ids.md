@@ -1,3 +1,9 @@
+---
+layout: post
+toc: true
+title: Region IDs
+---
+
 # Nintendo region values
 Since the Wii, Nintendo has tracked what region a client is from/in using a Region ID. Region IDs are uint32s made of 2 parts. The first byte is the country ID, with the remaining 3 bytes being the ID of a specific region in the country. Below is a table of all region values as they appear on the Wii U, though they should be accurate for the Wii and 3DS as well.
 
