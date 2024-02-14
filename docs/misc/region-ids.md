@@ -7,13 +7,13 @@ title: Region IDs
 # Nintendo region values
 Since the Wii, Nintendo has tracked what region a client is from/in using a Region ID. Region IDs are uint32s made of 2 parts. The first byte is the country ID, with the remaining 3 bytes being the ID of a specific region in the country. Below is a table of all region values as they appear on the Wii U, though they should be accurate for the Wii and 3DS as well.
 
-# Japan
+## Japan
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x01` | JP | 日本 | Japan | Japon | Japan | Giappone | Japón | 日本 | 일본 | Japan | Japão | Япония | 日本 | Japan | Japan | Japan | Japan |
 
-## Japan Regions
+### Japan Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -66,26 +66,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Kagoshima | `0x012F0000` | 31.547240852, 130.550892114 | 鹿児島県 | Kagoshima | Kagoshima | Kagoshima | Kagoshima | Kagoshima | 鹿儿岛县 | 가고시마 현 | Kagoshima | Kagoshima | Кагосима | 鹿兒島縣 | Kagoshima | Kagoshima | Kagoshima | Kagoshima |
 | Okinawa | `0x01300000` | 26.20239228, 127.683452676 | 沖縄県 | Okinawa | Okinawa | Okinawa | Okinawa | Okinawa | 冲绳县 | 오키나와 현 | Okinawa | Okinawa | Окинава | 沖繩縣 | Okinawa | Okinawa | Okinawa | Okinawa |
 
-# Anguilla
+## Anguilla
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x08` | AI | アンギラ | Anguilla | Anguilla | Anguilla | Anguilla | Anguila | 安圭拉 | 앵귈라 | Anguilla | Anguilha | Ангилья | Anguilla | Anguilla | Anguilla | Anguilla | Anguilla |
 
-## Anguilla Regions
+### Anguilla Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x08000000` | 18.215331824, -63.044725911 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Anguilla | `0x08010000` | 18.215331824, -63.044725911 | アンギラ | Anguilla | Anguilla | Anguilla | Anguilla | Anguila | 安圭拉 | 앵귈라 | Anguilla | Anguilha | Ангилья | Anguilla | Anguilla | Anguilla | Anguilla | Anguilla |
 
-# Antigua and Barbuda
+## Antigua and Barbuda
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x09` | AG | アンティグア・バーブーダ | Antigua and Barbuda | Antigua-et-Barbuda | Antigua und Barbuda | Antigua e Barbuda | Antigua y Barbuda | 安提瓜和巴布达 | 앤티가 바부다 | Antigua en Barbuda | Antígua e Barbuda | Антигуа и Барбуда | Antigua and Barbuda | Antigua and Barbuda | Antigua and Barbuda | Antigua and Barbuda | Antigua and Barbuda |
 
-## Antigua and Barbuda Regions
+### Antigua and Barbuda Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -98,13 +98,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Saint Peter | `0x09070000` | 17.078246876, -61.764815204 | セント・ピーター | Saint Peter | Saint-Pierre | Saint Peter | Saint Peter | Saint Peter | 圣彼得区 | 세인트피터 | Saint Peter | Saint Peter | Сент-Петер | Saint Peter | Saint Peter | Saint Peter | Saint Peter | Saint Peter |
 | Saint Philip | `0x09080000` | 17.045287892, -61.69889705600001 | セント・フィリップ | Saint Philip | Saint-Philippe | Saint Philip | Saint Philip | Saint Philip | 圣菲利普区 | 세인트필립 | Saint Philip | Saint Philip | Сент-Филип | Saint Philip | Saint Philip | Saint Philip | Saint Philip | Saint Philip |
 
-# Argentina
+## Argentina
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0A` | AR | アルゼンチン | Argentina | Argentine | Argentinien | Argentina | Argentina | 阿根廷 | 아르헨티나 | Argentinië | Argentina | Аргентина | Argentina | Argentina | Argentina | Argentina | Argentina |
 
-## Argentina Regions
+### Argentina Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -134,52 +134,52 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tierra del Fuego, Antártida e Islas del Atlántico Sur | `0x0A180000` | -54.799805088, -68.296205035 | ティエラ・デル・フエゴ州 | Tierra del Fuego, Antártida e Islas del Atlántico Sur | Terre de Feu, Antarctique et Îles de l’Atlantique Sud | Feuerland | Terra del Fuoco | Tierra del Fuego | 火地岛省 | 티에라델푸에고 주 | Vuurland | Terra do Fogo, Antártida e Ilhas do Atlântico Sul | Огненная Земля | Tierra del Fuego, Antártida e Islas del Atlántico Sur | Tierra del Fuego, Antártida e Islas del Atlántico Sur | Tierra del Fuego, Antártida e Islas del Atlántico Sur | Tierra del Fuego, Antártida e Islas del Atlántico Sur | Tierra del Fuego, Antártida e Islas del Atlántico Sur |
 | Tucumán | `0x0A190000` | -26.812134508, -65.214531616 | トゥクマン州 | Tucumán | Tucumán | Tucumán | Tucumán | Tucumán | 图库曼省 | 투쿠만 주 | Tucumán | Tucumán | Тукуман | Tucumán | Tucumán | Tucumán | Tucumán | Tucumán |
 
-# Aruba
+## Aruba
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0B` | AW | アルバ | Aruba | Aruba | Aruba | Aruba | Aruba | 阿鲁巴 | 아루바 | Aruba | Aruba | Аруба | Aruba | Aruba | Aruba | Aruba | Aruba |
 
-## Aruba Regions
+### Aruba Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x0B000000` | 12.513427592, -70.032049599 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Aruba | `0x0B010000` | 12.513427592, -70.032049599 | アルバ | Aruba | Aruba | Aruba | Aruba | Aruba | 阿鲁巴 | 아루바 | Aruba | Aruba | Аруба | Aruba | Aruba | Aruba | Aruba | Aruba |
 
-# Bahamas
+## Bahamas
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0C` | BS | バハマ | Bahamas | Bahamas | Bahamas | Bahamas | Bahamas | 巴哈马 | 바하마 | Bahama's | Bahamas | Багамские острова | Bahamas | Bahamas | Bahamas | Bahamas | Bahamas |
 
-## Bahamas Regions
+### Bahamas Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x0C000000` | 25.081786824, -77.34896402700001 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Bahamas | `0x0C010000` | 25.081786824, -77.34896402700001 | バハマ | Bahamas | Bahamas | Bahamas | Bahamas | Bahamas | 巴哈马 | 바하마 | Bahama's | Bahamas | Багамские острова | Bahamas | Bahamas | Bahamas | Bahamas | Bahamas |
 
-# Barbados
+## Barbados
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0D` | BB | バルバドス | Barbados | Barbade | Barbados | Barbados | Barbados | 巴巴多斯 | 바베이도스 | Barbados | Barbados | Барбадос | Barbados | Barbados | Barbados | Barbados | Barbados |
 
-## Barbados Regions
+### Barbados Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x0D000000` | 13.095702976, -59.611489035999995 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Barbados | `0x0D010000` | 13.095702976, -59.611489035999995 | バルバドス | Barbados | Barbade | Barbados | Barbados | Barbados | 巴巴多斯 | 바베이도스 | Barbados | Barbados | Барбадос | Barbados | Barbados | Barbados | Barbados | Barbados |
 
-# Belize
+## Belize
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0E` | BZ | ベリーズ | Belize | Belize | Belize | Belize | Belice | 伯利兹 | 벨리즈 | Belize | Belize | Белиз | Belize | Belize | Belize | Belize | Belize |
 
-## Belize Regions
+### Belize Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -191,13 +191,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Stann Creek | `0x0E060000` | 16.962890432000002, -88.214472089 | スタンクリーク州 | Stann Creek | Stann Creek | Stann Creek | Stann Creek | Stann Creek | 斯坦港区 | 스탠크리크 주 | Stann Creek | Stann Creek | Стэн Крик | Stann Creek | Stann Creek | Stann Creek | Stann Creek | Stann Creek |
 | Toledo | `0x0E070000` | 16.09497052, -88.79674906300001 | トレド州 | Toledo | Toledo | Toledo | Toledo | Toledo | 托莱多区 | 톨레도 주 | Toledo | Toledo | Толедо | Toledo | Toledo | Toledo | Toledo | Toledo |
 
-# Bolivia
+## Bolivia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x0F` | BO | ボリビア | Bolivia | Bolivie | Bolivien | Bolivia | Bolivia | 玻利维亚 | 볼리비아 | Bolivia | Bolívia | Боливия | Bolivia | Bolivia | Bolivia | Bolivia | Bolivia |
 
-## Bolivia Regions
+### Bolivia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -212,13 +212,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Santa Cruz | `0x0F090000` | -17.797852383999995, -63.16557584900001 | サンタ・クルス県 | Santa Cruz | Santa Cruz | Santa Cruz | Santa Cruz | Santa Cruz | 圣克鲁斯省 | 산타크루스 주 | Santa Cruz | Santa Cruz | Санта-Крус | Santa Cruz | Santa Cruz | Santa Cruz | Santa Cruz | Santa Cruz |
 | Tarija | `0x0F0A0000` | -21.511231248, -64.747611401 | タリハ県 | Tarija | Tarija | Tarija | Tarija | Tarija | 塔里哈省 | 타리하 주 | Tarija | Tarija | Тариха | Tarija | Tarija | Tarija | Tarija | Tarija |
 
-# Brazil
+## Brazil
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x10` | BR | ブラジル | Brazil | Brésil | Brasilien | Brasile | Brasil | 巴西 | 브라질 | Brazilië | Brasil | Бразилия | Brazil | Brazil | Brazil | Brazil | Brazil |
 
-## Brazil Regions
+### Brazil Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -251,26 +251,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Pernambuco | `0x101B0000` | -8.047486284000001, -34.89767671499999 | ペルナンブコ州 | Pernambuco | Pernambouc | Pernambuco | Pernambuco | Pernambuco | 伯南布哥州 | 페르남부쿠 주 | Pernambuco | Pernambuco | Пернамбуку | Pernambuco | Pernambuco | Pernambuco | Pernambuco | Pernambuco |
 | Tocantins | `0x101C0000` | -10.217286063999993, -48.27356757999999 | トカンティンス州 | Tocantins | Tocantins | Tocantins | Tocantins | Tocantins | 托坎廷斯州 | 토칸칭스 주 | Tocantins | Tocantins | Токантинс | Tocantins | Tocantins | Tocantins | Tocantins | Tocantins |
 
-# British Virgin Islands
+## British Virgin Islands
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x11` | VG | 英領ヴァージン諸島 | British Virgin Islands | Îles Vierges britanniques | Britische Jungferninseln | Isole Vergini Britanniche | Islas Vírgenes Británicas | 英属维尔京群岛 | 영국령 버진아일랜드 | Britse Maagdeneilanden | Ilhas Virgens Britânicas | Британские Виргинские острова | British Virgin Islands | British Virgin Islands | British Virgin Islands | British Virgin Islands | British Virgin Islands |
 
-## British Virgin Islands Regions
+### British Virgin Islands Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x11000000` | 18.413085728, -64.615775105 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | British Virgin Islands | `0x11010000` | 18.413085728, -64.615775105 | 英領ヴァージン諸島 | British Virgin Islands | Îles Vierges britanniques | Britische Jungferninseln | Isole Vergini Britanniche | Islas Vírgenes Británicas | 英属维尔京群岛 | 영국령 버진아일랜드 | Britse Maagdeneilanden | Ilhas Virgens Britânicas | Британские Виргинские острова | British Virgin Islands | British Virgin Islands | British Virgin Islands | British Virgin Islands | British Virgin Islands |
 
-# Canada
+## Canada
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x12` | CA | カナダ | Canada | Canada | Kanada | Canada | Canadá | 加拿大 | 캐나다 | Canada | Canadá | Канада | Canada | Canada | Canada | Canada | Canada |
 
-## Canada Regions
+### Canada Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -289,26 +289,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Northwest Territories | `0x120D0000` | 62.451781516, -114.351017771 | ノースウェスト準州 | Northwest Territories | Territoires du Nord-Ouest | Nordwest-Territorien | Territori del Nord-Ovest | Territorios del Noroeste | 西北地区 | 노스웨스트 준주 | Northwest Territories | Territórios do Noroeste | Северо-Западные территории | Northwest Territories | Northwest Territories | Northwest Territories | Northwest Territories | Northwest Territories |
 | Nunavut | `0x120E0000` | 63.748168220000004, -68.510439016 | ヌナブト準州 | Nunavut | Territoire du Nunavut | Nunavut | Nunavut | Nunavut | 努纳维特地区 | 누나부트 준주 | Nunavut | Nunavut | Нунавут | Nunavut | Nunavut | Nunavut | Nunavut | Nunavut |
 
-# Cayman Islands
+## Cayman Islands
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x13` | KY | ケイマン諸島 | Cayman Islands | Îles Caïmans | Kaimaninseln | Isole Cayman | Islas Caimán | 开曼群岛 | 케이맨 제도 | Kaaimaneilanden | Ilhas Caimão | Каймановы острова | Cayman Islands | Cayman Islands | Cayman Islands | Cayman Islands | Cayman Islands |
 
-## Cayman Islands Regions
+### Cayman Islands Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x13000000` | 19.297485132, -81.380957413 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Cayman Islands | `0x13010000` | 19.297485132, -81.380957413 | ケイマン諸島 | Cayman Islands | Îles Caïmans | Kaimaninseln | Isole Cayman | Islas Caimán | 开曼群岛 | 케이맨 제도 | Kaaimaneilanden | Ilhas Caimão | Каймановы острова | Cayman Islands | Cayman Islands | Cayman Islands | Cayman Islands | Cayman Islands |
 
-# Chile
+## Chile
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x14` | CL | チリ | Chile | Chili | Chile | Cile | Chile | 智利 | 칠레 | Chili | Chile | Чили | Chile | Chile | Chile | Chile | Chile |
 
-## Chile Regions
+### Chile Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -327,13 +327,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Maule | `0x140D0000` | -35.430908824, -71.663523762 | マウレ州 | Maule | Maule | Maule (Region VII) | Maule | Maule | 马乌莱大区 | 마울레 주 | Maule | Maule | Мауле | Maule | Maule | Maule | Maule | Maule |
 | Tarapacá | `0x140E0000` | -20.214844544, -70.163885895 | タラパカ州 | Tarapacá | Tarapacá | Tarapacá (Region I) | Tarapacá | Tarapacá | 塔拉帕卡大区 | 타라파카 주 | Tarapacá | Tarapacá | Тарапака | Tarapacá | Tarapacá | Tarapacá | Tarapacá | Tarapacá |
 
-# Colombia
+## Colombia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x15` | CO | コロンビア | Colombia | Colombie | Kolumbien | Colombia | Colombia | 哥伦比亚 | 콜롬비아 | Colombia | Colômbia | Колумбия | Colombia | Colombia | Colombia | Colombia | Colombia |
 
-## Colombia Regions
+### Colombia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -372,13 +372,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Vichada | `0x15210000` | 6.185302664, -67.472228185 | ビチャダ県 | Vichada | Vichada | Vichada | Vichada | Vichada | 维查达省 | 비차다 주 | Vichada | Vichada | Вичада | Vichada | Vichada | Vichada | Vichada | Vichada |
 | Casanare | `0x15220000` | 5.339355408, -72.38862339 | カサナレ県 | Casanare | Casanare | Casanare | Casanare | Casanare | 卡萨纳雷省 | 카사나레 주 | Casanare | Casanare | Касанаре | Casanare | Casanare | Casanare | Casanare | Casanare |
 
-# Costa Rica
+## Costa Rica
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x16` | CR | コスタリカ | Costa Rica | Costa Rica | Costa Rica | Costa Rica | Costa Rica | 哥斯达黎加 | 코스타리카 | Costa Rica | Costa Rica | Коста-Рика | Costa Rica | Costa Rica | Costa Rica | Costa Rica | Costa Rica |
 
-## Costa Rica Regions
+### Costa Rica Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -391,26 +391,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Limón | `0x16070000` | 9.99755848, -83.028911113 | リモン州 | Limón | Limón | Limón | Limón | Limón | 利蒙省 | 리몬 주 | Limón | Limón | Лимон | Limón | Limón | Limón | Limón | Limón |
 | Puntarenas | `0x16080000` | 9.964599496, -84.830673825 | プンタレナス州 | Puntarenas | Puntarenas | Puntarenas | Puntarenas | Puntarenas | 蓬塔雷纳斯省 | 푼타레나스 주 | Puntarenas | Puntarenas | Пунтаренас | Puntarenas | Puntarenas | Puntarenas | Puntarenas | Puntarenas |
 
-# Dominica
+## Dominica
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x17` | DM | ドミニカ国 | Dominica | Dominique | Dominica | Dominica | Dominica | 多米尼克 | 도미니카 연방 | Dominica | Dominica | Доминика | Dominica | Dominica | Dominica | Dominica | Dominica |
 
-## Dominica Regions
+### Dominica Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x17000000` | 15.29846174, -61.396772211 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Dominica | `0x17010000` | 15.29846174, -61.396772211 | ドミニカ国 | Dominica | Dominique | Dominica | Dominica | Dominica | 多米尼克 | 도미니카 연방 | Dominica | Dominica | Доминика | Dominica | Dominica | Dominica | Dominica | Dominica |
 
-# Dominican Republic
+## Dominican Republic
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x18` | DO | ドミニカ共和国 | Dominican Republic | République dominicaine | Dominikanische Republik | Repubblica Dominicana | República Dominicana | 多米尼加共和国 | 도미니카 공화국 | Dominicaanse Republiek | República Dominicana | Доминиканская Республика | Dominican Republic | Dominican Republic | Dominican Republic | Dominican Republic | Dominican Republic |
 
-## Dominican Republic Regions
+### Dominican Republic Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -446,13 +446,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Monte Plata | `0x181E0000` | 18.797607208, -69.779363365 | モンテ・プラタ | Monte Plata | Monte Plata | Monte Plata | Monte Plata | Monte Plata | 银山省 | 몬테플라타 | Monte Plata | Monte Plata | Монте-Плата | Monte Plata | Monte Plata | Monte Plata | Monte Plata | Monte Plata |
 | San Cristóbal | `0x181F0000` | 18.413085728, -70.097967747 | サン・クリストバル | San Cristóbal | San Cristóbal | San Cristóbal | San Cristóbal | San Cristóbal | 圣克里斯多堡省 | 산크리스토발 | San Cristóbal | São Cristóvão | Сан-Кристобаль | San Cristóbal | San Cristóbal | San Cristóbal | San Cristóbal | San Cristóbal |
 
-# Ecuador
+## Ecuador
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x19` | EC | エクアドル | Ecuador | Équateur | Ecuador | Ecuador | Ecuador | 厄瓜多尔 | 에콰도르 | Ecuador | Equador | Эквадор | Ecuador | Ecuador | Ecuador | Ecuador | Ecuador |
 
-## Ecuador Regions
+### Ecuador Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -482,13 +482,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Santa Elena | `0x19180000` | -2.224732443999997, -80.853612229 | サンタ・エレーナ | Santa Elena | Santa Elena | Santa Elena | Santa Elena | Santa Elena | 圣埃伦娜省 | 산타엘레나 | Santa Elena | Santa Elena | Санта Элена | Santa Elena | Santa Elena | Santa Elena | Santa Elena | Santa Elena |
 | Santo Domingo de los Tsáchilas | `0x19190000` | -0.24719340400000078, -79.14523356 | サント・ドミンゴ・デ・ロス・ツァチラス | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | 圣多明各-德洛斯查奇拉斯省 | 산토도밍고델로스트사칠라스 | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Санто Доминго де лос Тсачилас | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas | Santo Domingo de los Tsáchilas |
 
-# El Salvador
+## El Salvador
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1A` | SV | エルサルバドル | El Salvador | Salvador | El Salvador | El Salvador | El Salvador | 萨尔瓦多 | 엘살바도르 | El Salvador | El Salvador | Сальвадор | El Salvador | El Salvador | El Salvador | El Salvador | El Salvador |
 
-## El Salvador Regions
+### El Salvador Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -508,52 +508,52 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Sonsonate | `0x1A0E0000` | 13.716430508, -89.719603135 | ソンソナテ県 | Sonsonate | Sonsonate | Sonsonate | Sonsonate | Sonsonate | 松索纳特省 | 손소나테 주 | Sonsonate | Sonsonate | Сонсонате | Sonsonate | Sonsonate | Sonsonate | Sonsonate | Sonsonate |
 | Usulután | `0x1A0F0000` | 13.34838852, -88.445185607 | ウスルタン県 | Usulután | Usulután | Usulután | Usulután | Usulután | 乌苏卢坦省 | 우술루탄 주 | Usulután | Usulután | Усулутан | Usulután | Usulután | Usulután | Usulután | Usulután |
 
-# French Guiana
+## French Guiana
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1B` | GF | フランス領ギアナ | French Guiana | Guyane | Französisch-Guyana | Guyana Francese | Guayana Francesa | 法属圭亚那 | 프랑스령 기아나 | Frans-Guyana | Guiana Francesa | Французская Гвиана | French Guiana | French Guiana | French Guiana | French Guiana | French Guiana |
 
-## French Guiana Regions
+### French Guiana Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x1B000000` | 4.932861272, -52.327533681999995 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | French Guiana | `0x1B010000` | 4.932861272, -52.327533681999995 | フランス領ギアナ | French Guiana | Guyane | Französisch-Guyana | Guyana Francese | Guayana Francesa | 法属圭亚那 | 프랑스령 기아나 | Frans-Guyana | Guiana Francesa | Французская Гвиана | French Guiana | French Guiana | French Guiana | French Guiana | French Guiana |
 
-# Grenada
+## Grenada
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1C` | GD | グレナダ | Grenada | Grenade | Grenada | Grenada | Granada | 格林纳达 | 그레나다 | Grenada | Granada | Гренада | Grenada | Grenada | Grenada | Grenada | Grenada |
 
-## Grenada Regions
+### Grenada Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x1C000000` | 12.046508652, -61.748335667000006 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Grenada | `0x1C010000` | 12.046508652, -61.748335667000006 | グレナダ | Grenada | Grenade | Grenada | Grenada | Granada | 格林纳达 | 그레나다 | Grenada | Granada | Гренада | Grenada | Grenada | Grenada | Grenada | Grenada |
 
-# Guadeloupe
+## Guadeloupe
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1D` | GP | グアドループ | Guadeloupe | Guadeloupe | Guadeloupe | Guadalupa | Guadalupe | 瓜德罗普 | 과들루프 | Guadeloupe | Guadalupe | Гваделупа | Guadeloupe | Guadeloupe | Guadeloupe | Guadeloupe | Guadeloupe |
 
-## Guadeloupe Regions
+### Guadeloupe Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x1D000000` | 15.996093568000001, -61.715376593 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Guadeloupe | `0x1D010000` | 15.996093568000001, -61.715376593 | グアドループ | Guadeloupe | Guadeloupe | Guadeloupe | Guadalupa | Guadalupe | 瓜德罗普 | 과들루프 | Guadeloupe | Guadalupe | Гваделупа | Guadeloupe | Guadeloupe | Guadeloupe | Guadeloupe | Guadeloupe |
 
-# Guatemala
+## Guatemala
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1E` | GT | グアテマラ | Guatemala | Guatemala | Guatemala | Guatemala | Guatemala | 危地马拉 | 과테말라 | Guatemala | Guatemala | Гватемала | Guatemala | Guatemala | Guatemala | Guatemala | Guatemala |
 
-## Guatemala Regions
+### Guatemala Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -581,13 +581,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Totonicapán | `0x1E160000` | 14.91394026, -91.362063656 | トトニカパン県 | Totonicapán | Totonicapán | Totonicapán | Totonicapán | Totonicapán | 托托尼卡潘省 | 토토니카판 주 | Totonicapán | Totonicapán | Тотоникапан | Totonicapán | Totonicapán | Totonicapán | Totonicapán | Totonicapán |
 | Zacapa | `0x1E170000` | 14.963378736, -89.532835049 | サカパ県 | Zacapa | Zacapa | Zacapa | Zacapa | Zacapa | 萨卡帕省 | 사카파 주 | Zacapa | Zacapa | Сакапа | Zacapa | Zacapa | Zacapa | Zacapa | Zacapa |
 
-# Guyana
+## Guyana
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x1F` | GY | ガイアナ | Guyana | République coopérative de Guyana | Guyana | Guyana | Guyana | 圭亚那 | 가이아나 | Guyana | Guiana | Гайана | Guyana | Guyana | Guyana | Guyana | Guyana |
 
-## Guyana Regions
+### Guyana Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -603,13 +603,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Upper Demerara-Berbice | `0x1F0A0000` | 5.998535088, -58.298619255000006 | アッパー・デメララ・ベルビセ州 | Upper Demerara-Berbice | Haut-Demerara et Berbice | Upper Demerara-Berbice | Alto Demerara-Berbice | Alto Demerara-Berbice | 上德梅拉拉-伯比斯区 | 북부 데메라라-버비스 주 | Upper Demerara-Berbice | Alto Demerara-Berbice | Верхний Демерара-Бербайс | Upper Demerara-Berbice | Upper Demerara-Berbice | Upper Demerara-Berbice | Upper Demerara-Berbice | Upper Demerara-Berbice |
 | Upper Takutu-Upper Essequibo | `0x1F0B0000` | 3.37829586, -59.798257121999995 | アッパー・タクトゥ・アッパー・エセキボ州 | Upper Takutu-Upper Essequibo | Haut-Takutu et Haut-Essequibo | Upper Takutu-Upper Essequibo | Alto Takutu-Alto Essequibo | Alto Takutu-Alto Essequibo | 上塔库图-上埃塞奎博区 | 북부 타쿠투-북부 에세퀴보 주 | Upper Takutu-Upper Essequibo | Alto Takutu-Alto Essequibo | Верхний Такуту-Верхний Эссекуибо | Upper Takutu-Upper Essequibo | Upper Takutu-Upper Essequibo | Upper Takutu-Upper Essequibo | Upper Takutu-Upper Essequibo | Upper Takutu-Upper Essequibo |
 
-# Haiti
+## Haiti
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x20` | HT | ハイチ | Haiti | Haïti | Haiti | Haiti | Haití | 海地 | 아이티 | Haïti | Haiti | Гаити | Haiti | Haiti | Haiti | Haiti | Haiti |
 
-## Haiti Regions
+### Haiti Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -625,13 +625,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Sud-Est | `0x200A0000` | 18.231811316, -72.531446044 | 南東県 | Sud-Est | Sud-Est | Sud-Est | Sud-Est | Sureste | 东南省 | 남동부 | Sud-Est | Sudeste | Юго-Восточный департамент | Sud-Est | Sud-Est | Sud-Est | Sud-Est | Sud-Est |
 | Nippes | `0x200B0000` | 18.440551548, -73.086257123 | ニップ県 | Nippes | Nippes | Nippes | Nippes | Nippes | 尼普斯省 | 니프 | Nippes | Nippes | Нип | Nippes | Nippes | Nippes | Nippes | Nippes |
 
-# Honduras
+## Honduras
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x21` | HN | ホンジュラス | Honduras | Honduras | Honduras | Honduras | Honduras | 洪都拉斯 | 온두라스 | Honduras | Honduras | Гондурас | Honduras | Honduras | Honduras | Honduras | Honduras |
 
-## Honduras Regions
+### Honduras Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -655,13 +655,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Valle | `0x21120000` | 13.535156096, -87.483879282 | バジェ | Valle | Valle | Valle | Valle | Valle | 山谷省 | 바예 | Valle | Valle | Валле | Valle | Valle | Valle | Valle | Valle |
 | Yoro | `0x21130000` | 15.128173656, -87.132315826 | ヨロ | Yoro | Yoro | Yoro | Yoro | Yoro | 约罗省 | 요로 | Yoro | Yoro | Йоро | Yoro | Yoro | Yoro | Yoro | Yoro |
 
-# Jamaica
+## Jamaica
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x22` | JM | ジャマイカ | Jamaica | Jamaïque | Jamaika | Giamaica | Jamaica | 牙买加 | 자메이카 | Jamaica | Jamaica | Ямайка | Jamaica | Jamaica | Jamaica | Jamaica | Jamaica |
 
-## Jamaica Regions
+### Jamaica Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -681,26 +681,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Westmoreland | `0x220E0000` | 18.215331824, -78.128995445 | ウェストモアランド | Westmoreland | Westmoreland | Westmoreland얆徇᥄� | Westmoreland | Westmoreland | 西摩兰区 | 웨스트모얼랜드 | Westmoreland | Westmoreland | Уэстморлэнд | Westmoreland | Westmoreland | Westmoreland | Westmoreland | Westmoreland |
 | Kingston | `0x220F0000` | 17.946166788, -76.777673411 | キングストン | Kingston | Kingston | Kingston | Kingston | Kingston | 金斯敦区 | 킹스턴 | Kingston | Kingston | Кингстон | Kingston | Kingston | Kingston | Kingston | Kingston |
 
-# Martinique
+## Martinique
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x23` | MQ | マルティニーク | Martinique | Martinique | Martinique | Martinica | Martinica | 马提尼克 | 마르티니크 | Martinique | Martinica | Мартиника | Martinique | Martinique | Martinique | Martinique | Martinique |
 
-## Martinique Regions
+### Martinique Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x23000000` | 14.595336748, -61.078167828999995 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Martinique | `0x23010000` | 14.595336748, -61.078167828999995 | マルティニーク | Martinique | Martinique | Martinique | Martinica | Martinica | 马提尼克 | 마르티니크 | Martinique | Martinica | Мартиника | Martinique | Martinique | Martinique | Martinique | Martinique |
 
-# Mexico
+## Mexico
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x24` | MX | メキシコ | Mexico | Mexique | Mexiko | Messico | México | 墨西哥 | 멕시코 | Mexico | México | Мексика | Mexico | Mexico | Mexico | Mexico | Mexico |
 
-## Mexico Regions
+### Mexico Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -738,39 +738,39 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Yucatán | `0x24200000` | 20.961913824, -89.615232734 | ユカタン州 | Yucatán | Yucatán | Yukatan | Yucatán | Yucatán | 尤卡坦州 | 유카탄 주 | Yucatán | Yucatán | Юкатан | Yucatán | Yucatán | Yucatán | Yucatán | Yucatán |
 | Zacatecas | `0x24210000` | 22.780151108000002, -102.579135174 | サカテカス州 | Zacatecas | Zacatecas | Zacatecas | Zacatecas | Zacatecas | 萨卡特卡斯州 | 사카테카스 주 | Zacatecas | Zacatecas | Сакатекас | Zacatecas | Zacatecas | Zacatecas | Zacatecas | Zacatecas |
 
-# Montserrat
+## Montserrat
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x25` | MS | モントセラト | Montserrat | Montserrat | Montserrat | Montserrat | Montserrat | 蒙特塞拉特 | 몬트세랫 | Montserrat | Montserrat | Монтсеррат | Montserrat | Montserrat | Montserrat | Montserrat | Montserrat |
 
-## Montserrat Regions
+### Montserrat Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x25000000` | 16.69921856, -62.21525588200001 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Montserrat | `0x25010000` | 16.69921856, -62.21525588200001 | モントセラト | Montserrat | Montserrat | Montserrat | Montserrat | Montserrat | 蒙特塞拉特 | 몬트세랫 | Montserrat | Montserrat | Монтсеррат | Montserrat | Montserrat | Montserrat | Montserrat | Montserrat |
 
-# Netherlands Antilles
+## Netherlands Antilles
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x26` | AN | オランダ領アンティル | Netherlands Antilles | Antilles néerlandaises | Niederländische Antillen | Antille Olandesi | Antillas Neerlandesas | 荷属安的列斯 | 네덜란드령 앤틸리스 | Nederlandse Antillen | Antilhas Holandesas | Нидерландские Антильские острова | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles |
 
-## Netherlands Antilles Regions
+### Netherlands Antilles Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x26000000` | 12.095947128, -68.911441083 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Netherlands Antilles | `0x26010000` | 12.095947128, -68.911441083 | オランダ領アンティル | Netherlands Antilles | Antilles néerlandaises | Niederländische Antillen | Antille Olandesi | Antillas Neerlandesas | 荷属安的列斯 | 네덜란드령 앤틸리스 | Nederlandse Antillen | Antilhas Holandesas | Нидерландские Антильские острова | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles | Netherlands Antilles |
 
-# Nicaragua
+## Nicaragua
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x27` | NI | ニカラグア | Nicaragua | Nicaragua | Nicaragua | Nicaragua | Nicaragua | 尼加拉瓜 | 니카라과 | Nicaragua | Nicarágua | Никарагуа | Nicaragua | Nicaragua | Nicaragua | Nicaragua | Nicaragua |
 
-## Nicaragua Regions
+### Nicaragua Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -793,13 +793,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Atlántico Norte | `0x27110000` | 14.029540856, -83.380474569 | 北アトランティコ自治地域 | Atlántico Norte | Región Autónoma del Atlántico Norte | Región Autónoma del Atlántico Norte | Atlantico Settentrionale | Atlántico Norte | 北大西洋自治区 | 북아틀란티코 자치구 | Atlántico Norte | Atlântico Norte | Атлантический Северный автономный регион | Atlántico Norte | Atlántico Norte | Atlántico Norte | Atlántico Norte | Atlántico Norte |
 | Atlántico Sur | `0x27120000` | 11.997070176, -83.748517562 | 南アトランティコ自治地域 | Atlántico Sur | Región Autónoma del Atlántico Sur | Región Autónoma del Atlántico Sur | Atlantico Meridionale | Atlántico Sur | 南大西洋自治区 | 남아틀란티코 자치구 | Atlántico Sur | Atlântico Sul | Атлантический Южный автономный регион | Atlántico Sur | Atlántico Sur | Atlántico Sur | Atlántico Sur | Atlántico Sur |
 
-# Panama
+## Panama
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x28` | PA | パナマ | Panama | Panama | Panama | Panamá | Panamá | 巴拿马 | 파나마 | Panama | Panamá | Панама | Panama | Panama | Panama | Panama | Panama |
 
-## Panama Regions
+### Panama Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -815,13 +815,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Kuna Yala | `0x280A0000` | 9.563598524, -78.952972295 | サンブラス諸島 | Kuna Yala | Kuna Yala | Kuna Yala | Kuna Yala | Kuna Yala | 圣布拉斯特区 | 산블라스 제도 | San Blas-eilanden | Kuna Yala | Куна-Яла | Kuna Yala | Kuna Yala | Kuna Yala | Kuna Yala | Kuna Yala |
 | Veraguas | `0x280B0000` | 8.096923736, -80.979955346 | ベラグアス | Veraguas | Veraguas | Veraguas | Veraguas | Veraguas | 贝拉瓜斯省 | 베라과스 | Veraguas | Veraguas | Верагуас | Veraguas | Veraguas | Veraguas | Veraguas | Veraguas |
 
-# Paraguay
+## Paraguay
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x29` | PY | パラグアイ | Paraguay | Paraguay | Paraguay | Paraguay | Paraguay | 巴拉圭 | 파라과이 | Paraguay | Paraguai | Парагвай | Paraguay | Paraguay | Paraguay | Paraguay | Paraguay |
 
-## Paraguay Regions
+### Paraguay Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -845,13 +845,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Alto Paraguay | `0x29120000` | -21.03332598, -57.897617188 | アルト・パラグアイ県 | Alto Paraguay | Alto Paraguay | Alto Paraguay | Alto Paraguay | Alto Paraguay | 上巴拉圭省 | 알토파라과이 주 | Alto Paraguay | Alto Paraguai | Альто-Парагвай | Alto Paraguay | Alto Paraguay | Alto Paraguay | Alto Paraguay | Alto Paraguay |
 | Boquerón | `0x29130000` | -22.346192176000002, -60.02897064 | ボケロン県 | Boquerón | Boquerón | Boquerón | Boquerón | Boquerón | 博克龙省 | 보케론 주 | Boquerón | Boquerón | Бокерон | Boquerón | Boquerón | Boquerón | Boquerón | Boquerón |
 
-# Peru
+## Peru
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2A` | PE | ペルー | Peru | Pérou | Peru | Perù | Perú | 秘鲁 | 페루 | Peru | Peru | Перу | Peru | Peru | Peru | Peru | Peru |
 
-## Peru Regions
+### Peru Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -882,13 +882,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tumbes | `0x2A190000` | -3.565064460000002, -80.436130625 | トゥンベス | Tumbes | Tumbes | Tumbes | Tumbes | Tumbes | 通贝斯省 | 툼베스 | Tumbes | Tumbes | Тумбес | Tumbes | Tumbes | Tumbes | Tumbes | Tumbes |
 | Ucayali | `0x2A1A0000` | -8.377076123999998, -74.536456379 | ウカヤリ | Ucayali | Ucayali | Ucayali | Ucayali | Ucayali | 乌卡亚利省 | 우카얄리 | Ucayali | Ucayali | Укаяли | Ucayali | Ucayali | Ucayali | Ucayali | Ucayali |
 
-# St. Kitts and Nevis
+## St. Kitts and Nevis
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2B` | KN | セントキッツ・ネイビス | St. Kitts and Nevis | Saint-Christophe-et-Niévès | St. Kitts und Nevis | Saint Kitts e Nevis | San Cristóbal y Nieves | 圣基茨和尼维斯 | 세인트키츠네비스 | Saint Kitts en Nevis | São Cristóvão e Nevis | Сент-Китс и Невис | St. Kitts and Nevis | St. Kitts and Nevis | St. Kitts and Nevis | St. Kitts and Nevis | St. Kitts and Nevis |
 
-## St. Kitts and Nevis Regions
+### St. Kitts and Nevis Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -908,39 +908,39 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Saint Thomas Middle Island | `0x2B0E0000` | 17.314452928, -62.814012393 | セント・トーマス・ミドルアイランド | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island | 圣托马斯米德尔艾兰区 | 세인트토머스미들아일랜드 | Saint Thomas Middle Island | Saint Thomas Middle Island | Сент-Томас-Мидл-Айленд | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island | Saint Thomas Middle Island |
 | Trinity Palmetto Point | `0x2B0F0000` | 17.281493944, -62.764573782 | トリニティ・パルメット・ポイント | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point | 特里尼蒂帕尔梅托波因特区 | 트리니티팰머토포인트 | Trinity Palmetto Point | Trinity Palmetto Point | Тринити-Палметто-Пойнт | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point | Trinity Palmetto Point |
 
-# St. Lucia
+## St. Lucia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2C` | LC | セントルシア | St. Lucia | Sainte-Lucie | St. Lucia | Santa Lucia | Santa Lucía | 圣卢西亚 | 세인트루시아 | Saint Lucia | Santa Lúcia | Сент-Люсия | St. Lucia | St. Lucia | St. Lucia | St. Lucia | St. Lucia |
 
-## St. Lucia Regions
+### St. Lucia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x2C000000` | 13.996581872, -60.995770144000005 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | St. Lucia | `0x2C010000` | 13.996581872, -60.995770144000005 | セントルシア | St. Lucia | Sainte-Lucie | St. Lucia | Santa Lucia | Santa Lucía | 圣卢西亚 | 세인트루시아 | Saint Lucia | Santa Lúcia | Сент-Люсия | St. Lucia | St. Lucia | St. Lucia | St. Lucia | St. Lucia |
 
-# St. Vincent and the Grenadines
+## St. Vincent and the Grenadines
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2D` | VC | セントビンセント・グレナディーン | St. Vincent and the Grenadines | Saint-Vincent-et-les-Grenadines | St. Vincent und die Grenadinen | Saint Vincent e Grenadine | San Vicente y las Granadinas | 圣文森特和格林纳丁斯 | 세인트빈센트 그레나딘 | Saint Vincent en de Grenadines | S. Vicente e as Granadinas | Сент-Винсент и Гренадины | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines |
 
-## St. Vincent and the Grenadines Regions
+### St. Vincent and the Grenadines Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x2D000000` | 13.12866196, -61.215497303999996 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | St. Vincent and the Grenadines | `0x2D010000` | 13.12866196, -61.215497303999996 | セントビンセント・グレナディーン | St. Vincent and the Grenadines | Saint-Vincent-et-les-Grenadines | St. Vincent und die Grenadinen | Saint Vincent e Grenadine | San Vicente y las Granadinas | 圣文森特和格林纳丁斯 | 세인트빈센트 그레나딘 | Saint Vincent en de Grenadines | S. Vicente e as Granadinas | Сент-Винсент и Гренадины | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines | St. Vincent and the Grenadines |
 
-# Suriname
+## Suriname
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2E` | SR | スリナム | Suriname | Suriname | Suriname | Suriname | Surinam | 苏里南 | 수리남 | Suriname | Suriname | Суринам | Suriname | Suriname | Suriname | Suriname | Suriname |
 
-## Suriname Regions
+### Suriname Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -956,13 +956,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Sipaliwini | `0x2E0A0000` | 5.196533144, -57.161531202000006 | シパリウィニ | Sipaliwini | Sipaliwini | Sipaliwini | Sipaliwini | Sipaliwini | 西帕里维尼区 | 시팔리비니 | Sipaliwini | Sipaliwini | Сипалуини | Sipaliwini | Sipaliwini | Sipaliwini | Sipaliwini | Sipaliwini |
 | Wanica | `0x2E0B0000` | 5.696411068, -55.227932194000005 | ワニカ | Wanica | Wanica | Wanica | Wanica | Wanica | 瓦尼卡区 | 바니카 | Wanica | Wanica | Ваника | Wanica | Wanica | Wanica | Wanica | Wanica |
 
-# Trinidad and Tobago
+## Trinidad and Tobago
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x2F` | TT | トリニダード・トバゴ | Trinidad and Tobago | Trinité-et-Tobago | Trinidad und Tobago | Trinidad e Tobago | Trinidad y Tobago | 特立尼达和多巴哥 | 트리니다드토바고 | Trinidad en Tobago | Trinidade e Tobago | Тринидад и Тобаго | Trinidad and Tobago | Trinidad and Tobago | Trinidad and Tobago | Trinidad and Tobago | Trinidad and Tobago |
 
-## Trinidad and Tobago Regions
+### Trinidad and Tobago Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -981,26 +981,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Victoria | `0x2F0D0000` | 10.261230352, -61.380292674 | ビクトリア州 | Victoria | Victoria | Victoria | Victoria | Victoria | 维多利亚郡 | 빅토리아 주 | Victoria | Vitória | Виктория | Victoria | Victoria | Victoria | Victoria | Victoria |
 | Point Fortin | `0x2F0E0000` | 10.167846564, -61.67692434 | ポイントフォーティン | Point Fortin | Point Fortin | Point Fortin | Point Fortin | Point Fortin | 福廷岬市 | 포인트포르틴 | Point Fortin | Ponto Fortin | Пойнт Фортин | Point Fortin | Point Fortin | Point Fortin | Point Fortin | Point Fortin |
 
-# Turks and Caicos Islands
+## Turks and Caicos Islands
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x30` | TC | タークス・カイコス諸島 | Turks and Caicos Islands | Îles Turques-et-Caïques | Turks- und Caicosinseln | Isole Turks e Caicos | Islas Turcas y Caicos | 特克斯和凯科斯群岛 | 터크스 케이커스 제도 | Turks- en Caicoseilanden | Ilhas Turcas e Caicos | Тёркс и Кайкос | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands |
 
-## Turks and Caicos Islands Regions
+### Turks and Caicos Islands Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x30000000` | 21.461791748, -71.130685399 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Turks and Caicos Islands | `0x30010000` | 21.461791748, -71.130685399 | タークス・カイコス諸島 | Turks and Caicos Islands | Îles Turques-et-Caïques | Turks- und Caicosinseln | Isole Turks e Caicos | Islas Turcas y Caicos | 特克斯和凯科斯群岛 | 터크스 케이커스 제도 | Turks- en Caicoseilanden | Ilhas Turcas e Caicos | Тёркс и Кайкос | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands | Turks and Caicos Islands |
 
-# United States
+## United States
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x31` | US | アメリカ | United States | États-Unis d’Amérique | Vereinigte Staaten | Stati Uniti d'America | Estados Unidos de América | 美国 | 미국 | Verenigde Staten | Estados Unidos | Соединённые Штаты Америки | United States | United States | United States | United States | United States |
 
-## United States Regions
+### United States Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1058,13 +1058,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Wyoming | `0x31340000` | 41.138305196, -104.814859027 | ワイオミング州 | Wyoming | Wyoming | Wyoming | Wyoming | Wyoming | 怀俄明州 | 와이오밍 주 | Wyoming | Wyoming | Вайоминг | Wyoming | Wyoming | Wyoming | Wyoming | Wyoming |
 | Puerto Rico | `0x31350000` | 18.468017368, -66.104426614 | プエルトリコ | Puerto Rico | Porto Rico | Puerto Rico | Porto Rico | Puerto Rico | 波多黎各 | 푸에르토리코 | Puerto Rico | Porto Rico | Пуэрто-Рико | Puerto Rico | Puerto Rico | Puerto Rico | Puerto Rico | Puerto Rico |
 
-# Uruguay
+## Uruguay
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x32` | UY | ウルグアイ | Uruguay | Uruguay | Uruguay | Uruguay | Uruguay | 乌拉圭 | 우루과이 | Uruguay | Uruguai | Уругвай | Uruguay | Uruguay | Uruguay | Uruguay | Uruguay |
 
-## Uruguay Regions
+### Uruguay Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1089,26 +1089,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tacuarembó | `0x32130000` | -31.728516288, -55.980497717000006 | タクアレンボ | Tacuarembó | Tacuarembó | Tacuarembó | Tacuarembó | Tacuarembó | 塔夸伦博省 | 타쿠아렘보 | Tacuarembó | Tacuarembó | Такуарембо | Tacuarembó | Tacuarembó | Tacuarembó | Tacuarembó | Tacuarembó |
 | Treinta y Tres | `0x32140000` | -33.22815006, -54.381982628 | トレインタ・イ・トレス | Treinta y Tres | Treinta y Tres | Treinta y Tres | Treinta y Tres | Treinta y Tres | 三十三人省 | 트레인타이트레스 | Treinta y Tres | Treinta y Tres | Трейнта-и-Трес | Treinta y Tres | Treinta y Tres | Treinta y Tres | Treinta y Tres | Treinta y Tres |
 
-# US Virgin Islands
+## US Virgin Islands
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x33` | VI | 米領バージン諸島 | US Virgin Islands | Îles Vierges américaines | Amerikanische Jungferninseln | Isole Vergini Statunitensi | Islas Vírgenes de los EE. UU. | 美属维尔京群岛 | 미국령 버진아일랜드 | Amerikaanse Maagdeneilanden | Ilhas Virgens Americanas | Американские Виргинские острова | US Virgin Islands | US Virgin Islands | US Virgin Islands | US Virgin Islands | US Virgin Islands |
 
-## US Virgin Islands Regions
+### US Virgin Islands Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x33000000` | 18.341674596, -64.928886308 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | US Virgin Islands | `0x33010000` | 18.341674596, -64.928886308 | 米領バージン諸島 | US Virgin Islands | Îles Vierges américaines | Amerikanische Jungferninseln | Isole Vergini Statunitensi | Islas Vírgenes de los EE. UU. | 美属维尔京群岛 | 미국령 버진아일랜드 | Amerikaanse Maagdeneilanden | Ilhas Virgens Americanas | Американские Виргинские острова | US Virgin Islands | US Virgin Islands | US Virgin Islands | US Virgin Islands | US Virgin Islands |
 
-# Venezuela
+## Venezuela
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x34` | VE | ベネズエラ | Venezuela | Venezuela | Venezuela | Venezuela | Venezuela | 委内瑞拉 | 베네수엘라 | Venezuela | Venezuela | Венесуэла | Venezuela | Venezuela | Venezuela | Venezuela | Venezuela |
 
-## Venezuela Regions
+### Venezuela Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1139,13 +1139,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Dependencias Federales | `0x34190000` | 11.997070176, -65.994563034 | 連邦保護領 | Dependencias Federales | Dépendances Fédérales | Dependencias Federales | Dipendenze Federali | Dependencias Federales | 联邦属地 | 베네수엘라 연방자치령 | Federale gebieden | Dependências Federais | Федеральное владение | Dependencias Federales | Dependencias Federales | Dependencias Federales | Dependencias Federales | Dependencias Federales |
 | Vargas | `0x341A0000` | 10.596313356, -66.928403464 | バルガス | Vargas | Vargas | Vargas | Vargas | Vargas | 巴尔加斯州 | 바르가스 | Vargas | Vargas | Варгас | Vargas | Vargas | Vargas | Vargas | Vargas |
 
-# Albania
+## Albania
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x40` | AL | アルバニア | Albania | Albanie | Albanien | Albania | Albania | 阿尔巴尼亚 | 알바니아 | Albanië | Albânia | Албания | Albania | Albania | Albania | Albania | Albania |
 
-## Albania Regions
+### Albania Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1163,13 +1163,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Shkodër | `0x400C0000` | 42.072143076, 19.522758166 | シュコドラ州 | Shkodër | Shkodër | Shkodra | Scutari | Shkodër | 斯库台州 | 슈코더르 주 | Shkodër | Shkodër | Шкодер | Shkodër | Shkodër | Shkodër | Shkodër | Shkodër |
 | Vlorë | `0x400D0000` | 40.468139188, 19.484305913 | ヴロラ州 | Vlorë | Vlorë | Vlora | Valona | Vlorë | 发罗拉州 | 블로러 주 | Vlorë | Vlorë | Влёра | Vlorë | Vlorë | Vlorë | Vlorë | Vlorë |
 
-# Australia
+## Australia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x41` | AU | オーストラリア | Australia | Australie | Australien | Australia | Australia | 澳大利亚 | 오스트레일리아 | Australië | Austrália | Австралия | Australia | Australia | Australia | Australia | Australia |
 
-## Australia Regions
+### Australia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1183,13 +1183,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Victoria | `0x41080000` | -37.809448836, 144.96499381 | ヴィクトリア州 | Victoria | Victoria | Victoria | Victoria | Victoria | 维多利亚州 | 빅토리아 주 | Victoria | Victoria | Виктория | Victoria | Victoria | Victoria | Victoria | Victoria |
 | Western Australia | `0x41090000` | -31.931763355999998, 115.862131468 | 西オーストラリア州 | Western Australia | Australie-Occidentale | Westaustralien | Australia Occidentale | Australia Occidental | 西澳大利亚州 | 웨스턴오스트레일리아 주 | West-Australië | Austrália Ocidental | Западная Австралия | Western Australia | Western Australia | Western Australia | Western Australia | Western Australia |
 
-# Austria
+## Austria
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x42` | AT | オーストリア | Austria | Autriche | Österreich | Austria | Austria | 奥地利 | 오스트리아 | Oostenrijk | Áustria | Австрия | Austria | Austria | Austria | Austria | Austria |
 
-## Austria Regions
+### Austria Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1204,13 +1204,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tyrol | `0x42090000` | 47.263183056, 11.381866888 | ティロル州 | Tyrol | Tyrol | Tirol | Tirolo | Tirol | 蒂罗尔州 | 티롤 주 | Tirol | Tirol | Тироль | Tyrol | Tyrol | Tyrol | Tyrol | Tyrol |
 | Vorarlberg | `0x420A0000` | 47.499389108, 9.744899546 | フォアアールベルク州 | Vorarlberg | Vorarlberg | Vorarlberg | Vorarlberg | Vorarlberg | 福拉尔贝格州 | 포어아를베르크 주 | Vorarlberg | Vorarlberg | Форарльберг | Vorarlberg | Vorarlberg | Vorarlberg | Vorarlberg | Vorarlberg |
 
-# Belgium
+## Belgium
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x43` | BE | ベルギー | Belgium | Belgique | Belgien | Belgio | Bélgica | 比利时 | 벨기에 | België | Bélgica | Бельгия | Belgium | Belgium | Belgium | Belgium | Belgium |
 
-## Belgium Regions
+### Belgium Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1219,13 +1219,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Flanders | `0x43030000` | 50.83923282, 4.367077305 | フランデレン地域圏 | Flanders | Région flamande | Flandern | Fiandre | Región de Flandes | 佛兰德大区 | 플랑드르 지역 | Vlaanderen | Flandres | Фламандский регион | Flanders | Flanders | Flanders | Flanders | Flanders |
 | Wallonia | `0x43040000` | 50.465697668, 4.861463415 | ワロン地域圏 | Wallonia | Région wallonne | Wallonien | Vallonia | Región de Valonia | 瓦隆大区 | 왈롱 지역 | Wallonië | Valónia | Валлонский регион | Wallonia | Wallonia | Wallonia | Wallonia | Wallonia |
 
-# Bosnia and Herzegovina
+## Bosnia and Herzegovina
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x44` | BA | ボスニア・ヘルツェゴビナ | Bosnia and Herzegovina | Bosnie-Herzégovine | Bosnien-Herzegowina | Bosnia-Erzegovina | Bosnia-Herzegovina | 波斯尼亚和黑塞哥维那 | 보스니아헤르체고비나 | Bosnië en Herzegovina | Bósnia-Herzegovina | Босния и Герцеговина | Bosnia and Herzegovina | Bosnia and Herzegovina | Bosnia and Herzegovina | Bosnia and Herzegovina | Bosnia and Herzegovina |
 
-## Bosnia and Herzegovina Regions
+### Bosnia and Herzegovina Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1234,26 +1234,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Republika Srpska | `0x44030000` | 44.7692866, 17.19365027 | セルビア人共和国 | Republika Srpska | République serbe de Bosnie | Serbische Republik | Repubblica Serba di Bosnia-Erzegovina | República Srpska | 塞族共和国 | 스릅스카 공화국 | Servische Republiek | República Sérvia | Республика Сербская | Republika Srpska | Republika Srpska | Republika Srpska | Republika Srpska | Republika Srpska |
 | Brčko District | `0x44040000` | 44.868163552, 18.803151717 | ブルチュコ | Brčko District | Brčko (district) | Brčko-Distrikt | Distretto di Brčko | Distrito de Brčko | 布尔奇科特区 | 브르치코 | Brčko | Distrito de Brčko | Округ Брчко | Brčko District | Brčko District | Brčko District | Brčko District | Brčko District |
 
-# Botswana
+## Botswana
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x45` | BW | ボツワナ | Botswana | Botswana | Botsuana | Botswana | Botsuana | 博茨瓦纳 | 보츠와나 | Botswana | Botsuana | Ботсвана | Botswana | Botswana | Botswana | Botswana | Botswana |
 
-## Botswana Regions
+### Botswana Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x45000000` | -24.647827891999995, 25.900338985 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Botswana | `0x45010000` | -24.647827891999995, 25.900338985 | ボツワナ | Botswana | Botswana | Botsuana | Botswana | Botsuana | 博茨瓦纳 | 보츠와나 | Botswana | Botsuana | Ботсвана | Botswana | Botswana | Botswana | Botswana | Botswana |
 
-# Bulgaria
+## Bulgaria
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x46` | BG | ブルガリア | Bulgaria | Bulgarie | Bulgarien | Bulgaria | Bulgaria | 保加利亚 | 불가리아 | Bulgarije | Bulgária | Болгария | Bulgaria | Bulgaria | Bulgaria | Bulgaria | Bulgaria |
 
-## Bulgaria Regions
+### Bulgaria Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1287,13 +1287,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Veliko Tarnovo | `0x461C0000` | 43.082885252, 25.631173214 | ベリコ・トゥルノボ州 | Veliko Tarnovo | Veliko Tarnovo | Weliko Tarnowo | Veliko Tarnovo | Veliko Tarnovo | 大特尔诺沃州 | 벨리코투르노보 주 | Veliko Tarnovo | Veliko Tarnovo | Велико-Тырново | Veliko Tarnovo | Veliko Tarnovo | Veliko Tarnovo | Veliko Tarnovo | Veliko Tarnovo |
 | Vratsa | `0x461D0000` | 43.20373486, 23.549258373 | ブラツァ州 | Vratsa | Vratsa | Wraza | Vratsa | Vratsa | 弗拉察州 | 브라차 주 | Vratsa | Vratsa | Враца | Vratsa | Vratsa | Vratsa | Vratsa | Vratsa |
 
-# Croatia
+## Croatia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x47` | HR | クロアチア | Croatia | Croatie | Kroatien | Croazia | Croacia | 克罗地亚 | 크로아티아 | Kroatië | Croácia | Хорватия | Croatia | Croatia | Croatia | Croatia | Croatia |
 
-## Croatia Regions
+### Croatia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1320,26 +1320,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Zadar County | `0x47190000` | 44.11010692, 15.227092188 | ザダル郡 | Zadar County | Zadar | Zadar | Regione Zaratina | Condado de Zadar | 扎达尔县 | 자다르 군 | Zadar | Zadar (condado) | Задарская жупания | Zadar County | Zadar County | Zadar County | Zadar County | Zadar County |
 | Zagreb County | `0x471A0000` | 45.81298776, 15.979657711 | ザグレブ郡 | Zagreb County | Zagreb (comitat) | Zagreb | Regione Zagabrese | Condado de Zagreb | 萨格勒布县 | 자그레브 군 | Zagreb (provincie) | Zagrebe (condado) | Загребская жупания | Zagreb County | Zagreb County | Zagreb County | Zagreb County | Zagreb County |
 
-# Cyprus
+## Cyprus
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x48` | CY | キプロス | Cyprus | Chypre | Zypern | Cipro | Chipre | 塞浦路斯 | 키프로스 | Cyprus | Chipre | Кипр | Cyprus | Cyprus | Cyprus | Cyprus | Cyprus |
 
-## Cyprus Regions
+### Cyprus Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x48000000` | 35.161742764, 33.371062425 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Cyprus | `0x48010000` | 35.161742764, 33.371062425 | キプロス | Cyprus | Chypre | Zypern | Cipro | Chipre | 塞浦路斯 | 키프로스 | Cyprus | Chipre | Кипр | Cyprus | Cyprus | Cyprus | Cyprus | Cyprus |
 
-# Czech Republic
+## Czech Republic
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x49` | CZ | チェコ | Czech Republic | République tchèque | Tschechische Republik | Repubblica Ceca | República Checa | 捷克共和国 | 체코 | Tsjechië | República Checa | Чешская Республика | Czech Republic | Czech Republic | Czech Republic | Czech Republic | Czech Republic |
 
-## Czech Republic Regions
+### Czech Republic Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1359,13 +1359,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Zlín Region | `0x490E0000` | 49.21874944, 17.649584127 | ズリン地方 | Zlín Region | Région de Zlín | Region Zlin | Regione di Zlín | Región de Zlín | 兹林州 | 즐린 지방 | Zlín | Zlín (região) | Злинский край | Zlín Region | Zlín Region | Zlín Region | Zlín Region | Zlín Region |
 | Vysočina Region | `0x490F0000` | 49.389037524, 15.584148823 | ヴィソチナ地方 | Vysočina Region | Vysočina | Region Vysočina | Regione di Vysočina | Región de Vysočina | 维索基纳州 | 비소치나 지방 | Vysočina | Vysočina (região) | Край Высочина | Vysočina Region | Vysočina Region | Vysočina Region | Vysočina Region | Vysočina Region |
 
-# Denmark (Kingdom of)
+## Denmark (Kingdom of)
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4A` | DK | デンマーク | Denmark (Kingdom of) | Danemark (Royaume) | Dänemark (Königreich) | Danimarca (Regno di) | Dinamarca (Reino) | 丹麦 | 덴마크 | Denemarken (koninkrijk) | Dinamarca (Reino) | Дания (Королевство) | Denmark (Kingdom of) | Denmark (Kingdom of) | Denmark (Kingdom of) | Denmark (Kingdom of) | Denmark (Kingdom of) |
 
-## Denmark (Kingdom of) Regions
+### Denmark (Kingdom of) Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1378,26 +1378,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Region of Southern Denmark | `0x4A170000` | 55.711669288, 9.530665565 | 南デンマーク地域 | Region of Southern Denmark | Danemark-du-Sud | Süddänemark | Syddanmark | Dinamarca Meridional | 南丹麦大区 | 남부 덴마크 지역 | Zuid-Denemarken | Dinamarca do Sul | Южная Дания | Region of Southern Denmark | Region of Southern Denmark | Region of Southern Denmark | Region of Southern Denmark | 씒⭤ꥠ軷on of Southern Denmark |
 | Faroe Islands | `0x4A180000` | 62.006835232, -6.761613877000002 | フェロー諸島 | Faroe Islands | Îles Féroé | Färöer | Isole Fær Øer | Islas Feroe | 法罗群岛 | 페로 제도 | Faeröer | Ilhas Faroé | Фарерские острова | Faroe Islands | Faroe Islands | Faroe Islands | Faroe Islands | Faroe Islands |
 
-# Estonia
+## Estonia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4B` | EE | エストニア | Estonia | Estonie | Estland | Estonia | Estonia | 爱沙尼亚 | 에스토니아 | Estland | Estónia | Эстония | Estonia | Estonia | Estonia | Estonia | Estonia |
 
-## Estonia Regions
+### Estonia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x4B000000` | 59.430541316, 24.730291858 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Estonia | `0x4B010000` | 59.430541316, 24.730291858 | エストニア | Estonia | Estonie | Estland | Estonia | Estonia | 爱沙尼亚 | 에스토니아 | Estland | Estónia | Эстония | Estonia | Estonia | Estonia | Estonia | Estonia |
 
-# Finland
+## Finland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4C` | FI | フィンランド | Finland | Finlande | Finnland | Finlandia | Finlandia | 芬兰 | 핀란드 | Finland | Finlândia | Финляндия | Finland | Finland | Finland | Finland | Finland |
 
-## Finland Regions
+### Finland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1422,13 +1422,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Kymenlaakso / Kymmenedalen | `0x4C1A0000` | 60.86425712, 26.702343119 | キュメンラークソ県 | Kymenlaakso / Kymmenedalen | Vallée de la Kymi | Kymenlaakso | Kymenlaakso | Kymenlaakso | 屈米区 | 퀴멘락소 주 | Kymenlaakso | Kymenlaakso | Кюменлааксо | Kymenlaakso / Kymmenedalen | Kymenlaakso / Kymmenedalen | Kymenlaakso / Kymmenedalen | Kymenlaakso / Kymmenedalen | Kymenlaakso / Kymmenedalen |
 | Ahvenanmaa / Åland | `0x4C1B0000` | 60.089720996, 19.934746591 | アハベナンマー州 | Ahvenanmaa / Åland | Åland | Åland | Isole Åland | Islas de Åland | 奥兰岛自治区 | 아베난마 주 | Åland | Ilhas de Åland | Аландские острова | Ahvenanmaa / Åland | Ahvenanmaa / Åland | Ahvenanmaa / Åland | Ahvenanmaa / Åland | Ahvenanmaa / Åland |
 
-# France
+## France
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4D` | FR | フランス | France | France | Frankreich | Francia | Francia | 法国 | 프랑스 | Frankrijk | França | Франция | France | France | France | France | France |
 
-## France Regions
+### France Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1461,13 +1461,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Réunion | `0x4D1B0000` | -20.874024223999996, 55.448148826 | レユニオン | Réunion | Réunion | Réunion | Riunione | Reunión | 留尼汪省 | 레위니옹 | Réunion | Reunião | Реюньон | Réunion | Réunion | Réunion | Réunion | Réunion |
 | Mayotte | `0x4D1C0000` | -12.777100488000002, 45.225342707 | マヨット島 | Mayotte | Mayotte | Mayotte | Mayotte | Mayotte | 马约特省 | 마요트 | Mayotte | Maiote | Майотта | Mayotte | Mayotte | Mayotte | Mayotte | Mayotte |
 
-# Germany
+## Germany
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4E` | DE | ドイツ | Germany | Allemagne | Deutschland | Germania | Alemania | 德国 | 독일 | Duitsland | Alemanha | Германия | Germany | Germany | Germany | Germany | Germany |
 
-## Germany Regions
+### Germany Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1489,13 +1489,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Schleswig-Holstein | `0x4E100000` | 54.316405632, 10.118435718 | シュレスビヒ・ホルシュタイン州 | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein | 石勒苏益格-荷尔斯泰因州 | 슐레스비히홀슈타인 주 | Sleeswijk-Holstein | Schleswig-Holstein | Шлезвиг-Гольштейн | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein | Schleswig-Holstein |
 | Thuringia | `0x4E110000` | 50.971068756, 11.019317074 | テューリンゲン州 | Thuringia | Thuringe | Thüringen | Turingia | Turingia | 图林根州 | 튀링겐 주 | Thüringen | Turíngia | Тюрингия | Thuringia | Thuringia | Thuringia | Thuringia | Thuringia |
 
-# Greece
+## Greece
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x4F` | GR | ギリシャ | Greece | Grèce | Griechenland | Grecia | Grecia | 希腊 | 그리스 | Griekenland | Grécia | Греция | Greece | Greece | Greece | Greece | Greece |
 
-## Greece Regions
+### Greece Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1514,13 +1514,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | West Greece | `0x4F0D0000` | 38.23242144, 21.736509303 | 西ギリシャ | West Greece | Grèce-Occidentale | Westgriechenland | Grecia Occidentale | Grecia Occidental | 西希腊大区 | 서부 그리스 | West-Griekenland | Grécia Ocidental | Западная Греция | West Greece | West Greece | West Greece | West Greece | West Greece |
 | West Macedonia | `0x4F0E0000` | 40.308837432, 21.796934272 | 西マケドニア | West Macedonia | Macédoine-Occidentale | Westmakedonien | Macedonia Occidentale | Macedonia Occidental | 西马其顿大区 | 서부 마케도니아 | West-Macedonië | Macedónia Ocidental | Западная Македония | West Macedonia | West Macedonia | West Macedonia | West Macedonia | West Macedonia |
 
-# Hungary
+## Hungary
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x50` | HU | ハンガリー | Hungary | Hongrie | Ungarn | Ungheria | Hungría | 匈牙利 | 헝가리 | Hongarije | Hungria | Венгрия | Hungary | Hungary | Hungary | Hungary | Hungary |
 
-## Hungary Regions
+### Hungary Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1546,26 +1546,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Veszprém County | `0x50140000` | 47.098388136, 17.913256719 | ベスプレーム州 | Veszprém County | Veszprém | Veszprém | Veszprém | Veszprém | 维斯普雷姆州 | 베스프렘 주 | Veszprém | Veszprém (condado) | Веспрем | Veszprém County | Veszprém County | Veszprém County | Veszprém County | Veszprém County |
 | Zala County | `0x50150000` | 46.840209428, 16.836593635 | ザラ州 | Zala County | Zala | Zala | Zala | Zala | 佐洛州 | 절러 주 | Zala | Zala (condado) | Зала | Zala County | Zala County | Zala County | Zala County | Zala County |
 
-# Iceland
+## Iceland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x51` | IS | アイスランド | Iceland | Islande | Island | Islanda | Islandia | 冰岛 | 아이슬란드 | IJsland | Islândia | Исландия | Iceland | Iceland | Iceland | Iceland | Iceland |
 
-## Iceland Regions
+### Iceland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x51000000` | 64.1326897, -21.889828843000004 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Iceland | `0x51010000` | 64.1326897, -21.889828843000004 | アイスランド | Iceland | Islande | Island | Islanda | Islandia | 冰岛 | 아이슬란드 | IJsland | Islândia | Исландия | Iceland | Iceland | Iceland | Iceland | Iceland |
 
-# Ireland
+## Ireland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x52` | IE | アイルランド | Ireland | Irlande | Irland | Irlanda | Irlanda | 爱尔兰 | 아일랜드 | Ierland | Irlanda | Ирландия | Ireland | Ireland | Ireland | Ireland | Ireland |
 
-## Ireland Regions
+### Ireland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1597,13 +1597,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | County Wexford | `0x52210000` | 52.333373428, -6.453995853000009 | ウェックスフォード州 | County Wexford | Wexford | Wexford | Wexford | Wexford | 韦克斯福德郡 | 웩스퍼드 주 | Wexford | Wexford (condado) | Уэксфорд | County Wexford | County Wexford | County Wexford | County Wexford | County Wexford |
 | County Wicklow | `0x52220000` | 52.976073616, -6.036514248999993 | ウィックロー州 | County Wicklow | Wicklow | Wicklow | Wicklow | Wicklow | 威克洛郡 | 위클로 주 | Wicklow | Wicklow (condado) | Уиклоу | County Wicklow | County Wicklow | County Wicklow | County Wicklow | County Wicklow |
 
-# Italy
+## Italy
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x53` | IT | イタリア | Italy | Italie | Italien | Italia | Italia | 意大利 | 이탈리아 | Italië | Itália | Италия | Italy | Italy | Italy | Italy | Italy |
 
-## Italy Regions
+### Italy Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1629,26 +1629,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Sicily | `0x53140000` | 38.117064996, 13.353918149 | シチリア州 | Sicily | Sicile | Sizilien | Sicilia | Sicilia | 西西里大区 | 시칠리아 주 | Sicilië | Sicília | Сицилия | Sicily | Sicily | Sicily | Sicily | Sicily |
 | Sardinia | `0x53150000` | 39.215697796, 9.102197603 | サルデーニャ州 | Sardinia | Sardaigne | Sardinien | Sardegna | Cerdeña | 撒丁大区 | 사르데냐 주 | Sardinië | Sardenha | Сардиния | Sardinia | Sardinia | Sardinia | Sardinia | Sardinia |
 
-# Latvia
+## Latvia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x54` | LV | ラトビア | Latvia | Lettonie | Lettland | Lettonia | Letonia | 拉脱维亚 | 라트비아 | Letland | Letónia | Латвия | Latvia | Latvia | Latvia | Latvia | Latvia |
 
-## Latvia Regions
+### Latvia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x54000000` | 56.947631188, 24.082096736 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Latvia | `0x54010000` | 56.947631188, 24.082096736 | ラトビア | Latvia | Lettonie | Lettland | Lettonia | Letonia | 拉脱维亚 | 라트비아 | Letland | Letónia | Латвия | Latvia | Latvia | Latvia | Latvia | Latvia |
 
-# Lesotho
+## Lesotho
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x55` | LS | レソト | Lesotho | Lesotho | Lesotho | Lesotho | Lesoto | 莱索托 | 레소토 | Lesotho | Lesoto | Лесото | Lesotho | Lesotho | Lesotho | Lesotho | Lesotho |
 
-## Lesotho Regions
+### Lesotho Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1664,26 +1664,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Quthing | `0x550A0000` | -30.404663764, 27.707594875999998 | クティング県 | Quthing | Quthing | Quthing | Quthing | Quthing | 古廷区 | 쿠팅 주 | Quthing | Quthing | Цгутинг | Quthing | Quthing | Quthing | Quthing | Quthing |
 | Thaba-Tseka | `0x550B0000` | -29.514771195999998, 28.602983053 | ターバ・ツェーカ県 | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka | 塔巴采卡区 | 타바체카 주 | Thaba-Tseka | Thaba-Tseka | Таба-Цека | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka | Thaba-Tseka |
 
-# Liechtenstein
+## Liechtenstein
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x56` | LI | リヒテンシュタイン | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | 列支敦士登 | 리히텐슈타인 | Liechtenstein | Liechtenstein | Лихтенштейн | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein |
 
-## Liechtenstein Regions
+### Liechtenstein Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x56000000` | 47.136840284, 9.519679207 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Liechtenstein | `0x56010000` | 47.136840284, 9.519679207 | リヒテンシュタイン | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | 列支敦士登 | 리히텐슈타인 | Liechtenstein | Liechtenstein | Лихтенштейн | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein | Liechtenstein |
 
-# Lithuania
+## Lithuania
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x57` | LT | リトアニア | Lithuania | Lituanie | Litauen | Lituania | Lituania | 立陶宛 | 리투아니아 | Litouwen | Lituânia | Литва | Lithuania | Lithuania | Lithuania | Lithuania | Lithuania |
 
-## Lithuania Regions
+### Lithuania Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1699,91 +1699,91 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Telšiai | `0x570A0000` | 55.980834324, 22.24737495 | テルシェイ州 | Telšiai | Telšiai | Telšiai | Telšiai | Condado de Telšiai | 特尔希艾县 | 텔샤이 주 | Telšiai | Telšiai | Тельшяй | Telšiai | Telšiai | Telšiai | Telšiai | Telšiai |
 | Utena | `0x570B0000` | 55.491942728, 25.603707318999998 | ウテナ州 | Utena | Utena | Utena | Utena | Condado de Utena | 乌田纳县 | 우테나 주 | Utena | Utena | Утена | Utena | Utena | Utena | Utena | Utena |
 
-# Luxembourg
+## Luxembourg
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x58` | LU | ルクセンブルク | Luxembourg | Luxembourg | Luxemburg | Lussemburgo | Luxemburgo | 卢森堡 | 룩셈부르크 | Luxemburg | Luxemburgo | Люксембург | Luxembourg | Luxembourg | Luxembourg | Luxembourg | Luxembourg |
 
-## Luxembourg Regions
+### Luxembourg Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x58000000` | 49.608764084, 6.124894585 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Luxembourg | `0x58010000` | 49.608764084, 6.124894585 | ルクセンブルク | Luxembourg | Luxembourg | Luxemburg | Lussemburgo | Luxemburgo | 卢森堡 | 룩셈부르크 | Luxemburg | Luxemburgo | Люксембург | Luxembourg | Luxembourg | Luxembourg | Luxembourg | Luxembourg |
 
-# Macedonia (Republic of)
+## Macedonia (Republic of)
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x59` | MK | マケドニア | Macedonia (Republic of) | Macédoine (République) | Mazedonien (Republik) | Macedonia (Repubblica di) | Macedonia (República) | 马其顿 | 마케도니아 공화국 | Macedonië | Macedónia (República) | Македония (Республика) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) |
 
-## Macedonia (Republic of) Regions
+### Macedonia (Republic of) Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x59000000` | 41.99523878, 21.428891279 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Macedonia (Republic of) | `0x59010000` | 41.99523878, 21.428891279 | マケドニア | Macedonia (Republic of) | Macédoine (République) | Mazedonien (Republik) | Macedonia (Repubblica di) | Macedonia (República) | 马其顿 | 마케도니아 공화국 | Macedonië | Macedónia (República) | Македония (Республика) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) | Macedonia (Republic of) |
 
-# Malta
+## Malta
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5A` | MT | マルタ | Malta | Malte | Malta | Malta | Malta | 马耳他 | 몰타 | Malta | Malta | Мальта | Malta | Malta | Malta | Malta | Malta |
 
-## Malta Regions
+### Malta Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x5A000000` | 35.89782674, 14.512978918 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Malta | `0x5A010000` | 35.89782674, 14.512978918 | マルタ | Malta | Malte | Malta | Malta | Malta | 马耳他 | 몰타 | Malta | Malta | Мальта | Malta | Malta | Malta | Malta | Malta |
 
-# Montenegro
+## Montenegro
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5B` | ME | モンテネグロ | Montenegro | Monténégro | Montenegro | Montenegro | Montenegro | 黑山 | 몬테네그로 | Montenegro | Montenegro | Черногория | Montenegro | Montenegro | Montenegro | Montenegro | Montenegro |
 
-## Montenegro Regions
+### Montenegro Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x5B000000` | 42.4346919, 19.264578753 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Montenegro | `0x5B010000` | 42.4346919, 19.264578753 | モンテネグロ | Montenegro | Monténégro | Montenegro | Montenegro | Montenegro | 黑山 | 몬테네그로 | Montenegro | Montenegro | Черногория | Montenegro | Montenegro | Montenegro | Montenegro | Montenegro |
 
-# Mozambique
+## Mozambique
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5C` | MZ | モザンビーク | Mozambique | Mozambique | Mosambik | Mozambico | Mozambique | 莫桑比克 | 모잠비크 | Mozambique | Moçambique | Мозамбик | Mozambique | Mozambique | Mozambique | Mozambique | Mozambique |
 
-## Mozambique Regions
+### Mozambique Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x5C000000` | -25.966187251999997, 32.563565112 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Mozambique | `0x5C010000` | -25.966187251999997, 32.563565112 | モザンビーク | Mozambique | Mozambique | Mosambik | Mozambico | Mozambique | 莫桑比克 | 모잠비크 | Mozambique | Moçambique | Мозамбик | Mozambique | Mozambique | Mozambique | Mozambique | Mozambique |
 
-# Namibia
+## Namibia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5D` | NA | ナミビア | Namibia | Namibie | Namibia | Namibia | Namibia | 纳米比亚 | 나미비아 | Namibië | Namíbia | Намибия | Namibia | Namibia | Namibia | Namibia | Namibia |
 
-## Namibia Regions
+### Namibia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x5D000000` | -22.549439244, 17.078293511 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Namibia | `0x5D010000` | -22.549439244, 17.078293511 | ナミビア | Namibia | Namibie | Namibia | Namibia | Namibia | 纳米比亚 | 나미비아 | Namibië | Namíbia | Намибия | Namibia | Namibia | Namibia | Namibia | Namibia |
 
-# Netherlands
+## Netherlands
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5E` | NL | オランダ | Netherlands | Pays-Bas | Niederlande | Paesi Bassi | Países Bajos | 荷兰 | 네덜란드 | Nederland | Países Baixos | Нидерланды | Netherlands | Netherlands | Netherlands | Netherlands | Netherlands |
 
-## Netherlands Regions
+### Netherlands Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1801,13 +1801,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Utrecht | `0x5E0C0000` | 52.086181048, 5.10865647 | ユトレヒト州 | Utrecht | Utrecht | Utrecht | Utrecht | Utrecht | 乌得勒支省 | 위트레흐트 주 | Utrecht | Utrecht | Утрехт | Utrecht | Utrecht | Utrecht | Utrecht | Utrecht |
 | Zeeland | `0x5E0D0000` | 51.4984125, 3.609018603 | ゼーラント州 | Zeeland | Zélande | Zeeland | Zelanda | Zelanda | 泽兰省 | 제일란트 주 | Zeeland | Zelândia | Зеландия | Zeeland | Zeeland | Zeeland | Zeeland | Zeeland |
 
-# New Zealand
+## New Zealand
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x5F` | NZ | ニュージーランド | New Zealand | Nouvelle-Zélande | Neuseeland | Nuova Zelanda | Nueva Zelanda | 新西兰 | 뉴질랜드 | Nieuw-Zeeland | Nova Zelândia | Новая Зеландия | New Zealand | New Zealand | New Zealand | New Zealand | New Zealand |
 
-## New Zealand Regions
+### New Zealand Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1829,13 +1829,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Marlborough | `0x5F110000` | -41.511841372, 173.957992572 | マールボロ | Marlborough | Marlborough | Marlborough | Marlborough | Marlborough | 马尔伯勒大区 | 말버러 | Marlborough | Marlborough | Мальборо | Marlborough | Marlborough | Marlborough | Marlborough | Marlborough |
 | Tasman | `0x5F120000` | -41.341553288, 173.183454333 | タスマン | Tasman | Tasman | Tasman | Tasman | Tasman | 塔斯曼大区 | 태즈먼 | Tasman | Tasman | Тасман | Tasman | Tasman | Tasman | Tasman | Tasman |
 
-# Norway
+## Norway
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x60` | NO | ノルウェー | Norway | Norvège | Norwegen | Norvegia | Noruega | 挪威 | 노르웨이 | Noorwegen | Noruega | Норвегия | Norway | Norway | Norway | Norway | Norway |
 
-## Norway Regions
+### Norway Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1861,13 +1861,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Østfold | `0x60190000` | 59.287719052, 11.101714759 | エストフォル県 | Østfold | Østfold | Østfold | Østfold | Østfold | 东福尔郡 | 외스트폴 주 | Østfold | Østfold | Эстфолл | Østfold | Østfold | Østfold | Østfold | Østfold |
 | Svalbard | `0x601A0000` | 78.211669032, 15.54569657 | スヴァールバル諸島 | Svalbard | Svalbard | Svalbard | Isole Svalbard | Svalbard | 斯瓦尔巴群岛 | 스발바르 제도 | Spitsbergen | Svalbard | Шпицберген | Svalbard | Svalbard | Svalbard | Svalbard | Svalbard |
 
-# Poland
+## Poland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x61` | PL | ポーランド | Poland | Pologne | Polen | Polonia | Polonia | 波兰 | 폴란드 | Polen | Polónia | Польша | Poland | Poland | Poland | Poland | Poland |
 
-## Poland Regions
+### Poland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1889,13 +1889,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Greater Poland | `0x61100000` | 52.388305068, 16.880539067 | ヴィェルコポルスカ | Greater Poland | Grande-Pologne | Großpolen | Grande Polonia | Gran Polonia | 大波兰省 | 대폴란드 | Groot-Polen | Grande Polónia | Великопольское воеводство | Greater Poland | Greater Poland | Greater Poland | Greater Poland | Greater Poland |
 | Western Pomerania | `0x61110000` | 53.426513064, 14.551431170999999 | 西ポモージェ | Western Pomerania | Poméranie occidentale | Westpommern | Pomerania Occidentale | Pomerania Occidental | 西滨海省 | 서포메라니아 | West-Pommeren | Pomerânia Ocidental | Западно-Поморское воеводство | Western Pomerania | Western Pomerania | Western Pomerania | Western Pomerania | Western Pomerania |
 
-# Portugal
+## Portugal
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x62` | PT | ポルトガル | Portugal | Portugal | Portugal | Portogallo | Portugal | 葡萄牙 | 포르투갈 | Portugal | Portugal | Португалия | Portugal | Portugal | Portugal | Portugal | Portugal |
 
-## Portugal Regions
+### Portugal Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1921,13 +1921,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Vila Real | `0x62180000` | 41.292113788, -7.744892918000005 | ヴィラ・レアル県 | Vila Real | Vila Real | Vila Real | Vila Real | Distrito de Vila Real | 雷阿尔城区 | 빌라헤알 주 | Vila Real | Vila Real | Вила-Реал | Vila Real | Vila Real | Vila Real | Vila Real | Vila Real |
 | Viseu | `0x62190000` | 40.654906764, -7.909688288000012 | ヴィゼウ県 | Viseu | Viseu | Viseu | Viseu | Distrito de Viseu | 维塞乌区 | 비제우 주 | Viseu | Viseu | Визеу | Viseu | Viseu | Viseu | Viseu | Viseu |
 
-# Romania
+## Romania
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x63` | RO | ルーマニア | Romania | Roumanie | Rumänien | Romania | Rumanía | 罗马尼亚 | 루마니아 | Roemenië | Roménia | Румыния | Romania | Romania | Romania | Romania | Romania |
 
-## Romania Regions
+### Romania Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -1975,13 +1975,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Vaslui | `0x632A0000` | 46.63696236, 27.718581234 | ヴァスルイ州 | Vaslui | Vaslui | Vaslui | Vaslui | Vaslui | 瓦斯卢伊县 | 바슬루이 주 | Vaslui | Vaslui | Васлуй | Vaslui | Vaslui | Vaslui | Vaslui | Vaslui |
 | Vrancea | `0x632B0000` | 45.697631316, 27.180249692 | フランチェア州 | Vrancea | Vrancea | Vrancea | Vrancea | Vrancea | 弗朗恰县 | 브란체아 주 | Vrancea | Vrancea | Вранча | Vrancea | Vrancea | Vrancea | Vrancea | Vrancea |
 
-# Russia
+## Russia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x64` | RU | ロシア | Russia | Russie | Russland | Russia | Rusia | 俄罗斯 | 러시아 | Rusland | Rússia | Россия | Russia | Russia | Russia | Russia | Russia |
 
-## Russia Regions
+### Russia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2070,26 +2070,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Yevrey | `0x645A0000` | 48.77929632, 132.929438621 | ユダヤ自治州 | Yevrey | Oblast autonome juif | Jüdisches Autonomes Gebiet | Regione Autonoma Ebraica | Región Autónoma Hebrea | 犹太自治州 | 유태인 자치주 | Joodse Autonome Oblast | Região Autónoma Judaica | Еврейская автономная область | Yevrey | Yevrey | Yevrey | Yevrey | Yevrey |
 | Zabaykal'ye | `0x645B0000` | 52.0477289, 113.500064498 | ザバイカリエ地方 | Zabaykal'ye | Transbaïkalie | Region Transbaikalien | Territorio della Transbajkalia | Territorio de Zabaikalie | 外贝加尔边疆区 | 자바이칼 지방 | Transbaikal | Transbaikalia (território) | Забайкальский край | Zabaykal'ye | Zabaykal'ye | Zabaykal'ye | Zabaykal'ye | Zabaykal'ye |
 
-# Serbia and Kosovo
+## Serbia and Kosovo
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x65` | RS | セルビア・コソヴォ | Serbia and Kosovo | Serbie et Kosovo | Serbien und Kosovo | Serbia e Kosovo | Serbia y Kosovo | 塞尔维亚及科索沃 | 세르비아 코소보 | Servië en Kosovo | Sérvia e Kosovo | Сербия и Косово | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo |
 
-## Serbia and Kosovo Regions
+### Serbia and Kosovo Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x65000000` | 44.829711404, 20.484064490999998 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Serbia and Kosovo | `0x65010000` | 44.829711404, 20.484064490999998 | セルビア・コソヴォ | Serbia and Kosovo | Serbie et Kosovo | Serbien und Kosovo | Serbia e Kosovo | Serbia y Kosovo | 塞尔维亚及科索沃 | 세르비아 코소보 | Servië en Kosovo | Sérvia e Kosovo | Сербия и Косово | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo | Serbia and Kosovo |
 
-# Slovakia
+## Slovakia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x66` | SK | スロバキア | Slovakia | Slovaquie | Slowakei | Slovacchia | Eslovaquia | 斯洛伐克 | 슬로바키아 | Slowakije | Eslováquia | Словакия | Slovakia | Slovakia | Slovakia | Slovakia | Slovakia |
 
-## Slovakia Regions
+### Slovakia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2103,26 +2103,26 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Trnava | `0x66080000` | 48.372802184, 17.572679621 | トルナバ | Trnava | Trnava | Trnava | Trnava | Trnava | 特尔纳瓦州 | 트르나바 | Trnava | Trnava | Трнавский край | Trnava | Trnava | Trnava | Trnava | Trnava |
 | Žilina | `0x66090000` | 49.21874944, 18.726247211 | ジリナ | Žilina | Žilina | Žilina | Žilina | Žilina | 日利纳州 | 질리나 | Žilina | Zilina | Жилинский край | Žilina | Žilina | Žilina | Žilina | Žilina |
 
-# Slovenia
+## Slovenia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x67` | SI | スロベニア | Slovenia | Slovénie | Slowenien | Slovenia | Eslovenia | 斯洛文尼亚 | 슬로베니아 | Slovenië | Eslovénia | Словения | Slovenia | Slovenia | Slovenia | Slovenia | Slovenia |
 
-## Slovenia Regions
+### Slovenia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x67000000` | 46.049193812, 14.50199256 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Slovenia | `0x67010000` | 46.049193812, 14.50199256 | スロベニア | Slovenia | Slovénie | Slowenien | Slovenia | Eslovenia | 斯洛文尼亚 | 슬로베니아 | Slovenië | Eslovénia | Словения | Slovenia | Slovenia | Slovenia | Slovenia | Slovenia |
 
-# South Africa
+## South Africa
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x68` | ZA | 南アフリカ | South Africa | Afrique du Sud | Südafrika | Sudafrica | Sudáfrica | 南非 | 남아프리카 공화국 | Zuid-Afrika | África do Sul | ЮАР | South Africa | South Africa | South Africa | South Africa | South Africa |
 
-## South Africa Regions
+### South Africa Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2137,13 +2137,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Mpumalanga | `0x68090000` | -25.460816163999993, 30.98152956 | ムプマランガ州 | Mpumalanga | Mpumalanga | Mpumalanga | Mpumalanga | Mpumalanga | 普马兰加省 | 음푸말랑가 주 | Mpumalanga | Mpumalanga | Мпумаланга | Mpumalanga | Mpumalanga | Mpumalanga | Mpumalanga | Mpumalanga |
 | Limpopo | `0x680A0000` | -23.889771260000003, 29.437946261 | リンポポ州 | Limpopo | Limpopo | Limpopo | Limpopo | Limpopo | 林波波省 | 림포푸 주 | Limpopo | Limpopo | Лимпопо | Limpopo | Limpopo | Limpopo | Limpopo | Limpopo |
 
-# Spain
+## Spain
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x69` | ES | スペイン | Spain | Espagne | Spanien | Spagna | España | 西班牙 | 스페인 | Spanje | Espanha | Испания | Spain | Spain | Spain | Spain | Spain |
 
-## Spain Regions
+### Spain Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2168,13 +2168,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Ceuta | `0x69130000` | 35.881347248, -5.3114146210000115 | セウタ | Ceuta | Ceuta | Ceuta | Ceuta | Ceuta | 休达 | 세우타 | Ceuta | Ceuta | Сеута | Ceuta | Ceuta | Ceuta | Ceuta | Ceuta |
 | Melilla | `0x69140000` | 35.299071864, -2.9493476510000107 | メリラ | Melilla | Melilla | Melilla | Melilla | Melilla | 梅利利亚 | 멜리야 | Melilla | Melilla | Мелилья | Melilla | Melilla | Melilla | Melilla | Melilla |
 
-# Swaziland
+## Swaziland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6A` | SZ | スワジランド | Swaziland | Swaziland | Swasiland | Swaziland | Suazilandia | 斯威士兰 | 스와질란드 | Swaziland | Suazilândia | Свазиленд | Swaziland | Swaziland | Swaziland | Swaziland | Swaziland |
 
-## Swaziland Regions
+### Swaziland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2184,13 +2184,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Manzini | `0x6A040000` | -26.488037831999996, 31.382531627 | マンジニ | Manzini | Manzini | Manzini | Manzini | Manzini | 曼齐尼区 | 만지니 | Manzini | Manzini | Манзини | Manzini | Manzini | Manzini | Manzini | Manzini |
 | Shiselweni | `0x6A050000` | -27.1032722, 31.20125672 | シセルウェニ | Shiselweni | Shiselweni | Shiselweni | Shiselweni | Shiselweni | 希塞卢韦尼区 | 시셀웨니 | Shiselweni | Shiselweni | Шиселвени | Shiselweni | Shiselweni | Shiselweni | Shiselweni | Shiselweni |
 
-# Sweden
+## Sweden
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6B` | SE | スウェーデン | Sweden | Suède | Schweden | Svezia | Suecia | 瑞典 | 스웨덴 | Zweden | Suécia | Швеция | Sweden | Sweden | Sweden | Sweden | Sweden |
 
-## Sweden Regions
+### Sweden Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2217,13 +2217,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Västmanland County | `0x6B150000` | 59.611815728, 16.550948327 | ベストマンランド州 | Västmanland County | Västmanland | Västmanlands län | Västmanland | Västmanland | 西曼兰省 | 베스트만란드 주 | Västmanlands län | Västmanland | Лен Вестманланд | Västmanland County | Västmanland County | Västmanland County | Västmanland County | Västmanland County |
 | Halland County | `0x6B160000` | 56.656493496, 12.859532039 | ハランド州 | Halland County | Halland | Hallands län | Halland | Halland | 哈兰省 | 할란드 주 | Hallands län | Halland | Лен Халланд | Halland County | Halland County | Halland County | Halland County | Halland County |
 
-# Switzerland
+## Switzerland
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6C` | CH | スイス | Switzerland | Suisse | Schweiz | Svizzera | Suiza | 瑞士 | 스위스 | Zwitserland | Suíça | Швейцария | Switzerland | Switzerland | Switzerland | Switzerland | Switzerland |
 
-## Switzerland Regions
+### Switzerland Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2255,13 +2255,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Basel-Landschaft | `0x6C1B0000` | 47.466430124, 7.728902853 | バーゼル＝ラント準州 | Basel-Landschaft | Bâle-Campagne | Basel-Landschaft | Basilea Campagna | Basilea-Campiña | 巴塞尔乡村半州 | 바젤란트 주 | Basel-Landschaft | Basileia (cidade) | Базель-Ланд | Basel-Landschaft | Basel-Landschaft | Basel-Landschaft | Basel-Landschaft | Basel-Landschaft |
 | Nidwalden | `0x6C1C0000` | 46.944579544, 8.34963208 | ニトバルデン準州 | Nidwalden | Nidwald | Nidwalden | Nidvaldo | Nidwalden | 下瓦尔登半州 | 니트발덴 주 | Nidwalden | Nidwald | Нидвальден | Nidwalden | Nidwalden | Nidwalden | Nidwalden | Nidwalden |
 
-# Turkey
+## Turkey
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6D` | TR | トルコ | Turkey | Turquie | Türkei | Turchia | Turquía | 土耳其 | 터키 | Turkije | Turquia | Турция | Turkey | Turkey | Turkey | Turkey | Turkey |
 
-## Turkey Regions
+### Turkey Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2348,13 +2348,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tunceli | `0x6D520000` | 39.11132768, 39.545395621 | トゥンジェリ県 | Tunceli | Tunceli | Tunceli | Tunceli | Tunceli | 通杰利省 | 툰젤리 주 | Tunceli | Tunceli | Тунджели | Tunceli | Tunceli | Tunceli | Tunceli | Tunceli |
 | Yalova | `0x6D530000` | 40.6494136, 29.262164533 | ヤロワ県 | Yalova | Yalova | Yalova | Yalova | Yalova | 亚罗法省 | 얄로바 주 | Yalova | Yalova | Ялова | Yalova | Yalova | Yalova | Yalova | Yalova |
 
-# United Kingdom
+## United Kingdom
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6E` | GB | イギリス | United Kingdom | Royaume-Uni | Vereinigtes Königreich | Regno Unito | Reino Unido | 英国 | 영국 | Verenigd Koninkrijk | Reino Unido | Великобритания | United Kingdom | United Kingdom | United Kingdom | United Kingdom | United Kingdom |
 
-## United Kingdom Regions
+### United Kingdom Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2372,234 +2372,234 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | East of England | `0x6E0E0000` | 52.62451112, 1.296390244 | イングランド東部地方 | East of England | Est | East of England | Est dell'Inghilterra | Este de Inglaterra | 东英格兰 | 이스트오브잉글랜드 | East of England | Este de Inglaterra | Восточный регион | East of England | East of England | East of England | East of England | East of England |
 | South East | `0x6E0F0000` | 50.83923282, -0.1258536450000065 | 南東部地方 | South East | Sud-Est | South East | Sud Est | 씒⭤ꥠ軷됎矙ᑻ۱埣ἴឦ | 东南英格兰 | 사우스이스트 | South East | Sudeste | Юго-Восточный регион | South East | South East | South East | South East | South East |
 
-# Zambia
+## Zambia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x6F` | ZM | ザンビア | Zambia | Zambie | Sambia | Zambia | Zambia | 赞比亚 | 잠비아 | Zambia | Zâmbia | Замбия | Zambia | Zambia | Zambia | Zambia | Zambia |
 
-## Zambia Regions
+### Zambia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x6F000000` | -15.413819207999992, 28.278885492 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Zambia | `0x6F010000` | -15.413819207999992, 28.278885492 | ザンビア | Zambia | Zambie | Sambia | Zambia | Zambia | 赞比亚 | 잠비아 | Zambia | Zâmbia | Замбия | Zambia | Zambia | Zambia | Zambia | Zambia |
 
-# Zimbabwe
+## Zimbabwe
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x70` | ZW | ジンバブエ | Zimbabwe | Zimbabwe | Simbabwe | Zimbabwe | Zimbabue | 津巴布韦 | 짐바브웨 | Zimbabwe | Zimbabué | Зимбабве | Zimbabwe | Zimbabwe | Zimbabwe | Zimbabwe | Zimbabwe |
 
-## Zimbabwe Regions
+### Zimbabwe Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x70000000` | -17.819825039999998, 31.047447708 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Zimbabwe | `0x70010000` | -17.819825039999998, 31.047447708 | ジンバブエ | Zimbabwe | Zimbabwe | Simbabwe | Zimbabwe | Zimbabue | 津巴布韦 | 짐바브웨 | Zimbabwe | Zimbabué | Зимбабве | Zimbabwe | Zimbabwe | Zimbabwe | Zimbabwe | Zimbabwe |
 
-# Azerbaijan
+## Azerbaijan
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x71` | AZ | アゼルバイジャン | Azerbaijan | Azerbaïdjan | Aserbaidschan | Azerbaigian | Azerbaiyán | 阿塞拜疆 | 아제르바이잔 | Azerbeidzjan | Azerbaijão | Азербайджан | Azerbaijan | Azerbaijan | Azerbaijan | Azerbaijan | Azerbaijan |
 
-## Azerbaijan Regions
+### Azerbaijan Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x71000000` | 40.3747554, 49.889051678 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Azerbaijan | `0x71010000` | 40.3747554, 49.889051678 | アゼルバイジャン | Azerbaijan | Azerbaïdjan | Aserbaidschan | Azerbaigian | Azerbaiyán | 阿塞拜疆 | 아제르바이잔 | Azerbeidzjan | Azerbaijão | Азербайджан | Azerbaijan | Azerbaijan | Azerbaijan | Azerbaijan | Azerbaijan |
 
-# Mauritania
+## Mauritania
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x72` | MR | モーリタニア | Mauritania | Mauritanie | Mauretanien | Mauritania | Mauritania | 毛里塔尼亚 | 모리타니 | Mauritanië | Mauritânia | Мавритания | Mauritania | Mauritania | Mauritania | Mauritania | Mauritania |
 
-## Mauritania Regions
+### Mauritania Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x72000000` | 18.09997538, -15.946209164999999 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Mauritania | `0x72010000` | 18.09997538, -15.946209164999999 | モーリタニア | Mauritania | Mauritanie | Mauretanien | Mauritania | Mauritania | 毛里塔尼亚 | 모리타니 | Mauritanië | Mauritânia | Мавритания | Mauritania | Mauritania | Mauritania | Mauritania | Mauritania |
 
-# Mali
+## Mali
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x73` | ML | マリ | Mali | Mali | Mali | Mali | Malí | 马里 | 말리 | Mali | Mali | Мали | Mali | Mali | Mali | Mali | Mali |
 
-## Mali Regions
+### Mali Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x73000000` | 12.645263528, -7.997579152000014 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Mali | `0x73010000` | 12.645263528, -7.997579152000014 | マリ | Mali | Mali | Mali | Mali | Malí | 马里 | 말리 | Mali | Mali | Мали | Mali | Mali | Mali | Mali | Mali |
 
-# Niger
+## Niger
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x74` | NE | ニジェール | Niger | Niger | Niger | Niger | Níger | 尼日尔 | 니제르 | Niger | Níger | Нигер | Niger | Niger | Niger | Niger | Niger |
 
-## Niger Regions
+### Niger Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x74000000` | 13.518676604, 2.103887557 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Niger | `0x74010000` | 13.518676604, 2.103887557 | ニジェール | Niger | Niger | Niger | Niger | Níger | 尼日尔 | 니제르 | Niger | Níger | Нигер | Niger | Niger | Niger | Niger | Niger |
 
-# Chad
+## Chad
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x75` | TD | チャド | Chad | Tchad | Tschad | Ciad | Chad | 乍得 | 차드 | Tsjaad | Chade | Чад | Chad | Chad | Chad | Chad | Chad |
 
-## Chad Regions
+### Chad Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x75000000` | 12.106933456, 15.034830923 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Chad | `0x75010000` | 12.106933456, 15.034830923 | チャド | Chad | Tchad | Tschad | Ciad | Chad | 乍得 | 차드 | Tsjaad | Chade | Чад | Chad | Chad | Chad | Chad | Chad |
 
-# Sudan
+## Sudan
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x76` | SD | スーダン | Sudan | Soudan | Sudan | Sudan | Sudán | 苏丹 | 수단 | Soedan | Sudão | Судан | Sudan | Sudan | Sudan | Sudan | Sudan |
 
-## Sudan Regions
+### Sudan Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x76000000` | 15.62805158, 32.530606038 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Sudan | `0x76010000` | 15.62805158, 32.530606038 | スーダン | Sudan | Soudan | Sudan | Sudan | Sudán | 苏丹 | 수단 | Soedan | Sudão | Судан | Sudan | Sudan | Sudan | Sudan | Sudan |
 
-# Eritrea
+## Eritrea
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x77` | ER | エリトリア | Eritrea | Érythrée | Eritrea | Eritrea | Eritrea | 厄立特里亚 | 에리트레아 | Eritrea | Eritreia | Эритрея | Eritrea | Eritrea | Eritrea | Eritrea | Eritrea |
 
-## Eritrea Regions
+### Eritrea Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x77000000` | 15.331420724, 38.930159573 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Eritrea | `0x77010000` | 15.331420724, 38.930159573 | エリトリア | Eritrea | Érythrée | Eritrea | Eritrea | Eritrea | 厄立特里亚 | 에리트레아 | Eritrea | Eritreia | Эритрея | Eritrea | Eritrea | Eritrea | Eritrea | Eritrea |
 
-# Djibouti
+## Djibouti
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x78` | DJ | ジブチ | Djibouti | Djibouti | Dschibuti | Gibuti | Yibuti | 吉布提 | 지부티 | Djibouti | Djibouti | Джибути | Djibouti | Djibouti | Djibouti | Djibouti | Djibouti |
 
-## Djibouti Regions
+### Djibouti Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x78000000` | 11.585082876, 43.143427865999996 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Djibouti | `0x78010000` | 11.585082876, 43.143427865999996 | ジブチ | Djibouti | Djibouti | Dschibuti | Gibuti | Yibuti | 吉布提 | 지부티 | Djibouti | Djibouti | Джибути | Djibouti | Djibouti | Djibouti | Djibouti | Djibouti |
 
-# Somalia
+## Somalia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x79` | SO | ソマリア | Somalia | Somalie | Somalia | Somalia | Somalia | 索马里 | 소말리아 | Somalië | Somália | Сомали | Somalia | Somalia | Somalia | Somalia | Somalia |
 
-## Somalia Regions
+### Somalia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x79000000` | 2.03247068, 45.346192645 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Somalia | `0x79010000` | 2.03247068, 45.346192645 | ソマリア | Somalia | Somalie | Somalia | Somalia | Somalia | 索马里 | 소말리아 | Somalië | Somália | Сомали | Somalia | Somalia | Somalia | Somalia | Somalia |
 
-# Andorra
+## Andorra
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7A` | AD | アンドラ | Andorra | Andorre | Andorra | Andorra | Andorra | 安道尔 | 안도라 | Andorra | Andorra | Андорра | Andorra | Andorra | Andorra | Andorra | Andorra |
 
-## Andorra Regions
+### Andorra Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7A000000` | 42.495116704, 1.499637867 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Andorra | `0x7A010000` | 42.495116704, 1.499637867 | アンドラ | Andorra | Andorre | Andorra | Andorra | Andorra | 安道尔 | 안도라 | Andorra | Andorra | Андорра | Andorra | Andorra | Andorra | Andorra | Andorra |
 
-# Gibraltar
+## Gibraltar
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7B` | GI | ジブラルタル | Gibraltar | Gibraltar | Gibraltar | Gibilterra | Gibraltar | 直布罗陀 | 지브롤터 | Gibraltar | Gibraltar | Гибралтар | Gibraltar | Gibraltar | Gibraltar | Gibraltar | Gibraltar |
 
-## Gibraltar Regions
+### Gibraltar Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7B000000` | 36.128539628, -5.344373695000002 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Gibraltar | `0x7B010000` | 36.128539628, -5.344373695000002 | ジブラルタル | Gibraltar | Gibraltar | Gibraltar | Gibilterra | Gibraltar | 直布罗陀 | 지브롤터 | Gibraltar | Gibraltar | Гибралтар | Gibraltar | Gibraltar | Gibraltar | Gibraltar | Gibraltar |
 
-# Guernsey
+## Guernsey
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7C` | GG | ガーンジー島 | Guernsey | Guernesey | Guernsey | Guernsey | Guernsey | 根西 | 건지 섬 | Guernsey | Guernsey | Гернси | Guernsey | Guernsey | Guernsey | Guernsey | Guernsey |
 
-## Guernsey Regions
+### Guernsey Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7C000000` | 49.449462328, -2.5483455840000033 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Guernsey | `0x7C010000` | 49.449462328, -2.5483455840000033 | ガーンジー島 | Guernsey | Guernesey | Guernsey | Guernsey | Guernsey | 根西 | 건지 섬 | Guernsey | Guernsey | Гернси | Guernsey | Guernsey | Guernsey | Guernsey | Guernsey |
 
-# Isle of Man
+## Isle of Man
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7D` | IM | マン島 | Isle of Man | Île de Man | Isle of Man | Isola di Man | Isla de Man | 马恩岛 | 맨 섬 | Man | Ilha de Man | Мэн (остров) | Isle of Man | Isle of Man | Isle of Man | Isle of Man | Isle of Man |
 
-## Isle of Man Regions
+### Isle of Man Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7D000000` | 54.16259704, -4.481944591999991 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Isle of Man | `0x7D010000` | 54.16259704, -4.481944591999991 | マン島 | Isle of Man | Île de Man | Isle of Man | Isola di Man | Isla de Man | 马恩岛 | 맨 섬 | Man | Ilha de Man | Мэн (остров) | Isle of Man | Isle of Man | Isle of Man | Isle of Man | Isle of Man |
 
-# Jersey
+## Jersey
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7E` | JE | ジャージー島 | Jersey | Jersey | Jersey | Jersey | Jersey | 泽西 | 저지 섬 | Jersey | Jérsia | Джерси | Jersey | Jersey | Jersey | Jersey | Jersey |
 
-## Jersey Regions
+### Jersey Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7E000000` | 49.185790456, -2.1088912639999933 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Jersey | `0x7E010000` | 49.185790456, -2.1088912639999933 | ジャージー島 | Jersey | Jersey | Jersey | Jersey | Jersey | 泽西 | 저지 섬 | Jersey | Jérsia | Джерси | Jersey | Jersey | Jersey | Jersey | Jersey |
 
-# Monaco
+## Monaco
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x7F` | MC | モナコ | Monaco | Monaco | Monaco | Monaco (Principato di) | Mónaco | 摩纳哥 | 모나코 | Monaco | Mónaco | Монако | Monaco | Monaco | Monaco | Monaco | Monaco |
 
-## Monaco Regions
+### Monaco Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x7F000000` | 43.714599112, 7.41579165 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Monaco | `0x7F010000` | 43.714599112, 7.41579165 | モナコ | Monaco | Monaco | Monaco | Monaco (Principato di) | Mónaco | 摩纳哥 | 모나코 | Monaco | Mónaco | Монако | Monaco | Monaco | Monaco | Monaco | Monaco |
 
-# Taiwan
+## Taiwan
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x80` | TW | 台湾 | Taiwan | Taïwan | Taiwan | Taiwan | Taiwán | 中国 台湾 | 타이완 | Taiwan | Taiwan | Тайвань | 臺灣 | Taiwan | Taiwan | Taiwan | Taiwan |
 
-## Taiwan Regions
+### Taiwan Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2630,13 +2630,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Kinmen County | `0x80190000` | 24.428100308, 118.328568839 | 金門県 | Kinmen County | Kinmen (comté de) | Kreis Kinmen | Contea di Kinmen | Condado de Kinmen | - | 진먼 현 | Kinmen | Condado de Kinmen | Цзиньмэн (уезд) | 金門縣 | Kinmen County | Kinmen County | Kinmen County | Kinmen County |
 | Lienchiang County | `0x801A0000` | 26.14746064, 119.927083928 | 連江県 | Lienchiang County | Lienchiang (comté de) | Kreis Lienchiang | Contea di Lienchiang | Condado de Lienchiang | - | 롄장 현 | Lienchiang | Condado de Lienchiang | Ляньцзян (уезд) | 連江縣 | Lienchiang County | Lienchiang County | Lienchiang County | Lienchiang County |
 
-# South Korea
+## South Korea
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x88` | KR | 韓国 | South Korea | Corée du Sud | Südkorea | Corea del Sud | Corea del Sur | 韩国 | 대한민국 | Zuid-Korea | Coreia do Sul | Южная Корея | 韓國 | South Korea | South Korea | South Korea | South Korea |
 
-## South Korea Regions
+### South Korea Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2658,52 +2658,52 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Gyeongsangnam-do | `0x88100000` | 35.299071864, 128.65025218 | キョンサンナム道 | Gyeongsangnam-do | Gyeongsang du Sud | Gyeongsangnam-do | Gyeongsang Meridionale | Gyeongsang del Sur | 庆尚南道 | 경상남도 | Zuid-Gyeongsang | Gyeongsang do Sul | Кёнсан-Намдо | 慶尚南道 | Gyeongsangnam-do | Gyeongsangnam-do | Gyeongsangnam-do | Gyeongsangnam-do |
 | Jeju-teukbyeoljachido | `0x88110000` | 33.513793564, 126.529885086 | チェジュ特別自治道 | Jeju-teukbyeoljachido | Jeju | Jeju-do | Jeju | Jeju | 济州特别自治道 | 제주특별자치도 | Jeju-do | Jeju | Чеджудо | 濟州特別自治道 | Jeju-teukbyeoljachido | Jeju-teukbyeoljachido | Jeju-teukbyeoljachido | Jeju-teukbyeoljachido |
 
-# Hong Kong
+## Hong Kong
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x90` | HK | ホンコン | Hong Kong | Hong Kong | Hongkong | Hong Kong | Hong Kong | 中国 香港 | 홍콩 | Hongkong | Hong Kong | Гонконг | 香港 | Hong Kong | Hong Kong | Hong Kong | Hong Kong |
 
-## Hong Kong Regions
+### Hong Kong Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x90000000` | 22.461547596, 114.296575453 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Hong Kong | `0x90010000` | 22.461547596, 114.296575453 | ホンコン | Hong Kong | Hong Kong | Hongkong | Hong Kong | Hong Kong | 中国 香港 | 홍콩 | Hongkong | Hong Kong | Гонконг | 香港 | Hong Kong | Hong Kong | Hong Kong | Hong Kong |
 
-# Macao
+## Macao
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x91` | MO | マカオ | Macao | Macao | Macau | Macao | Macao | 中国 澳门 | 마카오 | Macau | Macau | Макао | 澳門 | Macao | Macao | Macao | Macao |
 
-## Macao Regions
+### Macao Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x91000000` | 22.214355216, 113.59894172 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Macao | `0x91010000` | 22.214355216, 113.59894172 | マカオ | Macao | Macao | Macau | Macao | Macao | 中国 澳门 | 마카오 | Macau | Macau | Макао | 澳門 | Macao | Macao | Macao | Macao |
 
-# Singapore
+## Singapore
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x99` | SG | シンガポール | Singapore | Singapour | Singapur | Singapore | Singapur | 新加坡 | 싱가포르 | Singapore | Singapura | Сингапур | Singapore | Singapore | Singapore | Singapore | Singapore |
 
-## Singapore Regions
+### Singapore Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0x99000000` | 1.2908935400000001, 103.854042174 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Singapore | `0x99010000` | 1.2908935400000001, 103.854042174 | シンガポール | Singapore | Singapour | Singapur | Singapore | Singapur | 新加坡 | 싱가포르 | Singapore | Singapura | Сингапур | Singapore | Singapore | Singapore | Singapore | Singapore |
 
-# Malaysia
+## Malaysia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0x9C` | MY | マレーシア | Malaysia | Malaisie | Malaysia | Malesia | Malasia | 马来西亚 | 말레이시아 | Maleisië | Malásia | Малайзия | Malaysia | Malaysia | Malaysia | Malaysia | Malaysia |
 
-## Malaysia Regions
+### Malaysia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2725,13 +2725,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Sabah | `0x9C100000` | 5.982055596, 116.065379091 | サバ州 | Sabah | Sabah | Sabah | Sabah | Sabah | 沙巴州 | 사바 주 | Sabah | Sabah | Сабах | Sabah | Sabah | Sabah | Sabah | Sabah |
 | Putrajaya | `0x9C110000` | 2.91137692, 101.662263753 | プトラジャヤ | Putrajaya | Putrajaya | Putrajaya | Putrajaya | Putrajaya | 布城联邦直辖区 | 푸트라자야 | Putrajaya | Putrajaya | Путраджая | Putrajaya | Putrajaya | Putrajaya | Putrajaya | Putrajaya |
 
-# China
+## China
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xA0` | CN | 中国 | China | Chine | China | Cina | China | 中国 | 중국 | China | China | Китай | 中國 | China | China | China | China |
 
-## China Regions
+### China Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2771,13 +2771,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Macao | `0xA0220000` | 22.214355216, 113.59894172 | マカオ | Macao | Macao | Macau | Macao | Macao | 澳门特别行政区 | 마카오 | Macau | Macau | Макао | 澳門特別行政區 | Macao | Macao | Macao | Macao |
 | Hong Kong | `0xA0230000` | 22.461547596, 114.296575453 | ホンコン | Hong Kong | Hong Kong | Hongkong | Hong Kong | Hong Kong | 香港特别行政区 | 홍콩 | Hongkong | Hong Kong | Гонконг | 香港特別行政區 | Hong Kong | Hong Kong | Hong Kong | Hong Kong |
 
-# U.A.E.
+## U.A.E.
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xA8` | AE | アラブ首長国連邦 | U.A.E. | Émirats arabes unis | Vereinigte Arabische Emirate | Emirati Arabi Uniti | Emiratos Árabes Unidos | 阿拉伯联合酋长国 | 아랍에미리트 | Verenigde Arabische Emiraten | Emirados Árabes Unidos | Объединённые Арабские Эмираты | U.A.E. | U.A.E. | U.A.E. | U.A.E. | U.A.E. |
 
-## U.A.E. Regions
+### U.A.E. Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2790,13 +2790,13 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Al Fujayrah | `0xA8070000` | 25.120238972, 56.332550645 | フジャイラー | Al Fujayrah | Fujaïrah | Fudschaira | Fujayrah | Fujaira | 富查伊拉 | 알푸자이라 | Fujairah | Fujaira | Фуджейра | Al Fujayrah | Al Fujayrah | Al Fujayrah | Al Fujayrah | Al Fujayrah |
 | Umm al Qaywayn | `0xA8080000` | 25.499267288, 55.744780492 | ウム・アル・カイワイン | Umm al Qaywayn | Umm al-Qaiwain | Umm al-Qaiwain | Umm al-Qaiwain | Um el Kaiwain | 乌姆盖万 | 움알카이와인 | Umm al-Qaiwain | Um el Kaiwain | Умм эль-Кайвайн | Umm al Qaywayn | Umm al Qaywayn | Umm al Qaywayn | Umm al Qaywayn | Umm al Qaywayn |
 
-# Saudi Arabia
+## Saudi Arabia
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xAE` | SA | サウジアラビア | Saudi Arabia | Arabie saoudite | Saudi-Arabien | Arabia Saudita | Arabia Saudí | 沙特阿拉伯 | 사우디아라비아 | Saoedi-Arabië | Arábia Saudita | Саудовская Аравия | Saudi Arabia | Saudi Arabia | Saudi Arabia | Saudi Arabia | Saudi Arabia |
 
-## Saudi Arabia Regions
+### Saudi Arabia Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
@@ -2815,39 +2815,39 @@ Since the Wii, Nintendo has tracked what region a client is from/in using a Regi
 | Tabuk | `0xAE0D0000` | 28.383178388, 36.579078961 | タブーク州 | Tabuk | Tabouk | Tabuk | Tabuk | Tabuk | 塔布克地区 | 타부크 주 | Tabuk | Tabuk | Табук | Tabuk | Tabuk | Tabuk | Tabuk | Tabuk |
 | Al Jawf | `0xAE0E0000` | 29.805907864, 39.864000003 | ジャウフ州 | Al Jawf | Al Djôf | Dschauf | Al-Jawf | Al Jouf | 朱夫地区 | 자우프 주 | Al Jawf | Al Jouf | Эль-Джауф | Al Jawf | Al Jawf | Al Jawf | Al Jawf | Al Jawf |
 
-# San Marino
+## San Marino
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xB8` | SM | サンマリノ | San Marino | Saint-Marin | San Marino | San Marino | San Marino | 圣马力诺 | 산마리노 | San Marino | São Marinho | Сан-Марино | San Marino | San Marino | San Marino | San Marino | San Marino |
 
-## San Marino Regions
+### San Marino Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0xB8000000` | 43.928832508, 12.431064077 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | San Marino | `0xB8010000` | 43.928832508, 12.431064077 | サンマリノ | San Marino | Saint-Marin | San Marino | San Marino | San Marino | 圣马力诺 | 산마리노 | San Marino | São Marinho | Сан-Марино | San Marino | San Marino | San Marino | San Marino | San Marino |
 
-# Vatican City
+## Vatican City
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xB9` | VA | バチカン | Vatican City | Vatican | Vatikanstadt | Vaticano (Città del) | Vaticano | 梵蒂冈 | 바티칸 | Vaticaanstad | Vaticano (cidade) | Ватикан | Vatican City | Vatican City | Vatican City | Vatican City | Vatican City |
 
-## Vatican City Regions
+### Vatican City Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | Unspecified | `0xB9000000` | 41.896361828, 12.447543614 | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — | — |
 | Vatican City | `0xB9010000` | 41.896361828, 12.447543614 | バチカン | Vatican City | Vatican | Vatikanstadt | Vaticano (Città del) | Vaticano | 梵蒂冈 | 바티칸 | Vaticaanstad | Vaticano (cidade) | Ватикан | Vatican City | Vatican City | Vatican City | Vatican City | Vatican City |
 
-# Bermuda
+## Bermuda
 
 |  ID | ISO | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 |  -- | --- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
 | `0xBA` | BM | バーミューダ | Bermuda | Bermudes | Bermuda | Bermude | Bermudas | 百慕大 | 버뮤다 | Bermuda | Bermudas | Бермуды | Bermuda | Bermuda | Bermuda | Bermuda | Bermuda |
 
-## Bermuda Regions
+### Bermuda Regions
 
 | Name | ID | Coordinates | Japanese | English | French | German | Italian | Spanish | Chinese (simplified) | Korean | Dutch | Portuguese | Russian | Chinese (traditional) | Unknown 1 | Unknown 2 | Unknown 3 | Unknown 4 |
 | ---- | -- | ----------- | -------- | ------- | ------ | ------ | ------- | ------- | -------------------- | ------ | ----- | ---------- | ------- | --------------------- | --------- | --------- | --------- | --------- |
