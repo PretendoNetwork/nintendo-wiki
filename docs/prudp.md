@@ -271,11 +271,11 @@ When multiple PRUDP connections are made to the same address, NEX doesn't create
 
 | Stream type | Name             | Details                                                              |
 |-------------|------------------|----------------------------------------------------------------------|
-| 1           | DO               | Unknown purpose                                                      |
+| 1           | DO               | "Duplicate Object". Use for P2P connections using NetZ               |
 | 2           | RV               | Unknown purpose                                                      |
 | 3           | OldRVSec         | Original "secure" stream type. Used by NEX 1 and QRV clients         |
 | 4           | SBMGMT           | Unknown purpose                                                      |
-| 5           | NAT              | Unknown purpose                                                      |
+| 5           | NAT              | Used for NAT traversal between users using NetZ                      |
 | 6           | SessionDiscovery | Unknown purpose                                                      |
 | 7           | NATEcho          | Unknown purpose                                                      |
 | 8           | Routing          | Unknown purpose. Not seen in non-NEX titles                          |
