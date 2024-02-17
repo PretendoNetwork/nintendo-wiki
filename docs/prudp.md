@@ -259,26 +259,29 @@ The CONNECT acknowledgement packet contains a [Buffer] with the following data:
 | Uint32 | Response check value + 1 |
 
 ### Virtual ports
-When multiple PRUDP connections are made to the same address, NEX doesn't create a new socket for each connection. Instead, it uses a single socket to create multiple PRUDP connections. To distinguish between connections, each packet contains a source and destination port.
+When multiple PRUDP connections are made to the same address, NEX doesn't create a new socket for each connection. Instead, it uses a single socket to create multiple PRUDP connections. To distinguish between connections, each packet contains a source and destination "virtual port". A "virtual port" is made of 2 parts, a stream type and stream ID. The client and server stream types will always match, though their IDs may not. Each stream may be configured differently: aspects of the connection such as retransmission rates, the encryption and compression algorithms, etc, are all controlled by these streams. How these are encoded depends on the protocol version:
 
-**V0 and V1**: The four most significant bits contain the stream type. The four least significant bits contain the port number. The client port is the highest unused port number &le; 0xF.
+**V0 and V1**: The virtual port uses a single byte. The four most significant bits contain the stream type. The four least significant bits contain the stream ID. The client stream ID is the highest unused stream ID &le; `0xF`.
 
-**Lite**: The port number now uses 8 bits instead of 4. The client port is the highest unused port number &le; 0x1F. The stream types are stored in a separate byte.
+**Lite**: The source and destination stream IDs are now encoded using 2 separate bytes. The stream type is encoded in a 3rd byte. The four most significant bits contain the source type. The four least significant bits contain the destination type. The client stream ID is the highest unused stream ID &le; `0x1F`.
 
-**Server port (3DS/Wii U)**: The authentication and secure server each have their own UDP server. The server port is always 1.
+**Server stream ID (3DS/Wii U)**: The authentication and secure server each have their own UDP server. The server stream ID is always 1.
 
-**Server port (Switch)**: A single websocket server handles both authentication and secure connections. The authentication server has server port 1, the secure server has server port 2.
+**Server stream ID (Switch)**: A single websocket server handles both authentication and secure connections. The authentication server has server stream ID 1, the secure server has server stream ID 2.
 
-The stream type is always RVSecure (0xA) in Nintendo games.
-
-| Stream type | Name             | Stream type | Name     |
-|-------------|------------------|-------------|----------|
-| 1           | DO               | 7           | NATEcho  |
-| 2           | RV               | 8           | Routing  |
-| 3           | OldRVSec         | 9           | Game     |
-| 4           | SBMGMT           | 10          | RVSecure |
-| 5           | NAT              | 11          | Relay    |
-| 6           | SessionDiscovery |             |          |
+| Stream type | Name             | Details                                                              |
+|-------------|------------------|----------------------------------------------------------------------|
+| 1           | DO               | "Duplicate Object". Use for P2P connections using NetZ               |
+| 2           | RV               | Unknown purpose                                                      |
+| 3           | OldRVSec         | Original "secure" stream type. Used by NEX 1 and QRV clients         |
+| 4           | SBMGMT           | Unknown purpose                                                      |
+| 5           | NAT              | Used for NAT traversal between users using NetZ                      |
+| 6           | SessionDiscovery | Unknown purpose                                                      |
+| 7           | NATEcho          | Unknown purpose                                                      |
+| 8           | Routing          | Unknown purpose. Not seen in non-NEX titles                          |
+| 9           | Game             | Unknown purpose. Not seen in non-NEX titles                          |
+| 10          | RVSecure         | New "secure" stream type. Used by NEX 2+. Not seen in non-NEX titles |
+| 11          | Relay            | Unknown purpose. Not seen in non-NEX titles                          |
 
 ### Type and flags
 This field takes up two bytes in the packet header and is encoded like this: `(flags << 4) | type`.
