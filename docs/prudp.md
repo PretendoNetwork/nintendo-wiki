@@ -259,7 +259,7 @@ The CONNECT acknowledgement packet contains a [Buffer] with the following data:
 | Uint32 | Response check value + 1 |
 
 ### Virtual ports
-When multiple PRUDP connections are made to the same address, NEX doesn't create a new socket for each connection. Instead, it uses a single socket to create multiple PRUDP connections. To distinguish between connections, each packet contains a source and destination "virtual port". A "virtual port" is made of 2 parts, a stream type and stream ID. The client and server stream types will always match, though their IDs may not. How these are encoded depends on the protocol version. Each stream may be configured differently. Aspects of the connection such as retransmission rates, the encryption and compression algorithms, etc, are all controlled by these streams.
+When multiple PRUDP connections are made to the same address, NEX doesn't create a new socket for each connection. Instead, it uses a single socket to create multiple PRUDP connections. To distinguish between connections, each packet contains a source and destination "virtual port". A "virtual port" is made of 2 parts, a stream type and stream ID. The client and server stream types will always match, though their IDs may not. Each stream may be configured differently: aspects of the connection such as retransmission rates, the encryption and compression algorithms, etc, are all controlled by these streams. How these are encoded depends on the protocol version:
 
 **V0 and V1**: The virtual port uses a single byte. The four most significant bits contain the stream type. The four least significant bits contain the stream ID. The client stream ID is the highest unused stream ID &le; `0xF`.
 
