@@ -19,6 +19,7 @@ title: Documentation
 * [LDN Protocol](/docs/pia/ldn)
 
 ## Other pages
+* [Region IDs](/docs/misc/region-ids)
 * [Server List](/docs/servers)
 * [Game Server List](/docs/game-servers)
 * [Wii U Error Codes](/docs/wiiu/error-codes)
