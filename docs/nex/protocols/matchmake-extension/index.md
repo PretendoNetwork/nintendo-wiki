@@ -150,7 +150,7 @@ This method does not return anything.
 |---------------------------|--------------------|----------------------|
 | [Data]&lt;[Gathering]&gt; | anyGathering       |                      |
 | [String]                  | strMessage         |                      |
-| Uint16                    | participationCount | NEX v3.5.0 and later |
+| Uint16                    | participationCount | NEX v3.4.0 and later |
 
 #### Response
 
@@ -445,12 +445,12 @@ This method does not take any parameters.
 ### (30) JoinMatchmakeSessionEx
 #### Request
 
-| Type     | Name                |
-|----------|---------------------|
-| Uint32   | gid                 |
-| [String] | strMessage          |
-| Bool     | dontCareMyBlackList |
-| Uint16   | participationCount  |
+| Type     | Name                | Only present in      |
+|----------|---------------------|----------------------|
+| Uint32   | gid                 |                      |
+| [String] | strMessage          |                      |
+| Bool     | dontCareMyBlackList |                      |
+| Uint16   | participationCount  | NEX v3.4.0 and later |
 
 #### Response
 
