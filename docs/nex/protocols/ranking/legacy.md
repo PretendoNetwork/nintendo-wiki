@@ -12,13 +12,13 @@ Scores are stored as a `List<Uint32>` for assigning multiple scores to a [Rankin
 
 In NEX 1, the category is represented as a `List<Uint16>`, but the server will only accept having a single value on the list.
 
-The common data is used on games to display user information on the ranking. Its value is game-specific on NEX 2, but on NEX 1 this must be an always-allocated 0x14-byte buffer which stores the player's name in UTF-16. If a user doesn't have common data or it has been deleted, any methods that query it will give an empty buffer, still allocated on NEX 1.
+The common data is used in games to display user information on the ranking. Its value is game-specific on NEX 2, but on NEX 1 this must be an always-allocated 0x14-byte buffer which stores the player's name in UTF-16. If a user doesn't have common data or it has been deleted, any methods that query it will give an empty buffer, still allocated on NEX 1.
 
 In some cases, when using a unique ID that doesn't exist on a method that requires it, the server will give error `0x00670004`.
 
 ## Extended Protocols
 
-The following games have additional methods in the ranking protocol:
+The following games have additional methods in the legacy ranking protocol:
 * [Mario Kart 7](/docs/nex/protocols/ranking/mario-kart-7)
 
 ## Methods
@@ -132,7 +132,7 @@ The following games have additional methods in the ranking protocol:
 
 ### (7) UnknownMethod0x7
 
-This method requires ownership of the unique ID, and having scores in the given category. In NEX 1, the server will return `Ranking::RegistrationError` if the user doesn't have scores in the given category.
+This method requires ownership of the unique ID, and having scores in the given category. In NEX 1, the server will return `Ranking::RegistrationError` if the user doesn't have scores in the given category. In NEX 2, `Ranking::NotFound` is returned instead.
 
 #### Request
 
