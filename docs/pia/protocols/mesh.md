@@ -107,7 +107,7 @@ If the join response is too big to be sent in a single packet it is split into f
 | Uint8              | Number of fragments                                    |
 | Uint8              | Fragment index                                         |
 | Uint8              | Number of station info entries in current fragment (N) |
-| Uint8              | Base index of station info in current fragment         |
+| Uint8              | Base index of station info entries in current fragment |
 | Uint8              | Maximum number of stations in first mesh               |
 | Uint8              | Maximum number of stations in second mesh              |
 | Uint8              | Maximum number of stations (total)                     |
@@ -163,35 +163,35 @@ If the join response is too big to be sent in a single packet it is split into f
 # Update mesh
 Because this message is sent through the reliable mesh protocol it does not need to be split into fragments like the join response.
 
-| Offset | Size | Description                                      |
-|--------|------|--------------------------------------------------|
-| 0x0    | 1    | Message type                                     |
-| 0x1    | 1    | Number of stations                               |
-| 0x2    | 1    | Host index                                       |
-| 0x3    | 1    | Always 0                                         |
-| 0x4    | 4    | Update counter (incremented on each mesh update) |
-| 0x8    | 1    | Always 1                                         |
-| 0x9    | 1    | Always 0                                         |
-| 0xA    | 1    | Host index                                       |
-| 0xB    | 1    | Always 0                                         |
-| 0xC    |      | [StationInfo] entries                            |
+| Offset | Size | Description                                            |
+|--------|------|--------------------------------------------------------|
+| 0x0    | 1    | Message type                                           |
+| 0x1    | 1    | Number of stations                                     |
+| 0x2    | 1    | Host index                                             |
+| 0x3    | 1    | Always 0                                               |
+| 0x4    | 4    | Update counter (incremented on each mesh update)       |
+| 0x8    | 1    | Number of fragments                                    |
+| 0x9    | 1    | Fragment index                                         |
+| 0xA    | 1    | Number of station info entries in current fragment     |
+| 0xB    | 1    | Base index of station info entries in current fragment |
+| 0xC    |      | [StationInfo] entries                                  |
 
 # StationInfo
 *Up to 5.9:*
 
-| Type                                            | Description                                               |
-|-------------------------------------------------|-----------------------------------------------------------|
-| [StationConnectionInfo](#stationconnectioninfo) | Connection info                                           |
-| Uint8                                           | Station index                                             |
-|                                                 | Padding such that the size becomes a multiple of 4 bytes. |
+| Type                                                           | Description                                               |
+|----------------------------------------------------------------|-----------------------------------------------------------|
+| [StationConnectionInfo](/docs/pia/types#stationconnectioninfo) | Connection info                                           |
+| Uint8                                                          | Station index                                             |
+|                                                                | Padding such that the size becomes a multiple of 4 bytes. |
 
 *5.10 - 5.18:*
 
-| Offset | Size | Description                                                                                                       |
-|--------|------|-------------------------------------------------------------------------------------------------------------------|
-| 0x0    | 0x3E | [StationLocation](#stationlocation). If it takes up less than 0x3E bytes the remaining bytes are filled with 0's. |
-| 0x3E   | 1    | Station index                                                                                                     |
-| 0x3F   | 1    | Padding                                                                                                           |
+| Offset | Size | Description                                                                                                                      |
+|--------|------|----------------------------------------------------------------------------------------------------------------------------------|
+| 0x0    | 0x3E | [StationLocation](/docs/pia/types#stationlocation). If it takes up less than 0x3E bytes the remaining bytes are filled with 0's. |
+| 0x3E   | 1    | Station index                                                                                                                    |
+| 0x3F   | 1    | Padding                                                                                                                          |
 
 [StationInfo]: #stationinfo
 

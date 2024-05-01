@@ -10,15 +10,15 @@ Every packet starts with a single byte that indicates its type.
 
 ## Packet types
 
-| Value | Description                                   |
-| ----- | --------------------------------------------- |
-| 0     | [Browse request](#0-browse-request)           |
-| 1     | [Browse reply](#1-browse-reply)               |
-| 3     | [Get host request](#3-get-host-request)       |
-| 4     | [Get host reply](#4-get-host-reply)           |
-| 5     | [Get session request](#5-get-session-request) |
-| 6     | [Get session reply](#6-get-session-reply)     |
-| 7     | [Keep alive message](#7-keep-alive-message)   |
+| Value | Description                                 |
+|-------|---------------------------------------------|
+| 0     | [Browse request](#0-browse-request)         |
+| 1     | [Browse reply](#1-browse-reply)             |
+| 3     | [Host request](#3-host-request)             |
+| 4     | [Host message](#4-host-message)             |
+| 5     | [Session request](#5-session-request)       |
+| 6     | [Session message](#6-session-message)       |
+| 7     | [Keep alive message](#7-keep-alive-message) |
 
 ### (0) Browse Request
 *Up to 5.44:*
@@ -313,7 +313,7 @@ If the application data consumes less than 0x184 bytes, this is reflected in the
 | 8       | 5.19 - 5.44 |
 | 10      | 6.16 - 6.30 |
 
-### (3) Get Host Request
+### (3) Host Request
 This packet is sent through UDP broadcast ports 49152 - 49155 and is encapsulated in a [Pia message](/docs/pia/protocol). The message payload contains the following data and is encrypted with the session key:
 
 *Up to 5.44:*
@@ -324,7 +324,7 @@ This packet is sent through UDP broadcast ports 49152 - 49155 and is encapsulate
 | 0x1    | 11   | Padding (always 0) |
 | 0xC    | 4    | Session id         |
 
-### (4) Get Host Reply
+### (4) Host Message
 This message is encapsulated in a [Pia message](/docs/pia/protocol) and is encrypted with the session key.
 
 *Up to 5.9:*
@@ -345,7 +345,7 @@ This message is encapsulated in a [Pia message](/docs/pia/protocol) and is encry
 | 0xC    | 4    | Session id                                                  |
 | 0x10   |      | [StationLocation](/docs/pia/types#stationlocation) for host |
 
-### (5) Get Session Request
+### (5) Session Request
 This packet is sent through UDP broadcast ports 49152 - 49155 and is encapsulated in a [Pia message](/docs/pia/protocol). The message payload contains the following data and is encrypted with the session key:
 
 *Up to 5.44:*
@@ -356,21 +356,23 @@ This packet is sent through UDP broadcast ports 49152 - 49155 and is encapsulate
 | 0x1    | 11   | Padding (always 0) |
 | 0xC    | 4    | Session id         |
 
-### (6) Get Session Reply
+### (6) Session Message
 This message is encapsulated in a [Pia message](/docs/pia/protocol) and is encrypted with the session key. The goal of this message is to transmit a [LanSessionInfo](#lansessioninfo) structure. Depending on the size of the [LanSessionInfo](#lansessioninfo), this message may be split into multiple fragments. Each fragment contains up to 800 bytes of data.
+
+Whenever the session is updated, a session message is sent through UDP broadcast port 49152 - 49155. A session message is also sent to a specific station when the station requests an update with a [session request](#5-session-request).
 
 *Up to 5.44:*
 
-| Offset | Size | Description                                                                                                                                                 |
-| ------ | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0x0    | 1    | Message type (6)                                                                                                                                            |
-| 0x1    | 11   | Padding (always 0)                                                                                                                                          |
-| 0xC    | 4    | This is a random value that must be the same in all fragments that belong to the same session reply. This is used to distinguish different session replies. |
-| 0x10   | 2    | Session reply id. This is an incrementing number that should be the same in all fragments that belong to the same session reply.                            |
-| 0x12   | 1    | Fragment index                                                                                                                                              |
-| 0x13   | 1    | Number of fragments                                                                                                                                         |
-| 0x14   | 4    | Fragment size                                                                                                                                               |
-| 0x18   |      | Fragment data                                                                                                                                               |
+| Offset | Size | Description                                                                                                                                                   |
+|--------|------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0x0    | 1    | Message type (6)                                                                                                                                              |
+| 0x1    | 11   | Padding (always 0)                                                                                                                                            |
+| 0xC    | 4    | This is a random value that must be the same in all fragments that belong to the same session message. This is used to distinguish different session replies. |
+| 0x10   | 2    | Session message id. This is an incrementing number that should be the same in all fragments that belong to the same session message.                          |
+| 0x12   | 1    | Fragment index                                                                                                                                                |
+| 0x13   | 1    | Number of fragments                                                                                                                                           |
+| 0x14   | 4    | Fragment size                                                                                                                                                 |
+| 0x18   |      | Fragment data                                                                                                                                                 |
 
 ### (7) Keep Alive Message
 This packet is sent through UDP broadcast port 49152 and is encapsulated in a [Pia message](/docs/pia/protocol). This message is sent once every two seconds, even if the console is not participating in a session. If the console is participating in a session, the message payload is encrypted with the session key. Otherwise, the payload is not encrypted. The message payload contains the following data:

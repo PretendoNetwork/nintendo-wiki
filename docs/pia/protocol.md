@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title: PIA Protocol
+title: PIA Packet Format
 ---
 
 These packets are usually sent directly from one console to another through UDP, with no server in between. Everything is encoded in big-endian byte order.

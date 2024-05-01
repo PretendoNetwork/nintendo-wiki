@@ -34,12 +34,13 @@ All peer-to-peer packets are sent through UDP. The packet format is described [h
 
 * [Unreliable Protocol](/docs/pia/protocols/unreliable)
 * [Reliable Protocol](/docs/pia/protocols/reliable)
-* Stream Broadcast Reliable Protocol
+* [Broadcast Reliable Protocol](/docs/pia/protocols/broadcast-reliable)
+* [Stream Broadcast Reliable Protocol](/docs/pia/protocols/stream-broadcast-reliable)
 * [Clone Protocol](/docs/pia/protocols/clone)
 * Sync Protocol
 
 ### Session management
-A group of connected consoles is called a mesh. Every mesh has a single "host" that controls the mesh. Initially, the console that created the mesh is the host. Once the host leaves the mesh, a new host is selected through "host migration". The host performs important tasks such as processing join requests by newcomers. The host may also perform some game-specific tasks. For example, in Mario Kart 8, the host decides which track is chosen by the track roulette.
+A group of connected consoles is called a mesh. Every mesh has a single "host" that controls the mesh. Initially, the console that created the mesh is the host. Once the host leaves the mesh, a new host is selected through "host migration". The host performs important tasks such as processing join requests by newcomers.
 
 ### Joining a mesh
 The following steps are performed to join a mesh:
@@ -48,12 +49,12 @@ The following steps are performed to join a mesh:
 2. Your console [establishes a connection](#connection-establishment) to the host of the mesh.
 3. Your console sends a [join request](/docs/pia/protocols/mesh) to the host.
 4. The host decides if it wants to accept the join request. For example, if the mesh already has the maximum number of participants it may reject the join request.
-5. The host sends a [join response](/docs/pia/protocols/mesh) to your console to inform it about its decision. If the join request was accepted, the join response also contains the addresses of the other consoles in the mesh.
-6. If the join request was accepted, your console establishes a connection to the other consoles in the mesh.
-7. Finally, your console starts sending/receiving data packets to/from the other consoles.
+5. The host sends a [join response](/docs/pia/protocols/mesh) to your console to inform it about its decision. If the join request was accepted, the join response also information about the other consoles in the mesh.
+6. If the join request was accepted, the host sends an [update message](/docs/pia/protocols/mesh) to all consoles in the mesh. The other consoles now try to establish a connection with your console.
+7. Your console is now part of the mesh and can start exchanging game-specific packets.
 
 ### Connection establishment
-After acquiring the [StationLocation](/docs/pia/types#stationlocation) of another console elsewhere (e.g. from [matchmaking](#matchmaking) or the [join response](#joining-a-mesh)), the following steps are performed to establish a connection with the console:
+After acquiring the [StationLocation](/docs/pia/types#stationlocation) of another console elsewhere (e.g. from [matchmaking](#matchmaking) or a [mesh update](/docs/pia/protocols/mesh)), the following steps are performed to establish a connection with the console:
 
 1. If necessary, [NAT traversal](#nat-traversal) is performed.
 2. Your console sends a [connection request](/docs/pia/protocols/station#connection-request) to the other console.
