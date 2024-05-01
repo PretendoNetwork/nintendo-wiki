@@ -38,6 +38,9 @@ The aauth server takes form-encoded requests and responds with json-encoding. It
 | 14.0.0 - 14.1.2 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 14.3.0.0; Add-on 14.3.0.0)`    |
 | 15.0.0 - 15.0.1 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 15.3.0.0; Add-on 15.3.0.0)`    |
 | 16.0.0          | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
+| 16.0.0 - 16.1.0 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
+| 17.0.0 - 17.0.1 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)`    |
+| 18.0.0          | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 18.3.0.0; Add-on 18.3.0.0)`    |
 
 ## Methods
 The following method returns a timestamp and your ip address:

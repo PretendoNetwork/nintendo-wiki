@@ -8,6 +8,7 @@ This server may be used to verify Nintendo Switch Online membership.
 
 URL: https://capi.lp1.op2.nintendo.net
 
-| URL                         |
-|-----------------------------|
-| `/v1/users/<id>/membership` |
+| URL                          |
+|------------------------------|
+| `/v1/users/<id>/membership`  |
+| `/v1/users/<id>/memberships` |

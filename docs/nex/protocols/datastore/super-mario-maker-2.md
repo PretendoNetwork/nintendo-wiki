@@ -69,7 +69,7 @@ Some methods take a `resultOption` parameter. This parameter controls which fiel
 | 101       | PostPlayResultMultiClear                                                       |
 | 102       | PostPlayResultEventCourse                                                      |
 | 103       | [GetDeathPositions](#103-getdeathpositions)                                    |
-| 104       | PostRatingInfo                                                                 |
+| 104       | [PostRatingInfo](#104-postratinginfo)                                          |
 | 105       | PostRatingInfos                                                                |
 | 106       | PostRatingInfoBattleModePersonal                                               |
 | 107       | PostRatingInfoBattleModeEntire                                                 |
@@ -688,6 +688,16 @@ This method does not return anything.
 | Type                              | Description     |
 | --------------------------------- | --------------- |
 | [List]&lt;[DeathPositionInfo]&gt; | Death positions |
+
+### (104) PostRatingInfo
+#### Request
+
+| Type         | Description |
+|--------------|-------------|
+| [RatingInfo] | Rating info |
+
+#### Response
+This method does not return anything.
 
 ### (108) GetEndlessModeStatus
 #### Request
@@ -1379,6 +1389,15 @@ This structure is empty.
 | Uint32                 | Unknown |
 | [List]&lt;[String]&gt; | Unknown |
 
+### RatingInfo ([Structure])
+
+| Type   | Description |
+|--------|-------------|
+| Uint64 | Unknown     |
+| Uint8  | Unknown     |
+| Uint8  | Unknown     |
+| Bool   | Unknown     |
+
 ### ReadEventCourseListParam ([Structure])
 
 | Type       | Description |
@@ -1917,6 +1936,7 @@ Revision 3:
 [BattleModeRating]: #battlemoderating-structure
 [DeathPositionInfo]: #deathpositioninfo-structure
 [WorldMapInfo]: #worldmapinfo-structure
+[RatingInfo]: #ratinginfo-structure
 
 [DataStoreGetMetaParam]: /docs/nex/protocols/datastore#datastoregetmetaparam-structure
 [DataStorePreparePostParam]: /docs/nex/protocols/datastore#datastorepreparepostparam-structure

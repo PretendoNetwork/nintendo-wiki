@@ -12,6 +12,7 @@ The following games use libeagle:
 * [Tetris 99](/docs/switch/eagle/rpc/tetris-99)
 * [Super Mario Bros. 35](/docs/switch/eagle/rpc/super-mario-bros-35)
 * [PAC-MAN 99](/docs/switch/eagle/rpc/pac-man-99)
+* F-Zero 99
 
 ## Notification Event
 When a [matchmake session](/docs/nex/protocols/matchmake-extension) is created, the server spawns a container that runs the eagle server. When the eagle server is ready, the NEX server sends a [notification event](/docs/nex/protocols/notifications) to everyone in the matchmake session. The notification event has the following fields set:
@@ -256,5 +257,6 @@ The eagle library was rewritten almost completely between Tetris 99 and Super Ma
 | Tetris 99           | release/1.2.14 | 2   |
 | Super Mario Bros 35 | 2.0.4          | 3   |
 | PAC-MAN 99          | 2.0.4          | 3   |
+| F-Zero 99           | 2.5.5          | 3   |
 
 [M]: #library-versions

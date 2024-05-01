@@ -4,7 +4,7 @@ toc: true
 title: LDN
 ---
 
-This page describes the protocol that is used to communicate with nearby consoles in LDN mode, which is the default mode for local multiplayer on Nintendo Switch.
+This page describes the wireless protocol that is used to communicate with nearby consoles in LDN mode, which is the default mode for local multiplayer on Nintendo Switch.
 
 Unless specified otherwise, everything is encoded in big-endian byte order.
 
