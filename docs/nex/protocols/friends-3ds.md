@@ -449,12 +449,21 @@ Relationship types:
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type     | Description |
-| -------- | ----------- |
-| [String] | Name        |
-| Bool     | Unknown     |
-| Uint8    | Unknown     |
-| [Buffer] | Mii data    |
+| Type     | Description    |
+| -------- | -------------- |
+| [String] | Name           |
+| Bool     | Profanity flag |
+| Uint8    | Character set  |
+| [Buffer] | Mii data       |
+
+Character sets:
+
+| Value | Description     |
+|-------|-----------------|
+| 0     | JPN + USA + EUR |
+| 1     | CHN             |
+| 2     | KOR             |
+| 3     | TWN             |
 
 ### MiiList ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
