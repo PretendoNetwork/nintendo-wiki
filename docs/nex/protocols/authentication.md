@@ -6,6 +6,8 @@ title: Ticket Granting (10)
 
 This is the only protocol that's available on the authentication server. Other protocols are only available on the secure server.
 
+If a server is in maintenance, the `%retval%` result fields are set to `Authentication::UnderMaintenance` and the other fields of the response are left with empty values.
+
 ## Methods
 
 | Method ID | Name (3DS / Wii U)                      | Name (Switch)                                                             |
@@ -20,7 +22,7 @@ This is the only protocol that's available on the authentication server. Other p
 ### (1) Login
 Usernames are not case sensitive.
 
-If the username does not exist, the `%retval%` field is set to `RendezVous::InvalidUsername` and the other fields are left blank.
+If the username does not exist, the `%retval%` field is set to `RendezVous::InvalidUsername` and the other fields are left with empty values.
 
 #### Request
 
@@ -49,7 +51,7 @@ Examples of server build names:
 ### (2) LoginEx
 Usernames are not case sensitive.
 
-If the username does not exist, the `%retval%` field is set to `RendezVous::InvalidUsername` and the other fields are left blank.
+If the username does not exist, the `%retval%` field is set to `RendezVous::InvalidUsername` and the other fields are left with empty values.
 
 Wii U servers don't seem to check what's in the extra data.
 
