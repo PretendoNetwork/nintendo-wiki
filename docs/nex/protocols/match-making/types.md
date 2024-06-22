@@ -112,7 +112,18 @@ In NEX version 4.0, the revision number was set back to 0 and one more field was
 | [String] | m_Codeword |
 
 ## MatchmakeSessionSearchCriteria ([Structure])
-Up to NEX version 2.x, this structure looks as follows:
+Up to NEX version 1.x, this structure looks as follows:
+
+| Type                   | Name                  |
+| ---------------------- | --------------------- |
+| [List]&lt;[String]&gt; | m_Attribs             |
+| [String]               | m_GameMode            |
+| [String]               | m_MatchmakeSystemType |
+| Bool                   | m_VacantOnly          |
+| Bool                   | m_ExcludeLocked       |
+| Bool                   | m_ExcludeNonHostPid   |
+
+In NEX version 2.0, the minimum and maximum participants fields were added. Note that these fields were inserted before the matchmaking system type field:
 
 | Type                   | Name                  |
 | ---------------------- | --------------------- |
