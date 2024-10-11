@@ -147,12 +147,12 @@ X-Amz-Cf-Id: WGSd3qu043Y9Co4sredK7gclrF4BMYPKQXytykkQfwEez4HYJmIbDw==
 ### POST /1.0.0/login
 This method can be used to log in on a device account that was registered with <code><a href="#post-100users">/1.0.0/users</a></code>. If an application token is provided, the server checks if the device account is linked against a Nintendo account, and if the account has a Nintendo Switch Online membership.
 
-| Param               | Description                                          |
-| ------------------- | ---------------------------------------------------- |
-| id                  | Device account id                                    |
-| password            | Device account password                              |
+| Param               | Description                                  |
+| ------------------- | -------------------------------------------- |
+| id                  | Device account id                            |
+| password            | Device account password                      |
 | appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional) |
-| skipOp2Verification | Skip NSO verification (optional)                     |
+| skipOp2Verification | Skip NSO verification (optional)             |
 
 Response on success:
 
@@ -178,14 +178,14 @@ The summary field is only present if an app token is provided where the policy h
 ### POST /1.0.0/federation
 This method is the same as [`/1.0.0/login`](#post-100login) except that it also takes an ID token that represents a Nintendo account. This is required to link the Nintendo account to the device.
 
-| Param               | Description                                                                   |
-| ------------------- | ----------------------------------------------------------------------------- |
-| id                  | Device account id                                                             |
-| password            | Device account password                                                       |
-| idp                 | `nintendoAccount`                                                             |
+| Param               | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- |
+| id                  | Device account id                                                    |
+| password            | Device account password                                              |
+| idp                 | `nintendoAccount`                                                    |
 | idToken             | ID token obtained from [accounts.nintendo.com](/docs/switch/account) |
-| appAuthNToken       | [AAuth token](/docs/switch/aauth) optional                            |
-| skipOp2Verification | Skip NSO verification (optional)                                              |
+| appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)                         |
+| skipOp2Verification | Skip NSO verification (optional)                                     |
 
 ### POST /1.0.0/users
 This method registers a new user on the server. This method does not take any parameters. On success, the response contains the new [user information](#user-information) and HTTP status code 201.
