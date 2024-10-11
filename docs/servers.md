@@ -6,15 +6,19 @@ title: Servers List
 
 ## Switch
 
-| Environment                                 | Description     |
-|---------------------------------------------|-----------------|
-| lp1                                         | Live production |
-| dd1, dp1, jd1, sd1, sp1, td1, xd1, yd1, zd1 | Development     |
+| Environment        | Description        |
+|--------------------|--------------------|
+| lp1                | Production         |
+| sd1, sp1           | Staging            |
+| dd1, dp1           | Game development   |
+| td1                | System development |
+| jd1, xd1, yd1, zd1 | Other              |
 
 #### Connection Test ([docs](/docs/switch/connection-test))
 * http://ctest.cdn.nintendo.net
 * http://ctest-ul-lp1.cdn.nintendo.net
 * http://ctest-dl-lp1.cdn.nintendo.net
+* https://api.hac.lp1.ctest.srv.nintendo.net
 
 #### Device Authentication ([docs](/docs/switch/dauth))
 * https://dauth-lp1.ndas.srv.nintendo.net
@@ -28,7 +32,7 @@ title: Servers List
 * https://aapi-lp1.ndas.srv.nintendo.net (internal)
 * https://aadmin-lp1.ndas.mng.nintendo.net (internal)
 
-#### Switch Accounts ([docs](/docs/switch/baas))
+#### Switch Users ([docs](/docs/switch/baas))
 * https://e0d67c509fb203858ebcb2fe3f88c2aa.baas.nintendo.com (lp1)
 * https://e97b8a9d672e4ce4845ec6947cd66ef6-sb.baas.nintendo.com (dd1)
 * https://d9c8ea0e17f68bdeab8674c59f6fabda-sb.baas.nintendo.com (dp1)
@@ -90,30 +94,42 @@ title: Servers List
 * https://ecs-lp1.hac.shop.nintendo.net
 * https://ias-lp1.hac.shop.nintendo.net
 
-#### eShop Applet ([docs](/docs/switch/eshop-applet)))
+#### eShop Applet ([docs](/docs/switch/eshop-applet))
 * https://bugyo.hac.lp1.eshop.nintendo.net
-* https://tagaya.hac.lp1.eshop.nintendo.net
 
-#### Title Installation ([docs](/docs/switch/nim))
-* https://aqua.hac.lp1.d4c.nintendo.net
-* https://atum.hac.lp1.d4c.nintendo.net
+#### System Updates
+* https://sun.hac.lp1.d4c.nintendo.net ([system update meta](/docs/switch/sun))
 * https://atumn.hac.lp1.d4c.nintendo.net ([system update content](/docs/switch/atumn))
+* https://aqua.hac.lp1.d4c.nintendo.net ([system update requirements](/docs/switch/aqua))
+
+#### Game Content (Metadata)
+* https://tagaya.hac.lp1.eshop.nintendo.net ([title version list](/docs/switch/tagaya))
 * https://beach.hac.lp1.eshop.nintendo.net
 * https://pearljam.hac.lp1.eshop.nintendo.net
 * https://pushmo.hac.lp1.eshop.nintendo.net
-* https://sun.hac.lp1.d4c.nintendo.net ([system update meta](/docs/switch/sun))
 * https://superfly.hac.lp1.d4c.nintendo.net
-* https://veer.hac.%.d4c.nintendo.net
+* https://veer.hac.lp1.d4c.nintendo.net ([vendor weights](/docs/switch/veer))
+
+#### Game Content (Data) ([docs](/docs/switch/atum))
+* https://atum.hac.lp1.d4c.nintendo.net (Akamai)
+* https://atum-eda.hac.lp1.d4c.nintendo.net (LLNW)
+* https://atum-4ff.hac.lp1.d4c.nintendo.net (Lumen)
 
 #### Push Notifications ([docs](/docs/switch/npns))
+Old:
 * https://consumer.lp1.npns.srv.nintendo.net
 * https://broker.lp1.npns.srv.nintendo.net
 * https://provider-lp1.npns.srv.nintendo.net
 * https://app-a03.lp1.npns.srv.nintendo.net
 * https://app-b01.lp1.npns.srv.nintendo.net
 
+New:
+* https://god.hac.lp1.penne.srv.nintendo.net
+* https://val.hac.lp1.penne.srv.nintendo.net
+
 #### Telemetry ([docs](/docs/switch/telemetry))
 * https://receive-lp1.dg.srv.nintendo.net (play reports)
+* https://realtime-receive-lp1.dg.srv.nintendo.net
 * https://receive-lp1.er.srv.nintendo.net (error reports)
 * https://sprofile-lp1.cdn.nintendo.net
 

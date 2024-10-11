@@ -16,6 +16,8 @@ The dauth server takes form-encoded requests and responds with json-encoding. It
 
 ## Headers
 
+Up to 17.0.1:
+
 | Header                | Description                                                               |
 | --------------------- | ------------------------------------------------------------------------- |
 | Host                  | `dauth-lp1.ndas.srv.nintendo.net`                                         |
@@ -26,6 +28,16 @@ The dauth server takes form-encoded requests and responds with json-encoding. It
 | Content-Type          | `application/x-www-form-urlencoded`                                       |
 
 The X-Nintendo-PowerState header is only present on system version 7.0.0 and later. In 7.0.0, there is a space between `X-Nintendo-PowerState` and the colon. This was fixed in 7.0.1.
+
+In 18.0.0 and later, the user agent is no longer present and the headers are reordered:
+
+| Header                | Description                             |
+|-----------------------|-----------------------------------------|
+| Host                  | `dauth-lp1.ndas.srv.nintendo.net`       |
+| Accept                | `*/*`                                   |
+| Content-Type          | `application/x-www-form-urlencoded`     |
+| X-Nintendo-PowerState | `FA` (fully awake) or `HA` (half awake) |
+| Content-Length        | Content length                          |
 
 ## User Agents
 
@@ -51,7 +63,7 @@ The X-Nintendo-PowerState header is only present on system version 7.0.0 and lat
 | 15.0.0 - 15.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 15.3.0.0)`                      |
 | 16.0.0 - 16.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 16.2.0.0)`                      |
 | 17.0.0 - 17.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 17.5.0.0)`                      |
-| 18.0.0          | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 18.3.0.0)`                      |
+| 18.0.0 - 18.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 18.3.0.0)`                      |
 
 ## Methods
 In API version 3 and later, one must perform a cryptographic challenge to obtain a device token or edge token:
@@ -96,7 +108,7 @@ The following methods return a different kind of device token:
 | 6.2.0           | v4  |
 | 7.0.0 - 8.1.1   | v5  |
 | 9.0.0 - 12.1.0  | v6  |
-| 13.0.0 - 18.0.0 | v7  |
+| 13.0.0 - 18.1.0 | v7  |
 
 #### API Changes
 
@@ -210,26 +222,26 @@ A `vendor_id` parameter was added:
 | 14.0.0 - 14.1.2 | 14             |
 | 15.0.0 - 15.0.1 | 15             |
 | 16.0.0 - 16.1.0 | 16             |
-| 17.0.0 - 18.0.0 | 17             |
+| 17.0.0 - 18.1.0 | 17             |
 
 ## Known Client IDs
 
-| Client ID          | Description                                                               | Edge |
-| ------------------ | ------------------------------------------------------------------------- | ---- |
-| `146c8ac7b8a0db52` | SCSI storage                                                              | Yes  |
-| `3117b250cab38f45` | Atum                                                                      | Yes  |
-| `41f4a6491028e3c4` | Pushmo and Tagaya                                                         | Yes  |
-| `67bf9945b45248c6` | BCAT                                                                      | Yes  |
-| `6ac5a6873fe5f68c` | SATA storage                                                              | No   |
-| `75fe236362ff5f8b` | ?                                                                         | No   |
-| `81333c548b2e876d` | [Account server](/docs/switch/account)                            | No   |
-| `83b72b05dc3278d7` | NPNS                                                                      | No   |
+| Client ID          | Description                                               | Edge |
+|--------------------|-----------------------------------------------------------|------|
+| `146c8ac7b8a0db52` | SCSI storage                                              | Yes  |
+| `3117b250cab38f45` | Atum and IDBE                                             | Yes  |
+| `41f4a6491028e3c4` | Pushmo and Tagaya                                         | Yes  |
+| `67bf9945b45248c6` | BCAT                                                      | Yes  |
+| `6ac5a6873fe5f68c` | SATA storage                                              | No   |
+| `75fe236362ff5f8b` | [Account server](/docs/switch/account)                    | No   |
+| `81333c548b2e876d` | [Account server](/docs/switch/account)                    | No   |
+| `83b72b05dc3278d7` | NPNS                                                      | No   |
 | `8f849b5d34778d8e` | [AAuth](/docs/switch/aauth) and [BaaS](/docs/switch/baas) | No   |
-| `93af0acb26258de9` | Beach and Bugyo                                                           | Yes  |
-| `bad8156f44ac935a` | SProfile                                                                  | No   |
-| `d5b6cac2c1514c56` | Dragons                                                                   | No   |
-| `dc656ea03b63cf68` | Parental controls                                                         | No   |
-| `df51c436bc01c437` | Prepo                                                                     | No   |
+| `93af0acb26258de9` | Beach and Bugyo                                           | Yes  |
+| `bad8156f44ac935a` | SProfile                                                  | No   |
+| `d5b6cac2c1514c56` | Dragons                                                   | No   |
+| `dc656ea03b63cf68` | Parental controls                                         | No   |
+| `df51c436bc01c437` | Prepo                                                     | No   |
 
 ## Errors
 On error, the server sends the following response:

@@ -8,8 +8,11 @@ Nintendo provides three connection test servers for the Nintendo Switch:
 * http://ctest.cdn.nintendo.net
 * http://ctest-dl-lp1.cdn.nintendo.net
 * http://ctest-ul-lp1.cdn.nintendo.net
+* https://api.hac.lp1.ctest.srv.nintendo.net
 
-The first server is used to check if the internet connection is working when you connect to a wifi network. The other two are used to measure your download and upload speed.
+The first server is used to check if the internet connection is working when you connect to a wifi network. The next two are used to measure your download and upload speed.
+
+The last server was introduced in system version 18.0.0 and is a replacement for `/v1/time` of the [AAuth server](/docs/switch/aauth).
 
 ## Connection Test
 Request:
@@ -95,8 +98,13 @@ Date: Wed, 23 Nov 2022 11:43:01 GMT
 Connection: keep-alive
 ```
 
+## API
+The server provides two endpoints:
+* `/v1/ip`
+* `/v1/time`
+
 ## Errors
-If the user agent does not start with `NX NIFM/` (during connection test) or `Nintendo` (while measuring speed) the server sends the following response instead:
+If the user agent does not start with `NX NIFM/` (during connection test) or `Nintendo` (for the other servers) the server sends the following response instead:
 
 ```
 HTTP/1.1 403 Forbidden
