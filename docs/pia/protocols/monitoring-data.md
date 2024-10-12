@@ -13,14 +13,14 @@ The message payload is encoded as follows:
 *Up to 5.6:*
 
 | Offset | Size | Description                                                                                                         |
-|--------|------|---------------------------------------------------------------------------------------------------------------------|
+| ------ | ---- | ------------------------------------------------------------------------------------------------------------------- |
 | 0x0    | 16   | [Monitoring data header](#monitoring-data-header)                                                                   |
 | 0x10   |      | Payload, first zlib compressed, then encrypted with AES-ECB. The key is always: `901edf193dc5ef3c5290647bff20c385`. |
 
 *5.7 and later:*
 
 | Offset | Size | Description                                                                                                       |
-|--------|------|-------------------------------------------------------------------------------------------------------------------|
+| ------ | ---- | ----------------------------------------------------------------------------------------------------------------- |
 | 0x0    | 16   | [Monitoring data header](#monitoring-data-header)                                                                 |
 | 0x10   |      | Payload, first zlib compressed, then encrypted with AES-GCM. See [AES-GCM encryption](#aes-gcm-encryption) below. |
 |        |      | AES-GCM authentication tag                                                                                        |
@@ -28,7 +28,7 @@ The message payload is encoded as follows:
 The content of the payload depends on the version number and data type in the monitoring data header.
 
 | Data Type | Payload content                                                       |
-|-----------|-----------------------------------------------------------------------|
+| --------- | --------------------------------------------------------------------- |
 | 0         | [Session begin monitoring content](#session-begin-monitoring-content) |
 | 1         | [Session end monitoring data](#session-end-monitoring-data)           |
 | 2         | [Session end monitoring data](#session-end-monitoring-data)           |
@@ -58,7 +58,7 @@ The key is chosen by the lower nybble of the encryption key id in the monitoring
 The nonce is constructed as follows:
 
 | Offset | Size | Description                       |
-|--------|------|-----------------------------------|
+| ------ | ---- | --------------------------------- |
 | 0x0    | 8    | Nonce from monitoring data header |
 | 0x8    | 4    | Always `5bd085fa`                 |
 
@@ -66,7 +66,7 @@ The nonce is constructed as follows:
 Monitoring was added to Pia in version 3.4.
 
 | Pia version | Monitoring version |
-|-------------|--------------------|
+| ----------- | ------------------ |
 | 3.4         | 1                  |
 | 3.5         | 2                  |
 | 3.6         | 3                  |
@@ -95,7 +95,7 @@ As described above, the message payload starts with a monitoring data header. Ea
 In the first monitoring data header, the payload size indicates the size of the compressed payload. In all other monitoring data headers, the payload size indicates the size of the structure, including the monitoring data header itself.
 
 | Offset | Size | Description                       |
-|--------|------|-----------------------------------|
+| ------ | ---- | --------------------------------- |
 | 0x0    | 1    | [Version number](#version-number) |
 | 0x1    | 1    | Data type                         |
 | 0x2    | 1    | Flags                             |
@@ -105,7 +105,7 @@ In the first monitoring data header, the payload size indicates the size of the 
 *Up to 5.6:*
 
 | Offset | Size | Description                |
-|--------|------|----------------------------|
+| ------ | ---- | -------------------------- |
 | 0x6    | 10   | Padding (filled with 0xFF) |
 
 *5.7 and later:*
@@ -113,7 +113,7 @@ In the first monitoring data header, the payload size indicates the size of the 
 This part is only relevant in the first monitoring data header. In all other monitoring data headers, it is filled with 0xFF.
 
 | Offset | Size | Description                       |
-|--------|------|-----------------------------------|
+| ------ | ---- | --------------------------------- |
 | 0x6    | 8    | AES-GCM nonce (random number)     |
 | 0xE    | 1    | Encryption key id (random number) |
 | 0xF    | 1    | Always 0xFF                       |
@@ -121,10 +121,53 @@ This part is only relevant in the first monitoring data header. In all other mon
 ## Session Begin Monitoring Content
 All fields are initialized to 0xFF.
 
+Version 7:
+
+| Offset | Size | Description                                                              |
+| ------ | ---- | ------------------------------------------------------------------------ |
+| 0x0    | 16   | [MonitoringDataHeader](#monitoring-data-header)                          |
+| 0x10   | 1    | PIA version major                                                        |
+| 0x11   | 1    | PIA version minor                                                        |
+| 0x12   | 1    | PIA version patch                                                        |
+| 0x1D   | 1    | Platform ID (3=Wii U)                                                    |
+| 0x1E   | 1    | [Region ID](https://nintendo-wiki.pretendo.network/docs/misc/region-ids) |
+| 0x37   | 4    | Uint32 client external IP address                                        |
+| 0x3B   | 4    | Uint32 client local IP address                                           |
+| 0x3F   | 1    | NAT Mapping                                                              |
+| 0x40   | 1    | NAT Filtering                                                            |
+| 0x42   | 1    | NAT type (flags)                                                         |
+| 0x4D   | 4    | First 4 bytes of the MD5 hash of the connected users PID                 |
+| 0x51   | 4    | Uint32 gathering ID                                                      |
+| 0x55   | 4    | Game server ID                                                           |
+| 0x19B  | 2    | Uint16 client external port                                              |
+| 0x19D  | 2    | Uint16 client local port                                                 |
+
+Version 11:
+
+| Offset | Size | Description                                                              |
+| ------ | ---- | ------------------------------------------------------------------------ |
+| 0x0    | 16   | [MonitoringDataHeader](#monitoring-data-header)                          |
+| 0x10   | 1    | PIA version major                                                        |
+| 0x11   | 1    | PIA version minor                                                        |
+| 0x12   | 1    | PIA version patch                                                        |
+| 0x1D   | 1    | Platform ID (3=Wii U)                                                    |
+| 0x1E   | 1    | [Region ID](https://nintendo-wiki.pretendo.network/docs/misc/region-ids) |
+| 0x37   | 4    | Uint32 client external IP address                                        |
+| 0x3B   | 4    | Uint32 client local IP address                                           |
+| 0x3F   | 1    | NAT Mapping                                                              |
+| 0x40   | 1    | NAT Filtering                                                            |
+| 0x42   | 1    | NAT type (flags)                                                         |
+| 0x4D   | 4    | First 4 bytes of the MD5 hash of the connected users PID                 |
+| 0x51   | 4    | Uint32 gathering ID                                                      |
+| 0x55   | 4    | Game server ID                                                           |
+| 0x14D  | 4    | First 4 bytes of the MD5 hash of the gathering hosts PID                 |
+| 0x19B  | 2    | Uint16 client external port                                              |
+| 0x19D  | 2    | Uint16 client local port                                                 |
+
 Version 18:
 
 | Type                                                            | Description                                                                                                                     |
-|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | [MonitoringDataHeader](#monitoring-data-header)                 | Monitoring data header                                                                                                          |
 | Uint32                                                          | Pia version                                                                                                                     |
 | Uint32                                                          | SDK version                                                                                                                     |
@@ -293,7 +336,7 @@ Version 18:
 ### NexSessionSearchCriteria
 
 | Type        | Description                                                                                           |
-|-------------|-------------------------------------------------------------------------------------------------------|
+| ----------- | ----------------------------------------------------------------------------------------------------- |
 | Uint32      | Game mode                                                                                             |
 | Uint8       | Min participants num range (min)                                                                      |
 | Uint8       | Min participants num range (max)                                                                      |
@@ -309,7 +352,7 @@ Version 18:
 ### NexSessionSearchCriteriaExtra
 
 | Type   | Description        |
-|--------|--------------------|
+| ------ | ------------------ |
 | Uint32 | Rating value       |
 | Uint32 | Violation rate     |
 | Uint32 | Disconnection rate |
@@ -319,7 +362,7 @@ Version 18:
 ### Thread Mode
 
 | Mode | Description                       |
-|------|-----------------------------------|
+| ---- | --------------------------------- |
 | 0    | ThreadModeUndefined               |
 | 1    | ThreadModeSafeTransportBuffer     |
 | 2    | ThreadModeUnsafeTransportBuffer   |
@@ -331,7 +374,7 @@ Version 18:
 ### NAT Traversal Result
 
 | Value | Description                |
-|-------|----------------------------|
+| ----- | -------------------------- |
 | 0     | Reliable                   |
 | 1     | Unreliable                 |
 | 2     | Failure or very unreliable |
@@ -339,6 +382,6 @@ Version 18:
 ## Session End Monitoring Data
 
 | Offset | Size | Description                                       |
-|--------|------|---------------------------------------------------|
+| ------ | ---- | ------------------------------------------------- |
 | 0x0    | 16   | [Monitoring data header](#monitoring-data-header) |
 | ...    | ...  | ...                                               |
