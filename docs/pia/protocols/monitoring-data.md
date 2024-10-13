@@ -23,7 +23,7 @@ The message payload is encoded as follows:
 | ------ | ---- | ----------------------------------------------------------------------------------------------------------------- |
 | 0x0    | 16   | [Monitoring data header](#monitoring-data-header)                                                                 |
 | 0x10   |      | Payload, first zlib compressed, then encrypted with AES-GCM. See [AES-GCM encryption](#aes-gcm-encryption) below. |
-|        |      | AES-GCM authentication tag                                                                                        |
+|        | 16   | AES-GCM authentication tag                                                                                        |
 
 The content of the payload depends on the version number and data type in the monitoring data header.
 
