@@ -92,7 +92,7 @@ Monitoring was added to Pia in version 3.4.
 ## Monitoring Data Header
 As described above, the message payload starts with a monitoring data header. Each monitoring data structure starts with a monitoring data header as well. The flags field is always 0xFC in the first monitoring data header, and 0xFF in all other monitoring data headers.
 
-In the first monitoring data header, the payload size indicates the size of the compressed payload. In all other monitoring data headers, the payload size indicates the size of the structure, including the monitoring data header itself.
+In the first monitoring data header, the payload size indicates the size of the compressed payload *after* the payload has been decrypted. In all other monitoring data headers, the payload size indicates the size of the structure, including the monitoring data header itself.
 
 | Offset | Size | Description                       |
 | ------ | ---- | --------------------------------- |
