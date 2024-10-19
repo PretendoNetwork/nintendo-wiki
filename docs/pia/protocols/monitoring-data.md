@@ -126,9 +126,7 @@ Version 7:
 | Offset | Size | Description                                                              |
 | ------ | ---- | ------------------------------------------------------------------------ |
 | 0x0    | 16   | [MonitoringDataHeader](#monitoring-data-header)                          |
-| 0x10   | 1    | PIA version major                                                        |
-| 0x11   | 1    | PIA version minor                                                        |
-| 0x12   | 1    | PIA version patch                                                        |
+| 0x10   | 4    | PIA version (u8: major, u8: minor, u8: patch, u8: padding)               |
 | 0x1D   | 1    | Platform ID (3=Wii U)                                                    |
 | 0x1E   | 1    | [Region ID](https://nintendo-wiki.pretendo.network/docs/misc/region-ids) |
 | 0x37   | 4    | Uint32 client external IP address                                        |
@@ -147,9 +145,7 @@ Version 11:
 | Offset | Size | Description                                                              |
 | ------ | ---- | ------------------------------------------------------------------------ |
 | 0x0    | 16   | [MonitoringDataHeader](#monitoring-data-header)                          |
-| 0x10   | 1    | PIA version major                                                        |
-| 0x11   | 1    | PIA version minor                                                        |
-| 0x12   | 1    | PIA version patch                                                        |
+| 0x10   | 4    | PIA version (u8: major, u8: minor, u8: patch, u8: padding)               |
 | 0x1D   | 1    | Platform ID (3=Wii U)                                                    |
 | 0x1E   | 1    | [Region ID](https://nintendo-wiki.pretendo.network/docs/misc/region-ids) |
 | 0x37   | 4    | Uint32 client external IP address                                        |
@@ -169,9 +165,9 @@ Version 18:
 | Type                                                            | Description                                                                                                                     |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | [MonitoringDataHeader](#monitoring-data-header)                 | Monitoring data header                                                                                                          |
-| Uint32                                                          | Pia version                                                                                                                     |
+| Uint32                                                          | Pia version (u8: major, u8: minor, u8: patch, u8: padding)                                                                      |
 | Uint32                                                          | SDK version                                                                                                                     |
-| Uint32                                                          | NEX version                                                                                                                     |
+| Uint32                                                          | NEX version (u8: major, u8: minor, u8: patch, u8: padding)                                                                      |
 | Uint8                                                           | Unknown                                                                                                                         |
 | Uint8                                                           | Unknown                                                                                                                         |
 | Uint8                                                           | Platform id (3=Wii U, 4=Switch)                                                                                                 |
