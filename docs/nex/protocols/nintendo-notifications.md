@@ -65,7 +65,10 @@ No RMC response is sent.
 | 2    | 1      | [GameKey]                          | (3DS) A friend changed their favorite game                                                |
 | 3    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed their comment                                                      |
 | 5    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend changed or edited their mii                                                |
+| 6    | 1      | [NintendoNotificationEventProfile] | (3DS) A friend updated their profile                                                      |
 | 7    | 1      | [NintendoNotificationEventGeneral] | (3DS) You became friends                                                                  |
+| 8    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend deleted your friend card                                                   |
+| 9    | 1      | [NintendoNotificationEventGeneral] | (3DS) A friend sent you an invitation                                                     |
 | 10   | 1      | [NintendoNotificationEventGeneral] | (3DS / Wii U) A friend went offline                                                       |
 | 21   | 2      | [NNAInfo]                          | (Wii U) A friend changed or edited their mii                                              |
 | 22   |        |                                    | (Wii U) Mii related                                                                       |
