@@ -29,7 +29,7 @@ This page describes the methods that are only seen in Super Smash Bros. 4. The p
 | 61        | [GetFightingPowerChart](#61-getfightingpowerchart)       |
 | 62        | [GetFightingPowerChartAll](#62-getfightingpowerchartall) |
 | 63        | [ReportSharedData](#63-reportshareddata)                 |
-| 64        | GetSharedDataMeta                                        |
+| 64        | [GetSharedDataMeta](#64-getshareddatameta)               |
 
 ### (45) PostProfile
 #### Request
@@ -255,6 +255,19 @@ This method does not take any parameters.
 #### Response
 This method does not return anything.
 
+### (64) GetSharedDataMeta
+#### Request
+
+| Type                              | Description |
+| --------------------------------- | ----------- |
+| [DataStoreGetSharedDataMetaParam] | param       |
+
+#### Response
+
+| Type                      | Description     |
+| ------------------------- | --------------- |
+| [DataStoreSharedDataInfo] | pSharedDataInfo |
+
 ## Types
 ### DataStorePostProfileParam ([Structure])
 
@@ -422,6 +435,12 @@ This method does not return anything.
 | Uint64                | dataId  |
 | [DataStoreReqGetInfo] | getInfo |
 
+### DataStoreGetSharedDataMetaParam ([Structure])
+
+| Type     | Description |
+| -------- | ----------- |
+| [String] | Unknown     |
+
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
 [Buffer]: /docs/nex/types#buffer
@@ -451,6 +470,7 @@ This method does not return anything.
 [DataStoreFightingPowerChart]: #datastorefightingpowerchart-structure
 [DataStoreReplayPlayer]: #datastorereplayplayer-structure
 [DataStoreFileServerObjectInfo]: #datastorefileserverobjectinfo-structure
+[DataStoreGetSharedDataMetaParam]: #datastoregetshareddatametaparam-structure
 
 [DataStoreReqGetInfo]: /docs/nex/protocols/datastore#datastorereqgetinfo-structure
 [DataStoreReqPostInfo]: /docs/nex/protocols/datastore#datastorereqpostinfo-structure
