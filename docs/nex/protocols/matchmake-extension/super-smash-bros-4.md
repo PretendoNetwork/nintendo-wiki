@@ -4,7 +4,7 @@ toc: true
 title: Super Smash Bros. 4 (109)
 ---
 
-This page describes the methods that are only seen in Super Smash Bros. 4.
+This page describes the methods that are only seen in Super Smash Bros. 4. Everything described in the Notes column for each table are guesses and may not be accurate.
 
 ## Methods
 
@@ -52,9 +52,9 @@ Methods 36 - 48 and 51 belong to the TournamentProtocol. The others belong to th
 ### (36) GetTournament
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown     | Tournament ID |
 
 #### Response
 
@@ -65,9 +65,9 @@ Methods 36 - 48 and 51 belong to the TournamentProtocol. The others belong to th
 ### (38) GetTournamentResult
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown     | Tournament ID |
 
 #### Response
 
@@ -80,11 +80,11 @@ Methods 36 - 48 and 51 belong to the TournamentProtocol. The others belong to th
 ### (39) SetTournamentReplayId
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown (1) |
-| Uint8  | Unknown (2) |
-| Uint64 | Unknown (3) |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown (1) | Tournament ID |
+| Uint8  | Unknown (2) | Slot ID       |
+| Uint64 | Unknown (3) | Replay ID     |
 
 #### Response
 This method does not return anything.
@@ -92,9 +92,9 @@ This method does not return anything.
 ### (40) GetTournamentProfiles
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown     | Tournament ID |
 
 #### Response
 
@@ -185,10 +185,10 @@ This method does not return anything.
 ### (50) GetTournamentCompetition
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown (1) |
-| Uint8  | Unknown (2) |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown (1) | Tournament ID |
+| Uint8  | Unknown (2) |               |
 
 #### Response
 
@@ -199,9 +199,9 @@ This method does not return anything.
 ### (51) GetTournamentReplayIds
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes         |
+|--------|-------------|---------------|
+| Uint32 | Unknown     | Tournament ID |
 
 #### Response
 
@@ -218,10 +218,10 @@ This method does not return anything.
 
 #### Response
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown (1) |
-| Uint32 | Unknown (2) |
+| Type   | Description | Notes                                    |
+|--------|-------------|------------------------------------------|
+| Uint32 | Unknown (1) | CommunityCompetition ID? / Gathering ID? |
+| Uint32 | Unknown (2) | Tournament ID?                           |
 
 ### (53) UnregisterCommunityCompetition
 #### Request
@@ -236,9 +236,9 @@ This method does not return anything.
 ### (54) UnregisterCommunityCompetitionById
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes                    |
+|--------|-------------|--------------------------|
+| Uint32 | Unknown     | CommunityCompetition ID? |
 
 #### Response
 This method does not return anything.
@@ -246,10 +246,10 @@ This method does not return anything.
 ### (55) GetCommunityCompetitions
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown (1) |
-| Bool   | Unknown (2) |
+| Type   | Description | Notes                    |
+|--------|-------------|--------------------------|
+| Uint32 | Unknown (1) | CommunityCompetition ID? |
+| Bool   | Unknown (2) |                          |
 
 #### Response
 
@@ -302,13 +302,13 @@ This method does not return anything.
 ### (60) JoinCommunityCompetition
 #### Request
 
-| Type     | Description |
-|----------|-------------|
-| Uint32   | Unknown (1) |
-| Bool     | Unknown (2) |
-| Bool     | Unknown (3) |
-| [String] | Unknown (4) |
-| [String] | Unknown (5) |
+| Type     | Description | Notes                    |
+|----------|-------------|--------------------------|
+| Uint32   | Unknown (1) | CommunityCompetition ID? |
+| Bool     | Unknown (2) |                          |
+| Bool     | Unknown (3) |                          |
+| [String] | Unknown (4) |                          |
+| [String] | Unknown (5) |                          |
 
 #### Response
 This method does not return anything.
@@ -330,12 +330,12 @@ This method does not return anything.
 ### (62) EndCommunityCompetitionParticipation
 #### Request
 
-| Type     | Description |
-|----------|-------------|
-| Uint32   | Unknown (1) |
-| Bool     | Unknown (2) |
-| Bool     | Unknown (3) |
-| [String] | Unknown (4) |
+| Type     | Description | Notes                    |
+|----------|-------------|--------------------------|
+| Uint32   | Unknown (1) | CommunityCompetition ID? |
+| Bool     | Unknown (2) |                          |
+| Bool     | Unknown (3) |                          |
+| [String] | Unknown (4) |                          |
 
 #### Response
 This method does not return anything.
@@ -383,9 +383,9 @@ This method does not return anything.
 ### (66) GetCommunityCompetitionRanking
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown     |
+| Type   | Description | Notes                    |
+|--------|-------------|--------------------------|
+| Uint32 | Unknown     | CommunityCompetition ID? |
 
 #### Response
 
