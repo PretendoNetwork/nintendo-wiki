@@ -51,7 +51,8 @@ The user agents below are taken from the account sysmodule. If the request is ma
 | 15.0.0 - 15.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 15.3.0.0; Add-on 15.3.0.0)` |
 | 16.0.0 - 16.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)` |
 | 17.0.0 - 17.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)` |
-| 18.0.0          | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 18.3.0.0; Add-on 18.3.0.0)` |
+| 18.0.0 - 18.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 18.3.0.0; Add-on 18.3.0.0)` |
+| 19.0.0          | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 19.3.0.0; Add-on 19.3.0.0)` |
 
 ## Methods
 The following methods do not require an access token:
@@ -74,6 +75,7 @@ The following methods require a user access token:
 
 | Module  | Method | URL                                                                             |
 | ------- | ------ | ------------------------------------------------------------------------------- |
+| Account | POST   | `/1.0.0/devices/me/delete`                                                      |
 | Account | POST   | `/1.0.0/image_upload`                                                           |
 | Account | PUT    | `/1.0.0/push_channels/<id>/<id>`                                                |
 | Friends | GET    | `/1.0.0/users`                                                                  |
@@ -85,7 +87,7 @@ The following methods require a user access token:
 | Friends | PATCH  | `/1.0.0/users/<id>/device_accounts/<id>`                                        |
 | Account | DELETE | [`/1.0.0/users/<id>/device_accounts/<id>`](#delete-100usersiddevice_accountsid) |
 | Friends | POST   | [`/1.0.0/users/<id>/generate_code`](#post-100usersidgenerate_code)              |
-| Account | POST   | `/1.0.0/users/<id>/link`                                                        |
+| Account | POST   | [`/1.0.0/users/<id>/link`](#post-100usersidlink)                                |
 | Account | POST   | `/1.0.0/users/<id>/unlink`                                                      |
 | Friends | POST   | `/2.0.0/friend_requests`                                                        |
 | Friends | PATCH  | `/2.0.0/friend_requests/<id>`                                                   |
@@ -99,10 +101,11 @@ The following methods require a user access token:
 ### POST /1.0.0/application/token
 This method provides an anonymous access token.
 
-| Param     | Description                                                           |
-| --------- | --------------------------------------------------------------------- |
-| grantType | `public_client`                                                       |
+| Param     | Description                                                   |
+| --------- | ------------------------------------------------------------- |
+| grantType | `public_client`                                               |
 | assertion | Device token obtained from [dauth server](/docs/switch/dauth) |
+| penneId   | Penne id (optional)                                           |
 
 Response on success:
 
@@ -248,6 +251,16 @@ Generates a new friend code. Returns the new [user information](#user-informatio
 | Param | Description |
 | ----- | ----------- |
 | type  | `NX`        |
+
+### POST /1.0.0/users/&lt;id&gt;/link
+Links a Nintendo account to the given device account.
+
+| Param     | Description                    |
+|-----------|--------------------------------|
+| `idp`     | `nintendoAccount`              |
+| `idToken` | ID token from Nintendo account |
+
+Returns the new [user information](#user-information).
 
 ### GET /1.0.0/certificates
 This method returns the JWK set for the id token that's issued by <code><a href="#post-100login">/1.0.0/login</a></code> and <code><a href="#post-100federation">/1.0.0/federation</a></code>.

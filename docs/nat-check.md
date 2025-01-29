@@ -9,8 +9,10 @@ This server is used to detect NAT properties of the router in order to perform N
 This server is at:<br>
 - `nncs1.app.nintendowifi.net` (Wii U, primary server)
 - `nncs2.app.nintendowifi.net` (Wii U, secondary server)
-- `nncs1-%.n.n.srv.nintendo.net` (Switch, primary server)
-- `nncs2-%.n.n.srv.nintendo.net` (Switch, secondary server)
+- `nncs1-lp1.n.n.srv.nintendo.net` (Switch, primary server)
+- `nncs2-lp1.n.n.srv.nintendo.net` (Switch, secondary server)
+- `nncs1.p01.lp1.n.n.srv.nintendo.net` (Switch 2, primary server)
+- `nncs2.p01.lp1.n.n.srv.nintendo.net` (Switch 2, secondary server)
 
 The protocol consists of simple UDP messages through port 10025 (primary port) or 10125 (secondary port). Messages are encoded in big endian byte order.
 

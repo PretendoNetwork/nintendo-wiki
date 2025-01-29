@@ -30,6 +30,7 @@ Services are never modified in a backward incompatible way, but new methods and 
 * `nn.npln.friends.v1.Friends`
 * `nn.npln.friends.v1.PresenceService`
 * `nn.npln.gamesync.v1.Gamesync`
+* `nn.npln.globalcounter.v1.GlobalCounterService`
 * `nn.npln.hydro.v1.Datastore`
 * `nn.npln.leaderboard.v1.LeaderboardService`
 * `nn.npln.maintenance.v1.MaintenanceScheduleService`
@@ -72,6 +73,7 @@ Pokemon Scarlet and Violet implement custom services as well:
 | Splatoon 3                           | `dce9377b` |
 | Splatoon 3: Splatfest World Premiere | `156eef4e` |
 | Super Mario Bros. Wonder             | `ba973ec6` |
+| Super Mario Party Jamboree           | `adf89f68` |
 
 ## Useful Tools
 * [grpcui](https://github.com/fullstorydev/grpcui) - a simple user interface for gRPC

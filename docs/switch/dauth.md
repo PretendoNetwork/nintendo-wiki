@@ -63,7 +63,8 @@ In 18.0.0 and later, the user agent is no longer present and the headers are reo
 | 15.0.0 - 15.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 15.3.0.0)`                      |
 | 16.0.0 - 16.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 16.2.0.0)`                      |
 | 17.0.0 - 17.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 17.5.0.0)`                      |
-| 18.0.0 - 18.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 18.3.0.0)`                      |
+
+No user agent is present in system version 18.0.0 and later.
 
 ## Methods
 In API version 3 and later, one must perform a cryptographic challenge to obtain a device token or edge token:
@@ -108,7 +109,7 @@ The following methods return a different kind of device token:
 | 6.2.0           | v4  |
 | 7.0.0 - 8.1.1   | v5  |
 | 9.0.0 - 12.1.0  | v6  |
-| 13.0.0 - 18.1.0 | v7  |
+| 13.0.0 - 19.0.1 | v7  |
 
 #### API Changes
 
@@ -132,10 +133,23 @@ Response:
 
 | Field     | Description                                                    |
 | --------- | -------------------------------------------------------------- |
-| challenge | Base64-encoded challenge (32 bytes)                            |
+| challenge | Base64-encoded challenge (35 bytes)                            |
 | data      | Base64-encoded AES key required for MAC calculation (16 bytes) |
 
 The data value never changes, but it depends on the given key generation. It is even consistent across environments. The challenge value is valid for one minute.
+
+The challenge field used to contain 32 unknown bytes. However, at the end of 2024, the challenge was updated and contains the following 35 bytes instead:
+
+| Offset | Size | Description   |
+|--------|------|---------------|
+| 0x0    | 1    | Always 2      |
+| 0x1    | 4    | Timestamp     |
+| 0x5    | 1    | Always 0 or 2 |
+| 0x6    | 29   | Unknown       |
+
+Since the challenge is treated as an opaque piece of data, no changes were needed on the client side.
+
+At the same time, the server stopped adding base64 padding to the challenge and data fields.
 
 ## Device Token Request
 This method returns a device token as JWT.
@@ -223,12 +237,14 @@ A `vendor_id` parameter was added:
 | 15.0.0 - 15.0.1 | 15             |
 | 16.0.0 - 16.1.0 | 16             |
 | 17.0.0 - 18.1.0 | 17             |
+| 19.0.0 - 19.0.1 | 19             |
 
 ## Known Client IDs
 
 | Client ID          | Description                                               | Edge |
 |--------------------|-----------------------------------------------------------|------|
 | `146c8ac7b8a0db52` | SCSI storage                                              | Yes  |
+| `16e96f76850156d1` | Crash reports                                             | No   |
 | `3117b250cab38f45` | Atum and IDBE                                             | Yes  |
 | `41f4a6491028e3c4` | Pushmo and Tagaya                                         | Yes  |
 | `67bf9945b45248c6` | BCAT                                                      | Yes  |
@@ -242,6 +258,7 @@ A `vendor_id` parameter was added:
 | `d5b6cac2c1514c56` | Dragons                                                   | No   |
 | `dc656ea03b63cf68` | Parental controls                                         | No   |
 | `df51c436bc01c437` | Prepo                                                     | No   |
+| `e58171fe439390ce` | Penne                                                     | No   |
 
 ## Errors
 On error, the server sends the following response:
@@ -302,7 +319,7 @@ Most errors use HTTP status code 400. The only known exception is error 0009, wh
 | 0017 | The device is banned.                                      |
 
 ## Examples
-Note that the client must always use a valid device certificate as the client certificate. If the client does not provide a certificate, the nginx server rejects the request:
+Note that the client must always use a valid device certificate as the client certificate. If the client does not provide a certificate, the nginx server used to reject the request:
 
 ```
 HTTP/1.1 400 Bad Request
@@ -321,6 +338,8 @@ Connection: close
 </body>
 </html>
 ```
+
+Nowadays, the server terminates the connection immediately after the TLS handshake instead.
 
 Before anything else, one must obtain a challenge:
 

@@ -4,6 +4,8 @@ toc: true
 title: NPNS (Push Notifications)
 ---
 
+NPNS has been replaced by [Penne](/docs/switch/penne).
+
 ### broker
 
 | URL                        |
