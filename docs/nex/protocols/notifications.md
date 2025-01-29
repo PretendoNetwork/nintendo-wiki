@@ -64,24 +64,32 @@ Notification types are a combined value made up of a category and a subtype. The
 
 * Type 3001 - 3008 are sent to the owner of the gathering.
 * Type 4000 and 109000 are sent to all participants of the gathering.
-* Type 101000 and 102000 are sent to all participants of the gathering who are not the owner.
+* Type 2000 is sent to all participants of the gathering who are not the owner.
 * Type 116000 is sent to all participants of the round.
 
 ## Notification Categories
 
-| Category | Description                     | Notes                                                  |
-|----------|---------------------------------|--------------------------------------------------------|
-| 3        | Participation                   |                                                        |
-| 4        | Ownership changed               | Does not seem to have subtypes                         |
-| 101      | Request join gathering          | Only seen in WiiU Chat. Does not seem to have subtypes |
-| 102      | End gathering                   | Only seen in WiiU Chat. Does not seem to have subtypes |
-| 109      | Gathering unregistered          | Does not seem to have subtypes                         |
-| 110      | Host changed                    | Does not seem to have subtypes                         |
-| 115      | Service item request completed  | Does not seem to have subtypes                         |
-| 116      | Matchmake referee round started | Does not seem to have subtypes                         |
-| 120      | System password changed         | Does not seem to have subtypes                         |
-| 121      | System password cleared         | Does not seem to have subtypes                         |
-| 122      | Switch gathering                | Does not seem to have subtypes                         |
+| Category  | Description                                   | Notes                                                           |
+|-----------|-----------------------------------------------|-----------------------------------------------------------------|
+| 2         | Session launched                              | Quazal notification triggered with `MatchMaking::LaunchSession` |
+| 3         | Participation                                 |                                                                 |
+| 4         | Ownership changed                             | Does not seem to have subtypes                                  |
+| 101 - 108 | Reserved                                      | Notifications within these categories are game-specific         |
+| 109       | Gathering unregistered                        | Does not seem to have subtypes                                  |
+| 110       | Host changed                                  | Does not seem to have subtypes                                  |
+| 111       | Game notification logout                      | Does not seem to have subtypes                                  |
+| 112       | Subscription event                            | Does not seem to have subtypes                                  |
+| 113       | Game server maintenance                       | Does not seem to have subtypes                                  |
+| 114       | Maintenance announcement                      | Does not seem to have subtypes                                  |
+| 115       | Service item request completed                | Does not seem to have subtypes                                  |
+| 116       | Matchmake referee round started               | Does not seem to have subtypes                                  |
+| 117       | Matchmake referee first round report received | Does not seem to have subtypes                                  |
+| 118       | Matchmake referee round summarized            | Does not seem to have subtypes                                  |
+| 119       | Matchmake system configuration notification   | Does not seem to have subtypes                                  |
+| 120       | System password changed                       | Does not seem to have subtypes                                  |
+| 121       | System password cleared                       | Does not seem to have subtypes                                  |
+| 122       | Added to gathering                            | Does not seem to have subtypes                                  |
+| 128       | User status updated                           | Does not seem to have subtypes                                  |
 
 ## Notification Subtypes
 
@@ -120,15 +128,6 @@ Notification types are a combined value made up of a category and a subtype. The
 | m_uiParam1  | Gathering id   |
 | m_uiParam2  | New owner      |
 | m_strParam  | Unknown        |
-
-### Notification type 101000 and 102000:
-
-| Field       | Description   |
-|-------------|---------------|
-| m_pidSource | Sender PID    |
-| m_uiParam1  | Gathering ID  |
-| m_uiParam2  | Recipient PID |
-| m_strParam  | Message       |
 
 ### Notification type 109000:
 
