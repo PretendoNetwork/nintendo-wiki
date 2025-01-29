@@ -37,36 +37,36 @@ This method does not return anything.
 ### (2) PostContent
 #### Request
 
-| Type                                                                | Description |
-| ------------------------------------------------------------------- | ----------- |
-| [SubscriberPostContentParam](#subscriberpostcontentparam-structure) | Param       |
+| Type                                                                | Name  |
+| ------------------------------------------------------------------- | ----- |
+| [SubscriberPostContentParam](#subscriberpostcontentparam-structure) | param |
 
 #### Response
 
-| Type   | Description |
-| ------ | ----------- |
-| Uint64 | Unknown     |
+| Type   | Name      |
+| ------ | --------- |
+| Uint64 | contentId |
 
 ### (3) GetContent
 #### Request
 
-| Type                                                              | Description |
-| ----------------------------------------------------------------- | ----------- |
-| [SubscriberGetContentParam](#subscribergetcontentparam-structure) | Param       |
+| Type                                                              | Name  |
+| ----------------------------------------------------------------- | ----- |
+| [SubscriberGetContentParam](#subscribergetcontentparam-structure) | param |
 
 #### Response
 
-| Type                                                            | Description |
-| --------------------------------------------------------------- | ----------- |
-| [List]&lt;[SubscriberContent](#subscribercontent-structure)&gt; | Content     |
+| Type                                                            | Name     |
+| --------------------------------------------------------------- | -------- |
+| [List]&lt;[SubscriberContent](#subscribercontent-structure)&gt; | contents |
 
 ### (11) DeleteContent
 #### Request
 
-| Type                   | Description |
-| ---------------------- | ----------- |
-| [List]&lt;[String]&gt; | Unknown     |
-| Uint64                 | Unknown     |
+| Type                   | Name      |
+| ---------------------- | --------- |
+| [List]&lt;[String]&gt; | topics    |
+| Uint64                 | contentId |
 
 #### Response
 This method does not return anything.
@@ -74,23 +74,23 @@ This method does not return anything.
 ### (12) GetContentMulti
 #### Request
 
-| Type                                                                            | Description |
-| ------------------------------------------------------------------------------- | ----------- |
-| [List]&lt;[SubscriberGetContentParam](#subscribergetcontentparam-structure)&gt; | Param       |
+| Type                                                                            | Name  |
+| ------------------------------------------------------------------------------- | ----- |
+| [List]&lt;[SubscriberGetContentParam](#subscribergetcontentparam-structure)&gt; | param |
 
 #### Response
 
-| Type                                                                          | Description |
-| ----------------------------------------------------------------------------- | ----------- |
-| [List]&lt;[List]&lt;[SubscriberContent](#subscribercontent-structure)&gt;&gt; | Content     |
+| Type                                                                          | Name     |
+| ----------------------------------------------------------------------------- | -------- |
+| [List]&lt;[List]&lt;[SubscriberContent](#subscribercontent-structure)&gt;&gt; | contents |
 
 ### (13) UpdateUserStatus
 #### Request
 
-| Type                                        | Description |
-| ------------------------------------------- | ----------- |
-| [List]&lt;[Unknown](#unknown-structure)&gt; | Unknown     |
-| [List]&lt;Uint8&gt;                         | Unknown     |
+| Type                                                                            | Description |
+| ------------------------------------------------------------------------------- | ----------- |
+| [List]&lt;[SubscriberUserStatusParam](#subscriberuserstatusparam-structure)&gt; | Param       |
+| [List]&lt;Uint8&gt;                                                             | Unknown     |
 
 #### Response
 This method does not return anything.
@@ -98,60 +98,60 @@ This method does not return anything.
 ### (14) GetFriendUserStatuses
 #### Request
 
-| Type                | Description                                |
-| ------------------- | ------------------------------------------ |
-| [List]&lt;Uint8&gt; | Up to 8 different integers between 0 and 7 |
+| Type                | Name | Description                                |
+| ------------------- | ---- | ------------------------------------------ |
+| [List]&lt;Uint8&gt; | keys | Up to 8 different integers between 0 and 7 |
 
 #### Response
 
-| Type                                                                          | Description |
-| ----------------------------------------------------------------------------- | ----------- |
-| [List]&lt;[SubscriberUserStatusInfo](#subscriberuserstatusinfo-structure)&gt; | Status list |
+| Type                                                                          | Name  |
+| ----------------------------------------------------------------------------- | ----- |
+| [List]&lt;[SubscriberUserStatusInfo](#subscriberuserstatusinfo-structure)&gt; | infos |
 
 ### (15) GetUserStatuses
 #### Request
 
-| Type                | Description                                |
-| ------------------- | ------------------------------------------ |
-| [List]&lt;[PID]&gt; | User ids                                   |
-| [List]&lt;Uint8&gt; | Up to 8 different integers between 0 and 7 |
+| Type                | Name  | Description                                |
+| ------------------- | ----- | ------------------------------------------ |
+| [List]&lt;[PID]&gt; | users | User ids                                   |
+| [List]&lt;Uint8&gt; | keys  | Up to 8 different integers between 0 and 7 |
 
 #### Response
 
-| Type                                                                          | Description |
-| ----------------------------------------------------------------------------- | ----------- |
-| [List]&lt;[SubscriberUserStatusInfo](#subscriberuserstatusinfo-structure)&gt; | Status list |
+| Type                                                                          | Name  |
+| ----------------------------------------------------------------------------- | ----- |
+| [List]&lt;[SubscriberUserStatusInfo](#subscriberuserstatusinfo-structure)&gt; | infos |
 
 ## Types
 ### SubscriberContent ([Structure])
 
-| Type                   | Description |
-| ---------------------- | ----------- |
-| Uint64                 | Unknown     |
-| [String]               | Unknown     |
-| [qBuffer]              | Unknown     |
-| Uint64                 | Unknown     |
-| [List]&lt;[String]&gt; | Unknown     |
-| [DateTime]             | Unknown     |
+| Type                   | Name      |
+| ---------------------- | --------- |
+| Uint64                 | contentId |
+| [String]               | message   |
+| [qBuffer]              | binary    |
+| [PID]                  | pid       |
+| [List]&lt;[String]&gt; | topics    |
+| [DateTime]             | postTime  |
 
 ### SubscriberGetContentParam ([Structure])
 
-| Type     | Description |
-| -------- | ----------- |
-| [String] | Unknown     |
-| Uint32   | Unknown     |
-| Uint32   | Unknown     |
-| Uint64   | Unknown     |
+| Type     | Name             |
+| -------- | ---------------- |
+| [String] | topic            |
+| Uint32   | size             |
+| Uint32   | offset           |
+| Uint64   | minimumContentId |
 
 ### SubscriberPostContentParam ([Structure])
 
-| Type                   | Description |
-| ---------------------- | ----------- |
-| [List]&lt;[String]&gt; | Unknown     |
-| [String]               | Unknown     |
-| [qBuffer]              | Unknown     |
+| Type                   | Name    |
+| ---------------------- | ------- |
+| [List]&lt;[String]&gt; | topic   |
+| [String]               | message |
+| [qBuffer]              | binary  |
 
-### Unknown ([Structure])
+### SubscriberUserStatusParam ([Structure])
 
 | Type      | Description |
 | --------- | ----------- |
@@ -159,10 +159,10 @@ This method does not return anything.
 
 ### SubscriberUserStatusInfo ([Structure])
 
-| Type                    | Description |
-| ----------------------- | ----------- |
-| [PID]                   | User id     |
-| [List]&lt;[qBuffer]&gt; | Unknown     |
+| Type                    | Name   |
+| ----------------------- | ------ |
+| [PID]                   | pid    |
+| [List]&lt;[qBuffer]&gt; | values |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
