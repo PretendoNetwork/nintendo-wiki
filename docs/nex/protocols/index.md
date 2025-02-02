@@ -40,6 +40,7 @@ See also: [RMC Protocol](/docs/rmc)
 | 115 | [Data store](/docs/nex/protocols/datastore)                                                     |
 | 116 | [Debug](/docs/nex/protocols/debug)                                                              |
 | 117 | [Subscription](/docs/nex/protocols/subscription)                                                |
+| 118 | [Rating](/docs/nex/protocols/rating)                                                            |
 | 119 | [Service item](/docs/nex/protocols/service-item)                                                |
 | 120 | [Matchmake referee](/docs/nex/protocols/matchmake-referee)                                      |
 | 121 | [Subscriber](/docs/nex/protocols/subscriber)                                                    |
