@@ -474,11 +474,11 @@ Some functions take a key string. This is a hex string derived from the password
 
 ### AccountExtraInfo ([Structure])
 
-| Type     | Description |
-|----------|-------------|
-| Uint64   | Unknown     |
-| Uint32   | Unknown     |
-| [String] | NEX token   |
+| Type     | Description       |
+|----------|------------------ |
+| Uint64   | Local Friend Code |
+| Uint32   | MoveCount(?)      |
+| [String] | NEX token         |
 
 ### NintendoCreateAccountData ([Structure])
 
