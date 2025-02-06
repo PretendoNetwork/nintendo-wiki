@@ -476,8 +476,8 @@ Some functions take a key string. This is a hex string derived from the password
 
 | Type     | Description       |
 |----------|------------------ |
-| Uint64   | Local Friend Code |
-| Uint32   | MoveCount(?)      |
+| Uint64   | Local friend code |
+| Uint32   | Move count (?)    |
 | [String] | NEX token         |
 
 ### NintendoCreateAccountData ([Structure])
