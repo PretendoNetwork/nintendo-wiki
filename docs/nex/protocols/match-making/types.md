@@ -187,19 +187,29 @@ In NEX version 4.0, the revision number was set back to 0 and two more fields we
 
 ## JoinMatchmakeSessionParam ([Structure])
 
-| Type                                                          | Name                         |
-| ------------------------------------------------------------- | ---------------------------- |
-| Uint32                                                        | gid                          |
-| [List]&lt;[PID]&gt;                                           | additionalParticipants       |
-| Uint32                                                        | gidForParticipationCheck     |
-| Uint32                                                        | joinMatchmakeSessionOption   |
-| Uint8                                                         | joinMatchmakeSessionBehavior |
-| [String]                                                      | strUserPassword              |
-| [String]                                                      | strSystemPassword            |
-| [String]                                                      | joinMessage                  |
-| Uint16                                                        | participationCount           |
-| Uint16                                                        | extraParticipants            |
-| [MatchmakeBlockListParam](#matchmakeblocklistparam-structure) | blockListParam               |
+| Type                | Name                         |
+|---------------------|------------------------------|
+| Uint32              | gid                          |
+| [List]&lt;[PID]&gt; | additionalParticipants       |
+| Uint32              | gidForParticipationCheck     |
+| Uint32              | joinMatchmakeSessionOption   |
+| Uint8               | joinMatchmakeSessionBehavior |
+| [String]            | strUserPassword              |
+| [String]            | strSystemPassword            |
+| [String]            | joinMessage                  |
+| Uint16              | participationCount           |
+
+Revision 1:
+
+| Type   | Name              |
+|--------|-------------------|
+| Uint16 | extraParticipants |
+
+In NEX version 4.0, the revision number was set back to 0 and one more field was added:
+
+| Type                                                          | Name           |
+| ------------------------------------------------------------- | -------------- |
+| [MatchmakeBlockListParam](#matchmakeblocklistparam-structure) | blockListParam |
 
 ## UpdateMatchmakeSessionParam ([Structure])
 
@@ -221,7 +231,12 @@ In NEX version 4.0, the revision number was set back to 0 and two more fields we
 | Uint32                                      | matchmakeSystemType |
 | Uint32                                      | participationPolicy |
 | Uint32                                      | policyArgument      |
-| [String]                                    | codeword            |
+
+In NEX version 4.0, the codeword was added:
+
+| Type     | Name     |
+|----------|----------|
+| [String] | codeword |
 
 ## MatchmakeBlockListParam ([Structure])
 

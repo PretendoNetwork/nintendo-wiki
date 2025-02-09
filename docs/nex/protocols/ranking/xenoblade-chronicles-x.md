@@ -8,11 +8,11 @@ This page describes the methods that are only seen in Xenoblade Chronicles X.
 
 ## Methods
 
-| Method ID | Method Name                                                     |
-|-----------|-----------------------------------------------------------------|
-| 14        | [UploadScores_Lazy](14-uploadscores_lazy)                       |
-| 15        | [GetMultiCategoryRanking_Lazy](15-getmulticategoryranking_lazy) |
-| 16        | [DebugUpdateRanking_Lazy](16-debugupdateranking_lazy)           |
+| Method ID | Method Name                                                      |
+|-----------|------------------------------------------------------------------|
+| 14        | [UploadScores_Lazy](#14-uploadscores_lazy)                       |
+| 15        | [GetMultiCategoryRanking_Lazy](#15-getmulticategoryranking_lazy) |
+| 16        | [DebugUpdateRanking_Lazy](#16-debugupdateranking_lazy)           |
 
 ### (14) UploadScores_Lazy
 #### Request

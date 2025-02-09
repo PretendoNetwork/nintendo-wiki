@@ -32,3 +32,5 @@ For message types, see [Messaging Protocol](/docs/nex/protocols/messaging#types)
 This method does not return anything.
 
 [Any]: /docs/nex/types#anydataholder
+[List]: /docs/nex/types#list
+[PID]: /docs/nex/types#pid
