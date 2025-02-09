@@ -264,10 +264,10 @@ The CRC32 hash is calculated over the following data:
 
 **LDN** *(6.16 - 6.30):*
 
-| Offset | Size | Description                                                                   |
-|--------|------|-------------------------------------------------------------------------------|
-| 0x0    | 4    | XOR of [network id](LAN-Protocol#lannetworkproperty) and IP address of source |
-| 0x4    | 8    | Nonce from [header](#header)                                                  |
+| Offset | Size | Description                                                                    |
+|--------|------|--------------------------------------------------------------------------------|
+| 0x0    | 4    | XOR of [network id](/docs/pia/lan#lannetworkproperty) and IP address of source |
+| 0x4    | 8    | Nonce from [header](#header)                                                   |
 
 **LAN** *(up to 5.44):*
 
@@ -296,7 +296,7 @@ The session key is used for packet encryption and signature calculation.
 
 **NEX** *(Up to 5.44):*
 
-The session key is obtained from the game server during [matchmaking](Match-Making-Types#matchmakesession-structure).
+The session key is obtained from the game server during [matchmaking](/docs/nex/protocols/match-making/types#matchmakesession-structure).
 
 **LDN** *(Up to 5.44):*
 

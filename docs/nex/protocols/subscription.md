@@ -219,7 +219,7 @@ This method does not return anything.
 
 ## Types
 ### SubscriptionData ([Structure])
-> This structure [inherits](/docs/nex/types#structure-inheritance) from [NullData]
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
 | Type      | Description |
@@ -228,7 +228,7 @@ This method does not return anything.
 | [qBuffer] | Unknown     |
 
 ### ActivePlayerSubscriptionData ([Structure])
-> This structure [inherits](/docs/nex/types#structure-inheritance) from [SubscStructureriptionData](#subscriptiondata-structure)
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [SubscriptionData](#subscriptiondata-structure)
 {: .prompt-info }
 
 | Type   | Description |
@@ -239,6 +239,6 @@ This method does not return anything.
 [Structure]: /docs/nex/types#structure
 [String]: /docs/nex/types#string
 [PID]: /docs/nex/types#pid
-[NullData]: /docs/nex/types#data-structure
+[Data]: /docs/nex/types#data-structure
 [List]: /docs/nex/types#list
 [qBuffer]: /docs/nex/types#qbuffer

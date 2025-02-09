@@ -385,6 +385,7 @@ This method does not return anything.
 | [Map]&lt;[String], [Variant]&gt;            | Properties  |
 
 ### Property keys
+
 | Key              | Description |
 | ---------------- | ----------- |
 | `app_version`    |             |

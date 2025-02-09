@@ -782,6 +782,7 @@ This method returns headers that can be used to download relation files from the
 | Uint8 | [Data type](#relation-data-type) |
 
 #### Relation Data Type
+
 | Value | Directory                                        |
 | ----- | ------------------------------------------------ |
 | 2     | /ds/1/relation_data/course_one_screen_thumbnail/ |

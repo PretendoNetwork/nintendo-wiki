@@ -101,3 +101,4 @@ No RMC response is sent.
 [PrincipalPreference]: /docs/nex/protocols/friends-wiiu#principalpreference-structure
 [PersistentNotificationList]: /docs/nex/protocols/friends-wiiu#persistentnotificationlist-structure
 [NintendoNotificationEventGeneral]: #nintendonotificationeventgeneral-structure
+[NintendoNotificationEventProfile]: #nintendonotificationeventprofile-structure
