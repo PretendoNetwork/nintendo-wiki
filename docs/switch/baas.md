@@ -76,7 +76,8 @@ The following methods require a user access token:
 | Module  | Method | URL                                                                             |
 | ------- | ------ | ------------------------------------------------------------------------------- |
 | Account | POST   | `/1.0.0/devices/me/delete`                                                      |
-| Account | POST   | `/1.0.0/image_upload`                                                           |
+| Account | ?      | `/1.0.0/devices/snapshot`                                                       |
+| Account | POST   | [`/1.0.0/image_upload`](#post-100image_upload)                                  |
 | Account | PUT    | `/1.0.0/push_channels/<id>/<id>`                                                |
 | Friends | GET    | `/1.0.0/users`                                                                  |
 | Both    | GET    | [`/1.0.0/users/<id>`](#get-100usersid)                                          |
@@ -86,6 +87,7 @@ The following methods require a user access token:
 | Friends | DELETE | `/1.0.0/users/<id>/blocks/<id>`                                                 |
 | Friends | PATCH  | `/1.0.0/users/<id>/device_accounts/<id>`                                        |
 | Account | DELETE | [`/1.0.0/users/<id>/device_accounts/<id>`](#delete-100usersiddevice_accountsid) |
+| Account | ?      | `/1.0.0/users/<id>/device_histories`                                            |
 | Friends | POST   | [`/1.0.0/users/<id>/generate_code`](#post-100usersidgenerate_code)              |
 | Account | POST   | [`/1.0.0/users/<id>/link`](#post-100usersidlink)                                |
 | Account | POST   | `/1.0.0/users/<id>/unlink`                                                      |
@@ -105,7 +107,7 @@ This method provides an anonymous access token.
 | --------- | ------------------------------------------------------------- |
 | grantType | `public_client`                                               |
 | assertion | Device token obtained from [dauth server](/docs/switch/dauth) |
-| penneId   | Penne id (optional)                                           |
+| penneId   | Penne id (optional, introduced in 19.0.0)                     |
 
 Response on success:
 
@@ -150,12 +152,13 @@ X-Amz-Cf-Id: WGSd3qu043Y9Co4sredK7gclrF4BMYPKQXytykkQfwEez4HYJmIbDw==
 ### POST /1.0.0/login
 This method can be used to log in on a device account that was registered with <code><a href="#post-100users">/1.0.0/users</a></code>. If an application token is provided, the server checks if the device account is linked against a Nintendo account, and if the account has a Nintendo Switch Online membership.
 
-| Param               | Description                                  |
-| ------------------- | -------------------------------------------- |
-| id                  | Device account id                            |
-| password            | Device account password                      |
-| appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional) |
-| skipOp2Verification | Skip NSO verification (optional)             |
+| Param               | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| id                  | Device account id                                |
+| password            | Device account password                          |
+| appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)     |
+| naCountry           | Country code such as `NL` (introduced in 18.0.0) |
+| skipOp2Verification | Skip NSO verification (optional)                 |
 
 Response on success:
 
@@ -188,6 +191,7 @@ This method is the same as [`/1.0.0/login`](#post-100login) except that it also 
 | idp                 | `nintendoAccount`                                                    |
 | idToken             | ID token obtained from [accounts.nintendo.com](/docs/switch/account) |
 | appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)                         |
+| naCountry           | Country code such as `NL` (introduced in 18.0.0)                     |
 | skipOp2Verification | Skip NSO verification (optional)                                     |
 
 ### POST /1.0.0/users
@@ -224,6 +228,44 @@ Connection: keep-alive
 
 {"id":"f09c3d45cc3432c6","etag":"\"4d20053b9c0fcf9a\"","nickname":"","country":"","birthday":"0000-00-00","thumbnailUrl":"","deviceAccounts":[{"id":"7c23fd7c9b37b0cb","password":"0mr1prbsNFzRs0dRCHXRUNECGd1kJVg3Lq6zn0nR"}],"links":{},"permissions":{"personalAnalytics":true,"personalNotification":true,"friendRequestReception":true,"friends":"EVERYONE","presence":"FRIENDS","presenceUpdatedAt":1633432210,"personalAnalyticsUpdatedAt":1633432210,"personalNotificationUpdatedAt":1633432210},"extras":{"self":{},"favoriteFriends":{},"friends":{},"foaf":{},"everyone":{}},"presence":{"state":"OFFLINE","extras":{"self":{},"favoriteFriends":{},"friends":{},"foaf":{},"everyone":{}},"updatedAt":1632676901,"logoutAt":0},"deleted":false,"blocksUpdatedAt":1632676901,"friendsUpdatedAt":1632676901,"createdAt":1632676901,"updatedAt":1632676901}
 ```
+
+### POST /1.0.0/image_upload
+This method uploads a profile picture to the server. The request uses a JSON body.
+
+| Field          | Description         |
+|----------------|---------------------|
+| rawContent     | Base64-encoded JPEG |
+| ownerId        | User id of owner    |
+| allowTransform | Boolean             |
+
+Response on success:
+
+| Field     | Description            |
+|-----------|------------------------|
+| id        | Image id               |
+| ownerId   | Owner id               |
+| owner     | Owner                  |
+| state     | `STORED`               |
+| content   | Content                |
+| createdAt | Created at (timestamp) |
+| updatedAt | Updated at (timestamp) |
+
+The owner has the following fields:
+
+| Field | Description |
+|-------|-------------|
+| id    | Owner id    |
+
+The content has the following fields:
+
+| Field        | Description           |
+|--------------|-----------------------|
+| id           | Image id              |
+| width        | Width                 |
+| height       | Height                |
+| format       | `jpg`                 |
+| url          | URL of uploaded image |
+| urlExpiresAt | Set to 2147483647     |
 
 ### GET /1.0.0/users/&lt;id&gt;
 This method does not take any parameters and simply returns the [user information](#user-information) for the given user. If the access token does not belong to the given user, this method returns [`insufficient_scope`](#errors).

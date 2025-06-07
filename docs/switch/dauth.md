@@ -29,12 +29,23 @@ Up to 17.0.1:
 
 The X-Nintendo-PowerState header is only present on system version 7.0.0 and later. In 7.0.0, there is a space between `X-Nintendo-PowerState` and the colon. This was fixed in 7.0.1.
 
-In 18.0.0 and later, the user agent is no longer present and the headers are reordered:
+Between 18.0.0 and 19.0.1, the user agent is no longer present and the headers are reordered:
 
 | Header                | Description                             |
 |-----------------------|-----------------------------------------|
 | Host                  | `dauth-lp1.ndas.srv.nintendo.net`       |
 | Accept                | `*/*`                                   |
+| Content-Type          | `application/x-www-form-urlencoded`     |
+| X-Nintendo-PowerState | `FA` (fully awake) or `HA` (half awake) |
+| Content-Length        | Content length                          |
+
+In 20.0.0 and later, the user agent is back again, between the `Accept` and `Content-Type` headers:
+
+| Header                | Description                             |
+|-----------------------|-----------------------------------------|
+| Host                  | `dauth-lp1.ndas.srv.nintendo.net`       |
+| Accept                | `*/*`                                   |
+| User-Agent            | [User agent](#user-agents)              |
 | Content-Type          | `application/x-www-form-urlencoded`     |
 | X-Nintendo-PowerState | `FA` (fully awake) or `HA` (half awake) |
 | Content-Length        | Content length                          |
@@ -63,8 +74,9 @@ In 18.0.0 and later, the user agent is no longer present and the headers are reo
 | 15.0.0 - 15.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 15.3.0.0)`                      |
 | 16.0.0 - 16.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 16.2.0.0)`                      |
 | 17.0.0 - 17.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 17.5.0.0)`                      |
+| 20.0.0 - 20.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                      |
 
-No user agent is present in system version 18.0.0 and later.
+No user agent is present between system version 18.0.0 and 19.0.1.
 
 ## Methods
 In API version 3 and later, one must perform a cryptographic challenge to obtain a device token or edge token:
@@ -76,6 +88,7 @@ In API version 3 and later, one must perform a cryptographic challenge to obtain
 | POST   | [`/v5/challenge`](#challenge-request)                                                                  |
 | POST   | [`/v6/challenge`](#challenge-request)                                                                  |
 | POST   | [`/v7/challenge`](#challenge-request)                                                                  |
+| POST   | [`/v8/challenge`](#challenge-request)                                                                  |
 
 The following methods return a device token as JWT:
 
@@ -88,6 +101,7 @@ The following methods return a device token as JWT:
 | POST   | [`/v5/device_auth_token`](#device-token-request)                                                                  |
 | POST   | [`/v6/device_auth_token`](#device-token-request)                                                                  |
 | POST   | [`/v7/device_auth_token`](#device-token-request)                                                                  |
+| POST   | [`/v8/device_auth_tokens`](#device-token-request)                                                                 |
 
 The following methods return a different kind of device token:
 
@@ -98,6 +112,7 @@ The following methods return a different kind of device token:
 | POST   | [`/v5/edge_token`](#edge-token-request)                                                                  |
 | POST   | [`/v6/edge_token`](#edge-token-request)                                                                  |
 | POST   | [`/v7/edge_token`](#edge-token-request)                                                                  |
+| POST   | [`/v8/edge_token`](#edge-token-request)                                                                  |
 
 ## System Versions
 
@@ -110,6 +125,7 @@ The following methods return a different kind of device token:
 | 7.0.0 - 8.1.1   | v5  |
 | 9.0.0 - 12.1.0  | v6  |
 | 13.0.0 - 19.0.1 | v7  |
+| 20.0.0 - 20.0.1 | v8  |
 
 #### API Changes
 
@@ -122,6 +138,7 @@ The following methods return a different kind of device token:
 | v5  | The `X-Nintendo-PowerState` header was added. The API path is no longer obfuscated.                                                                                                                                                                         |
 | v6  | The `ist` parameter was added.                                                                                                                                                                                                                              |
 | v7  | The `vendor_id` parameter was added to the edge token request.                                                                                                                                                                                              |
+| v8  | The token endpoints were renamed and now allow the client to request multiple tokens at once                                                                                                                                                                |
 
 ## Challenge Request
 
@@ -198,6 +215,40 @@ An `ist` parameter was added:
 | system_version | [System version digest](https://switchbrew.org/wiki/System_Version_Title)                            |
 | mac            | Base64-encoded AES-CMAC of all previous fields in form-encoding                                      |
 
+### Version 8
+The endpoint now accepts a JSON body instead of form-encoding, and allows the client to request multiple tokens at once:
+
+| Field          | Description                                                                                                                                                                                                                                                                                                                |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| system_version | System version in hexadecimal (e.g. `00140001` for 20.0.1)                                                                                                                                                                                                                                                                 |
+| fw_revision    | [System version hash (hex string)](https://switchbrew.org/wiki/System_Version_Title#Known_Versions)                                                                                                                                                                                                                        |
+| ist            | `true` or `false` (depends on [platform region](https://switchbrew.org/wiki/Settings_services#GetT))                                                                                                                                                                                                                       |
+| token_requests | List of token requests                                                                                                                                                                                                                                                                                                     |
+| key_generation | [Master key revision](#master-key-revisions)                                                                                                                                                                                                                                                                               |
+| challenge      | Base64-encoded [challenge](#challenge-request)                                                                                                                                                                                                                                                                             |
+| mac            | Base64-encoded AES-CMAC of all previous fields in form-encoding. The fields are encoded in the following order: `challenge`, `fw_revision`, `ist`, `key_gneration`, `system_version` and `token_requests`. The `token_requests` field is encoded with JSON without whitespace and without percent-encoding any characters. |
+
+Every token request is a dictionary with one or two fields:
+
+| Field     | Description                                                                               |
+|-----------|-------------------------------------------------------------------------------------------|
+| client_id | [Client id](#known-client-ids)                                                            |
+| vendor_id | `akamai`, `llnw`, `lumen`, `fastly` or `cloudflare` (only present in edge token requests) |
+
+Response on success:
+
+| Field   | Description           |
+|---------|-----------------------|
+| results | List of token results |
+
+Every token result contains the following fields:
+
+| Field             | Description                   |
+|-------------------|-------------------------------|
+| client_id         | Client id from request        |
+| device_auth_token | Device token                  |
+| expires_in        | Expiration in seconds (86400) |
+
 ## Edge Token Request
 This method returns a different kind of device token. Up to v6, it takes the same parameters as [`/device_auth_token`](#device-token-request).
 
@@ -206,7 +257,7 @@ Response on success:
 | Field      | Description                   |
 | ---------- | ----------------------------- |
 | expires_in | Expiration in seconds (86400) |
-| dtoken     | Device token                  |
+| dtoken     | Edge token                    |
 
 ### Version 7
 A `vendor_id` parameter was added:
@@ -220,6 +271,16 @@ A `vendor_id` parameter was added:
 | system_version | [System version digest](https://switchbrew.org/wiki/System_Version_Title)                            |
 | vendor_id      | `akamai`, `llnw` or `lumen`                                                                          |
 | mac            | Base64-encoded AES-CMAC of all previous fields in form-encoding                                      |
+
+### Version 8
+The request is the same as the [`/device_auth_tokens`](#device-token-request) request, except that a `vendor_id` field is present next to each client id. The response contains a `results` array, where every element contains the following fields:
+
+| Field      | Description                   |
+|------------|-------------------------------|
+| client_id  | Client id from request        |
+| vendor_id  | Vendor id from request        |
+| dtoken     | Edge token                    |
+| expires_in | Expiration in seconds (86400) |
 
 ## Master Key Revisions
 
@@ -238,27 +299,29 @@ A `vendor_id` parameter was added:
 | 16.0.0 - 16.1.0 | 16             |
 | 17.0.0 - 18.1.0 | 17             |
 | 19.0.0 - 19.0.1 | 19             |
+| 20.0.0 - 20.0.1 | 20             |
 
 ## Known Client IDs
 
-| Client ID          | Description                                               | Edge |
-|--------------------|-----------------------------------------------------------|------|
-| `146c8ac7b8a0db52` | SCSI storage                                              | Yes  |
-| `16e96f76850156d1` | Crash reports                                             | No   |
-| `3117b250cab38f45` | Atum and IDBE                                             | Yes  |
-| `41f4a6491028e3c4` | Pushmo and Tagaya                                         | Yes  |
-| `67bf9945b45248c6` | BCAT                                                      | Yes  |
-| `6ac5a6873fe5f68c` | SATA storage                                              | No   |
-| `75fe236362ff5f8b` | [Account server](/docs/switch/account)                    | No   |
-| `81333c548b2e876d` | [Account server](/docs/switch/account)                    | No   |
-| `83b72b05dc3278d7` | NPNS                                                      | No   |
-| `8f849b5d34778d8e` | [AAuth](/docs/switch/aauth) and [BaaS](/docs/switch/baas) | No   |
-| `93af0acb26258de9` | Beach and Bugyo                                           | Yes  |
-| `bad8156f44ac935a` | SProfile                                                  | No   |
-| `d5b6cac2c1514c56` | Dragons                                                   | No   |
-| `dc656ea03b63cf68` | Parental controls                                         | No   |
-| `df51c436bc01c437` | Prepo                                                     | No   |
-| `e58171fe439390ce` | Penne                                                     | No   |
+| Client ID          | Description                                                               | Edge |
+|--------------------|---------------------------------------------------------------------------|------|
+| `146c8ac7b8a0db52` | SCSI storage                                                              | Yes  |
+| `16e96f76850156d1` | Crash reports                                                             | No   |
+| `3117b250cab38f45` | Atum and IDBE                                                             | Yes  |
+| `41f4a6491028e3c4` | Pushmo and Tagaya                                                         | Yes  |
+| `67bf9945b45248c6` | BCAT                                                                      | Yes  |
+| `6ac5a6873fe5f68c` | SATA storage                                                              | No   |
+| `75fe236362ff5f8b` | [Account server](/docs/switch/account)                                    | No   |
+| `81333c548b2e876d` | [Account server](/docs/switch/account)                                    | No   |
+| `83b72b05dc3278d7` | NPNS                                                                      | No   |
+| `8f849b5d34778d8e` | [AAuth](/docs/switch/aauth) and [BaaS](/docs/switch/baas)                 | No   |
+| `93af0acb26258de9` | Beach and Bugyo                                                           | Yes  |
+| `bad8156f44ac935a` | SProfile                                                                  | No   |
+| `d5b6cac2c1514c56` | [Dragons](/docs/switch/dragons) and [Vermillion](/docs/switch/vermillion) | No   |
+| `d98185acb55994b4` | SCSI policy                                                               | Yes  |
+| `dc656ea03b63cf68` | Parental controls                                                         | No   |
+| `df51c436bc01c437` | Prepo                                                                     | No   |
+| `e58171fe439390ce` | Penne                                                                     | No   |
 
 ## Errors
 On error, the server sends the following response:

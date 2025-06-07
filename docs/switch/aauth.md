@@ -4,7 +4,8 @@ toc: true
 title: Application Authentication (AAuth)
 ---
 
-URL: https://aauth-lp1.ndas.srv.nintendo.net
+Up to 19.0.1: https://aauth-lp1.ndas.srv.nintendo.net<br>
+In 20.0.0 and later: https://aauth.hac.lp1.ndas.srv.nintendo.net
 
 The aauth server provides application tokens. These are required to access game-specific servers, such as [NEX](/docs/nex) and [NPLN](/docs/npln). To obtain an application token, one must first obtain a [device token](/docs/switch/dauth).
 
@@ -13,6 +14,8 @@ The aauth server provides application tokens. These are required to access game-
 Because the certificates are signed by Nintendo there is only one way to obtain a valid certificate: buy a game and dump it.
 
 The aauth server takes form-encoded requests and responds with json-encoding. It uses base64url, and the client does not add any padding characters.
+
+In 20.0.0, the aauth server was moved to a different server, and now requires a device certificate during the handshake.
 
 ## Headers
 Up to 17.0.1:
@@ -36,6 +39,17 @@ In 18.0.0 and later, the user agent is no longer present and the headers are reo
 | X-Nintendo-PowerState | `FA` (fully awake) or `HA` (half awake). This header is only sent in the [application token request](#application-token-request). |
 | Content-Length        | Content length                                                                                                                    |
 
+In 20.0.0 and later, the user agent is back:
+
+| Header                | Description                                                                                                                       |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Host                  | `aauth-lp1.ndas.srv.nintendo.net`                                                                                                 |
+| Accept                | `*/*`                                                                                                                             |
+| User-Agent            | [User agent](#user-agents)                                                                                                        |
+| Content-Type          | `application/x-www-form-urlencoded`                                                                                               |
+| X-Nintendo-PowerState | `FA` (fully awake) or `HA` (half awake). This header is only sent in the [application token request](#application-token-request). |
+| Content-Length        | Content length                                                                                                                    |
+
 ## User Agents
 
 | System Version  | User agent                                                                                 |
@@ -51,6 +65,7 @@ In 18.0.0 and later, the user agent is no longer present and the headers are reo
 | 16.0.0          | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
 | 16.0.0 - 16.1.0 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
 | 17.0.0 - 17.0.1 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)`    |
+| 20.0.0 - 20.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                    |
 
 ## Methods
 The following method returns a timestamp and your ip address:
@@ -84,7 +99,7 @@ The following methods return an application token as JWT:
 | 5.0.0 - 8.1.1   | v2  |
 | 9.0.0 - 14.1.2  | v3  |
 | 15.0.0 - 18.1.0 | v4  |
-| 19.0.0          | v5  |
+| 19.0.0 - 20.0.1 | v5  |
 
 ## API Changes
 

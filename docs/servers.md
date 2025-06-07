@@ -18,6 +18,8 @@ Table of contents:
 * `https://api.p01.lp1.ctest.srv.nintendo.net`
 * `https://ctest-dl.p01.lp1.ctest.srv.nintendo.net`
 * `https://ctest-ul.p01.lp1.ctest.srv.nintendo.net`
+* `https://ctest.p01.ctest.srv.nintendo.net`
+* `https://ctest.cdn.nintendo.net`
 
 #### Device Authentication
 * `https://dauth.p01.lp1.ndas.srv.nintendo.net`
@@ -25,9 +27,20 @@ Table of contents:
 #### Application Authentication
 * `https://aauth.p01.lp1.ndas.srv.nintendo.net`
 
+#### Switch Users ([docs](/docs/switch/baas))
+* `https://e0d67c509fb203858ebcb2fe3f88c2aa.baas.nintendo.com`
+* `https://cdn-image-e0d67c509fb203858ebcb2fe3f88c2aa.baas.nintendo.com`
+
+#### Nintendo Accounts ([docs](/docs/switch/account))
+* `https://accounts.nintendo.com`
+* `https://cdn.accounts.nintendo.com`
+* `https://api.accounts.nintendo.com`
+* `https://c-lp1.accounts.nintendo.com`
+
 #### Push Notifications
 * `https://god.p01.lp1.penne.srv.nintendo.net`
 * `https://val.p01.lp1.penne.srv.nintendo.net`
+* `https://fro-2.p01.lp1.penne.srv.nintendo.net`
 
 #### eLicenses
 * `https://dragons.p01.lp1.dragons.nintendo.net`
@@ -47,10 +60,12 @@ Table of contents:
 * `https://superfly.p01.lp1.d4c.srv.nintendo.net`
 * `https://veer.p01.lp1.d4c.srv.nintendo.net`
 * `https://atum.p01.lp1.d4c.srv.nintendo.net`
+* `https://atum-img-lp1.cdn.nintendo.net`
 
 #### Online Save Storage
 * `https://storage.p01.lp1.scsi.srv.nintendo.net`
 * `https://policy.p01.lp1.scsi.srv.nintendo.net`
+* `scsi-upload-lp1.s3.us-west-2.amazonaws.com`
 
 #### Telemetry
 * `https://receive.p01.lp1.dg.srv.nintendo.net`
@@ -60,25 +75,44 @@ Table of contents:
 * `nncs1.p01.lp1.n.n.srv.nintendo.net`
 * `nncs2.p01.lp1.n.n.srv.nintendo.net`
 
-#### Other Servers
-* `https://bvc.p01.lp1.bvc.srv.nintendo.net`
+#### System Transfer
+* `https://transfer.p01.lp1.banco.srv.nintendo.net`
 * `https://download.p01.lp1.banco.srv.nintendo.net`
-* `https://idbe-p01.cdn.nintendo.net`
+
+#### News
+* `https://list.p01.lp1.bcat.srv.nintendo.net`
+* `https://topics.p01.lp1.bcat.srv.nintendo.net`
+* `https://data.p01.lp1.bcat.srv.nintendo.net`
+* `https://web.p01.lp1.bcat.srv.nintendo.net`
+
+#### Game Chat
+* `https://enishi.p01.lp1.idobata.srv.nintendo.net`
+* `https://sebumi.p01.lp1.idobata.srv.nintendo.net`
+
+#### Album Upload
+* `api.p01.lp1.nega.srv.nintendo.net`
+* `nega-lp1-upload.s3.us-east-1.amazonaws.com`
+
+#### Other Servers
+* `https://bvc.p01.lp1.bvc.srv.nintendo.net` (browser version check)
+* `https://idbe-p01.cdn.nintendo.net` ([icon data](/docs/idbe))
+* `https://nemof.p01.lp1.nemo.srv.nintendo.net` (eShop videos)
+* `https://gw.p01.lp1.vermillion.srv.nintendo.net` (virtual game cards)
+* `https://p01.lp1.znma.srv.nintendo.net` (parental controls)
+* `https://capi.lp1.op2.nintendo.net` ([NSO membership verification](/docs/switch/nso-verification))
+* `https://app.lp1.five.nintendo.net` (friend invitations)
+* `https://p01.lp1.savanna.srv.nintendo.net` (eShop)
+* `https://lp1.nso.nintendo.net` (NSO applet)
+* `https://fw-api.lp1.nso.nintendo.net` (NSO rewards)
+* `service-status.p01.lp1.smn.srv.nintendo.net` (service status)
 
 Unknown:
 
-* `*.p01.lp1.bcat.srv.nintendo.net`
-* `*.p01.lp1.nemo.srv.nintendo.net`
 * `*.p01.lp1.pegasus.srv.nintendo.net`
-* `*.p01.lp1.savanna.srv.nintendo.net`
-* `*.p01.lp1.smn.srv.nintendo.net`
 * `*.p01.lp1.sprofile.srv.nintendo.net`
-* `*.p01.lp1.vermillion.srv.nintendo.net`
 * `*.p01.lp1.p01-aaab.srv.nintendo.net`
 * `*.p01.lp1.civil.nintendo.net`
 * `*.p01.lp1.ss.nintendo.net`
-* `*.p01.lp1.nega.srv.nintendo.net`
-* `*.p01.lp1.idobata.srv.nintendo.net`
 * `*.p01.lp1.kanawa.srv.nintendo.net`
 
 # Switch
@@ -105,7 +139,8 @@ Unknown:
 * `https://dadmin-lp1.ndas.mng.nintendo.net` (internal)
 
 #### Application Authentication ([docs](/docs/switch/aauth))
-* `https://aauth-lp1.ndas.srv.nintendo.net`
+* `https://aauth.hac.lp1.ndas.srv.nintendo.net` (new)
+* `https://aauth-lp1.ndas.srv.nintendo.net` (old)
 * `https://acert-lp1.ndas.srv.nintendo.net`
 * `https://aapi-lp1.ndas.srv.nintendo.net` (internal)
 * `https://aadmin-lp1.ndas.mng.nintendo.net` (internal)
@@ -204,6 +239,7 @@ Old ([docs](/docs/switch/npns)):
 New ([docs](/docs/switch/penne)):
 * `https://god.hac.lp1.penne.srv.nintendo.net`
 * `https://val.hac.lp1.penne.srv.nintendo.net`
+* `https://fro-8.hac.lp1.penne.srv.nintendo.net`
 
 #### Telemetry ([docs](/docs/switch/telemetry))
 * `https://receive-lp1.dg.srv.nintendo.net` (play reports)
@@ -220,6 +256,10 @@ New ([docs](/docs/switch/penne)):
 * `https://api-lp1.pctl.srv.nintendo.net`
 * `https://parentalcontrols-movie-lp1.cdn.nintendo.net`
 
+#### System Transfer
+* `https://transfer.hac.lp1.banco.srv.nintendo.net`
+* `https://download.hac.lp1.banco.srv.nintendo.net`
+
 #### Other Services
 * `https://mii-secure-lp1.cdn.nintendo.net` (mii images)
 * `https://idbe-hac.cdn.nintendo.net` ([icon data](/docs/idbe))
@@ -229,8 +269,9 @@ New ([docs](/docs/switch/penne)):
 * `https://api-lp1.frs.srv.nintendo.net` ([friends](/docs/switch/friends-api))
 * `https://api.hac.lp1.acbaa.srv.nintendo.net` ([Animal Crossing API](/docs/switch/animal-cross-new-horizons))
 * `https://web-lp1.share.srv.nintendo.net`
-* `https://bvc-hac-lp1.cdn.nintendo.net`
+* `https://bvc-hac-lp1.cdn.nintendo.net` (browser version check)
 * `https://api.sect.srv.nintendo.net`
+* `https://gw.hac.lp1.vermillion.srv.nintendo.net` ([virtual game cards](/docs/switch/vermillion))
 
 # Wii U
 #### Account Server ([docs](/docs/wiiu/account))
