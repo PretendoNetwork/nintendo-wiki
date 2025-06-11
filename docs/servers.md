@@ -67,7 +67,7 @@ Table of contents:
 * `https://policy.p01.lp1.scsi.srv.nintendo.net`
 * `scsi-upload-lp1.s3.us-west-2.amazonaws.com`
 
-#### Telemetry
+#### Telemetry ([docs](/docs/switch/telemetry))
 * `https://receive.p01.lp1.dg.srv.nintendo.net`
 * `https://receive.p01.lp1.er.srv.nintendo.net`
 
@@ -103,7 +103,7 @@ Table of contents:
 * `https://app.lp1.five.nintendo.net` (friend invitations)
 * `https://p01.lp1.savanna.srv.nintendo.net` (eShop)
 * `https://lp1.nso.nintendo.net` (NSO applet)
-* `https://fw-api.lp1.nso.nintendo.net` (NSO rewards)
+* `https://fw-api.lp1.nso.nintendo.net` ([NSO rewards](/docs/switch/nso-reward))
 * `service-status.p01.lp1.smn.srv.nintendo.net` (service status)
 
 Unknown:
@@ -264,7 +264,7 @@ New ([docs](/docs/switch/penne)):
 * `https://mii-secure-lp1.cdn.nintendo.net` (mii images)
 * `https://idbe-hac.cdn.nintendo.net` ([icon data](/docs/idbe))
 * `https://lp1.nso.nintendo.net` (NSO applet)
-* `https://fw-api.lp1.nso.nintendo.net` (NSO rewards)
+* `https://fw-api.lp1.nso.nintendo.net` ([NSO rewards](/docs/switch/nso-reward))
 * `https://capi.lp1.op2.nintendo.net` ([NSO membership verification](/docs/switch/nso-verification))
 * `https://api-lp1.frs.srv.nintendo.net` ([friends](/docs/switch/friends-api))
 * `https://api.hac.lp1.acbaa.srv.nintendo.net` ([Animal Crossing API](/docs/switch/animal-cross-new-horizons))

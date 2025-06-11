@@ -4,29 +4,43 @@ toc: true
 title: Wii U Error Codes
 ---
 
-## Error Categories
+An error code contains a module id and a module-specific code, separated by a dash. For example: `106-0502`.
 
-| Error Codes | Description                                                                             |
-|-------------|-----------------------------------------------------------------------------------------|
-| 101-XXXX    | [FP (friends)](#fp-error-codes)                                                         |
-| 102-XXXX    | [ACT (accounts)](#act-error-codes)                                                      |
-| 103-XXXX    | AC (internet connection)                                                                |
-| 104-XXXX    | BOSS (spotpass)                                                                         |
-| 105-XXXX    | NIM (title installation)                                                                |
-| 106-XXXX    | [NEX (game servers)](#nex-error-codes)<br>[Error descriptions](#nex-error-descriptions) |
-| 107-XXXX    | [eShop (api)](#eshop-errors-api)                                                        |
-| 111-XXXX    | [eShop (website)](#eshop-errors-website)                                                |
-| 115-XXXX    | OLV (miiverse)                                                                          |
-| 118-XXXX    | PIA (peer to peer)                                                                      |
-| 124-XXXX    | EC (e-commerce)                                                                         |
-| 150-XXXX    | FS (file system)                                                                        |
-| 151-XXXX    | KPAD (wiimote)                                                                          |
-| 155-XXXX    | SAVE (save files)                                                                       |
-| 160-XXXX    | System error                                                                            |
-| 162-XXXX    | MCP (title management)                                                                  |
-| 165-XXXX    | VPAD (gamepad)                                                                          |
-| 166-XXXX    | AOC (add-on content)                                                                    |
-| 168-XXXX    | NFP (amiibo)                                                                            |
+The following module ids are known:
+
+| Module | Code | Description                              |
+|--------|------|------------------------------------------|
+| 101    | FP   | [Friends](#fp-error-codes)               |
+| 102    | ACT  | [Accounts](#act-error-codes)             |
+| 103    | AC   | Internet connection                      |
+| 104    | BOSS | Spotpass                                 |
+| 105    | NIM  | Title installation                       |
+| 106    | NEX  | [Game servers](#nex-error-codes)         |
+| 107    |      | [eShop (api)](#eshop-errors-api)         |
+| 109    | NEI  | eShop (REST)                             |
+| 111    |      | [eShop (website)](#eshop-errors-website) |
+| 112    |      | Internet browser                         |
+| 115    | OLV  | Miiverse                                 |
+| 117    | NWF  | Nintendo web framework                   |
+| 118    | PIA  | Peer to peer                             |
+| 123    |      | E-commerce applet                        |
+| 124    | EC   | E-commerce                               |
+| 150    | FS   | Filesystem                               |
+| 151    | KPAD | Controller                               |
+| 152    | WPAD | Wiimote                                  |
+| 153    |      | USB HID                                  |
+| 154    |      | USB microphone                           |
+| 155    | SAVE | Save files                               |
+| 156    | UDS  | Local wireless                           |
+| 157    | ACP  | Title launch                             |
+| 158    |      | System settings                          |
+| 159    |      | Security                                 |
+| 160    |      | System error                             |
+| 162    | MCP  | Title management                         |
+| 165    | VPAD | Gamepad                                  |
+| 166    | TEMP | Temporary storage                        |
+| 168    | NFP  | Amiibo                                   |
+| 199    | CMN  | General                                  |
 
 ## FP Error Codes
 

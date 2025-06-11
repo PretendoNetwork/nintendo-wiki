@@ -11,7 +11,8 @@ Nintendo provides the following connection test servers for the Nintendo Switch:
 * https://api.hac.lp1.ctest.srv.nintendo.net
 
 On the Switch 2, the following servers are used instead:
-* https://ctest.p01.ctest.srv.nintendo.net
+* http://ctest.p01.ctest.srv.nintendo.net
+* http://ctest-ipv6.p01.ctest.srv.nintendo.net
 * https://ctest-dl.p01.lp1.ctest.srv.nintendo.net
 * https://ctest-ul.p01.lp1.ctest.srv.nintendo.net
 * https://api.p01.lp1.ctest.srv.nintendo.net

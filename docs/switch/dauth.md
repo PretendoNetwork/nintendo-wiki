@@ -302,26 +302,34 @@ The request is the same as the [`/device_auth_tokens`](#device-token-request) re
 | 20.0.0 - 20.0.1 | 20             |
 
 ## Known Client IDs
+Device tokens:
 
-| Client ID          | Description                                                               | Edge |
-|--------------------|---------------------------------------------------------------------------|------|
-| `146c8ac7b8a0db52` | SCSI storage                                                              | Yes  |
-| `16e96f76850156d1` | Crash reports                                                             | No   |
-| `3117b250cab38f45` | Atum and IDBE                                                             | Yes  |
-| `41f4a6491028e3c4` | Pushmo and Tagaya                                                         | Yes  |
-| `67bf9945b45248c6` | BCAT                                                                      | Yes  |
-| `6ac5a6873fe5f68c` | SATA storage                                                              | No   |
-| `75fe236362ff5f8b` | [Account server](/docs/switch/account)                                    | No   |
-| `81333c548b2e876d` | [Account server](/docs/switch/account)                                    | No   |
-| `83b72b05dc3278d7` | NPNS                                                                      | No   |
-| `8f849b5d34778d8e` | [AAuth](/docs/switch/aauth) and [BaaS](/docs/switch/baas)                 | No   |
-| `93af0acb26258de9` | Beach and Bugyo                                                           | Yes  |
-| `bad8156f44ac935a` | SProfile                                                                  | No   |
-| `d5b6cac2c1514c56` | [Dragons](/docs/switch/dragons) and [Vermillion](/docs/switch/vermillion) | No   |
-| `d98185acb55994b4` | SCSI policy                                                               | Yes  |
-| `dc656ea03b63cf68` | Parental controls                                                         | No   |
-| `df51c436bc01c437` | Prepo                                                                     | No   |
-| `e58171fe439390ce` | Penne                                                                     | No   |
+| Client ID          | Description                                                               |
+|--------------------|---------------------------------------------------------------------------|
+| `146c8ac7b8a0db52` | SCSI storage                                                              |
+| `16e96f76850156d1` | Crash reports                                                             |
+| `6ac5a6873fe5f68c` | SATA storage                                                              |
+| `75fe236362ff5f8b` | [Nintendo account](/docs/switch/account) applet                           |
+| `81333c548b2e876d` | [Nintendo account](/docs/switch/account) API                              |
+| `83b72b05dc3278d7` | NPNS                                                                      |
+| `8f849b5d34778d8e` | [AAuth](/docs/switch/aauth) and [BaaS](/docs/switch/baas)                 |
+| `93af0acb26258de9` | Beach and Bugyo                                                           |
+| `bad8156f44ac935a` | SProfile                                                                  |
+| `d5b6cac2c1514c56` | [Dragons](/docs/switch/dragons) and [Vermillion](/docs/switch/vermillion) |
+| `dc656ea03b63cf68` | Parental controls                                                         |
+| `df51c436bc01c437` | Prepo                                                                     |
+| `e58171fe439390ce` | Penne                                                                     |
+
+Edge tokens:
+
+| Client ID          | Description       |
+|--------------------|-------------------|
+| `146c8ac7b8a0db52` | SCSI storage      |
+| `3117b250cab38f45` | Atum and IDBE     |
+| `41f4a6491028e3c4` | Pushmo and Tagaya |
+| `67bf9945b45248c6` | BCAT              |
+| `93af0acb26258de9` | Beach and Bugyo   |
+| `d98185acb55994b4` | SCSI policy       |
 
 ## Errors
 On error, the server sends the following response:

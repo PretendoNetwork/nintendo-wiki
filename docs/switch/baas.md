@@ -52,7 +52,8 @@ The user agents below are taken from the account sysmodule. If the request is ma
 | 16.0.0 - 16.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)` |
 | 17.0.0 - 17.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)` |
 | 18.0.0 - 18.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 18.3.0.0; Add-on 18.3.0.0)` |
-| 19.0.0          | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 19.3.0.0; Add-on 19.3.0.0)` |
+| 19.0.0 - 19.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 19.3.0.0; Add-on 19.3.0.0)` |
+| 20.0.0 - 20.1.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 20.5.4.0; Add-on 20.5.4.0)` |
 
 ## Methods
 The following methods do not require an access token:
@@ -158,6 +159,7 @@ This method can be used to log in on a device account that was registered with <
 | password            | Device account password                          |
 | appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)     |
 | naCountry           | Country code such as `NL` (introduced in 18.0.0) |
+| isPersistent        | `true` or `false` (introduced in 20.0.0)         |
 | skipOp2Verification | Skip NSO verification (optional)                 |
 
 Response on success:
@@ -312,24 +314,26 @@ This method returns the JWK set for the access token that's issued by <code><a h
 
 ## User information
 
-| Field            | Description                                |
-| ---------------- | ------------------------------------------ |
-| id               | User id (16 hex digits)                    |
-| etag             | ETag                                       |
-| nickname         | Nickname                                   |
-| country          | Country                                    |
-| birthday         | YYYY-MM-DD                                 |
-| thumbnailUrl     | Thumbnail URL                              |
-| deviceAccounts   | List of [device accounts](#device-account) |
-| links            | [Linked accounts](#linked-accounts)        |
-| permissions      | [Privacy settings](#privacy-settings)      |
-| extras           | [Extras](#extras)                          |
-| presence         | [Online status](#online-status)            |
-| deleted          | Bool                                       |
-| blocksUpdatedAt  | Timestamp                                  |
-| friendsUpdatedAt | Timestamp                                  |
-| createdAt        | Timestamp                                  |
-| updatedAt        | Timestamp                                  |
+| Field               | Description                                |
+|---------------------|--------------------------------------------|
+| id                  | User id (16 hex digits)                    |
+| etag                | ETag                                       |
+| nickname            | Nickname                                   |
+| country             | Country                                    |
+| birthday            | YYYY-MM-DD                                 |
+| thumbnailUrl        | Small thumbnail URL (256x256)              |
+| thumbnail2Url       | Large thumbnail URL (512x512)              |
+| deviceAccounts      | List of [device accounts](#device-account) |
+| links               | [Linked accounts](#linked-accounts)        |
+| permissions         | [Privacy settings](#privacy-settings)      |
+| extras              | [Extras](#extras)                          |
+| presence            | [Online status](#online-status)            |
+| deleted             | Bool                                       |
+| blocksUpdatedAt     | Timestamp                                  |
+| friendsUpdatedAt    | Timestamp                                  |
+| thumbnailUploadedAt | Timestamp                                  |
+| createdAt           | Timestamp                                  |
+| updatedAt           | Timestamp                                  |
 
 ## Device account
 The password is only present once, when the account is created.
@@ -344,6 +348,7 @@ The password is only present once, when the account is created.
 | Field           | Description                              |
 | --------------- | ---------------------------------------- |
 | nintendoNetwork | [Nintendo network link](#linked-account) |
+| nintendoAccount | [Nintendo account link](#linked-account) |
 | twitter         | [Twitter account link](#linked-account)  |
 | facebook        | [Facebook account link](#linked-account) |
 | google          | [Google account link](#linked-account)   |
