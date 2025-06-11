@@ -26,6 +26,7 @@ title: Documentation
 * [Switch Error Codes](/docs/switch/error-codes)
 * [Switch Tokens](/docs/switch/tokens)
 * [Title Database](https://kinnay.github.io)
+* [Switch 2 Titles](/docs/switch/switch-2-titles)
 * [DKC:TF Level IDs](/docs/misc/donkey-kong-tropical-freeze-level-ids)
 * [Mario Kart 8 Track IDs](/docs/misc/mario-kart-8-track-ids)
 * [Mario Kart 8 Protocol](/docs/misc/mario-kart-8-protocol)

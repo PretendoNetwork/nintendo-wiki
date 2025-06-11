@@ -91,7 +91,8 @@ In the tables below, the values of P (maximum number of players) and Q (maximum 
 | Offset | Size | Description        |
 |--------|------|--------------------|
 | 0x0    | 4    | [[Constant id]]    |
-| 0x4    | 2    | Unknown            |
+| 0x4    | 1    | Player id          |
+| 0x5    | 1    | Unknown            |
 | 0x6    | 2    | Padding (always 0) |
 
 *Switch:*
@@ -99,7 +100,8 @@ In the tables below, the values of P (maximum number of players) and Q (maximum 
 | Offset | Size | Description        |
 |--------|------|--------------------|
 | 0x0    | 8    | [[Constant id]]    |
-| 0x8    | 2    | Unknown            |
+| 0x8    | 1    | Is local player    |
+| 0x9    | 1    | Is disconnected    |
 | 0xA    | 6    | Padding (always 0) |
 
 [Constant id]: /docs/pia/types#constant-id

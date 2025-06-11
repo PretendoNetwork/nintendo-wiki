@@ -174,36 +174,44 @@ If the error code is `invalid_parameter`, the response may contain more details 
 
 ### Known Errors
 
-| Status | Code                          | Title                         |
-| ------ | ----------------------------- | ----------------------------- |
-| 400    | `duplicate_rights_id`         |                               |
-| 400    | `invalid_device_certificate`  | Device certificate is invalid |
-| 400    | `invalid_eticket_template`    |                               |
-| 400    | `invalid_parameter`           | Parameter is invalid          |
-| 401    | `account_id_required`         |                               |
-| 401    | `authentication_required`     |                               |
-| 403    | `edge_token_not_grantable`    |                               |
-| 403    | `invalid_token`               | Token is invalid              |
-| 403    | `license_archive_not_allowed` |                               |
-| 403    | `license_inactive`            | ELicense is inactive          |
-| 403    | `license_not_grantable`       |                               |
-| 403    | `rights_policy_not_allowed`   |                               |
-| 403    | `system_update_required`      |                               |
-| 404    | `license_archive_not_found`   | ELicense archive is not found |
-| 404    | `license_not_found`           | ELicense is not found         |
-| 404    | `page_not_found`              | Page not found                |
-| 404    | `promotion_policy_not_found`  |                               |
-| 404    | `title_not_found`             |                               |
-| 405    | `method_not_allowed`          | Method not allowed            |
-| 406    | `not_acceptable`              |                               |
-| 415    | `unsupported_media_type`      |                               |
-| 500    | `delete_record_failed`        |                               |
-| 500    | `insert_record_failed`        |                               |
-| 500    | `op2_error`                   |                               |
-| 500    | `shogun_error`                |                               |
-| 500    | `unexpected_error`            |                               |
-| 500    | `unknown_issuer`              |                               |
-| 500    | `update_record_failed`        |                               |
-| 503    | `abort_retry`                 |                               |
-| 503    | `op2_maintenance`             |                               |
-| 503    | `service_unavailable`         |                               |
+| Status | Code                              | Title                         |
+|--------|-----------------------------------|-------------------------------|
+| 400    | `duplicate_rights_id`             |                               |
+| 400    | `exceed_upper_lending_limit`      |                               |
+| 400    | `invalid_account_for_borrowing`   |                               |
+| 400    | `invalid_device_certificate`      | Device certificate is invalid |
+| 400    | `invalid_device_for_lending`      |                               |
+| 400    | `invalid_eticket_template`        |                               |
+| 400    | `invalid_lending_state`           |                               |
+| 400    | `invalid_parameter`               | Parameter is invalid          |
+| 400    | `license_active_on_lender_device` |                               |
+| 400    | `rights_has_already_lent`         |                               |
+| 401    | `account_id_required`             | Account ID is required        |
+| 401    | `authentication_required`         |                               |
+| 403    | `edge_token_not_grantable`        |                               |
+| 403    | `invalid_rights_for_lending`      |                               |
+| 403    | `invalid_migration_state`         |                               |
+| 403    | `invalid_token`                   | Token is invalid              |
+| 403    | `license_archive_not_allowed`     |                               |
+| 403    | `license_inactive`                | ELicense is inactive          |
+| 403    | `license_not_grantable`           |                               |
+| 403    | `rights_policy_not_allowed`       |                               |
+| 403    | `system_update_required`          |                               |
+| 404    | `license_archive_not_found`       | ELicense archive is not found |
+| 404    | `license_not_found`               | ELicense is not found         |
+| 404    | `page_not_found`                  | Page not found                |
+| 404    | `promotion_policy_not_found`      |                               |
+| 404    | `title_not_found`                 |                               |
+| 405    | `method_not_allowed`              | Method not allowed            |
+| 406    | `not_acceptable`                  |                               |
+| 415    | `unsupported_media_type`          |                               |
+| 500    | `delete_record_failed`            |                               |
+| 500    | `insert_record_failed`            |                               |
+| 500    | `op2_error`                       |                               |
+| 500    | `shogun_error`                    |                               |
+| 500    | `unexpected_error`                |                               |
+| 500    | `unknown_issuer`                  |                               |
+| 500    | `update_record_failed`            |                               |
+| 503    | `abort_retry`                     |                               |
+| 503    | `op2_maintenance`                 |                               |
+| 503    | `service_unavailable`             |                               |

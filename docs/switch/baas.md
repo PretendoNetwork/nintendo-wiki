@@ -52,7 +52,8 @@ The user agents below are taken from the account sysmodule. If the request is ma
 | 16.0.0 - 16.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)` |
 | 17.0.0 - 17.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)` |
 | 18.0.0 - 18.1.0 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 18.3.0.0; Add-on 18.3.0.0)` |
-| 19.0.0          | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 19.3.0.0; Add-on 19.3.0.0)` |
+| 19.0.0 - 19.0.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 19.3.0.0; Add-on 19.3.0.0)` |
+| 20.0.0 - 20.1.1 | `libcurl (nnAccount; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 20.5.4.0; Add-on 20.5.4.0)` |
 
 ## Methods
 The following methods do not require an access token:
@@ -76,7 +77,8 @@ The following methods require a user access token:
 | Module  | Method | URL                                                                             |
 | ------- | ------ | ------------------------------------------------------------------------------- |
 | Account | POST   | `/1.0.0/devices/me/delete`                                                      |
-| Account | POST   | `/1.0.0/image_upload`                                                           |
+| Account | ?      | `/1.0.0/devices/snapshot`                                                       |
+| Account | POST   | [`/1.0.0/image_upload`](#post-100image_upload)                                  |
 | Account | PUT    | `/1.0.0/push_channels/<id>/<id>`                                                |
 | Friends | GET    | `/1.0.0/users`                                                                  |
 | Both    | GET    | [`/1.0.0/users/<id>`](#get-100usersid)                                          |
@@ -86,6 +88,7 @@ The following methods require a user access token:
 | Friends | DELETE | `/1.0.0/users/<id>/blocks/<id>`                                                 |
 | Friends | PATCH  | `/1.0.0/users/<id>/device_accounts/<id>`                                        |
 | Account | DELETE | [`/1.0.0/users/<id>/device_accounts/<id>`](#delete-100usersiddevice_accountsid) |
+| Account | ?      | `/1.0.0/users/<id>/device_histories`                                            |
 | Friends | POST   | [`/1.0.0/users/<id>/generate_code`](#post-100usersidgenerate_code)              |
 | Account | POST   | [`/1.0.0/users/<id>/link`](#post-100usersidlink)                                |
 | Account | POST   | `/1.0.0/users/<id>/unlink`                                                      |
@@ -105,7 +108,7 @@ This method provides an anonymous access token.
 | --------- | ------------------------------------------------------------- |
 | grantType | `public_client`                                               |
 | assertion | Device token obtained from [dauth server](/docs/switch/dauth) |
-| penneId   | Penne id (optional)                                           |
+| penneId   | Penne id (optional, introduced in 19.0.0)                     |
 
 Response on success:
 
@@ -150,12 +153,14 @@ X-Amz-Cf-Id: WGSd3qu043Y9Co4sredK7gclrF4BMYPKQXytykkQfwEez4HYJmIbDw==
 ### POST /1.0.0/login
 This method can be used to log in on a device account that was registered with <code><a href="#post-100users">/1.0.0/users</a></code>. If an application token is provided, the server checks if the device account is linked against a Nintendo account, and if the account has a Nintendo Switch Online membership.
 
-| Param               | Description                                  |
-| ------------------- | -------------------------------------------- |
-| id                  | Device account id                            |
-| password            | Device account password                      |
-| appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional) |
-| skipOp2Verification | Skip NSO verification (optional)             |
+| Param               | Description                                      |
+| ------------------- | ------------------------------------------------ |
+| id                  | Device account id                                |
+| password            | Device account password                          |
+| appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)     |
+| naCountry           | Country code such as `NL` (introduced in 18.0.0) |
+| isPersistent        | `true` or `false` (introduced in 20.0.0)         |
+| skipOp2Verification | Skip NSO verification (optional)                 |
 
 Response on success:
 
@@ -188,6 +193,7 @@ This method is the same as [`/1.0.0/login`](#post-100login) except that it also 
 | idp                 | `nintendoAccount`                                                    |
 | idToken             | ID token obtained from [accounts.nintendo.com](/docs/switch/account) |
 | appAuthNToken       | [AAuth token](/docs/switch/aauth) (optional)                         |
+| naCountry           | Country code such as `NL` (introduced in 18.0.0)                     |
 | skipOp2Verification | Skip NSO verification (optional)                                     |
 
 ### POST /1.0.0/users
@@ -224,6 +230,44 @@ Connection: keep-alive
 
 {"id":"f09c3d45cc3432c6","etag":"\"4d20053b9c0fcf9a\"","nickname":"","country":"","birthday":"0000-00-00","thumbnailUrl":"","deviceAccounts":[{"id":"7c23fd7c9b37b0cb","password":"0mr1prbsNFzRs0dRCHXRUNECGd1kJVg3Lq6zn0nR"}],"links":{},"permissions":{"personalAnalytics":true,"personalNotification":true,"friendRequestReception":true,"friends":"EVERYONE","presence":"FRIENDS","presenceUpdatedAt":1633432210,"personalAnalyticsUpdatedAt":1633432210,"personalNotificationUpdatedAt":1633432210},"extras":{"self":{},"favoriteFriends":{},"friends":{},"foaf":{},"everyone":{}},"presence":{"state":"OFFLINE","extras":{"self":{},"favoriteFriends":{},"friends":{},"foaf":{},"everyone":{}},"updatedAt":1632676901,"logoutAt":0},"deleted":false,"blocksUpdatedAt":1632676901,"friendsUpdatedAt":1632676901,"createdAt":1632676901,"updatedAt":1632676901}
 ```
+
+### POST /1.0.0/image_upload
+This method uploads a profile picture to the server. The request uses a JSON body.
+
+| Field          | Description         |
+|----------------|---------------------|
+| rawContent     | Base64-encoded JPEG |
+| ownerId        | User id of owner    |
+| allowTransform | Boolean             |
+
+Response on success:
+
+| Field     | Description            |
+|-----------|------------------------|
+| id        | Image id               |
+| ownerId   | Owner id               |
+| owner     | Owner                  |
+| state     | `STORED`               |
+| content   | Content                |
+| createdAt | Created at (timestamp) |
+| updatedAt | Updated at (timestamp) |
+
+The owner has the following fields:
+
+| Field | Description |
+|-------|-------------|
+| id    | Owner id    |
+
+The content has the following fields:
+
+| Field        | Description           |
+|--------------|-----------------------|
+| id           | Image id              |
+| width        | Width                 |
+| height       | Height                |
+| format       | `jpg`                 |
+| url          | URL of uploaded image |
+| urlExpiresAt | Set to 2147483647     |
 
 ### GET /1.0.0/users/&lt;id&gt;
 This method does not take any parameters and simply returns the [user information](#user-information) for the given user. If the access token does not belong to the given user, this method returns [`insufficient_scope`](#errors).
@@ -270,24 +314,26 @@ This method returns the JWK set for the access token that's issued by <code><a h
 
 ## User information
 
-| Field            | Description                                |
-| ---------------- | ------------------------------------------ |
-| id               | User id (16 hex digits)                    |
-| etag             | ETag                                       |
-| nickname         | Nickname                                   |
-| country          | Country                                    |
-| birthday         | YYYY-MM-DD                                 |
-| thumbnailUrl     | Thumbnail URL                              |
-| deviceAccounts   | List of [device accounts](#device-account) |
-| links            | [Linked accounts](#linked-accounts)        |
-| permissions      | [Privacy settings](#privacy-settings)      |
-| extras           | [Extras](#extras)                          |
-| presence         | [Online status](#online-status)            |
-| deleted          | Bool                                       |
-| blocksUpdatedAt  | Timestamp                                  |
-| friendsUpdatedAt | Timestamp                                  |
-| createdAt        | Timestamp                                  |
-| updatedAt        | Timestamp                                  |
+| Field               | Description                                |
+|---------------------|--------------------------------------------|
+| id                  | User id (16 hex digits)                    |
+| etag                | ETag                                       |
+| nickname            | Nickname                                   |
+| country             | Country                                    |
+| birthday            | YYYY-MM-DD                                 |
+| thumbnailUrl        | Small thumbnail URL (256x256)              |
+| thumbnail2Url       | Large thumbnail URL (512x512)              |
+| deviceAccounts      | List of [device accounts](#device-account) |
+| links               | [Linked accounts](#linked-accounts)        |
+| permissions         | [Privacy settings](#privacy-settings)      |
+| extras              | [Extras](#extras)                          |
+| presence            | [Online status](#online-status)            |
+| deleted             | Bool                                       |
+| blocksUpdatedAt     | Timestamp                                  |
+| friendsUpdatedAt    | Timestamp                                  |
+| thumbnailUploadedAt | Timestamp                                  |
+| createdAt           | Timestamp                                  |
+| updatedAt           | Timestamp                                  |
 
 ## Device account
 The password is only present once, when the account is created.
@@ -302,6 +348,7 @@ The password is only present once, when the account is created.
 | Field           | Description                              |
 | --------------- | ---------------------------------------- |
 | nintendoNetwork | [Nintendo network link](#linked-account) |
+| nintendoAccount | [Nintendo account link](#linked-account) |
 | twitter         | [Twitter account link](#linked-account)  |
 | facebook        | [Facebook account link](#linked-account) |
 | google          | [Google account link](#linked-account)   |

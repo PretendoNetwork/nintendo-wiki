@@ -4,13 +4,16 @@ toc: true
 title: IDBE
 ---
 
-This server provides icon data for 3DS, Wii U and Switch titles.
+This server provides icon data for 3DS and Wii U titles.
 
 | Platform | Server                            |
 |----------|-----------------------------------|
 | 3DS      | https://idbe-ctr.cdn.nintendo.net |
 | Wii U    | https://idbe-wup.cdn.nintendo.net |
 | Switch   | https://idbe-hac.cdn.nintendo.net |
+| Switch 2 | https://idbe-p01.cdn.nintendo.net |
+
+Note: on the Switch and Switch 2, the IDBE server is only used when 3DS and Wii U titles are fetched, after an Amiibo has been used. For Switch and Switch 2 titles, the [atum server](/docs/switch/atum) is used instead.
 
 An icon file can be retrieved by sending a GET request to one of the following URLs:
 

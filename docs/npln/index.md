@@ -62,19 +62,27 @@ Pokemon Scarlet and Violet implement custom services as well:
 * [SDK version table](https://kinnay.github.io/view.html?page=switch&sort=npln&npln=1)
 
 | Game                                 | Tenant ID  |
-| ------------------------------------ | ---------- |
+|--------------------------------------|------------|
 | Bayonetta 3                          | `2c06a4d3` |
+| Endless Ocean Luminous               | `a71f7ea5` |
 | Hamster Playground                   | `b9dd3510` |
+| MACHI KORO With Everyone             | ?          |
 | Monster Hunter Rise                  | `e1c218b5` |
 | Monster Hunter Rise Demo             | `f124d2cb` |
 | Monster Hunter Rise: Sunbreak Demo   | `bc33b7d4` |
+| Mario Kart World                     | `e96531c6` |
+| Nintendo Classics                    | `7b4e32ca` |
+| Nintendo Switch Online Playtest      | `927e13da` |
 | Pokemon Legends: Arceus              | `e047112f` |
 | Pokemon Scarlet & Violet             | `50e39f8f` |
+| Puyo Puyo Tetris 2S                  | `cebd73f4` |
 | Splatoon 3                           | `dce9377b` |
 | Splatoon 3: Splatfest World Premiere | `156eef4e` |
 | Super Mario Bros. Wonder             | `ba973ec6` |
 | Super Mario Party Jamboree           | `adf89f68` |
+| Wavecade                             | `61cb5c35` |
 
 ## Useful Tools
 * [grpcui](https://github.com/fullstorydev/grpcui) - a simple user interface for gRPC
 * [grpc-dump](https://github.com/bradleyjkemp/grpc-tools) - a proxy that dumps gRPC messages (for mitm)
+* [proxide](https://github.com/Rantanen/proxide) - another gRPC debugging proxy (for mitm)
