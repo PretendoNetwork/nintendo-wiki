@@ -16,7 +16,7 @@ Card IDs were introduced in NEX 2, and a user can use as much card IDs as they l
 |-----------|---------------------------------------------------------|
 | 1         | [AcquireNexUniqueId](#1-acquirenexuniqueid)             |
 | 2         | [NexUniqueIdToPrincipalId](#2-nexuniqueidtoprincipalid) |
-| 3         | ?                                                       |
+| 3         | [UnknownMethod0x3](#3-unknownmethod0x3)                 |
 | 4         | [AcquireCardId](#4-acquirecardid)                       |
 | 5         | [ActivateWithCardId](#5-activatewithcardid)             |
 
@@ -47,6 +47,17 @@ Card IDs were introduced in NEX 2, and a user can use as much card IDs as they l
 |-------|--------------|
 | [PID] | Principal ID |
 
+### (3) UnknownMethod0x3
+#### Request
+
+The request format of this method is unknown.
+
+#### Response
+
+| Type                 | Description |
+|----------------------|-------------|
+| [List]&lt;Uint32&gt; | Unknown     |
+
 ### (4) AcquireCardId
 #### Request
 This method does not take any parameters.
@@ -73,3 +84,4 @@ This method does not take any parameters.
 | Bool   | First time  |
 
 [PID]: /docs/nex/types#pid
+[List]: /docs/nex/types#list
