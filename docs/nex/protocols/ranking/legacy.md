@@ -38,8 +38,8 @@ The following games have additional methods in the legacy ranking protocol:
 | 9                 | 11                | [GetCommonData](#11-getcommondata)                 |
 | 10                | 12                | [UnknownMethod0xC](#12-unknownmethod0xc)           |
 | 11                | 13                | [UnknownMethod0xD](#13-unknownmethod0xd)           |
-| 12                | 14                | [UnknownMethod0xE](#14-unknownmethod0xe)           |
-| 13                | 15                | [UnknownMethod0xF](#15-unknownmethod0xf)           |
+| 12                | 14                | [GetScore](#14-getscore)                           |
+| 13                | 15                | [GetSelfScore](#15-getselfscore)                   |
 | 14                | 16                | [GetTotal](#16-gettotal)                           |
 |                   | 17                | [UploadScoreWithLimit](#17-uploadscorewithlimit)   |
 |                   | 18                | [UploadScoresWithLimit](#18-uploadscoreswithlimit) |
@@ -140,6 +140,7 @@ This method requires ownership of the unique ID, and having scores in the given 
 |------------------------------------------------|-------------|
 | Uint32                                         | Unique ID   |
 | [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category    |
+| Uint8                                          | Unknown     |
 
 #### Response
 
@@ -156,6 +157,7 @@ This method requires ownership of the unique ID.
 | Type   | Description |
 |--------|-------------|
 | Uint32 | Unique ID   |
+| Uint8  | Unknown     |
 
 #### Response
 
@@ -224,12 +226,11 @@ The response format of this method is unknown.
 ### (13) UnknownMethod0xD
 #### Request
 
-| Type                                           | Description |
-|------------------------------------------------|-------------|
-| Uint32                                         | Unique ID   |
-| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category    |
-| Uint8                                          | Unknown (1) |
-| Uint8                                          | Unknown (2) |
+| Type                                           | Description         |
+|------------------------------------------------|---------------------|
+| Uint32                                         | Unique ID           |
+| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category            |
+| [RankingOrderParam]                            | Ranking order param |
 
 #### Response
 
@@ -238,22 +239,16 @@ The response format of this method is unknown.
 | Sint16 | Result code (20) |
 | Uint32 | Unknown          |
 
-### (14) UnknownMethod0xE
+### (14) GetScore
 #### Request
 
-| Type                                           | Description                       |
-|------------------------------------------------|-----------------------------------|
-| Uint8                                          | [Ranking mode]                    |
-| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category                          |
-| Uint8                                          | Score index to order by           |
-| Uint8                                          | 0: Lowest score, 1: Highest score |
-| Uint8                                          | [Rank calculation]                |
-| Uint8                                          | Unknown (1)                       |
-| Uint8                                          | Unknown (2)                       |
-| Uint8                                          | Unknown (3)                       |
-| Uint32                                         | Unknown (4)                       |
-| Uint32                                         | Offset                            |
-| Uint8                                          | Length                            |
+| Type                                           | Description         |
+|------------------------------------------------|---------------------|
+| Uint8                                          | [Ranking mode]      |
+| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category            |
+| [RankingOrderParam]                            | Ranking order param |
+| Uint32                                         | Offset              |
+| Uint8                                          | Length              |
 
 #### Response
 
@@ -262,21 +257,18 @@ The response format of this method is unknown.
 | Sint16                      | Result code (30) |
 | [List]&lt;[RankingData]&gt; | Rank data list   |
 
-### (15) UnknownMethod0xF
+### (15) GetSelfScore
+
+This method works in a similar way as `GetScore`, but it sets the ranking mode to 1 (global rankings around own entry).
+
 #### Request
 
-| Type                                           | Description                       |
-|------------------------------------------------|-----------------------------------|
-| Uint32                                         | Unique ID                         |
-| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category                          |
-| Uint8                                          | Score index to sort by            |
-| Uint8                                          | 0: Lowest score, 1: Highest score |
-| Uint8                                          | [Rank calculation]                |
-| Uint8                                          | Unknown (1)                       |
-| Uint8                                          | Unknown (2)                       |
-| Uint8                                          | Unknown (3)                       |
-| Uint32                                         | Unknown (4)                       |
-| Uint8                                          | Length                            |
+| Type                                           | Description         |
+|------------------------------------------------|---------------------|
+| Uint32                                         | Unique ID           |
+| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category            |
+| [RankingOrderParam]                            | Ranking order param |
+| Uint8                                          | Length              |
 
 #### Response
 
@@ -347,10 +339,14 @@ It is unknown how the limit affects the score.
 | Uint32               | Unknown (2) |
 | [List]&lt;Uint32&gt; | Unknown (3) |
 | [List]&lt;Uint8&gt;  | Unknown (4) |
+| Bool                 | Unknown (5) |
+| Uint16               | Unknown (6) |
 
 #### Response
 
-The response format of this method is unknown.
+| Type   | Description     |
+|--------|-----------------|
+| Sint16 | Result code (?) |
 
 ## Types
 ### RankingData ([Structure])
@@ -365,6 +361,18 @@ The response format of this method is unknown.
 | Uint8                                          | Unknown (1) |
 | Uint32                                         | Unknown (2) |
 | [Buffer]                                       | Common data |
+
+### RankingOrderParam ([Structure])
+
+| Type   | Description                       |
+|--------|-----------------------------------|
+| Uint8  | Score index to order by           |
+| Uint8  | 0: Lowest score, 1: Highest score |
+| Uint8  | [Rank calculation]                |
+| Uint8  | Unknown (1)                       |
+| Uint8  | Unknown (2)                       |
+| Uint8  | Unknown (3)                       |
+| Uint32 | Unknown (4)                       |
 
 ### RankingScore ([Structure])
 
@@ -398,6 +406,7 @@ The response format of this method is unknown.
 [PID]: /docs/nex/types#pid
 
 [RankingData]: #rankingdata-structure
+[RankingOrderParam]: #rankingorderparam-structure
 [RankingScore]: #rankingscore-structure
 [RankingScoreWithLimit]: #rankingscorewithlimit-structure
 [Ranking mode]: /docs/nex/protocols/ranking#ranking-mode
