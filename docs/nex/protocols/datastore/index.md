@@ -10,6 +10,7 @@ The following games have additional methods in the datastore protocol:
 * [Animal Crossing: Happy Home Designer](/docs/nex/protocols/datastore/happy-home-designer)
 * [Miitopia (3DS)](/docs/nex/protocols/datastore/miitopia-3ds)
 * [Pokemon Bank](/docs/nex/protocols/datastore/pokemon-bank)
+* [Pokemon Sun / Moon](/docs/nex/protocols/datastore/pokemon-sun-moon)
 * [Pokemon X / Y](/docs/nex/protocols/datastore/pokemon-x-y)
 * [Real Escape Game](/docs/nex/protocols/datastore/real-escape-game)
 * [Splatoon 2](/docs/nex/protocols/datastore/splatoon-2)
