@@ -99,6 +99,9 @@ Notification types are a combined value made up of a category and a subtype. The
 | 3        | 2       | Participation cancelled  |
 | 3        | 7       | Participant disconnected |
 | 3        | 8       | Participation ended      |
+| 112      | 0       | Unknown                  |
+| 112      | 1       | Unknown                  |
+| 112      | 2       | Unknown                  |
 
 
 ### Notification type 3001:
