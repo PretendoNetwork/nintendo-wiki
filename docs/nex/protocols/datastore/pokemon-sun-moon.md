@@ -1,26 +1,26 @@
 ---
 layout: post
 toc: true
-title: Pokemon X / Y (115)
+title: Pokemon Sun / Moon (115)
 ---
 
-This page describes the methods that are only seen in Pokemon X / Y and Omega Ruby / Alpha Sapphire.
+This page describes the methods that are only seen in Pokemon Sun / Moon and Ultra Sun / Ultra Moon.
 
 ## Methods
 
 | Method ID | Method Name                                      |
 | --------- | ------------------------------------------------ |
-| 40        | [PrepareUploadPokemon](#40-prepareuploadpokemon) |
-| 41        | [UploadPokemon](#41-uploadpokemon)               |
-| 42        | [SearchPokemon](#42-searchpokemon)               |
-| 43        | [PrepareTradePokemon](#43-preparetradepokemon)   |
-| 44        | [TradePokemon](#44-tradepokemon)                 |
-| 45        | [DownloadOtherPokemon](#45-downloadotherpokemon) |
-| 46        | [DownloadMyPokemon](#46-downloadmypokemon)       |
-| 47        | [DeletePokemon](#47-deletepokemon)               |
-| 48        | [GetObjectInfos](#48-getobjectinfos)             |
+| 47        | [PrepareUploadPokemon](#47-prepareuploadpokemon) |
+| 48        | [UploadPokemon](#48-uploadpokemon)               |
+| 49        | [SearchPokemon](#49-searchpokemon)               |
+| 50        | [PrepareTradePokemon](#50-preparetradepokemon)   |
+| 51        | [TradePokemon](#51-tradepokemon)                 |
+| 52        | [DownloadOtherPokemon](#52-downloadotherpokemon) |
+| 53        | [DownloadMyPokemon](#53-downloadmypokemon)       |
+| 54        | [DeletePokemon](#54-deletepokemon)               |
+| 55        | [SearchPokemonV2](#55-searchpokemonv2)           |
 
-### (40) PrepareUploadPokemon
+### (47) PrepareUploadPokemon
 #### Request
 This method does not take any parameters.
 
@@ -30,7 +30,7 @@ This method does not take any parameters.
 | ----------------------------- | ---------- |
 | [GlobalTradeStationRecordKey] | pRecordKey |
 
-### (41) UploadPokemon
+### (48) UploadPokemon
 #### Request
 
 | Type                                   | Name  |
@@ -40,7 +40,7 @@ This method does not take any parameters.
 #### Response
 This method does not return anything.
 
-### (42) SearchPokemon
+### (49) SearchPokemon
 #### Request
 
 | Type                                   | Name  |
@@ -53,7 +53,7 @@ This method does not return anything.
 | --------------------------------------- | ------- |
 | [GlobalTradeStationSearchPokemonResult] | pResult |
 
-### (43) PrepareTradePokemon
+### (50) PrepareTradePokemon
 #### Request
 
 | Type                                         | Name  |
@@ -66,7 +66,7 @@ This method does not return anything.
 | --------------------------------------------- | ------- |
 | [GlobalTradeStationPrepareTradePokemonResult] | pResult |
 
-### (44) TradePokemon
+### (51) TradePokemon
 #### Request
 
 | Type                                  | Name  |
@@ -79,7 +79,7 @@ This method does not return anything.
 | -------------------------------------- | ------- |
 | [GlobalTradeStationTradePokemonResult] | pResult |
 
-### (45) DownloadOtherPokemon
+### (52) DownloadOtherPokemon
 #### Request
 
 | Type                                          | Name  |
@@ -92,7 +92,7 @@ This method does not return anything.
 | -------------------------------------- | ------- |
 | [GlobalTradeStationTradePokemonResult] | pResult |
 
-### (46) DownloadMyPokemon
+### (53) DownloadMyPokemon
 #### Request
 
 | Type                                       | Name  |
@@ -105,7 +105,7 @@ This method does not return anything.
 | ------------------------------------------- | ------- |
 | [GlobalTradeStationDownloadMyPokemonResult] | pResult |
 
-### (47) DeletePokemon
+### (54) DeletePokemon
 #### Request
 
 | Type                                   | Name  |
@@ -115,18 +115,18 @@ This method does not return anything.
 #### Response
 This method does not return anything.
 
-### (48) GetObjectInfos
+### (55) SearchPokemonV2
 #### Request
 
-| Type                 | Name    |
-| -------------------- | ------- |
-| [List]&lt;Uint64&gt; | dataIds |
+| Type                                   | Name  |
+| -------------------------------------- | ----- |
+| [GlobalTradeStationSearchPokemonParam] | param |
 
 #### Response
 
-| Type                                                                                    | Name   |
-| --------------------------------------------------------------------------------------- | ------ |
-| [List]&lt;[DataStoreFileServerObjectInfo](#datastorefileserverobjectinfo-structure)&gt; | pInfos |
+| Type                                    | Name    |
+| --------------------------------------- | ------- |
+| [GlobalTradeStationSearchPokemonResult] | pResult |
 
 ## Types
 ### GlobalTradeStationRecordKey ([Structure])
@@ -251,13 +251,6 @@ This method does not return anything.
 | [qBuffer] | indexData   |
 | [qBuffer] | pokemonData |
 
-### DataStoreFileServerObjectInfo ([Structure])
-
-| Type                  | Name    |
-| --------------------- | ------- |
-| Uint64                | dataId  |
-| [DataStoreReqGetInfo] | getInfo |
-
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
 [Buffer]: /docs/nex/types#buffer
@@ -285,6 +278,3 @@ This method does not return anything.
 [GlobalTradeStationData]: #globaltradestationdata-structure
 [GlobalTradeStationTradeKey]: #globaltradestationtradekey-structure
 [GlobalTradeStationDownloadPokemonResult]: #globaltradestationdownloadpokemonresult-structure
-[DataStoreFileServerObjectInfo]: #datastorefileserverobjectinfo-structure
-
-[DataStoreReqGetInfo]: /docs/nex/protocols/datastore#datastorereqgetinfo-structure
