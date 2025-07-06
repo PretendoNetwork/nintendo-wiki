@@ -121,7 +121,13 @@ This method does not return anything.
 | [qBuffer]           | Report data  |
 | [List]&lt;Float&gt; | Values       |
 
-The values list contains two entries, the first one being related to the report rate and the second one related to `BtlRecordResul2`.
+The information for this structure is populated by the following function:
+
+```cpp
+NetLib::P2P::NexRatingClient::SetReportStatusInfo(NetLib::P2P::NexRatingClient::REPORT_SLOT_ID, unsigned int, unsigned long long, unsigned int, nn::nex::RatingStatsFlags::RatingStatsFlags, NetLib::P2P::NexRatingClient::REPORT_RATE, void const*, unsigned int, BtlRecordResult2)
+```
+
+The values list contains two entries, the first one being related to the `REPORT_RATE` and the second one related to `BtlRecordResul2`. What these values mean is unknown.
 
 ### RatingRankData ([Structure])
 
