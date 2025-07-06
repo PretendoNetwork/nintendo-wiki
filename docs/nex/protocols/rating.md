@@ -6,17 +6,17 @@ title: Rating (118)
 
 ## Methods
 
-| Method ID | Method Name                             |
-|-----------|-----------------------------------------|
-| 1         | [UnknownMethod0x1](#1-unknownmethod0x1) |
-| 2         | [UnknownMethod0x2](#2-unknownmethod0x2) |
-| 3         | [UnknownMethod0x3](#3-unknownmethod0x3) |
-| 4         | [UnknownMethod0x4](#4-unknownmethod0x4) |
-| 5         | [UnknownMethod0x5](#5-unknownmethod0x5) |
-| 6         | ?                                       |
-| 7         | [UnknownMethod0x7](#7-unknownmethod0x7) |
-| 8         | [UnknownMethod0x8](#8-unknownmethod0x8) |
-| 9         | ?                                       |
+| Method ID | Method Name                               |
+|-----------|-------------------------------------------|
+| 1         | [UnknownMethod0x1](#1-unknownmethod0x1)   |
+| 2         | [UnknownMethod0x2](#2-unknownmethod0x2)   |
+| 3         | [ReportRatingStats](#3-reportratingstats) |
+| 4         | [GetRanking](#4-getranking)               |
+| 5         | [DeleteScore](#5-deletescore)             |
+| 6         | ?                                         |
+| 7         | [UploadCommonData](#7-uploadcommondata)   |
+| 8         | [GetCommonData](#8-getcommondata)         |
+| 9         | ?                                         |
 
 ### (1) UnknownMethod0x1
 #### Request
@@ -38,25 +38,28 @@ This method does not take any parameters.
 #### Response
 This method does not return anything.
 
-### (3) UnknownMethod0x3
+### (3) ReportRatingStats
 #### Request
 
-| Type                                                | Description   |
-|-----------------------------------------------------|---------------|
-| [RatingSessionToken](#ratingsessiontoken-structure) | Session token |
-| [List]&lt;[RatingStats](#ratingstats-structure)&gt; | Stats         |
+| Type                                                | Description   | Notes                        |
+|-----------------------------------------------------|---------------|------------------------------|
+| [RatingSessionToken](#ratingsessiontoken-structure) | Session token |                              |
+| [List]&lt;[RatingStats](#ratingstats-structure)&gt; | Stats         | There are always two entries |
 
 #### Response
 This method does not return anything.
 
-### (4) UnknownMethod0x4
+### (4) GetRanking
+
+This returns ranking data belonging to the caller, with no filters.
+
 #### Request
 
-| Type   | Description |
+| Type   | Name        |
 |--------|-------------|
-| Uint32 | Unknown (1) |
-| Uint64 | Unknown (2) |
-| Uint32 | Unknown (3) |
+| Uint32 | category    |
+| Uint64 | uniqueId    |
+| [PID]  | principalId |
 
 #### Response
 
@@ -64,40 +67,40 @@ This method does not return anything.
 |---------------------------------------------|-------------|
 | [RatingRankData](#ratingrankdata-structure) | Rank data   |
 
-### (5) UnknownMethod0x5
+### (5) DeleteScore
 #### Request
 
-| Type   | Description |
-|--------|-------------|
-| Uint32 | Unknown (1) |
-| Uint64 | Unknown (2) |
+| Type   | Name     |
+|--------|----------|
+| Uint32 | category |
+| Uint64 | uniqueId |
 
 #### Response
 This method does not return anything.
 
-### (7) UnknownMethod0x7
+### (7) UploadCommonData
 #### Request
 
-| Type                | Description |
-|---------------------|-------------|
-| [List]&lt;Uint8&gt; | Unknown (1) |
-| Uint64              | Unknown (2) |
+| Type     | Name       |
+|----------|------------|
+| [Buffer] | commonData |
+| Uint64   | uniqueId   |
 
 #### Response
 This method does not return anything.
 
-### (8) UnknownMethod0x8
+### (8) GetCommonData
 #### Request
 
-| Type                | Description |
-|---------------------|-------------|
-| Uint64              | Unknown     |
+| Type   | Name     |
+|--------|----------|
+| Uint64 | uniqueId |
 
 #### Response
 
-| Type                | Description |
-|---------------------|-------------|
-| [List]&lt;Uint8&gt; | Unknown     |
+| Type     | Name       |
+|----------|------------|
+| [Buffer] | commonData |
 
 ## Types
 ### RatingSessionToken ([Structure])
@@ -109,29 +112,37 @@ This method does not return anything.
 
 ### RatingStats ([Structure])
 
-| Type                 | Description |
-|----------------------|-------------|
-| Uint32               | Unknown (1) |
-| Uint64               | Unknown (2) |
-| Uint32               | Unknown (3) |
-| Uint32               | Unknown (4) |
-| [qBuffer]            | Unknown (5) |
-| [List]&lt;Uint32&gt; | Unknown (6) |
+| Type                | Description  |
+|---------------------|--------------|
+| [PID]               | Principal ID |
+| Uint64              | Unique ID    |
+| Uint32              | Flags        |
+| Uint32              | Category     |
+| [qBuffer]           | Report data  |
+| [List]&lt;Float&gt; | Values       |
+
+The information for this structure is populated by the following function:
+
+```cpp
+NetLib::P2P::NexRatingClient::SetReportStatusInfo(NetLib::P2P::NexRatingClient::REPORT_SLOT_ID, unsigned int, unsigned long long, unsigned int, nn::nex::RatingStatsFlags::RatingStatsFlags, NetLib::P2P::NexRatingClient::REPORT_RATE, void const*, unsigned int, BtlRecordResult2)
+```
+
+The values list contains two entries, the first one being related to the `REPORT_RATE` and the second one related to `BtlRecordResul2`. What these values mean is unknown.
 
 ### RatingRankData ([Structure])
 
-| Type                | Description  |
-|---------------------|--------------|
-| Uint32              | Unknown (1)  |
-| Uint64              | Unknown (2)  |
-| Uint32              | Unknown (3)  |
-| Uint32              | Unknown (4)  |
-| Uint32              | Unknown (5)  |
-| Uint32              | Unknown (6)  |
-| Uint32              | Unknown (7)  |
-| Uint32              | Unknown (8)  |
-| [List]&lt;Uint8&gt; | Unknown (9)  |
-| [DateTime]          | Unknown (10) |
+| Type       | Description  |
+|------------|--------------|
+| [PID]      | Principal ID |
+| Uint64     | Unique ID    |
+| Uint32     | Order        |
+| Uint32     | Category     |
+| Uint32     | Score        |
+| Uint32     | Unknown (1)  |
+| Uint32     | Unknown (2)  |
+| Uint32     | Unknown (3)  |
+| [Buffer]   | Common data  |
+| [DateTime] | Update time  |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
