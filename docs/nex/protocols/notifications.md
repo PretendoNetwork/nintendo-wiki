@@ -78,7 +78,7 @@ Notification types are a combined value made up of a category and a subtype. The
 | 109       | Gathering unregistered                        | Does not seem to have subtypes                                  |
 | 110       | Host changed                                  | Does not seem to have subtypes                                  |
 | 111       | Game notification logout                      | Does not seem to have subtypes                                  |
-| 112       | Subscription event                            | Does not seem to have subtypes                                  |
+| 112       | Subscription event                            |                                                                 |
 | 113       | Game server maintenance                       | Does not seem to have subtypes                                  |
 | 114       | Maintenance announcement                      | Does not seem to have subtypes                                  |
 | 115       | Service item request completed                | Does not seem to have subtypes                                  |
