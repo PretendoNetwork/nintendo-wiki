@@ -7,7 +7,7 @@ title: Subscription (117)
 ## Extended Protocols
 
 The following games have additional methods in the subscription protocol:
-* [Pokemon Sun / Moon](/docs/nex/protocols/subscription/pokemon-sun-moon)
+* [Pokemon (Generation 7)](/docs/nex/protocols/subscription/pokemon-generation-7)
 * [Xenoblade Chronicles X](/docs/nex/protocols/subscription/xenoblade-chronicles-x)
 
 This remainder of this page describes the methods that are not specific to any game.
