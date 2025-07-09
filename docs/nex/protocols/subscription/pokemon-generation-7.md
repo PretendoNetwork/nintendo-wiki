@@ -1,7 +1,7 @@
 ---
 layout: post
 toc: true
-title: Pokemon Sun / Moon (117)
+title: Pokemon Generation 7 (117)
 ---
 
 This page describes the methods that are only seen in Pokemon Sun / Moon and Ultra Sun / Ultra Moon.
