@@ -24,7 +24,7 @@ No RMC response is sent.
 ### NotificationEvent ([Structure])
 Most notification types are predefined. However, some games also implement their own notification types (see [libeagle](/docs/switch/eagle) for example).
 
-**Wii U and 3DS:**
+**Up to NEX 3:**
 
 | Type     | Name        |
 |----------|-------------|
@@ -40,7 +40,7 @@ In NEX version 3.4, a new field was added:
 |--------|------------|
 | Uint32 | m_uiParam3 |
 
-**Switch:**
+**NEX 4:**
 
 The following fields are always present (revision 0 and 1):
 
