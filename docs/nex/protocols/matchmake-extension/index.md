@@ -187,7 +187,7 @@ This method does not return anything.
 
 ### (9) UpdateNotificationData
 #### Request
-**Wii U and 3DS:**
+**Up to NEX 3:**
 
 | Type     | Name     |
 |----------|----------|
@@ -196,7 +196,7 @@ This method does not return anything.
 | Uint32   | uiParam2 |
 | [String] | strParam |
 
-**Switch:**
+**NEX 4:**
 
 | Type     | Name     |
 |----------|----------|

@@ -26,7 +26,7 @@ Game server accounts are separate from other Nintendo accounts. Username and pas
     <td><b>Wii U</b></td><td>Username and password are requested from the <a href="/docs/wiiu/account">account server</a> (/provider/nex_token/@me)</td>
   </tr>
   <tr>
-    <td><b>Switch</b></td><td>Normal user accounts don't have a password anymore. Instead, they must provide an id token to log in. This token (and your username) can be retrieved by logging in on the <a href="BAAS-Server">BAAS server</a> after acquiring a <a href="DAuth-Server">device token</a> and an <a href="AAuth-Server">application token</a>.</td>
+    <td><b>Switch</b></td><td>Normal user accounts don't have a password anymore. Instead, they must provide an id token to log in. This token (and your username) can be retrieved by logging in on the <a href="/docs/switch/baas">BAAS server</a> after acquiring a <a href="/docs/switch/dauth">device token</a> and an <a href="/docs/switch/aauth">application token</a>.</td>
   </tr>
 </table>
 
@@ -110,7 +110,7 @@ Here, `pid` and `password` are the principal id and password of the **source** o
 ## Ticket Format
 The following encryption algorithm is used: first, the ticket is encrypted with RC4. Then a HMAC-MD5 of the encrypted data is appended. The decryption process is the reverse: first check the HMAC, then decrypt.
 
-The [Kerberos ticket](#kerberos-ticket) contains the following data, encrypted with the **source key**:
+The [Kerberos ticket](#kerberos-tickets) contains the following data, encrypted with the **source key**:
 
 | Type     | Description                                     |
 | -------- | ----------------------------------------------- |
@@ -118,7 +118,16 @@ The [Kerberos ticket](#kerberos-ticket) contains the following data, encrypted w
 | [PID]    | The principal id of the **target user**         |
 | [Buffer] | [Internal ticket data](#internal-ticket-format) |
 
-The length of the session key is always 32 bytes, except in communication with the 3DS / Wii U friends server, in which case it's 16 bytes.
+The length of the session key is always 32 bytes, except in NEX 1 or in communication with the 3DS / Wii U friends server, in which case it's 16 bytes.
+
+At some point the ticket format was updated to include a buffer containing NULL-terminated JSON data alongside the internal ticket data. This data can only be seen in NEX 4 tickets obtained through either `ValidateAndRequestTicketWithCustomData` or `ValidateAndRequestTicketWithParam`. Tickets coming from `RequestTicket` don't have this JSON data:
+
+| Type     | Description                                     |
+| -------- | ----------------------------------------------- |
+| Bytes    | A random session key                            |
+| [PID]    | The principal id of the **target user**         |
+| [Buffer] | [Internal ticket data](#internal-ticket-format) |
+| [Buffer] | [JSON data](#json-data)                         |
 
 ### Internal Ticket Format
 The format of the internal ticket was updated at some point. In the old format, the internal ticket data was encrypted directly with the **target key**. In the new format, a random key is sent along with the internal ticket in plain text, which is combined with the **target key** to derive the final encryption key.
@@ -146,6 +155,32 @@ The date time is used to check ticket expiration. A ticket is valid for exactly 
 | [DateTime] | The time at which the ticket was issued |
 | [PID]      | The principal id of the **source user** |
 | Bytes      | The session key                         |
+
+NEX 4 tickets were updated at some point and seem to have more information on those generated through either `ValidateAndRequestTicketWithCustomData` or `ValidateAndRequestTicketWithParam`. Tickets coming from `RequestTicket` don't have any additional data.
+
+### JSON data
+The following are some examples of the JSON data, with the user PID being scrubbed:
+
+**MH Gen U Transfer Tool (3DS, NEX 4.4)**
+```json
+{"mi": {"cpa": true, "mp": 2, "ms": 1}, "att": 0, "pid": 1234, "v": 1}
+```
+
+**Sushi Striker (3DS, NEX 4.3)**
+```json
+{"mi": {"cpa": true, "mp": 0, "ms": -1}, "att": 0, "pid": 5678, "v": 1}
+```
+
+**MK8DX (Switch)**
+```json
+{"mi": {"cpa": true, "mp": 0, "ms": -1}, "att": 2, "pid": 8901, "exp": 1622037015, "v": 1}
+```
+
+The currently known fields are the following:
+* `pid`: User PID
+* `exp`: Expiration date? Seems to have a unix timestamp for 5 minutes after the ticket was made
+* `att`: This is the `m_authTokenType` from [AuthenticationInfo](/docs/nex/protocols/authentication#authenticationinfo-structure)
+* `v`: Version? Maybe?
 
 ## Terminology
 * **Authentication server:** the server that generates the tickets. This server only provides a single service: the ticket granting service.

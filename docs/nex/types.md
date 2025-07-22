@@ -43,6 +43,8 @@ Every user is given a unique id called principal id.
 | 3DS / Wii U | Uint32 |
 | Switch      | Uint64 |
 
+Games with crossplay between Switch and 3DS / Wii U use the Switch backend, so in those cases the PID is always represented as a Uint64, regardless of platform.
+
 ## Result
 
 | Type   | Description |
