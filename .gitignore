@@ -1,0 +1,6 @@
+# composer
+/vendor/
+composer.phar
+
+.env
+.DS_Store
