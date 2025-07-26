@@ -3,7 +3,8 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 	http_response_code(405);
 	exit("Method Not Allowed");
 }
-require_once "vendor/autoload.php";
+
+require_once __DIR__ .  "vendor/autoload.php";
 
 use Gitonomy\Git\Repository;
 

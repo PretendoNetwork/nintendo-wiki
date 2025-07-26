@@ -1,0 +1,39 @@
+services:
+  mediawiki:
+    image: mediawiki:1.44.0
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - database
+    volumes:
+      - images:/var/www/html/images
+      # - ./LocalSettings.php:/var/www/html/LocalSettings.php
+      - ./htaccess:/var/www/html/.htaccess
+      - ./webhook:/var/www/html/webhook
+      - ./extensions/Tabs:/var/www/html/extensions/Tabs
+      - ./extensions/Breadcrumbs:/var/www/html/extensions/Breadcrumbs
+    environment:
+      GITHUB_WEBHOOK_SECRET: change_me
+      GITHUB_TOKEN: change_me
+      GITHUB_ORG_NAME: change_me
+      GITHUB_REPO_NAME: change_me
+      GITHUB_TARGET_REF: change_me
+      WIKI_API_URL: change_me
+      WIKI_API_BOT_USERNAME: change_me
+      WIKI_API_BOT_PASSWORD: change_me
+  database: # <- This key defines the name of the database during setup
+    image: mariadb
+    restart: always
+    environment:
+      # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
+      MYSQL_DATABASE: my_wiki
+      MYSQL_USER: wikiuser
+      MYSQL_PASSWORD: example
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  images:
+  db:
