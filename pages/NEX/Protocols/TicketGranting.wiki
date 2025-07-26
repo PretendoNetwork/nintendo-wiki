@@ -100,21 +100,41 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 
 ==== Response ====
 
-{| class="wikitable"
-! Type !! Name !! Description
-|-
-| Result || %retval% || Result code.
-|-
-| PID || pidPrincipal || PID of the connecting user.
-|-
-| Buffer || pbufResponse || [[Kerberos ticket]]
-|-
-| RVConnectionData || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1.
-|-
-| String || strReturnMsg || Server build name.
-|-
-| String || pSourceKey || '''Only present in NEX 4+.''' If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
-|}
+<tabs items="NEX 3 and below,NEX 4.0+" storagekey="loginex">
+	<tab name="NEX 3 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Result || %retval% || Result code.
+		|-
+		| PID || pidPrincipal || PID of the connecting user.
+		|-
+		| Buffer || pbufResponse || [[Kerberos ticket]]
+		|-
+		| RVConnectionData || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1.
+		|-
+		| String || strReturnMsg || Server build name.
+		|}
+	</tab>
+
+	<tab name="NEX 4.0+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Result || %retval% || Result code.
+		|-
+		| PID || pidPrincipal || PID of the connecting user.
+		|-
+		| Buffer || pbufResponse || [[Kerberos ticket]]
+		|-
+		| RVConnectionData || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1.
+		|-
+		| String || strReturnMsg || Server build name.
+		|-
+		| String || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
+		|}
+	</tab>
+</tabs>
 
 === (3) RequestTicket ===
 Grants a connection ticket for the source user to the target user. This can effectively be identical to <code>TicketGranting::Login</code>, only with explicit source and target PIDs. This can be used for getting the correct ticket if the target user PID returned by either <code>TicketGranting::Login</code> or <code>TicketGranting::LoginEx</code> does not match the expected PID of the secure server.
@@ -135,15 +155,29 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 
 ==== Response ====
 
-{| class="wikitable"
-! Type !! Name !! Description
-|-
-| Result || %retval% || Result code
-|-
-| Buffer || bufResponse || [[Kerberos ticket]]
-|-
-| String || pSourceKey || '''Only present in NEX 4+.''' If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
-|}
+<tabs items="NEX 3 and below,NEX 4.0+" storagekey="requestticket">
+	<tab name="NEX 3 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Result || %retval% || Result code
+		|-
+		| Buffer || bufResponse || [[Kerberos ticket]]
+		|}
+	</tab>
+
+	<tab name="NEX 4.0+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Result || %retval% || Result code
+		|-
+		| Buffer || bufResponse || [[Kerberos ticket]]
+		|-
+		| String || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
+		|}
+	</tab>
+</tabs>
 
 === (4) GetPID ===
 Returns the PID of the game server account based on the accounts username. Usernames are not case sensitive. In NEX the game server account username is always the string of the account PID for all normal users. For NEX special users (such as the <code>guest</code> account), and non-NEX game server accounts (such as those use the original Quazal Rendez-Vous library), this may not be the case. Returns 0 if the username does not exist.
@@ -191,7 +225,7 @@ Grants a connection ticket using only authentication information. This is effect
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| AnyDataHolder || loginData || Login data
+| DataHolder || loginData || Login data
 |}
 
 ==== Response ====
@@ -264,45 +298,89 @@ This structure represents the authentication information used by NEX when loggin
 
 This structure is effectively an upgraded version of [[#AuthenticationInfo_Structure|AuthenticationInfo]], which embeds a [[#AuthenticationInfo_Structure|AuthenticationInfo]] in itself along with much more additional metadata about the connection.
 
-{| class="wikitable"
-! Type !! Name !! Description
-|-
-| Uint32 || platformType || [[#Platform_type|Platform type]].
-|-
-| String || userName || Game server account username. In NEX this is always the users PID.
-|-
-| AnyDataHolder || extraData || [[#NullData_Structure|NullData]] or [[#AuthenticationInfo_Structure|AuthenticationInfo]].
-|-
-| Bool || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields.
-|-
-| Uint32 || apiVersionGeneral || NEX version (e.g. 40601).
-|-
-| Uint32 || apiVersionCustom || Client version.
-|-
-| Uint8 || platformTypeForPlatformPid || '''Only present on games with crossplay between Switch and 3DS/Wii U.''' Designates the [[#Platform_type|platform type]] for the <code>platformPid</code> on the response.
-|}
+<tabs items="Original,Games with Switch and 3DS/Wii U crossplay" storagekey="ValidateAndRequestTicketParam">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Uint32 || platformType || [[#Platform_type|Platform type]].
+		|-
+		| String || userName || Game server account username. In NEX this is always the users PID.
+		|-
+		| DataHolder || extraData || Authentication info. In NEX this is [[#AuthenticationInfo_Structure|AuthenticationInfo]]. May be [[#NullData_Structure|NullData]] if no data is being sent.
+		|-
+		| Bool || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields.
+		|-
+		| Uint32 || apiVersionGeneral || NEX version (e.g. 40601).
+		|-
+		| Uint32 || apiVersionCustom || Client version.
+		|}
+	</tab>
+
+	<tab name="Games with Switch and 3DS/Wii U crossplay">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| Uint32 || platformType || [[#Platform_type|Platform type]].
+		|-
+		| String || userName || Game server account username. In NEX this is always the users PID.
+		|-
+		| DataHolder || extraData || Authentication info. In NEX this is [[#AuthenticationInfo_Structure|AuthenticationInfo]]. May be [[#NullData_Structure|NullData]] if no data is being sent.
+		|-
+		| Bool || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields.
+		|-
+		| Uint32 || apiVersionGeneral || NEX version (e.g. 40601).
+		|-
+		| Uint32 || apiVersionCustom || Client version.
+		|-
+		| Uint8 || platformTypeForPlatformPid || Designates the [[#Platform_type|platform type]] for the <code>platformPid</code> on the response.
+		|}
+	</tab>
+</tabs>
 
 === ValidateAndRequestTicketResult (Structure) ===
 
 This structure is effectively an upgraded version of the login method responses, which includes the typical login data along with much more additional metadata about the connection.
 
-{| class="wikitable"
-! Type !! Name !! Description
-|-
-| PID || sourcePid || The PID the ticket is to be granted for. This value may not always match the real PID for the game server account. See <code>platformPid</code> for additional details.
-|-
-| Buffer || bufResponse || [[Kerberos ticket]]
-|-
-| StationURL || serviceNodeUrl || Secure server location
-|-
-| DateTime || currentUtcTime || Server time
-|-
-| String || returnMsg || Server build name
-|-
-| String || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
-|-
-| PID || platformPid || '''Only present on games with crossplay between Switch and 3DS/Wii U.''' User id of the matching [[#Platform_type|platform]].<br>For example, a 3DS user will have its original PID here, while the <code>sourcePid</code> will be a different 64-bit PID.
-|}
+<tabs items="Original,Games with Switch and 3DS/Wii U crossplay" storagekey="ValidateAndRequestTicketResult">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| PID || sourcePid || The PID the ticket is to be granted for.
+		|-
+		| Buffer || bufResponse || [[Kerberos ticket]]
+		|-
+		| StationURL || serviceNodeUrl || Secure server location
+		|-
+		| DateTime || currentUtcTime || Server time
+		|-
+		| String || returnMsg || Server build name
+		|-
+		| String || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
+		|}
+	</tab>
+
+	<tab name="Games with Switch and 3DS/Wii U crossplay">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| PID || sourcePid || The PID the ticket is to be granted for. This value may not always match the real PID for the game server account. See <code>platformPid</code> for additional details.
+		|-
+		| Buffer || bufResponse || [[Kerberos ticket]]
+		|-
+		| StationURL || serviceNodeUrl || Secure server location
+		|-
+		| DateTime || currentUtcTime || Server time
+		|-
+		| String || returnMsg || Server build name
+		|-
+		| String || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''.
+		|-
+		| PID || platformPid || User id of the matching [[#Platform_type|platform]].<br>For example, a 3DS user will have its original PID here, while the <code>sourcePid</code> will be a different 64-bit PID.
+		|}
+	</tab>
+</tabs>
 
 === NullData (Structure) ===
 {{Info|[[Structure inheritance|Inherits]] from [[Data]]}}
