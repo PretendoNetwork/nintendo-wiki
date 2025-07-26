@@ -1,0 +1,36 @@
+.tab-container {
+	margin: 1em 0;
+}
+
+.tab-headers {
+	border-bottom: 2px solid #CCC;
+	display: flex;
+	gap: 0;
+}
+
+.tab-header {
+	background: #F8F9FA;
+	border: 1px solid #CCC;
+	border-bottom: none;
+	padding: 8px 16px;
+	cursor: pointer;
+	font-weight: normal;
+}
+
+.tab-header:hover {
+	background: #E8E9EA;
+}
+
+.tab-header.active {
+	background: white;
+	font-weight: bold;
+	border-bottom: 2px solid white;
+	margin-bottom: -2px;
+}
+
+.tab-content {
+	border: 1px solid #CCC;
+	border-top: none;
+	padding: 1em;
+	background: white;
+}
