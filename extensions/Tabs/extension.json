@@ -1,0 +1,25 @@
+{
+  "name": "Tabs",
+  "version": "1.0.0",
+  "author": ["PretendoNetwork"],
+  "url": "https://github.com/PretendoNetwork/nintendo-wiki",
+  "descriptionmsg": "Adds support for displaying content using switchable tabs",
+  "type": "parserhook",
+  "AutoloadClasses": {
+    "Tabs": "includes/Tabs.php"
+  },
+  "Hooks": {
+    "ParserFirstCallInit": "Tabs::onParserFirstCallInit"
+  },
+  "ResourceModules": {
+    "ext.tabs": {
+      "scripts": ["resources/tabs.js"],
+      "styles": ["resources/tabs.css"]
+    }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "",
+    "remoteExtPath": "Tabs"
+  },
+  "manifest_version": 2
+}

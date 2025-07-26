@@ -1,21 +1,10 @@
-# Bundler cache
-.bundle
+# composer
 vendor
-Gemfile.lock
+composer
+composer.phar
 
-# Jekyll cache
-.jekyll-cache
-_site
-
-# RubyGems
-*.gem
-
-# NPM dependencies
-node_modules
-package-lock.json
-
-# IDE configurations
-.idea
-.vscode
-
-# Misc
+# custom
+.env
+.DS_Store
+LocalSettings.php
+compose.yaml

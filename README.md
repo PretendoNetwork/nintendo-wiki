@@ -1,95 +1,71 @@
-<div align="center">
+# Nintendo Wiki
 
-  # Chirpy Jekyll Theme
+WikiMedia source for Nintendo Wiki.
 
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
-
-  [![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy?color=brightgreen)](https://rubygems.org/gems/jekyll-theme-chirpy)
-  [![CI](https://github.com/cotes2020/jekyll-theme-chirpy/actions/workflows/ci.yml/badge.svg)](https://github.com/cotes2020/jekyll-theme-chirpy/actions/workflows/ci.yml)
-  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/4e556876a3c54d5e8f2d2857c4f43894)](https://www.codacy.com/gh/cotes2020/jekyll-theme-chirpy/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cotes2020/jekyll-theme-chirpy&amp;utm_campaign=Badge_Grade)
-  [![GitHub license](https://img.shields.io/github/license/cotes2020/jekyll-theme-chirpy.svg)](https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/LICENSE)
-  [![996.icu](https://img.shields.io/badge/link-996.icu-%23FF4D5B.svg)](https://996.icu)
-
-  [**Live Demo →**][demo]
-
-  [![Devices Mockup](https://chirpy-img.netlify.app/commons/devices-mockup.png)][demo]
-
-</div>
-
-## Features
-
-<details>
-  <summary>
-    <i>Click to view features</i>
-  </summary>
-  <p>
-
-  - Dark / Light Theme Mode
-  - Localized UI language
-  - Pinned Posts
-  - Hierarchical Categories
-  - Trending Tags
-  - Table of Contents
-  - Last Modified Date of Posts
-  - Syntax Highlighting
-  - Mathematical Expressions
-  - Mermaid Diagram & Flowchart
-  - Dark / Light Mode Images
-  - Embed Videos
-  - Disqus / Utterances / Giscus Comments
-  - Search
-  - Atom Feeds
-  - Google Analytics
-  - Page Views Reporting
-  - SEO & Performance Optimization
-
-  </p>
-</details>
-
-## Documentation
-
-To explore usage, development, and upgrade guide of the project, please refer to
-the [Wiki][wiki].
+## Structure
+- `extensions` - Custom MediaWiki extensions used by the wiki. Some of these could be replaced by MediaWiki templates, but are written as extensions for easier deploying
+- `pages` - MediaWiki page source files. Page names are based on file path. For example `pages/NEX/Protocols/TicketGranting.wiki` is the source for the page `http://example.com/wiki/NEX/Protocols/TicketGranting`
+- `media` - Media (images, videos, etc.) to be synced to the wiki. Currently not synced
+- `webhook` - Webhook for syncing changes made via GitHub to the MediaWiki instance
+- `htaccess` - The `.htaccess` file to get copied to the Docker container. Used to enable short URLs
 
 ## Contributing
+Contributions cannot be made on the wiki itself. All contributions must be done via a pull request on this repository. This is done to centralize our contributions for easier management, as well as to take full advantage of the tools provided by GitHub for reviews.
 
-Welcome to report bugs, help improve the code or submit new features.
-For more information, please see the ["Contributing Guidelines"][contribute-guide].
+## Running
+It is recommended that you run this instance using Docker. The official MediaWiki image is used. Rename `compose.example.yaml` to `compose.yaml`, set your configurations, and run `docker compose up` to start the services. By default the MediaWiki instance will be accessible at `http://localhost:8080`
 
-## Credits
+Use `database` as the host name when setting up the database connection, to use the MariaDB instance provided by Docker.
 
-This theme is mainly built with [Jekyll][jekyllrb] ecosystem,
-[Bootstrap][bootstrap], [Font Awesome][icons] and some other [wonderful tools][lib].
-The avatar and favicon design come from [Clipart Max][image].
+Once the `LocalSettings.php` file has been created, copy it to the same directory as the `compose.yaml` and uncomment the line `# - ./LocalSettings.php:/var/www/html/LocalSettings.php`. Add the following lines to the END of the `LocalSettings.php` file:
 
-Thanks to all the [contributors][contributors]. Also, folks who submitted issues
-or unmerged PRs should not be forgotten. Because they reported bugs, shared ideas,
-or inspired me to write more readable documentation.
+```php
+// Enable short URLs (`/wiki/Page_Name` instead of `index.php?title=Page_Name`).
+// Requires the provided .htaccess file also be used
+$wgScriptPath = "";
+$wgArticlePath = "/wiki/$1";
+$wgUsePathInfo = true;
 
-Last but not least, thanks to [JetBrains][jetbrains] for providing the
-_Open Source Development_ license.
+// Enable custom extensions
+wfLoadExtension('Tabs');
+wfLoadExtension('Breadcrumbs');
 
-## Sponsoring
+// Disable account creation, to enforce GitHub usage
+$wgGroupPermissions['*']['createaccount'] = false;
+```
 
-If you'd like to sponsor this project, the following options are available.
+Finally, navigate to the `webhook` directory and run `composer install` to ensure all the local dependancies are vendored. See [here for how to install `composer`](https://getcomposer.org/download/).
 
-[![Ko-fi](https://img.shields.io/badge/-Buy%20Me%20a%20Coffee-ff5f5f?logo=ko-fi&logoColor=white)](https://ko-fi.com/coteschung)
-[![Wechat Pay](https://img.shields.io/badge/-Tip%20Me%20on%20WeChat-brightgreen?logo=wechat&logoColor=white)][donation]
-[![Alipay](https://img.shields.io/badge/-Tip%20Me%20on%20Alipay-blue?logo=alipay&logoColor=white)][donation]
+Save `LocalSettings.php` and restart the services.
 
-## License
+## Webhook
+By default we recommend disabling account creation so that all changes can be managed via GitHub. In order to do so, a webhook must be created to listen for changes to the repository. The source for this webhook can be found in the `webhook` directory and is available at `http://example.com/webhook/webhook.php`. For the rest of this section it is assumed that the MediaWiki instance is available at `http://localhost:8080`.
 
-This work is published under [MIT][mit] License.
+It is recommended that you create a new account on the MediaWiki instance, as edits will appear as credited to the account the bot is made under. The webhook will utilize a MediaWiki bot, which is tied to the account which created it. Navigate to `http://localhost:8080/wiki/Special:CreateAccount` while logged into an admin account. Create the new accounts username (such as `GitHubSync`) and password. Once created, navigate to `http://localhost:8080/wiki/Special:UserRights` and search for the new account. Check the `bot` and `administrator` boxes (these groups are needed for bot actions such as high volume API requests and deleting pages/managing protected pages) and click `Save user groups`. Now log into the newly created account.
 
-[jekyllrb]: https://jekyllrb.com/
-[bootstrap]: https://getbootstrap.com/
-[icons]: https://fontawesome.com/
-[image]: https://www.clipartmax.com/middle/m2i8b1m2K9Z5m2K9_ant-clipart-childrens-ant-cute/
-[demo]: https://cotes2020.github.io/chirpy-demo/
-[wiki]: https://github.com/cotes2020/jekyll-theme-chirpy/wiki
-[contribute-guide]: https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/.github/CONTRIBUTING.md
-[contributors]: https://github.com/cotes2020/jekyll-theme-chirpy/graphs/contributors
-[lib]: https://github.com/cotes2020/chirpy-static-assets
-[jetbrains]: https://www.jetbrains.com/?from=jekyll-theme-chirpy
-[donation]: https://sponsor.cotes.page/
-[mit]: https://github.com/cotes2020/jekyll-theme-chirpy/blob/master/LICENSE
+Navigate to `http://localhost:8080/wiki/Special:BotPasswords`. Give the bot a name (such as `GitHubSync`). Check the following boxes:
+
+- `High-volume (bot) access`
+- `Edit existing pages`
+- `Edit protected pages`
+- `Create, edit, and move pages`
+- `Upload new files`
+- `Upload, replace, and move files`
+- `Delete pages, revisions, and log entries`
+
+Optionally, create an IP whitelist to secure bot actions. This can be set to only allow actions from the bot within your server. Leave `Allowed pages for editing` blank, as the bot will need arbitrary page access. The username for the bot will be `CREATOR_NAME@BOT_NAME`. For example, if the user and bot are both named `GitHubSync` the username will be `GitHubSync@GitHubSync`. Note the password created, as it will NOT be displayed again.
+
+Navigate to `https://github.com/owner_name/repository_name/settings/hooks/new` and create a new webhook. Set `Payload URL` to the publicly accessible location of `webhook.php` (such as `http://example.com/webhook/webhook.php`, not `http://localhost:8080/webhook/webhook.php`). For local development/testing, see GitHub's guide ["Testing webhook code locally"](https://docs.github.com/en/webhooks/testing-and-troubleshooting-webhooks/testing-webhooks#testing-webhook-code-locally) for information on how to proxy webhook requests to a local server. Set `Content type` to `application/json` and configure a webhook secret (this can be anything, so long as it is secure). Enable or disable SSL verification and select `Just the push event`.
+
+Then configure the following envrionment variables in the `composer.yaml` file:
+
+| Name                    | Description                                                                                                                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `GITHUB_WEBHOOK_SECRET` | The webhook secret key set when creating the webhook on GitHub.                                                                        |
+| `GITHUB_TOKEN`          | Optional. GitHub personal access token, for when working with a private repository.                                                    |
+| `GITHUB_ORG_NAME`       | The name of the owner of the repository. Can be an organization or user.                                                               |
+| `GITHUB_REPO_NAME`      | The name of the repository with the wiki page source files.                                                                            |
+| `GITHUB_TARGET_REF`     | The git ref the webhook will target. Events sent for refs other than this are ignored. This is also used to determine the branch name. |
+| `WIKI_API_URL`          | The URL for your MediaWiki API (`http://localhost:8080/api.php`)                                                                       |
+| `WIKI_API_BOT_USERNAME` | The MediaWiki bot username (`GitHubSync@GitHubSync`)                                                                                   |
+| `WIKI_API_BOT_PASSWORD` | The MediaWiki bot password                                                                                                             |

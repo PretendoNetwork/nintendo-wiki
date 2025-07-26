@@ -1,0 +1,24 @@
+{
+  "name": "Breadcrumbs",
+  "version": "1.0.0",
+  "author": ["PretendoNetwork"],
+  "url": "https://github.com/PretendoNetwork/nintendo-wiki",
+  "descriptionmsg": "Automatically create breadcrumb links for nested pages",
+  "type": "parserhook",
+  "AutoloadClasses": {
+    "Breadcrumbs": "includes/Breadcrumbs.php"
+  },
+  "Hooks": {
+    "BeforePageDisplay": "Breadcrumbs::onBeforePageDisplay"
+  },
+  "ResourceModules": {
+    "ext.breadcrumbs": {
+      "styles": ["resources/breadcrumbs.css"]
+    }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "",
+    "remoteExtPath": "Breadcrumbs"
+  },
+  "manifest_version": 2
+}
