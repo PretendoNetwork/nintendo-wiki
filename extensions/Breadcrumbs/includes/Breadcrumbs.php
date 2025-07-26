@@ -1,5 +1,7 @@
 <?php
 
+use MediaWiki\Title\Title;
+
 class Breadcrumbs {
 	public static function onBeforePageDisplay($out, $skin) {
 		$title = $out->getTitle();
