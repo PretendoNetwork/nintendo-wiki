@@ -1,10 +1,10 @@
 ---
 layout: post
 toc: true
-title: Pokemon X / Y (109)
+title: Pokemon Generation 6 (109)
 ---
 
-This page describes the methods that are only seen in Pokemon X and Y.
+This page describes the methods that are only seen in Pokemon X / Y and Omega Ruby / Alpha Sapphire.
 
 ## Methods
 
