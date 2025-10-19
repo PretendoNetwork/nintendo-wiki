@@ -26,7 +26,7 @@ wlp2s0    IEEE 802.11  ESSID:"Lothlorien"
 In monitor mode, the network interface receives all packets that are sent through the air:
 
 ```console
-yannik@yannik:~$ sudo service network-manager stop
+yannik@yannik:~$ sudo service NetworkManager stop
 yannik@yannik:~$ sudo iw wlp2s0 set type monitor
 yannik@yannik:~$ sudo ip link set wlp2s0 up
 yannik@yannik:~$ iwconfig
@@ -50,9 +50,9 @@ This command can even be used while Wireshark is running (there is no need to tu
 Because we had to disable the network-manager service, you cannot access the internet while in monitor mode. To disable monitor mode, run the following commands:
 
 ```console
-yannik@yannik:~$ sudo ip link set wlp2s0 up
+yannik@yannik:~$ sudo ip link set wlp2s0 down
 yannik@yannik:~$ sudo iw wlp2s0 set type managed
-yannik@yannik:~$ sudo service network-manager start
+yannik@yannik:~$ sudo service NetworkManager start
 yannik@yannik:~$ iwconfig
 wlp2s0    IEEE 802.11  ESSID:"Lothlorien"  
           Mode:Managed  Frequency:5.5 GHz  Access Point: 94:A7:B7:49:F6:F9   

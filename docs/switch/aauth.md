@@ -65,7 +65,7 @@ In 20.0.0 and later, the user agent is back:
 | 16.0.0          | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
 | 16.0.0 - 16.1.0 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 16.2.0.0; Add-on 16.2.0.0)`    |
 | 17.0.0 - 17.0.1 | `libcurl (nnHttp; 789f928b-138e-4b2f-afeb-1acae821d897; SDK 17.5.0.0; Add-on 17.5.0.0)`    |
-| 20.0.0 - 20.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                    |
+| 20.0.0 - 20.1.5 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                    |
 
 ## Methods
 The following method returns a timestamp and your ip address:

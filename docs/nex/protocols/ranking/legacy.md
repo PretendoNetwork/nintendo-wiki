@@ -376,12 +376,12 @@ It is unknown how the limit affects the score.
 
 ### RankingScore ([Structure])
 
-| Type                                           | Description |
-|------------------------------------------------|-------------|
-| [List]&lt;Uint16&gt; (NEX 1) or Uint32 (NEX 2) | Category    |
-| [List]&lt;Uint32&gt;                           | Scores      |
-| Uint8                                          | Unknown (1) |
-| Uint32                                         | Unknown (2) |
+| Type                 | Description |
+|----------------------|-------------|
+| Uint32               | Category    |
+| [List]&lt;Uint32&gt; | Scores      |
+| Uint8                | Unknown (1) |
+| Uint32               | Unknown (2) |
 
 ### RankingScoreWithLimit ([Structure])
 

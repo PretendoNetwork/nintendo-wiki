@@ -107,12 +107,12 @@ This method does not return anything.
 
 | Type                                  | Description  |
 | ------------------------------------- | ------------ |
-| Uint32                                | Unknown      |
-| [PID]                                 | Unknown      |
+| Uint32                                | Object id    |
+| [PID]                                 | Owner        |
 | [List]&lt;[SimpleSearchCondition]&gt; | Conditions   |
-| [String]                              | Unknown      |
+| [String]                              | Code         |
 | [ResultRange]                         | Result range |
-| [DateTime]                            | Unknown      |
+| [DateTime]                            | Datetime     |
 
 ### SimpleSearchCondition ([Structure])
 
@@ -125,12 +125,12 @@ This method does not return anything.
 
 | Value | Description |
 | ----- | ----------- |
-| 0     | Any |
-| 1     | == |
-| 2     | > |
-| 3     | < |
-| 4     | >= |
-| 5     | <= |
+| 0     | Any         |
+| 1     | ==          |
+| 2     | >           |
+| 3     | <           |
+| 4     | >=          |
+| 5     | <=          |
 
 [String]: /docs/nex/types#string
 [Data]: /docs/nex/types#anydataholder

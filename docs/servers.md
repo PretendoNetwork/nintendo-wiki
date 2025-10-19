@@ -263,6 +263,7 @@ New ([docs](/docs/switch/penne)):
 #### Other Services
 * `https://mii-secure-lp1.cdn.nintendo.net` (mii images)
 * `https://idbe-hac.cdn.nintendo.net` ([icon data](/docs/idbe))
+* `https://nemof.hac.lp1.nemo.srv.nintendo.net` (eShop videos)
 * `https://lp1.nso.nintendo.net` (NSO applet)
 * `https://fw-api.lp1.nso.nintendo.net` ([NSO rewards](/docs/switch/nso-reward))
 * `https://capi.lp1.op2.nintendo.net` ([NSO membership verification](/docs/switch/nso-verification))

@@ -17,11 +17,12 @@ Also see: [Local Wireless Communication on PC](/docs/misc/local-wireless-communi
 
 ## Changelog
 
-| System version  | LDN version | Changes                                     |
-|-----------------|-------------|---------------------------------------------|
-| 2.0.0 - 5.1.0   | 2           | Initial version                             |
-| 6.0.0 - 18.1.0  | 3           | Challenge was added to authentication frame |
-| 19.0.0 - 19.0.1 | 4           | Unknown difference                          |
+| System version  | LDN version | Changes                                                                                              |
+|-----------------|-------------|------------------------------------------------------------------------------------------------------|
+| 2.0.0 - 5.1.0   | 2           | Initial version                                                                                      |
+| 6.0.0 - 18.1.0  | 3           | Challenge was added to authentication frame                                                          |
+| 19.0.0 - 19.0.1 | 4           | No significant changes                                                                               |
+| 20.0.0 - 20.4.0 | 4           | Support for AES-GCM encryption was added, and a band/channel field was added to advertisement frames |
 
 ## WLAN Channels
 The channel on which LDN operates can be specified by games. Allowed channels are:
@@ -92,48 +93,96 @@ This is a vendor-specific action frame that is broadcasted by the access point e
 
 ### Advertisement Payload
 
+| Offset | Size | Description                                     |
+|--------|------|-------------------------------------------------|
+| 0x0    | 32   | [Session info](#session-info)                   |
+| 0x20   | 1    | [LDN version](#changelog)                       |
+| 0x21   | 1    | Encryption type (1=plain, 2=AES-CTR, 3=AES-GCM) |
+| 0x22   | 2    | Advertisement data size                         |
+| 0x24   | 4    | Nonce for AES algorithm                         |
+
+*Plain* or *AES-CTR*:
+
 | Offset | Size | Description                                                                             |
 |--------|------|-----------------------------------------------------------------------------------------|
-| 0x0    | 32   | [Session info](#session-info)                                                           |
-| 0x20   | 1    | [LDN version](#changelog)                                                               |
-| 0x21   | 1    | Encryption type (1=plain, 2=AES-CTR)                                                    |
-| 0x22   | 2    | Advertisement data size                                                                 |
-| 0x24   | 4    | Nonce for AES-CTR algorithm                                                             |
 | 0x28   | 32   | SHA-256 hash, calculated over the whole advertisement payload with the hash set to zero |
 | 0x48   |      | [Advertisement data](#advertisement-data)                                               |
 
-If encryption is enabled, the hash and advertisement data are encrypted with AES-CTR. The input buffer for [key derivation](#encryption-keys) is the [session info](#session-info), and the input key is `191884743e24c77d87c69e4207d0c438`.
+*AES-GCM*:
+
+| Offset | Size | Description                                         |
+|--------|------|-----------------------------------------------------|
+| 0x28   | 16   | AES-GCM MAC                                         |
+| 0x38   |      | Encrypted [Advertisement data](#advertisement-data) |
+
+When AES-CTR is used, both the hash and advertisement data are encrypted. The input buffer for [key derivation](#encryption-keys) is the [session info](#session-info), and the input key is `191884743e24c77d87c69e4207d0c438`.
+
+AES-GCM encryption must be explicitly enabled by games. It is mostly used by Switch 2 games.
 
 ### Advertisement Data
+The format of the advertisement data depends on the encryption type that is specified in the [header](#advertisement-payload).
+
+The authentication token is generated when the network is created and was added in LDN version 3. In previous versions it is set to 0. It is used during [authentication](#authentication).
+
+The band and channel fields were added in version 20.0.0.
+
+#### Plain or AES-CTR
 
 | Offset | Size   | Description                                                                                                                                          |
 |--------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 0x0    | 16     | Network key                                                                                                                                          |
-| 0x10   | 2      | Security level                                                                                                                                       |
+| 0x10   | 2      | [Security level](#encryption-keys)                                                                                                                   |
 | 0x12   | 1      | Station accept policy:<br>0 = Open participation<br>1 = Closed participation<br>2 = Blacklist (provided by game)<br>3 = Whitelist (provided by game) |
-| 0x13   | 3      | Padding (always 0)                                                                                                                                   |
+| 0x13   | 1      | Padding (always 0)                                                                                                                                   |
+| 0x14   | 2      | `0x03FF`: Channel<br>`0xFC00`: Band (2 = 2.4 GHz, 5 = 5 GHz, 6 = 6 GHz)                                                                              |
 | 0x16   | 1      | Maximum number of participants                                                                                                                       |
 | 0x17   | 1      | Current number of participants                                                                                                                       |
-| 0x18   | 56 x 8 | [Participant](#participant-info) list                                                                                                                |
+| 0x18   | 56 x 8 | Participant list (see below)                                                                                                                         |
 | 0x1D8  | 2      | Padding (always 0)                                                                                                                                   |
 | 0x1DA  | 2      | Application data size                                                                                                                                |
-| 0x1DC  | 384    | [Application data](/docs/pia/ldn/application-data)                                                                                                       |
+| 0x1DC  | 384    | [Application data](/docs/pia/ldn/application-data)                                                                                                   |
 | 0x35C  | 412    | Padding (always 0)                                                                                                                                   |
 | 0x4F8  | 8      | Authentication token (random)                                                                                                                        |
 
-The authentication token is generated when the network is created and was added in LDN version 3. In previous versions it is set to 0. It is used during [authentication](#authentication).
+Every participant has the following structure:
 
-#### Participant Info
+| Offset | Size | Description                         |
+|--------|------|-------------------------------------|
+| 0x0    | 4    | IP address                          |
+| 0x4    | 6    | MAC address                         |
+| 0xA    | 1    | Is connected                        |
+| 0xB    | 1    | Platform (0 = Switch, 1 = Switch 2) |
+| 0xC    | 32   | Username                            |
+| 0x2C   | 2    | Application communication version   |
+| 0x2E   | 10   | Padding (always 0)                  |
 
-| Offset | Size | Description                       |
-|--------|------|-----------------------------------|
-| 0x0    | 4    | IP address                        |
-| 0x4    | 6    | MAC address                       |
-| 0xA    | 1    | Is connected                      |
-| 0xB    | 1    | Padding (always 0)                |
-| 0xC    | 32   | Username                          |
-| 0x2C   | 2    | Application communication version |
-| 0x2E   | 10   | Padding (always 0)                |
+#### AES-GCM
+
+| Offset | Size   | Description                                                                                                                                          |
+|--------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0x0    | 16     | Network key                                                                                                                                          |
+| 0x10   | 8      | Authentication token (random)                                                                                                                        |
+| 0x18   | 1      | [Security level](#encryption-keys)                                                                                                                   |
+| 0x19   | 1      | Station accept policy:<br>0 = Open participation<br>1 = Closed participation<br>2 = Blacklist (provided by game)<br>3 = Whitelist (provided by game) |
+| 0x1A   | 2      | Application communication version                                                                                                                    |
+| 0x1C   | 8      | Unknown                                                                                                                                              |
+| 0x24   | 2      | `0x03FF`: Channel<br>`0xFC00`: Band (2 = 2.4 GHz, 5 = 5 GHz, 6 = 6 GHz)                                                                              |
+| 0x26   | 1      | Maximum number of participants                                                                                                                       |
+| 0x27   | 1      | Current number of participants (N)                                                                                                                   |
+| 0x28   | 48 x N | [Participant](#participant-info) list                                                                                                                |
+|        | 2      | Application data size                                                                                                                                |
+|        |        | [Application data](/docs/pia/ldn/application-data)                                                                                                   |
+
+Every participant has the following structure:
+
+| Offset | Size | Description                         |
+|--------|------|-------------------------------------|
+| 0x0    | 4    | IP address                          |
+| 0x4    | 6    | MAC address                         |
+| 0xA    | 1    | Player index                        |
+| 0xB    | 1    | Platform (0 = Switch, 1 = Switch 2) |
+| 0xC    | 32   | Username                            |
+| 0x2C   | 4    | Padding (always 0)                  |
 
 ## Authentication Frame
 This is a data frame with ethertype 0x88B7 (OUI extended). It is usually [encrypted](#encryption-keys).
@@ -174,11 +223,12 @@ This is set to 0 in an authentication request. In an authentication response, it
 
 #### Authentication Request
 
-| Offset | Size | Description                       |
-|--------|------|-----------------------------------|
-| 0x0    | 32   | Username                          |
-| 0x20   | 2    | Application communication version |
-| 0x22   | 30   | Padding (always 0)                |
+| Offset | Size | Description                         |
+|--------|------|-------------------------------------|
+| 0x0    | 32   | Username                            |
+| 0x20   | 2    | Application communication version   |
+| 0x22   | 1    | Platform (0 = Switch, 1 = Switch 2) |
+| 0x23   | 29   | Padding (always 0)                  |
 
 LDN version 3 and later:
 
@@ -194,7 +244,8 @@ LDN version 3 and later:
 
 | Offset | Size  | Description                                                         |
 |--------|-------|---------------------------------------------------------------------|
-| 0x0    | 0x84  | Unknown                                                             |
+| 0x0    | 1     | Platform (0 = Switch, 1 = Switch 2)                                 |
+| 0x1    | 0x83  | Padding (always 0)                                                  |
 | 0x84   | 0x100 | [Challenge response](#challenge-response) (only present if enabled) |
 
 #### Challenge Request
@@ -209,12 +260,13 @@ The challenge was added to the authentication frame in LDN version 3. Its purpos
 | 0x31   | 1     | Always 0                                                               |
 | 0x32   | 1     | P                                                                      |
 | 0x33   | 1     | Q                                                                      |
-| 0x34   | 1     | Debug check (always 0)                                                 |
+| 0x34   | 1     | Flags (1 = is debug check, 2 = unknown)                                |
 | 0x35   | 3     | Padding (always 0)                                                     |
 | 0x38   | 8     | Authentication token (see [advertisement frame](#advertisement-frame)) |
 | 0x40   | 8     | Authentication nonce (random)                                          |
 | 0x48   | 8     | Device id                                                              |
-| 0x50   | 0x70  | Always 0                                                               |
+| 0x50   | 16    | Unknown (Switch 2 only?)                                               |
+| 0x60   | 0x60  | Always 0                                                               |
 | 0xC0   | 0x40  | Unknown (8*P bytes)                                                    |
 | 0x100  | 0x200 | Unknown (8*Q bytes)                                                    |
 
@@ -229,11 +281,14 @@ The HMAC is calculated over bytes 0x30 - 0x300 and the key is `f84b487fb37251c26
 | 0x24   | 12   | Always 0                          |
 | 0x30   | 1    | Always 0                          |
 | 0x31   | 1    | Always 0                          |
-| 0x32   | 6    | Padding (always 0)                |
+| 0x32   | 2    | Padding (always 0)                |
+| 0x34   | 4    | Flags (1 = unknown, 2 = unknown)  |
 | 0x38   | 8    | Authentication nonce from request |
 | 0x40   | 8    | Device id from request            |
 | 0x48   | 8    | Own device id                     |
-| 0x50   | 0xB0 | Always 0                          |
+| 0x50   | 16   | Unknown (copied from request)     |
+| 0x60   | 16   | Unknown (Switch 2 only?)          |
+| 0x70   | 0x90 | Always 0                          |
 
 The HMAC is calculated over bytes 0x30 - 0x100 and the key is `f84b487fb37251c263bf11609036589266af70ca79b44c93c7370c5769c0f602`.
 

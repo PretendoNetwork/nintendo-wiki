@@ -64,6 +64,7 @@ Pokemon Scarlet and Violet implement custom services as well:
 | Game                                 | Tenant ID  |
 |--------------------------------------|------------|
 | Bayonetta 3                          | `2c06a4d3` |
+| Drag x Drive: Global Jam             | `cb81dadf` |
 | Endless Ocean Luminous               | `a71f7ea5` |
 | Hamster Playground                   | `b9dd3510` |
 | MACHI KORO With Everyone             | ?          |
@@ -72,6 +73,7 @@ Pokemon Scarlet and Violet implement custom services as well:
 | Monster Hunter Rise: Sunbreak Demo   | `bc33b7d4` |
 | Mario Kart World                     | `e96531c6` |
 | Nintendo Classics                    | `7b4e32ca` |
+| Nintendo Classics - GameCube         | `f4177419` |
 | Nintendo Switch Online Playtest      | `927e13da` |
 | Pokemon Legends: Arceus              | `e047112f` |
 | Pokemon Scarlet & Violet             | `50e39f8f` |

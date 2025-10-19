@@ -112,22 +112,16 @@ The following encryption algorithm is used: first, the ticket is encrypted with 
 
 The [Kerberos ticket](#kerberos-tickets) contains the following data, encrypted with the **source key**:
 
-| Type     | Description                                     |
-| -------- | ----------------------------------------------- |
-| Bytes    | A random session key                            |
-| [PID]    | The principal id of the **target user**         |
-| [Buffer] | [Internal ticket data](#internal-ticket-format) |
+| Type     | Description                                                                                        |
+|----------|----------------------------------------------------------------------------------------------------|
+| Bytes    | A random session key                                                                               |
+| [PID]    | The principal id of the **target user**                                                            |
+| [Buffer] | [Internal ticket data](#internal-ticket-format)                                                    |
+| [Buffer] | Optional null-terminated string (contains [JSON attributes](#json-attributes) on new game servers) |
 
 The length of the session key is always 32 bytes, except in NEX 1 or in communication with the 3DS / Wii U friends server, in which case it's 16 bytes.
 
-At some point the ticket format was updated to include a buffer containing NULL-terminated JSON data alongside the internal ticket data. This data can only be seen in NEX 4 tickets obtained through either `ValidateAndRequestTicketWithCustomData` or `ValidateAndRequestTicketWithParam`. Tickets coming from `RequestTicket` don't have this JSON data:
-
-| Type     | Description                                     |
-| -------- | ----------------------------------------------- |
-| Bytes    | A random session key                            |
-| [PID]    | The principal id of the **target user**         |
-| [Buffer] | [Internal ticket data](#internal-ticket-format) |
-| [Buffer] | [JSON data](#json-data)                         |
+The optional string is not always present. The client checks whether the ticket has more data to determine whether there is an optional string. The optional string is supported in NEX version 4.3.x and later, and can only be seen in tickets obtained through either `ValidateAndRequestTicketWithCustomData` or `ValidateAndRequestTicketWithParam`. Tickets coming from `RequestTicket` don't have this JSON data.
 
 ### Internal Ticket Format
 The format of the internal ticket was updated at some point. In the old format, the internal ticket data was encrypted directly with the **target key**. In the new format, a random key is sent along with the internal ticket in plain text, which is combined with the **target key** to derive the final encryption key.
@@ -158,29 +152,50 @@ The date time is used to check ticket expiration. A ticket is valid for exactly 
 
 NEX 4 tickets were updated at some point and seem to have more information on those generated through either `ValidateAndRequestTicketWithCustomData` or `ValidateAndRequestTicketWithParam`. Tickets coming from `RequestTicket` don't have any additional data.
 
-### JSON data
-The following are some examples of the JSON data, with the user PID being scrubbed:
+### JSON Attributes
+If present, the JSON attributes contain the following null-terminated string:
 
-**MH Gen U Transfer Tool (3DS, NEX 4.4)**
 ```json
-{"mi": {"cpa": true, "mp": 2, "ms": 1}, "att": 0, "pid": 1234, "v": 1}
+{"v": 1, "att": 2, "pid": 11607394848327368017, "mi": {"ms": -1, "mp": 1, "cpa": true}}
 ```
 
-**Sushi Striker (3DS, NEX 4.3)**
-```json
-{"mi": {"cpa": true, "mp": 0, "ms": -1}, "att": 0, "pid": 5678, "v": 1}
-```
+These fields have the following meaning.
 
-**MK8DX (Switch)**
-```json
-{"mi": {"cpa": true, "mp": 0, "ms": -1}, "att": 2, "pid": 8901, "exp": 1622037015, "v": 1}
-```
+| Field | Description                                                                                                 |
+|-------|-------------------------------------------------------------------------------------------------------------|
+| `v`   | Version (always 1)                                                                                          |
+| `att` | Auth token type (see [AuthenticationInfo](/docs/nex/protocols/authentication#authenticationinfo-structure)) |
+| `pid` | User id                                                                                                     |
+| `exp` | Expiration timestamp in seconds, set to 5 minutes after the ticket was made                                 |
+| `mi`  | [Membership info](#membership-info)                                                                         |
 
-The currently known fields are the following:
-* `pid`: User PID
-* `exp`: Expiration date? Seems to have a unix timestamp for 5 minutes after the ticket was made
-* `att`: This is the `m_authTokenType` from [AuthenticationInfo](/docs/nex/protocols/authentication#authenticationinfo-structure)
-* `v`: Version? Maybe?
+The expiration timestamp is not always present. It is possible that this depends on the server version.
+
+#### Membership Info
+
+| Field | Description                             |
+|-------|-----------------------------------------|
+| `ms`  | [Membership status](#membership-status) |
+| `mp`  | [Membership policy](#membership-policy) |
+| `cpa` | Can play all                            |
+
+#### Membership Status
+This field probably indicates whether the user has an active Nintendo Switch Online membership:
+
+| Value | Description              |
+|-------|--------------------------|
+| -1    | No information available |
+| 0     | Not a member             |
+| 1     | Is a member              |
+
+#### Membership Policy
+This field seems to indicate whether a Nintendo Switch Online membership is required to access the game server:
+
+| Value | Description                           |
+|-------|---------------------------------------|
+| 0     | No membership required                |
+| 1     | Membership required for all features  |
+| 2     | Membership required for some features |
 
 ## Terminology
 * **Authentication server:** the server that generates the tickets. This server only provides a single service: the ticket granting service.

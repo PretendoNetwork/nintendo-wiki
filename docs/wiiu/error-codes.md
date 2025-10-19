@@ -6,6 +6,9 @@ title: Wii U Error Codes
 
 An error code contains a module id and a module-specific code, separated by a dash. For example: `106-0502`.
 
+This page lists the technical reason behind the errors that may occur. The messages that are shown to the user can be found on a separate page: [Wii U Error Messages](/docs/wiiu/error-messages).
+
+
 The following module ids are known:
 
 | Module | Code | Description                              |

@@ -13,8 +13,8 @@ This page describes the methods that are only seen in Mario Kart 8 Deluxe.
 | 16        | [GetCompetitionRankingScore](#16-getcompetitionrankingscore)       |
 | 17        | [UploadCompetitionRankingScore](#17-uploadcompetitionrankingscore) |
 | 18        | [GetCompetitionInfo](#18-getcompetitioninfo)                       |
-| 19        | UploadScorePack                                                    |
-| 20        | GetScorePack                                                       |
+| 19        | [UploadScorePack](#19-uploadscorepack)                             |
+| 20        | [GetScorePack](#20-getscorepack)                                   |
 | 21        | ExecuteDeleteScoreJob                                              |
 | 22        | [GetCommonDataByPIDList](#22-getcommondatabypidlist)               |
 
@@ -56,6 +56,31 @@ This page describes the methods that are only seen in Mario Kart 8 Deluxe.
 | Type                                   | Description      |
 | -------------------------------------- | ---------------- |
 | [List]&lt;[CompetitionRankingInfo]&gt; | Competition info |
+
+### (19) UploadScorePack
+#### Request
+
+| Type                                                             | Description |
+|------------------------------------------------------------------|-------------|
+| [RankingScoreData](/docs/nex/ranking#rankingscoredata-structure) | Param       |
+| [qBuffer]                                                        | Metadata    |
+
+#### Request
+This method does not return anything.
+
+### (20) GetScorePack
+#### Request
+
+| Type                | Description |
+|---------------------|-------------|
+| [List]&lt;[PID]&gt; | Pids        |
+| Uint32              | Category    |
+
+#### Response
+
+| Type        | Description |
+|-------------|-------------|
+| [ScorePack] | Score pack  |
 
 ### (22) GetCommonDataByPIDList
 #### Request
@@ -132,6 +157,12 @@ This page describes the methods that are only seen in Mario Kart 8 Deluxe.
 | Bool      | Unknown     |
 | [qBuffer] | Metadata    |
 
+### ScorePack ([Structure])
+
+| Type                    | Description |
+|-------------------------|-------------|
+| [List]&lt;[qBuffer]&gt; | Data        |
+
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
 [Buffer]: /docs/nex/types#buffer
@@ -151,3 +182,4 @@ This page describes the methods that are only seen in Mario Kart 8 Deluxe.
 [CompetitionRankingScoreInfo]: #competitionrankingscoreinfo-structure
 [CompetitionRankingGetScoreParam]: #competitionrankinggetscoreparam-structure
 [CompetitionRankingUploadScoreParam]: #competitionrankinguploadscoreparam-structure
+[ScorePack]: #scorepack-structure
