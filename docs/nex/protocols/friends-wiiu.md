@@ -441,10 +441,10 @@ This method does not take any parameters.
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [Data]
 {: .prompt-info }
 
-| Type   | Description |
-| ------ | ----------- |
-| Uint32 | Unknown     |
-| Bool   | Unknown     |
+| Type  | Description |
+| ----- | ----------- |
+| [PID] | Pid         |
+| Bool  | Blocked     |
 
 ## Changed Flags
 Specifies which fields changed their value recently.

@@ -162,9 +162,9 @@ Revision 1:
 [qBuffer]: /docs/nex/types#qbuffer
 [List]: /docs/nex/types#list
 [Map]: /docs/nex/types#map
-[DateTime]: /docs/nex/types#date-time
+[DateTime]: /docs/nex/types#datetime
 [Structure]: /docs/nex/types#structure
-[Data]: /docs/nex/types#any-data-holder
+[Data]: /docs/nex/types#anydataholder
 
 [RankingScoreData]: #rankingscoredata-structure
 [RankingChangeAttributesParam]: #rankingchangeattributesparam-structure

@@ -108,3 +108,4 @@ Many client and server certificates that are used by Nintendo are issued by an i
 | `01:D3` | `*.cdn.nintendo.net`       |
 | `02:00` | `*.cdn.nintendo.net`       |
 | `02:4A` | `*.cdn.nintendo.net`       |
+| `02:6E` | `*.cdn.nintendo.net`       |

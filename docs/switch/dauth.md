@@ -74,7 +74,7 @@ In 20.0.0 and later, the user agent is back again, between the `Accept` and `Con
 | 15.0.0 - 15.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 15.3.0.0)`                      |
 | 16.0.0 - 16.1.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 16.2.0.0)`                      |
 | 17.0.0 - 17.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 17.5.0.0)`                      |
-| 20.0.0 - 20.0.1 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                      |
+| 20.0.0 - 20.4.0 | `libcurl (nnDauth; 16f4553f-9eee-4e39-9b61-59bc7c99b7c8; SDK 20.5.4.0)`                      |
 
 No user agent is present between system version 18.0.0 and 19.0.1.
 
@@ -125,7 +125,7 @@ The following methods return a different kind of device token:
 | 7.0.0 - 8.1.1   | v5  |
 | 9.0.0 - 12.1.0  | v6  |
 | 13.0.0 - 19.0.1 | v7  |
-| 20.0.0 - 20.0.1 | v8  |
+| 20.0.0 - 20.4.0 | v8  |
 
 #### API Changes
 
@@ -299,7 +299,7 @@ The request is the same as the [`/device_auth_tokens`](#device-token-request) re
 | 16.0.0 - 16.1.0 | 16             |
 | 17.0.0 - 18.1.0 | 17             |
 | 19.0.0 - 19.0.1 | 19             |
-| 20.0.0 - 20.0.1 | 20             |
+| 20.0.0 - 20.4.0 | 20             |
 
 ## Known Client IDs
 Device tokens:
