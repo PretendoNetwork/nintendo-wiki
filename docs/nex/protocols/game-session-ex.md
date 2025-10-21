@@ -12,6 +12,7 @@ title: GameSessionExProtocol
 
 ### (1) SearchSessions
 #### Request
+
 | Type             | Name             |
 | ---------------- | ---------------- |
 | GameSessionQuery | gameSessionQuery |

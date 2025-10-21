@@ -12,6 +12,7 @@ title: IP2LocationProtocolAdmin (46)
 
 ### (1) GetLocationFromIP
 #### Request
+
 | Type     | Name |
 | -------- | ---- |
 | [String] | ip   |

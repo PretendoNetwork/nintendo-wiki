@@ -14,6 +14,7 @@ title: ChallengeHelperProtocol
 
 ### (1) GenerateMyFriendChallenges
 #### Request
+
 | Type                     | Name       |
 | ------------------------ | ---------- |
 | [List]&#x3C;Uint32&#x3E; | friendPIDs |
@@ -25,6 +26,7 @@ title: ChallengeHelperProtocol
 
 ### (2) GenerateFriendChallenges
 #### Request
+
 | Type                     | Name       |
 | ------------------------ | ---------- |
 | Uint32                   | targetPID  |

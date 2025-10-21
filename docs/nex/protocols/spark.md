@@ -35,6 +35,7 @@ title: SparkProtocol (60)
 
 ### (4) CreateGame
 #### Request
+
 | Type     | Name     |
 | -------- | -------- |
 | [String] | gameName |
@@ -46,6 +47,7 @@ title: SparkProtocol (60)
 
 ### (5) JoinGame
 #### Request
+
 | Type     | Name     |
 | -------- | -------- |
 | [String] | gameName |
@@ -73,6 +75,7 @@ Unknown request format
 
 ### (17) GetLeaderboardStats
 #### Request
+
 | Type     | Name   |
 | -------- | ------ |
 | [String] | LbType |
@@ -82,6 +85,7 @@ Unknown response format
 
 ### (20) BrowseMatchesWithHostUrls
 #### Request
+
 | Type     | Name     |
 | -------- | -------- |
 | [String] | hostUrls |
@@ -91,6 +95,7 @@ Unknown response format
 
 ### (21) QuickMatchWithHostUrls
 #### Request
+
 | Type   | Name      |
 | ------ | --------- |
 | Uint32 | matchType |

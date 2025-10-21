@@ -14,6 +14,7 @@ title: SkillRatingProtocol (48)
 
 ### (1) GetSkillRatings
 #### Request
+
 | Type                     | Name         |
 | ------------------------ | ------------ |
 | Uint32                   | skillBoardID |
@@ -27,6 +28,7 @@ title: SkillRatingProtocol (48)
 
 ### (2) UpdateSkillRating
 #### Request
+
 | Type                                                            | Name             |
 | --------------------------------------------------------------- | ---------------- |
 | Uint32                                                          | skillBoardID     |
@@ -40,6 +42,7 @@ title: SkillRatingProtocol (48)
 
 ### (3) CalculateMatchQuality
 #### Request
+
 | Type                                                    | Name                |
 | ------------------------------------------------------- | ------------------- |
 | Uint32                                                  | skillBoardID        |

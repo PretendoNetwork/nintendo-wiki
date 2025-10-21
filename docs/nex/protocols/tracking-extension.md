@@ -13,6 +13,7 @@ title: TrackingExtensionProtocol
 
 ### (1) GetTrackingUserGroup
 #### Request
+
 | Type   | Name |
 | ------ | ---- |
 | Uint32 | pid  |
@@ -24,6 +25,7 @@ title: TrackingExtensionProtocol
 
 ### (2) GetTrackingUserGroupTags
 #### Request
+
 | Type   | Name      |
 | ------ | --------- |
 | Uint32 | usergroup |
