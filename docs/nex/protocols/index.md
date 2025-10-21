@@ -45,6 +45,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 35  | [Privileges](/docs/nex/protocols/privileges)                                 | No                   |
 | 36  | [Tracking 3](/docs/nex/protocols/tracking-3)                                 | No                   |
 | 39  | [Localization](/docs/nex/protocols/localization)                             | No                   |
+| 40  | [Localization admin](/docs/nex/protocols/localization-admin)                 | No                   |
 | 42  | [Game session](/docs/nex/protocols/game-session)                             | No                   |
 | 44  | Sub account management                                                       | No                   |
 | 45  | [IP to location](/docs/nex/protocols/ip-2-location)                          | No                   |
