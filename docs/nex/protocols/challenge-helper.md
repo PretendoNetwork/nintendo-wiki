@@ -20,6 +20,7 @@ title: ChallengeHelperProtocol
 | [List]&lt;[PID]&gt; | friendPIDs |
 
 #### Response
+
 | Type                                                        | Name   |
 | ----------------------------------------------------------- | ------ |
 | [List]&lt;[FriendChallenge](#friendchallenge-structure)&gt; | result |
@@ -33,6 +34,7 @@ title: ChallengeHelperProtocol
 | [List]&lt;[PID]&gt; | friendPIDs |
 
 #### Response
+
 | Type                                                        | Name   |
 | ----------------------------------------------------------- | ------ |
 | [List]&lt;[FriendChallenge](#friendchallenge-structure)&gt; | result |
@@ -42,6 +44,7 @@ title: ChallengeHelperProtocol
 This method does not take any parameters.
 
 #### Response
+
 | Type                                                        | Name             |
 | ----------------------------------------------------------- | ---------------- |
 | [List]&lt;[OnlineChallenge](#onlinechallenge-structure)&gt; | onlineChallenges |

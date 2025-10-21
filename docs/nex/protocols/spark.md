@@ -41,6 +41,7 @@ title: SparkProtocol (60)
 | [String] | gameName |
 
 #### Response
+
 | Type    | Name     |
 | ------- | -------- |
 | boolean | %retval% |
@@ -57,18 +58,20 @@ The response format of this method is unknown.
 
 ### (15) EndGame
 #### Request
-Unknown request format
+The request format of this method is unknown.
 
 #### Response
+
 | Type    | Name     |
 | ------- | -------- |
 | boolean | %retval% |
 
 ### (16) CancelGame
 #### Request
-Unknown request format
+The request format of this method is unknown.
 
 #### Response
+
 | Type    | Name     |
 | ------- | -------- |
 | boolean | %retval% |

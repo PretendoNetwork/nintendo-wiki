@@ -21,6 +21,7 @@ title: SkillRatingProtocol (48)
 | [List]&lt;Uint32&gt; | playerPIDs   |
 
 #### Response
+
 | Type                                                            | Name               |
 | --------------------------------------------------------------- | ------------------ |
 | [List]&lt;[PlayerSkillRating](#playerskillrating-structure)&gt; | playerSkillRatings |
@@ -36,6 +37,7 @@ title: SkillRatingProtocol (48)
 | Uint32                                                      | matchID          |
 
 #### Response
+
 | Type                                                            | Name               |
 | --------------------------------------------------------------- | ------------------ |
 | [List]&lt;[PlayerSkillRating](#playerskillrating-structure)&gt; | playerSkillRatings |
@@ -50,6 +52,7 @@ title: SkillRatingProtocol (48)
 | [List]&lt;[SkillRating](#skillrating-structure)&gt; | sessionSkillRatings |
 
 #### Response
+
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;Double&gt; | matchQualities |

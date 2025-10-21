@@ -19,6 +19,7 @@ title: TrackingExtensionProtocol
 | [PID] | pid  |
 
 #### Response
+
 | Type   | Name      |
 | ------ | --------- |
 | Uint32 | usergroup |
@@ -31,6 +32,7 @@ title: TrackingExtensionProtocol
 | Uint32 | usergroup |
 
 #### Response
+
 | Type                   | Name | Description |
 | ---------------------- | ---- | ----------- |
 | [List]&lt;[String]&gt; | tags |             |

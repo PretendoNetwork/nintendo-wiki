@@ -15,6 +15,7 @@ title: IP2LocationProtocol (45)
 This method does not take any parameters.
 
 #### Response
+
 | Type                                | Name     |
 | ----------------------------------- | -------- |
 | [IPLocation](#iplocation-structure) | location |

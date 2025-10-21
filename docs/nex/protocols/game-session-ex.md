@@ -18,6 +18,7 @@ title: GameSessionExProtocol
 | GameSessionQuery | gameSessionQuery |
 
 #### Response
+
 | Type                                                                            | Name          |
 | ------------------------------------------------------------------------------- | ------------- |
 | [List]&lt;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&gt; | searchResults |

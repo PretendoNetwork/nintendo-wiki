@@ -18,6 +18,7 @@ title: IP2LocationProtocolAdmin (46)
 | [String] | ip   |
 
 #### Response
+
 | Type                                | Name     |
 | ----------------------------------- | -------- |
 | [IPLocation](#iplocation-structure) | location |

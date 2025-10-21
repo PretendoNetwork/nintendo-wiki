@@ -15,6 +15,7 @@ title: ClientSettingsProtocol (28)
 This method does not take any parameters.
 
 #### Response
+
 | Type                          | Name        |
 | ----------------------------- | ----------- |
 | [Map]&lt;[String], Uint32&gt; | lstSettings |
