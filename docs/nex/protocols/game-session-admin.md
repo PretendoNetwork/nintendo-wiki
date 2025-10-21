@@ -4,7 +4,7 @@ toc: true
 title: GameSessionAdminProtocol (43)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                             |
 | --------- | ------------------------------------------------------- |

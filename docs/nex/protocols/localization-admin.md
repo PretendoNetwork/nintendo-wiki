@@ -4,7 +4,7 @@ toc: true
 title: LocalizationAdminProtocol (40)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                                            |
 | --------- | ---------------------------------------------------------------------- |

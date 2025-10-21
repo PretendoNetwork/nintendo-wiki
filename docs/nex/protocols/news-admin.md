@@ -4,7 +4,7 @@ toc: true
 title: NewsProtocolAdmin (32)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                                        |
 | --------- | ------------------------------------------------------------------ |

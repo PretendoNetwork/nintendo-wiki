@@ -4,7 +4,7 @@ toc: true
 title: ClientSettingsProtocol (28)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                     |
 | --------- | ----------------------------------------------- |

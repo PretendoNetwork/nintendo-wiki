@@ -4,7 +4,7 @@ toc: true
 title: IP2LocationProtocolAdmin (46)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                               |
 | --------- | ----------------------------------------- |

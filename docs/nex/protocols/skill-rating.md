@@ -4,7 +4,7 @@ toc: true
 title: SkillRatingProtocol (48)
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                       |
 | --------- | ------------------------------------------------- |

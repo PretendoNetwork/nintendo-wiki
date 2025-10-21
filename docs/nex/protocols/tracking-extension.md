@@ -4,7 +4,7 @@ toc: true
 title: TrackingExtensionProtocol
 ---
 
-# Methods
+## Methods
 
 | Method ID | Method Name                                             |
 | --------- | ------------------------------------------------------- |
