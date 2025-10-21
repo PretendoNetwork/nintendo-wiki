@@ -36,7 +36,7 @@ title: Ubi Account Management (29)
 #### Request
 
 | Type         | Name       |
-|--------------|------------|
+| ------------ | ---------- |
 | [UbiAccount] | ubiAccount |
 
 #### Response
@@ -50,7 +50,7 @@ title: Ubi Account Management (29)
 #### Request
 
 | Type         | Name       |
-|--------------|------------|
+| ------------ | ---------- |
 | [UbiAccount] | ubiAccount |
 
 #### Response
@@ -169,22 +169,22 @@ This method does not return anything.
 
 #### Response
 
-| Type                          | Name |
-| ----------------------------- | ---- |
-| [Map]&lt;[String], Uint32&gt; | pids |
+| Type                         | Name |
+| ---------------------------- | ---- |
+| [Map]&lt;[String], [PID]&gt; | pids |
 
 ### (12) LookupUbiAccountIDsByPids
 #### Request
 
-| Type                 | Name |
-| -------------------- | ---- |
-| [List]&lt;Uint32&gt; | pids |
+| Type                | Name |
+| ------------------- | ---- |
+| [List]&lt;[PID]&gt; | pids |
 
 #### Response
 
-| Type                          | Name          |
-| ----------------------------- | ------------- |
-| [Map]&lt;Uint32, [String]&gt; | ubiaccountIDs |
+| Type                         | Name          |
+| ---------------------------- | ------------- |
+| [Map]&lt;[PID], [String]&gt; | ubiaccountIDs |
 
 ### (13) LookupUbiAccountIDsByUsernames
 #### Request
@@ -410,6 +410,7 @@ This method does not take any parameters.
 [Structure]: /docs/nex/types#structure
 [Data]: /docs/nex/types#any-data-holder
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [UbiAccount]: #ubiaccount-structure
 [ValidationFailureReason]: #validationfailurereason-structure

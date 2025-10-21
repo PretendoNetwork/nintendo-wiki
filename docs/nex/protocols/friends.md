@@ -32,7 +32,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type     | Name       |
 | -------- | ---------- |
-| Uint32   | uiPlayer   |
+| [PID]    | uiPlayer   |
 | Uint32   | uiDetails  |
 | [String] | strMessage |
 
@@ -62,7 +62,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type     | Name       |
 | -------- | ---------- |
-| Uint32   | uiPlayer   |
+| [PID]    | uiPlayer   |
 | Uint32   | uiDetails  |
 | [String] | strMessage |
 
@@ -77,7 +77,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type     | Name       |
 | -------- | ---------- |
-| Uint32   | uiPlayer   |
+| [PID]    | uiPlayer   |
 | Uint32   | uiDetails  |
 | [String] | strMessage |
 
@@ -90,9 +90,9 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 ### (5) AcceptFriendship
 #### Request
 
-| Type   | Name     |
-| ------ | -------- |
-| Uint32 | uiPlayer |
+| Type  | Name     |
+| ----- | -------- |
+| [PID] | uiPlayer |
 
 #### Response
 
@@ -103,9 +103,9 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 ### (6) DeclineFriendship
 #### Request
 
-| Type   | Name     |
-| ------ | -------- |
-| Uint32 | uiPlayer |
+| Type  | Name     |
+| ----- | -------- |
+| [PID] | uiPlayer |
 
 #### Response
 
@@ -118,7 +118,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type   | Name      |
 | ------ | --------- |
-| Uint32 | uiPlayer  |
+| [PID]  | uiPlayer  |
 | Uint32 | uiDetails |
 
 #### Response
@@ -144,9 +144,9 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 ### (9) ClearRelationship
 #### Request
 
-| Type   | Name     |
-| ------ | -------- |
-| Uint32 | uiPlayer |
+| Type  | Name     |
+| ----- | -------- |
+| [PID] | uiPlayer |
 
 #### Response
 
@@ -159,7 +159,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type   | Name      |
 | ------ | --------- |
-| Uint32 | uiPlayer  |
+| [PID]  | uiPlayer  |
 | Uint32 | uiDetails |
 
 #### Response
@@ -178,9 +178,9 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 #### Response
 
-| Type                 | Name           |
-| -------------------- | -------------- |
-| [List]&lt;Uint32&gt; | lstFriendsList |
+| Type                | Name           |
+| ------------------- | -------------- |
+| [List]&lt;[PID]&gt; | lstFriendsList |
 
 ### (12) GetDetailedList
 #### Request
@@ -215,7 +215,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type     | Name             |
 | -------- | ---------------- |
-| Uint32   | m_pid            |
+| [PID]    | m_pid            |
 | [String] | m_strName        |
 | Uint8    | m_byRelationship |
 | Uint32   | m_uiDetails      |
@@ -225,7 +225,7 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 
 | Type     | Name             |
 | -------- | ---------------- |
-| Uint32   | m_pid            |
+| [PID]    | m_pid            |
 | [String] | m_strName        |
 | Uint8    | m_byRelationship |
 | Uint32   | m_uiDetails      |
@@ -234,3 +234,4 @@ Even though this protocol is implemented on Nintendo game servers, it is never a
 [List]: /docs/nex/types#list
 [String]: /docs/nex/types#string
 [ResultRange]: /docs/nex/types#resultrange-structure
+[PID]: /docs/nex/types#pid

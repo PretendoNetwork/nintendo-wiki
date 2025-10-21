@@ -74,10 +74,10 @@ This page describes the methods that are only seen in Animal Crossing: Happy Hom
 
 #### Response
 
-| Type                                  | Name      |
-| ------------------------------------- | --------- |
-| [List]&#x3C;[DataStoreMetaInfo]&#x3E; | pMetaInfo |
-| Bool                                  | pHasNext  |
+| Type                              | Name      |
+| --------------------------------- | --------- |
+| [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
+| Bool                              | pHasNext  |
 
 ### (49) SearchHousePopular
 #### Request
@@ -88,10 +88,10 @@ This page describes the methods that are only seen in Animal Crossing: Happy Hom
 
 #### Response
 
-| Type                                  | Name      |
-| ------------------------------------- | --------- |
-| [List]&#x3C;[DataStoreMetaInfo]&#x3E; | pMetaInfo |
-| Bool                                  | pHasNext  |
+| Type                              | Name      |
+| --------------------------------- | --------- |
+| [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
+| Bool                              | pHasNext  |
 
 ### (50) SearchHouseResident
 #### Request
@@ -102,10 +102,10 @@ This page describes the methods that are only seen in Animal Crossing: Happy Hom
 
 #### Response
 
-| Type                                  | Name      |
-| ------------------------------------- | --------- |
-| [List]&#x3C;[DataStoreMetaInfo]&#x3E; | pMetaInfo |
-| Bool                                  | pHasNext  |
+| Type                              | Name      |
+| --------------------------------- | --------- |
+| [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
+| Bool                              | pHasNext  |
 
 ### (51) SearchHouseContest
 #### Request
@@ -116,10 +116,10 @@ This page describes the methods that are only seen in Animal Crossing: Happy Hom
 
 #### Response
 
-| Type                                  | Name      |
-| ------------------------------------- | --------- |
-| [List]&#x3C;[DataStoreMetaInfo]&#x3E; | pMetaInfo |
-| Bool                                  | pHasNext  |
+| Type                              | Name      |
+| --------------------------------- | --------- |
+| [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
+| Bool                              | pHasNext  |
 
 ### (52) SearchHouseContestRandom
 #### Request
@@ -130,10 +130,10 @@ This page describes the methods that are only seen in Animal Crossing: Happy Hom
 
 #### Response
 
-| Type                                  | Name      |
-| ------------------------------------- | --------- |
-| [List]&#x3C;[DataStoreMetaInfo]&#x3E; | pMetaInfo |
-| Bool                                  | pHasNext  |
+| Type                              | Name      |
+| --------------------------------- | --------- |
+| [List]&lt;[DataStoreMetaInfo]&gt; | pMetaInfo |
+| Bool                              | pHasNext  |
 
 ### (53) AddToBufferQueue
 #### Request
@@ -189,7 +189,7 @@ This method does not return anything.
 ### (57) GetContestEntryCount
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

@@ -6,166 +6,166 @@ title: Uplay Win (49)
 
 ## Methods
 
-| Method ID | Method Name |
-| --- | --- |
-| 1 | [GetActions](#1-getactions) |
-| 2 | [GetActionsCompleted](#2-getactionscompleted) |
-| 3 | [GetActionsCount](#3-getactionscount) |
-| 4 | [GetActionsCompletedCount](#4-getactionscompletedcount) |
-| 5 | [GetRewards](#5-getrewards) |
-| 6 | [GetRewardsPurchased](#6-getrewardspurchased) |
-| 7 | [UplayWelcome](#7-uplaywelcome) |
-| 8 | [SetActionCompleted](#8-setactioncompleted) |
-| 9 | [SetActionsCompleted](#9-setactionscompleted) |
-| 10 | [GetUserToken](#10-getusertoken) |
-| 11 | [GetVirtualCurrencyUserBalance](#11-getvirtualcurrencyuserbalance) |
-| 12 | [GetSectionsByKey](#12-getsectionsbykey) |
+| Method ID | Method Name                                                        |
+| --------- | ------------------------------------------------------------------ |
+| 1         | [GetActions](#1-getactions)                                        |
+| 2         | [GetActionsCompleted](#2-getactionscompleted)                      |
+| 3         | [GetActionsCount](#3-getactionscount)                              |
+| 4         | [GetActionsCompletedCount](#4-getactionscompletedcount)            |
+| 5         | [GetRewards](#5-getrewards)                                        |
+| 6         | [GetRewardsPurchased](#6-getrewardspurchased)                      |
+| 7         | [UplayWelcome](#7-uplaywelcome)                                    |
+| 8         | [SetActionCompleted](#8-setactioncompleted)                        |
+| 9         | [SetActionsCompleted](#9-setactionscompleted)                      |
+| 10        | [GetUserToken](#10-getusertoken)                                   |
+| 11        | [GetVirtualCurrencyUserBalance](#11-getvirtualcurrencyuserbalance) |
+| 12        | [GetSectionsByKey](#12-getsectionsbykey)                           |
 
 ### (1) GetActions
 #### Request
 
-| Type | Name |
-| --- | --- |
-| Sint32 | startRowIndex |
-| Sint32 | maximumRows |
+| Type     | Name           |
+| -------- | -------------- |
+| Sint32   | startRowIndex  |
+| Sint32   | maximumRows    |
 | [String] | sortExpression |
-| [String] | cultureName |
-| [String] | platformCode |
-| [String] | gameCode |
+| [String] | cultureName    |
+| [String] | platformCode   |
+| [String] | gameCode       |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayAction]&gt; | actionList |
 
 ### (2) GetActionsCompleted
 #### Request
 
-| Type | Name |
-| --- | --- |
-| Sint32 | startRowIndex |
-| Sint32 | maximumRows |
+| Type     | Name           |
+| -------- | -------------- |
+| Sint32   | startRowIndex  |
+| Sint32   | maximumRows    |
 | [String] | sortExpression |
-| [String] | cultureName |
-| [String] | platformCode |
-| [String] | gameCode |
+| [String] | cultureName    |
+| [String] | platformCode   |
+| [String] | gameCode       |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayAction]&gt; | actionList |
 
 ### (3) GetActionsCount
 #### Request
 
-| Type | Name |
-| --- | --- |
+| Type     | Name         |
+| -------- | ------------ |
 | [String] | platformCode |
-| [String] | gameCode |
+| [String] | gameCode     |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type   | Name         |
+| ------ | ------------ |
 | Sint32 | actionsCount |
 
 ### (4) GetActionsCompletedCount
 #### Request
 
-| Type | Name |
-| --- | --- |
+| Type     | Name         |
+| -------- | ------------ |
 | [String] | platformCode |
-| [String] | gameCode |
+| [String] | gameCode     |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type   | Name         |
+| ------ | ------------ |
 | Sint32 | actionsCount |
 
 ### (5) GetRewards
 #### Request
 
-| Type | Name |
-| --- | --- |
-| Sint32 | startRowIndex |
-| Sint32 | maximumRows |
+| Type     | Name           |
+| -------- | -------------- |
+| Sint32   | startRowIndex  |
+| Sint32   | maximumRows    |
 | [String] | sortExpression |
-| [String] | cultureName |
-| [String] | platformCode |
-| [String] | gameCode |
+| [String] | cultureName    |
+| [String] | platformCode   |
+| [String] | gameCode       |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayReward]&gt; | rewardList |
 
 ### (6) GetRewardsPurchased
 #### Request
 
-| Type | Name |
-| --- | --- |
-| Sint32 | startRowIndex |
-| Sint32 | maximumRows |
+| Type     | Name           |
+| -------- | -------------- |
+| Sint32   | startRowIndex  |
+| Sint32   | maximumRows    |
 | [String] | sortExpression |
-| [String] | cultureName |
-| [String] | platformCode |
-| [String] | gameCode |
+| [String] | cultureName    |
+| [String] | platformCode   |
+| [String] | gameCode       |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayReward]&gt; | rewardList |
 
 ### (7) UplayWelcome
 #### Request
 
-| Type | Name |
-| --- | --- |
-| [String] | cultureName |
+| Type     | Name         |
+| -------- | ------------ |
+| [String] | cultureName  |
 | [String] | platformCode |
-| [String] | gameCode |
+| [String] | gameCode     |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayAction]&gt; | actionList |
 
 ### (8) SetActionCompleted
 #### Request
 
-| Type | Name |
-| --- | --- |
-| [String] | actionCode |
-| [String] | cultureName |
+| Type     | Name         |
+| -------- | ------------ |
+| [String] | actionCode   |
+| [String] | cultureName  |
 | [String] | platformCode |
-| [String] | gameCode |
+| [String] | gameCode     |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type          | Name           |
+| ------------- | -------------- |
 | [UplayAction] | unlockedAction |
 
 ### (9) SetActionsCompleted
 #### Request
 
-| Type | Name |
-| --- | --- |
+| Type                   | Name           |
+| ---------------------- | -------------- |
 | [List]&lt;[String]&gt; | actionCodeList |
-| [String] | cultureName |
-| [String] | platformCode |
-| [String] | gameCode |
+| [String]               | cultureName    |
+| [String]               | platformCode   |
+| [String]               | gameCode       |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                        | Name       |
+| --------------------------- | ---------- |
 | [List]&lt;[UplayAction]&gt; | actionList |
 
 ### (10) GetUserToken
@@ -174,112 +174,112 @@ This method does not take any parameters.
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type     | Name  |
+| -------- | ----- |
 | [String] | token |
 
 ### (11) GetVirtualCurrencyUserBalance
 #### Request
 
-| Type | Name |
-| --- | --- |
+| Type     | Name         |
+| -------- | ------------ |
 | [String] | platformCode |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type   | Name                       |
+| ------ | -------------------------- |
 | Sint32 | virtualCurrencyUserBalance |
 
 ### (12) GetSectionsByKey
 #### Request
 
-| Type | Name |
-| --- | --- |
-| [String] | cultureName |
-| [String] | sectionKey |
+| Type     | Name         |
+| -------- | ------------ |
+| [String] | cultureName  |
+| [String] | sectionKey   |
 | [String] | platformCode |
-| [String] | gameCode |
+| [String] | gameCode     |
 
 #### Response
 
-| Type | Name |
-| --- | --- |
+| Type                         | Name        |
+| ---------------------------- | ----------- |
 | [List]&lt;[UplaySection]&gt; | sectionList |
 
 ## Types
 ### UplayAction ([Structure])
 
-| Type | Name |
-| --- | --- |
-| [String] | m_code |
-| [String] | m_name |
-| [String] | m_description |
-| Sint32 | m_value |
-| [String] | m_gameCode |
-| [List]&lt;[UplayActionPlatform]&gt; | m_platforms |
+| Type                                | Name          |
+| ----------------------------------- | ------------- |
+| [String]                            | m_code        |
+| [String]                            | m_name        |
+| [String]                            | m_description |
+| Sint32                              | m_value       |
+| [String]                            | m_gameCode    |
+| [List]&lt;[UplayActionPlatform]&gt; | m_platforms   |
 
 ### UplayReward ([Structure])
 
-| Type | Name |
-| --- | --- |
-| [String] | m_code |
-| [String] | m_name |
-| [String] | m_description |
-| Sint32 | m_value |
-| [String] | m_rewardTypeName |
-| [String] | m_gameCode |
-| [List]&lt;[UplayRewardPlatform]&gt; | m_platforms |
+| Type                                | Name             |
+| ----------------------------------- | ---------------- |
+| [String]                            | m_code           |
+| [String]                            | m_name           |
+| [String]                            | m_description    |
+| Sint32                              | m_value          |
+| [String]                            | m_rewardTypeName |
+| [String]                            | m_gameCode       |
+| [List]&lt;[UplayRewardPlatform]&gt; | m_platforms      |
 
 ### UplaySection ([Structure])
 
-| Type | Name |
-| --- | --- |
-| [String] | m_key |
-| [String] | m_name |
-| [String] | m_typeName |
-| [String] | m_menuTypeName |
-| [List]&lt;[UplaySectionContent]&gt; | m_contentList |
-| [String] | m_gameCode |
-| [String] | m_platformCode |
+| Type                                | Name           |
+| ----------------------------------- | -------------- |
+| [String]                            | m_key          |
+| [String]                            | m_name         |
+| [String]                            | m_typeName     |
+| [String]                            | m_menuTypeName |
+| [List]&lt;[UplaySectionContent]&gt; | m_contentList  |
+| [String]                            | m_gameCode     |
+| [String]                            | m_platformCode |
 
 ### UplayActionPlatform ([Structure])
 
-| Type | Name |
-| --- | --- |
+| Type     | Name           |
+| -------- | -------------- |
 | [String] | m_platformCode |
-| Bool | m_completed |
-| [String] | m_specificKey |
+| Bool     | m_completed    |
+| [String] | m_specificKey  |
 
 ### UplayRewardPlatform ([Structure])
 
-| Type | Name |
-| --- | --- |
+| Type     | Name           |
+| -------- | -------------- |
 | [String] | m_platformCode |
-| Bool | m_purchased |
+| Bool     | m_purchased    |
 
 ### UplaySectionContent ([Structure])
 
-| Type | Name |
-| --- | --- |
-| [String] | m_key |
-| [String] | m_name |
-| Sint16 | m_order |
-| [String] | m_typeName |
+| Type                           | Name            |
+| ------------------------------ | --------------- |
+| [String]                       | m_key           |
+| [String]                       | m_name          |
+| Sint16                         | m_order         |
+| [String]                       | m_typeName      |
 | [UplaySectionContentLocalized] | m_localizedInfo |
 
 ### UplaySectionContentLocalized ([Structure])
 
-| Type | Name |
-| --- | --- |
-| [String] | m_key |
-| [String] | m_culture |
-| [String] | m_text |
-| [String] | m_url |
-| Sint32 | m_duration |
-| [String] | m_size |
-| [String] | m_width |
-| [String] | m_height |
+| Type     | Name       |
+| -------- | ---------- |
+| [String] | m_key      |
+| [String] | m_culture  |
+| [String] | m_text     |
+| [String] | m_url      |
+| Sint32   | m_duration |
+| [String] | m_size     |
+| [String] | m_width    |
+| [String] | m_height   |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string

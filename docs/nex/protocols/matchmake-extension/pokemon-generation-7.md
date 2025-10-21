@@ -9,7 +9,7 @@ This page describes the methods that are only seen in Pokemon Sun / Moon and Ult
 ## Methods
 
 | Method ID | Method Name                                                                |
-|-----------|----------------------------------------------------------------------------|
+| --------- | -------------------------------------------------------------------------- |
 | 48        | [ClearMyPreviouslyMatchedUserCache](#48-clearmypreviouslymatchedusercache) |
 | 49        | [GetAttractionStatus](#49-getattractionstatus)                             |
 | 50        | [GetAttractionStatusWithGroupId](#50-getattractionstatuswithgroupid)       |
@@ -28,7 +28,7 @@ This method does not take any parameters.
 #### Response
 
 | Type                                            | Name             |
-|-------------------------------------------------|------------------|
+| ----------------------------------------------- | ---------------- |
 | [AttractionStatus](#attractionstatus-structure) | attractionStatus |
 | Uint16                                          | refreshInterval  |
 
@@ -36,13 +36,13 @@ This method does not take any parameters.
 #### Request
 
 | Type   | Name    |
-|--------|---------|
+| ------ | ------- |
 | Uint32 | groupId |
 
 #### Response
 
 | Type                                            | Name             |
-|-------------------------------------------------|------------------|
+| ----------------------------------------------- | ---------------- |
 | [AttractionStatus](#attractionstatus-structure) | attractionStatus |
 | Uint16                                          | refreshInterval  |
 
@@ -50,13 +50,13 @@ This method does not take any parameters.
 #### Request
 
 | Type   | Name    |
-|--------|---------|
+| ------ | ------- |
 | Uint32 | groupId |
 
 #### Response
 
 | Type                                                          | Name  |
-|---------------------------------------------------------------|-------|
+| ------------------------------------------------------------- | ----- |
 | Bool                                                          | found |
 | [SimpleMatchmakeHostInfo](#simplematchmakehostinfo-structure) | info  |
 
@@ -64,7 +64,7 @@ This method does not take any parameters.
 #### Request
 
 | Type     | Name       |
-|----------|------------|
+| -------- | ---------- |
 | Uint32   | groupId    |
 | [Buffer] | sessionKey |
 
@@ -75,32 +75,32 @@ This method does not return anything.
 #### Request
 
 | Type   | Name    |
-|--------|---------|
+| ------ | ------- |
 | Uint32 | groupId |
 
 #### Response
 
 | Type | Name    |
-|------|---------|
+| ---- | ------- |
 | Bool | succeed |
 
 ### AttractionStatus ([Structure])
 
-| Type                     | Name                    |
-|--------------------------|-------------------------|
-| Uint16                   | messageInterval         |
-| Uint8                    | operationFlag           |
-| Uint16                   | activePlayerInviteParam |
-| Uint16                   | activePlayerJoinParam   |
-| [List]&#x3C;Uint32&#x3E; | extraParams             |
+| Type                 | Name                    |
+| -------------------- | ----------------------- |
+| Uint16               | messageInterval         |
+| Uint8                | operationFlag           |
+| Uint16               | activePlayerInviteParam |
+| Uint16               | activePlayerJoinParam   |
+| [List]&lt;Uint32&gt; | extraParams             |
 
 ### SimpleMatchmakeHostInfo ([Structure])
 
-| Type                           | Name        |
-|--------------------------------|-------------|
-| Uint32                         | pid         |
-| [Buffer]                       | sessionKey  |
-| [List]&#x3C;[StationURL]&#x3E; | stationUrls |
+| Type                       | Name        |
+| -------------------------- | ----------- |
+| Uint32                     | pid         |
+| [Buffer]                   | sessionKey  |
+| [List]&lt;[StationURL]&gt; | stationUrls |
 
 [Buffer]: /docs/nex/types#buffer
 [List]: /docs/nex/types#list

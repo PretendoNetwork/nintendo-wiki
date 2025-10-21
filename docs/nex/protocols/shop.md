@@ -108,9 +108,9 @@ This method does not return anything.
 ### (8) PrincipalIDToSupportNumber
 #### Request
 
-| Type   | Name |
-| ------ | ---- |
-| Uint32 | pid  |
+| Type  | Name |
+| ----- | ---- |
+| [PID] | pid  |
 
 #### Response
 
@@ -127,9 +127,9 @@ This method does not return anything.
 
 #### Response
 
-| Type   | Name |
-| ------ | ---- |
-| Uint32 | pid  |
+| Type  | Name |
+| ----- | ---- |
+| [PID] | pid  |
 
 ### (10) GetGameServerTime
 #### Request
@@ -170,6 +170,7 @@ This method does not take any parameters.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [ShopItem]: #shopitem-structure
 [ShopItemRights]: #shopitemrights-structure

@@ -123,7 +123,7 @@ This method does not return anything.
 
 ### (7) GetAccountData
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

@@ -39,9 +39,9 @@ title: User Account Management (72)
 
 #### Response
 
-| Type                          | Name |
-| ----------------------------- | ---- |
-| [Map]&lt;[String], Uint32&gt; | pids |
+| Type                         | Name |
+| ---------------------------- | ---- |
+| [Map]&lt;[String], [PID]&gt; | pids |
 
 ### (3) LookupFirstPartyIds
 #### Request
@@ -99,16 +99,16 @@ This method does not return anything.
 ### (7) LookupUsernames
 #### Request
 
-| Type                 | Name       |
-| -------------------- | ---------- |
-| [List]&lt;Uint32&gt; | pids       |
-| Uint32               | platformId |
+| Type                | Name       |
+| ------------------- | ---------- |
+| [List]&lt;[PID]&gt; | pids       |
+| Uint32              | platformId |
 
 #### Response
 
-| Type                          | Name      |
-| ----------------------------- | --------- |
-| [Map]&lt;Uint32, [String]&gt; | UserNames |
+| Type                         | Name      |
+| ---------------------------- | --------- |
+| [Map]&lt;[PID], [String]&gt; | UserNames |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string
@@ -121,3 +121,4 @@ This method does not return anything.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid

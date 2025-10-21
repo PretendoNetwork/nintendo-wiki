@@ -338,10 +338,10 @@ This method does not return anything.
 ### (25) SearchContentsByPlayers
 #### Request
 
-| Type                 | Name  |
-| -------------------- | ----- |
-| [List]&lt;Uint32&gt; | pids  |
-| [UserStorageQuery]   | query |
+| Type                | Name  |
+| ------------------- | ----- |
+| [List]&lt;[PID]&gt; | pids  |
+| [UserStorageQuery]  | query |
 
 #### Response
 
@@ -352,10 +352,10 @@ This method does not return anything.
 ### (26) SearchContentsByPlayersWithTotal
 #### Request
 
-| Type                 | Name  |
-| -------------------- | ----- |
-| [List]&lt;Uint32&gt; | pids  |
-| [UserStorageQuery]   | query |
+| Type                | Name  |
+| ------------------- | ----- |
+| [List]&lt;[PID]&gt; | pids  |
+| [UserStorageQuery]  | query |
 
 #### Response
 
@@ -384,7 +384,7 @@ This method does not return anything.
 | Type                            | Name         |
 | ------------------------------- | ------------ |
 | [UserContentKey]                | m_key        |
-| Uint32                          | m_pid        |
+| [PID]                           | m_pid        |
 | [List]&lt;[ContentProperty]&gt; | m_properties |
 
 ### UserStorageQuery ([Structure])
@@ -400,7 +400,7 @@ This method does not return anything.
 
 | Type   | Name         |
 | ------ | ------------ |
-| Uint32 | m_pid        |
+| [PID]  | m_pid        |
 | Uint32 | m_typeID     |
 | Uint32 | m_usedSlots  |
 | Uint32 | m_totalSlots |
@@ -431,6 +431,7 @@ This method does not return anything.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [UserStorageQuery]: #userstoragequery-structure
 [UserContent]: #usercontent-structure
