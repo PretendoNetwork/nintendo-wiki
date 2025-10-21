@@ -46,7 +46,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 39  | [Localization](/docs/nex/protocols/localization)                             | No                   |
 | 42  | [Game session](/docs/nex/protocols/game-session)                             | No                   |
 | 44  | Sub account management                                                       | No                   |
-| 45  | IP to location                                                               | No                   |
+| 45  | [IP to location](/docs/nex/protocols/ip-2-location)                                                               | No                   |
 | 46  | IP to location admin                                                         | No                   |
 | 47  | Ubi friends                                                                  | No                   |
 | 48  | Skill rating                                                                 | No                   |
