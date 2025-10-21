@@ -37,7 +37,7 @@ This method does not return anything.
 
 | Type                           | Name       |
 | ------------------------------ | ---------- |
-| [List]&lt;Uint32&gt;           | playerPIDs |
+| [List]&lt;[PID]&gt;            | playerPIDs |
 | [List]&lt;[StatboardQuery]&gt; | queries    |
 
 #### Response
@@ -51,7 +51,7 @@ This method does not return anything.
 
 | Type                             | Name      |
 | -------------------------------- | --------- |
-| Uint32                           | playerPID |
+| [PID]                            | playerPID |
 | Uint32                           | count     |
 | [List]&lt;[LeaderboardQuery]&gt; | queries   |
 
@@ -81,7 +81,7 @@ This method does not return anything.
 
 | Type                             | Name       |
 | -------------------------------- | ---------- |
-| [List]&lt;Uint32&gt;             | playerPIDs |
+| [List]&lt;[PID]&gt;              | playerPIDs |
 | [List]&lt;[LeaderboardQuery]&gt; | queries    |
 
 #### Response
@@ -148,7 +148,7 @@ This method does not return anything.
 
 | Type                              | Name      |
 | --------------------------------- | --------- |
-| Uint32                            | playerPID |
+| [PID]                             | playerPID |
 | Uint32                            | count     |
 | [List]&lt;[LeaderboardQuery2]&gt; | queries   |
 
@@ -259,41 +259,41 @@ This method does not return anything.
 
 ### StatboardHistoryQuery ([Structure])
 
-| Type                                                  | Name            |
-| ----------------------------------------------------- | --------------- |
-| [List]&lt;Uint32&gt;                                  | m_playerPIDs    |
-| Uint32                                                | m_boardID       |
-| [List]&lt;Uint32&gt;                                  | m_contextIDs    |
-| [List]&lt;Uint32&gt;                                  | m_statIDs       |
+| Type                                                 | Name            |
+| ---------------------------------------------------- | --------------- |
+| [List]&lt;[PID]&gt;                                  | m_playerPIDs    |
+| Uint32                                               | m_boardID       |
+| [List]&lt;Uint32&gt;                                 | m_contextIDs    |
+| [List]&lt;Uint32&gt;                                 | m_statIDs       |
 | [ResultRange](/docs/nex/types#resultrange-structure) | m_resultRange   |
-| [List]&lt;[PropertyVariant]&gt;                       | m_playerStats   |
-| [List]&lt;[DateRange]&gt;                             | m_dateRanges    |
-| [List]&lt;[PlayerStatSortCriteria]&gt;                | m_sortCriterias |
+| [List]&lt;[PropertyVariant]&gt;                      | m_playerStats   |
+| [List]&lt;[DateRange]&gt;                            | m_dateRanges    |
+| [List]&lt;[PlayerStatSortCriteria]&gt;               | m_sortCriterias |
 
 ### StatboardHistoryAggregatedQuery ([Structure])
 
-| Type                                                  | Name            |
-| ----------------------------------------------------- | --------------- |
-| [List]&lt;Uint32&gt;                                  | m_playerPIDs    |
-| Uint32                                                | m_boardID       |
-| [List]&lt;Uint32&gt;                                  | m_contextIDs    |
-| [List]&lt;Uint32&gt;                                  | m_statIDs       |
+| Type                                                 | Name            |
+| ---------------------------------------------------- | --------------- |
+| [List]&lt;[PID]&gt;                                  | m_playerPIDs    |
+| Uint32                                               | m_boardID       |
+| [List]&lt;Uint32&gt;                                 | m_contextIDs    |
+| [List]&lt;Uint32&gt;                                 | m_statIDs       |
 | [ResultRange](/docs/nex/types#resultrange-structure) | m_resultRange   |
-| [List]&lt;[PropertyVariant]&gt;                       | m_playerStats   |
-| [List]&lt;[DateRange]&gt;                             | m_dateRanges    |
-| [List]&lt;[PlayerStatSortCriteria]&gt;                | m_sortCriterias |
-| Uint32                                                | m_filterOption  |
+| [List]&lt;[PropertyVariant]&gt;                      | m_playerStats   |
+| [List]&lt;[DateRange]&gt;                            | m_dateRanges    |
+| [List]&lt;[PlayerStatSortCriteria]&gt;               | m_sortCriterias |
+| Uint32                                               | m_filterOption  |
 
 ### LeaderboardHistoryQuery ([Structure])
 
-| Type                                                  | Name           |
-| ----------------------------------------------------- | -------------- |
-| [List]&lt;Uint32&gt;                                  | m_playerPIDs   |
-| Uint32                                                | m_boardID      |
-| Uint32                                                | m_contextID    |
+| Type                                                 | Name           |
+| ---------------------------------------------------- | -------------- |
+| [List]&lt;[PID]&gt;                                  | m_playerPIDs   |
+| Uint32                                               | m_boardID      |
+| Uint32                                               | m_contextID    |
 | [ResultRange](/docs/nex/types#resultrange-structure) | m_resultRange  |
-| [List]&lt;[DateRange]&gt;                             | m_dateRanges   |
-| Uint32                                                | m_filterOption |
+| [List]&lt;[DateRange]&gt;                            | m_dateRanges   |
+| Uint32                                               | m_filterOption |
 
 ### PopulationStatQuery ([Structure])
 
@@ -325,7 +325,7 @@ This method does not return anything.
 
 | Type                            | Name            |
 | ------------------------------- | --------------- |
-| Uint32                          | m_playerPID     |
+| [PID]                           | m_playerPID     |
 | [String]                        | m_playerName    |
 | [DateTime]                      | m_submittedTime |
 | [List]&lt;[PropertyVariant]&gt; | m_stats         |
@@ -364,6 +364,7 @@ This method does not return anything.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [PropertyVariant]: #propertyvariant-structure
 [PlayerStatUpdate]: #playerstatupdate-structure

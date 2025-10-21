@@ -124,11 +124,11 @@ This method does not return anything.
 ### (8) AddParticipants
 #### Request
 
-| Type                 | Name                  |
-| -------------------- | --------------------- |
-| [GameSessionKey]     | gameSessionKey        |
-| [List]&lt;Uint32&gt; | publicParticipantIDs  |
-| [List]&lt;Uint32&gt; | privateParticipantIDs |
+| Type                | Name                  |
+| ------------------- | --------------------- |
+| [GameSessionKey]    | gameSessionKey        |
+| [List]&lt;[PID]&gt; | publicParticipantIDs  |
+| [List]&lt;[PID]&gt; | privateParticipantIDs |
 
 #### Response
 This method does not return anything.
@@ -136,10 +136,10 @@ This method does not return anything.
 ### (9) RemoveParticipants
 #### Request
 
-| Type                 | Name           |
-| -------------------- | -------------- |
-| [GameSessionKey]     | gameSessionKey |
-| [List]&lt;Uint32&gt; | participantIDs |
+| Type                | Name           |
+| ------------------- | -------------- |
+| [GameSessionKey]    | gameSessionKey |
+| [List]&lt;[PID]&gt; | participantIDs |
 
 #### Response
 This method does not return anything.
@@ -308,10 +308,10 @@ This method does not return anything.
 ### (24) SearchSessionsWithParticipants
 #### Request
 
-| Type                 | Name              |
-| -------------------- | ----------------- |
-| Uint32               | gameSessionTypeID |
-| [List]&lt;Uint32&gt; | participantIDs    |
+| Type                | Name              |
+| ------------------- | ----------------- |
+| Uint32              | gameSessionTypeID |
+| [List]&lt;[PID]&gt; | participantIDs    |
 
 #### Response
 
@@ -335,10 +335,10 @@ This method does not return anything.
 ### (26) GetParticipantsURLs
 #### Request
 
-| Type                 | Name           |
-| -------------------- | -------------- |
-| [GameSessionKey]     | gameSessionKey |
-| [List]&lt;Uint32&gt; | participantIDs |
+| Type                | Name           |
+| ------------------- | -------------- |
+| [GameSessionKey]    | gameSessionKey |
+| [List]&lt;[PID]&gt; | participantIDs |
 
 #### Response
 
@@ -412,7 +412,7 @@ This method does not return anything.
 | Type                       | Name         |
 | -------------------------- | ------------ |
 | [GameSessionKey]           | m_sessionKey |
-| Uint32                     | m_hostPID    |
+| [PID]                      | m_hostPID    |
 | [List]&lt;[StationURL]&gt; | m_hostURLs   |
 | [List]&lt;[Property]&gt;   | m_attributes |
 
@@ -427,24 +427,24 @@ This method does not return anything.
 
 | Type                       | Name          |
 | -------------------------- | ------------- |
-| Uint32                     | m_PID         |
+| [PID]                      | m_PID         |
 | [String]                   | m_name        |
 | [List]&lt;[StationURL]&gt; | m_stationURLs |
 
 ### GameSessionInvitation ([Structure])
 
-| Type                 | Name            |
-| -------------------- | --------------- |
-| [GameSessionKey]     | m_sessionKey    |
-| [List]&lt;Uint32&gt; | m_recipientPIDs |
-| [String]             | m_message       |
+| Type                | Name            |
+| ------------------- | --------------- |
+| [GameSessionKey]    | m_sessionKey    |
+| [List]&lt;[PID]&gt; | m_recipientPIDs |
+| [String]            | m_message       |
 
 ### GameSessionInvitationSent ([Structure])
 
 | Type             | Name           |
 | ---------------- | -------------- |
 | [GameSessionKey] | m_sessionKey   |
-| Uint32           | m_recipientPID |
+| [PID]            | m_recipientPID |
 | [String]         | m_message      |
 | [DateTime]       | m_creationTime |
 
@@ -453,7 +453,7 @@ This method does not return anything.
 | Type             | Name           |
 | ---------------- | -------------- |
 | [GameSessionKey] | m_sessionKey   |
-| Uint32           | m_senderPID    |
+| [PID]            | m_senderPID    |
 | [String]         | m_message      |
 | [DateTime]       | m_creationTime |
 
@@ -483,9 +483,9 @@ This method does not return anything.
 
 ### GameSessionSearchWithParticipantsResult ([Structure])
 
-| Type                 | Name             |
-| -------------------- | ---------------- |
-| [List]&lt;Uint32&gt; | m_participantIDs |
+| Type                | Name             |
+| ------------------- | ---------------- |
+| [List]&lt;[PID]&gt; | m_participantIDs |
 
 ### GameSessionUnsuccessfulJoinSession ([Structure])
 
@@ -513,6 +513,7 @@ This method does not return anything.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [Property]: #property-structure
 [GameSession]: #gamesession-structure

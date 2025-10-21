@@ -14,9 +14,9 @@ title: TrackingExtensionProtocol
 ### (1) GetTrackingUserGroup
 #### Request
 
-| Type   | Name |
-| ------ | ---- |
-| Uint32 | pid  |
+| Type  | Name |
+| ----- | ---- |
+| [PID] | pid  |
 
 #### Response
 | Type   | Name      |
@@ -37,3 +37,4 @@ title: TrackingExtensionProtocol
 
 [String]: /docs/nex/types#string
 [List]: /docs/nex/types#list
+[PID]: /docs/nex/types#pid

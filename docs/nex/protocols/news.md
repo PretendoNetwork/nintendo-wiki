@@ -193,7 +193,7 @@ This method does not return anything.
 | Type       | Name             |
 | ---------- | ---------------- |
 | Uint32     | m_ID             |
-| Uint32     | m_ownerPID       |
+| [PID]      | m_ownerPID       |
 | [String]   | m_name           |
 | [String]   | m_description    |
 | [DateTime] | m_creationTime   |
@@ -209,7 +209,7 @@ This method does not return anything.
 | Uint32     | m_ID              |
 | Uint32     | m_recipientID     |
 | Uint32     | m_recipientType   |
-| Uint32     | m_publisherPID    |
+| [PID]      | m_publisherPID    |
 | [String]   | m_publisherName   |
 | [DateTime] | m_publicationTime |
 | [DateTime] | m_displayTime     |
@@ -240,6 +240,7 @@ This method does not return anything.
 [Structure]: /docs/nex/types#structure
 [Data]: /docs/nex/types#any-data-holder
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid
 
 [NewsChannel]: #newschannel-structure
 [NewsRecipient]: #newsrecipient-structure

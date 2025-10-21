@@ -66,14 +66,14 @@ title: SkillRatingProtocol (48)
 ### PlayerSkillRating ([Structure])
 | Type                                  | Name          |
 | ------------------------------------- | ------------- |
-| Uint32                                | m_playerPID   |
+| [PID]                                 | m_playerPID   |
 | [SkillRating](#skillrating-structure) | m_skillRating |
 | Uint32                                | m_matchCount  |
 
 ### SkillRatingTeamParticipant ([Structure])
 | Type   | Name                      |
 | ------ | ------------------------- |
-| Uint32 | m_playerPID               |
+| [PID]  | m_playerPID               |
 | Uint32 | m_partialPlayPercentage   |
 | Uint32 | m_partialUpdatePercentage |
 
@@ -85,3 +85,4 @@ title: SkillRatingProtocol (48)
 
 [List]: /docs/nex/types#list
 [Structure]: /docs/nex/types#structure
+[PID]: /docs/nex/types#pid

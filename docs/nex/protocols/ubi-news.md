@@ -66,7 +66,7 @@ This method does not take any parameters.
 | Type       | Name              |
 | ---------- | ----------------- |
 | Uint32     | m_ID              |
-| [PID]      | m_recipientID     |
+| Uint32     | m_recipientID     |
 | Uint32     | m_recipientType   |
 | [PID]      | m_publisherPID    |
 | [String]   | m_publisherName   |

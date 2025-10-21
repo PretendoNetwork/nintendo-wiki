@@ -244,8 +244,8 @@ This method does not return anything.
 ### (18) UpdateNewsFeedLink
 #### Request
 
-| Type                                    | Name         |
-| --------------------------------------- | ------------ |
+| Type         | Name         |
+| ------------ | ------------ |
 | [NewsFeedLink](#newsfeedlink-structure) | newsFeedLink |
 
 #### Response
@@ -343,7 +343,7 @@ This method does not take any parameters.
 | Type       | Name             |
 | ---------- | ---------------- |
 | Uint32     | m_ID             |
-| Uint32     | m_ownerPID       |
+| [PID]      | m_ownerPID       |
 | [String]   | m_name           |
 | [String]   | m_description    |
 | [DateTime] | m_creationTime   |
@@ -358,7 +358,7 @@ This method does not take any parameters.
 | Uint32     | m_ID              |
 | Uint32     | m_recipientID     |
 | Uint32     | m_recipientType   |
-| Uint32     | m_publisherPID    |
+| [PID]      | m_publisherPID    |
 | [String]   | m_publisherName   |
 | [DateTime] | m_publicationTime |
 | [DateTime] | m_displayTime     |
@@ -402,3 +402,4 @@ This method does not take any parameters.
 [DateTime]: /docs/nex/types#datetime
 [Structure]: /docs/nex/types#structure
 [ResultRange]: /docs/nex/types#resultrange-structure
+[PID]: /docs/nex/types#pid

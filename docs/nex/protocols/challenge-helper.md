@@ -15,9 +15,9 @@ title: ChallengeHelperProtocol
 ### (1) GenerateMyFriendChallenges
 #### Request
 
-| Type                     | Name       |
-| ------------------------ | ---------- |
-| [List]&#x3C;Uint32&#x3E; | friendPIDs |
+| Type                    | Name       |
+| ----------------------- | ---------- |
+| [List]&#x3C;[PID]&#x3E; | friendPIDs |
 
 #### Response
 | Type                                                            | Name   |
@@ -27,10 +27,10 @@ title: ChallengeHelperProtocol
 ### (2) GenerateFriendChallenges
 #### Request
 
-| Type                     | Name       |
-| ------------------------ | ---------- |
-| Uint32                   | targetPID  |
-| [List]&#x3C;Uint32&#x3E; | friendPIDs |
+| Type                    | Name       |
+| ----------------------- | ---------- |
+| [PID]                   | targetPID  |
+| [List]&#x3C;[PID]&#x3E; | friendPIDs |
 
 #### Response
 | Type                                                            | Name   |
@@ -53,7 +53,7 @@ This method does not take any parameters
 | ------ | ----------------- |
 | Uint32 | m_ChallengeType   |
 | Uint32 | m_MapID           |
-| Uint32 | m_FriendToBeatPID |
+| [PID]  | m_FriendToBeatPID |
 | Uint32 | m_ValueOnHand     |
 | Uint32 | m_ValueToBeat     |
 
@@ -70,3 +70,4 @@ This method does not take any parameters
 [List]: /docs/nex/types#list
 [String]: /docs/nex/types#string
 [DateTime]: /docs/nex/types#datetime
+[PID]: /docs/nex/types#pid
