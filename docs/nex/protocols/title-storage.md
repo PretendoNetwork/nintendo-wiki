@@ -26,9 +26,9 @@ title: Title Storage (51)
 
 #### Response
 
-| Type                                                      | Name     |
-| --------------------------------------------------------- | -------- |
-| [List]&#x3C;[TitleContent](#titlecontent-structure)&#x3E; | contents |
+| Type                                                  | Name     |
+| ----------------------------------------------------- | -------- |
+| [List]&lt;[TitleContent](#titlecontent-structure)&gt; | contents |
 
 ### (2) BrowseContentsByType
 
@@ -44,9 +44,9 @@ title: Title Storage (51)
 
 #### Response
 
-| Type                     | Name     |
-| ------------------------ | -------- |
-| [List]&#x3C;[Data]&#x3E; | contents |
+| Type                 | Name     |
+| -------------------- | -------- |
+| [List]&lt;[Data]&gt; | contents |
 
 ### (3) GetContentDetails
 

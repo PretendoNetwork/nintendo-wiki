@@ -18,9 +18,9 @@ title: GameSessionExProtocol
 | GameSessionQuery | gameSessionQuery |
 
 #### Response
-| Type                                                                                | Name          |
-| ----------------------------------------------------------------------------------- | ------------- |
-| [List]&#x3C;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&#x3E; | searchResults |
+| Type                                                                            | Name          |
+| ------------------------------------------------------------------------------- | ------------- |
+| [List]&lt;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&gt; | searchResults |
 
 ## Types
 
@@ -28,9 +28,9 @@ title: GameSessionExProtocol
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [GameSessionSearchResult]
 {: .prompt-info }
 
-| Type                                     | Name           |
-| ---------------------------------------- | -------------- |
-| [List]&#x3C;GameSessionParticipant&#x3E; | m_participants |
+| Type                                 | Name           |
+| ------------------------------------ | -------------- |
+| [List]&lt;GameSessionParticipant&gt; | m_participants |
 
 [Structure]: /docs/nex/types#structure
 [List]: /docs/nex/types#list

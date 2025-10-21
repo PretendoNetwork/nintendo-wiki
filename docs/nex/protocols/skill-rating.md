@@ -15,44 +15,44 @@ title: SkillRatingProtocol (48)
 ### (1) GetSkillRatings
 #### Request
 
-| Type                     | Name         |
-| ------------------------ | ------------ |
-| Uint32                   | skillBoardID |
-| [List]&#x3C;Uint32&#x3E; | playerPIDs   |
+| Type                 | Name         |
+| -------------------- | ------------ |
+| Uint32               | skillBoardID |
+| [List]&lt;Uint32&gt; | playerPIDs   |
 
 #### Response
-| Type                                                                | Name               |
-| ------------------------------------------------------------------- | ------------------ |
-| [List]&#x3C;[PlayerSkillRating](#playerskillrating-structure)&#x3E; | playerSkillRatings |
-| [SkillRating](#skillrating-structure)                               | averageSkillRating |
+| Type                                                            | Name               |
+| --------------------------------------------------------------- | ------------------ |
+| [List]&lt;[PlayerSkillRating](#playerskillrating-structure)&gt; | playerSkillRatings |
+| [SkillRating](#skillrating-structure)                           | averageSkillRating |
 
 ### (2) UpdateSkillRating
 #### Request
 
-| Type                                                            | Name             |
-| --------------------------------------------------------------- | ---------------- |
-| Uint32                                                          | skillBoardID     |
-| [List]&#x3C;[SkillRatingTeam](#skillratingteam-structure)&#x3E; | skillRatingTeams |
-| Uint32                                                          | matchID          |
+| Type                                                        | Name             |
+| ----------------------------------------------------------- | ---------------- |
+| Uint32                                                      | skillBoardID     |
+| [List]&lt;[SkillRatingTeam](#skillratingteam-structure)&gt; | skillRatingTeams |
+| Uint32                                                      | matchID          |
 
 #### Response
-| Type                                                                | Name               |
-| ------------------------------------------------------------------- | ------------------ |
-| [List]&#x3C;[PlayerSkillRating](#playerskillrating-structure)&#x3E; | playerSkillRatings |
+| Type                                                            | Name               |
+| --------------------------------------------------------------- | ------------------ |
+| [List]&lt;[PlayerSkillRating](#playerskillrating-structure)&gt; | playerSkillRatings |
 
 ### (3) CalculateMatchQuality
 #### Request
 
-| Type                                                    | Name                |
-| ------------------------------------------------------- | ------------------- |
-| Uint32                                                  | skillBoardID        |
-| [SkillRating](#skillrating-structure)                   | userSkillRating     |
-| [List]&#x3C;[SkillRating](#skillrating-structure)&#x3E; | sessionSkillRatings |
+| Type                                                | Name                |
+| --------------------------------------------------- | ------------------- |
+| Uint32                                              | skillBoardID        |
+| [SkillRating](#skillrating-structure)               | userSkillRating     |
+| [List]&lt;[SkillRating](#skillrating-structure)&gt; | sessionSkillRatings |
 
 #### Response
-| Type                     | Name           |
-| ------------------------ | -------------- |
-| [List]&#x3C;Double&#x3E; | matchQualities |
+| Type                 | Name           |
+| -------------------- | -------------- |
+| [List]&lt;Double&gt; | matchQualities |
 
 ## Types
 
@@ -78,10 +78,10 @@ title: SkillRatingProtocol (48)
 | Uint32 | m_partialUpdatePercentage |
 
 ### SkillRatingTeam ([Structure])
-| Type                                                                                  | Name           |
-| ------------------------------------------------------------------------------------- | -------------- |
-| [List]&#x3C;[SkillRatingTeamParticipant](#skillratingteamparticipant-structure)&#x3E; | m_participants |
-| Uint32                                                                                | m_rank         |
+| Type                                                                              | Name           |
+| --------------------------------------------------------------------------------- | -------------- |
+| [List]&lt;[SkillRatingTeamParticipant](#skillratingteamparticipant-structure)&gt; | m_participants |
+| Uint32                                                                            | m_rank         |
 
 [List]: /docs/nex/types#list
 [Structure]: /docs/nex/types#structure

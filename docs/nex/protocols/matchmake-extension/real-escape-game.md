@@ -9,7 +9,7 @@ This page describes the methods that are only seen in Real Escape Game × Ninten
 ## Methods
 
 | Method ID | Method Name                                                                                |
-|-----------|--------------------------------------------------------------------------------------------|
+| --------- | ------------------------------------------------------------------------------------------ |
 | 45        | [GetCustomMatchmakeConfig](#45-getcustommatchmakeconfig)                                   |
 | 46        | [GetNumberOfMatchmakeSessions](#46-getnumberofmatchmakesessions)                           |
 | 47        | [GetNumberOfMatchmakeSessionsWithGameModes](#47-getnumberofmatchmakesessionswithgamemodes) |
@@ -20,9 +20,9 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                     | Description |
-|--------------------------|-------------|
-| [List]&#x3C;Uint32&#x3E; | Config      |
+| Type                 | Description |
+| -------------------- | ----------- |
+| [List]&lt;Uint32&gt; | Config      |
 
 ### (46) GetNumberOfMatchmakeSessions
 #### Request
@@ -31,22 +31,22 @@ This method does not take any parameters.
 #### Response
 
 | Type   | Description   |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | Session count |
 
 ### (47) GetNumberOfMatchmakeSessionsWithGameModes
 #### Request
 
 
-| Type                     | Description |
-|--------------------------|-------------|
-| [List]&#x3C;Uint32&#x3E; | Game modes  |
+| Type                 | Description |
+| -------------------- | ----------- |
+| [List]&lt;Uint32&gt; | Game modes  |
 
 #### Response
 
-| Type                     | Description    |
-|--------------------------|----------------|
-| [List]&#x3C;Uint32&#x3E; | Session counts |
+| Type                 | Description    |
+| -------------------- | -------------- |
+| [List]&lt;Uint32&gt; | Session counts |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string

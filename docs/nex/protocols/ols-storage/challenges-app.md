@@ -98,15 +98,15 @@ This method does not return anything
 
 #### Request
 
-| Type                                                | Name    |
-| --------------------------------------------------- | ------- |
-| [List]&#x3C;[OLSFriend](#olsfriend-structure)&#x3E; | friends |
+| Type                                            | Name    |
+| ----------------------------------------------- | ------- |
+| [List]&lt;[OLSFriend](#olsfriend-structure)&gt; | friends |
 
 #### Response
 
-| Type                                                  | Name     |
-| ----------------------------------------------------- | -------- |
-| [List]&#x3C;[OLSProfile](#olsprofile-structure)&#x3E; | profiles |
+| Type                                              | Name     |
+| ------------------------------------------------- | -------- |
+| [List]&lt;[OLSProfile](#olsprofile-structure)&gt; | profiles |
 
 ### (6) QueryUbisoftProfiles
 
@@ -115,19 +115,19 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                  | Name     |
-| ----------------------------------------------------- | -------- |
-| [List]&#x3C;[OLSProfile](#olsprofile-structure)&#x3E; | profiles |
+| Type                                              | Name     |
+| ------------------------------------------------- | -------- |
+| [List]&lt;[OLSProfile](#olsprofile-structure)&gt; | profiles |
 
 ### (7) CreateMessage
 
 #### Request
 
-| Type                                                      | Name         |
-| --------------------------------------------------------- | ------------ |
-| Uint32                                                    | message_type |
-| [List]&#x3C;Sint32&#x3E;                                  | receivers    |
-| [List]&#x3C;[OLSAttribute](#olsattribute-structure)&#x3E; | attributes   |
+| Type                                                  | Name         |
+| ----------------------------------------------------- | ------------ |
+| Uint32                                                | message_type |
+| [List]&lt;Sint32&gt;                                  | receivers    |
+| [List]&lt;[OLSAttribute](#olsattribute-structure)&gt; | attributes   |
 
 #### Response
 This method does not return anything
@@ -139,9 +139,9 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                  | Name     |
-| ----------------------------------------------------- | -------- |
-| [List]&#x3C;[OLSMessage](#olsmessage-structure)&#x3E; | messages |
+| Type                                              | Name     |
+| ------------------------------------------------- | -------- |
+| [List]&lt;[OLSMessage](#olsmessage-structure)&gt; | messages |
 
 ### (9) QueryLeaderboard
 
@@ -153,15 +153,15 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                | Name         |
-| --------------------------------------------------- | ------------ |
-| [List]&#x3C;[OLSLdbRow](#olsldbrow-structure)&#x3E; | result       |
-| [List]&#x3C;Float&#x3E;                             | graduations  |
-| [List]&#x3C;Uint32&#x3E;                            | envelope     |
-| Uint32                                              | unit         |
-| Uint32                                              | my_country   |
-| Uint32                                              | participants |
-| Bool                                                | cacheable    |
+| Type                                            | Name         |
+| ----------------------------------------------- | ------------ |
+| [List]&lt;[OLSLdbRow](#olsldbrow-structure)&gt; | result       |
+| [List]&lt;Float&gt;                             | graduations  |
+| [List]&lt;Uint32&gt;                            | envelope     |
+| Uint32                                          | unit         |
+| Uint32                                          | my_country   |
+| Uint32                                          | participants |
+| Bool                                            | cacheable    |
 
 ### (10) QuerySmartSelection
 
@@ -173,10 +173,10 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                            | Name   |
-| --------------------------------------------------------------- | ------ |
-| [List]&#x3C;[OLSSelectionRow](#olsselectionrow-structure)&#x3E; | ghosts |
-| [List]&#x3C;[OLSTomb](#olstomb-structure)&#x3E;                 | tombs  |
+| Type                                                        | Name   |
+| ----------------------------------------------------------- | ------ |
+| [List]&lt;[OLSSelectionRow](#olsselectionrow-structure)&gt; | ghosts |
+| [List]&lt;[OLSTomb](#olstomb-structure)&gt;                 | tombs  |
 
 ### (11) SaveScore
 
@@ -223,9 +223,9 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                                    | Name  |
-| ----------------------------------------------------------------------- | ----- |
-| [List]&#x3C;[OLSCompetitionInfos](#olscompetitioninfos-structure)&#x3E; | infos |
+| Type                                                                | Name  |
+| ------------------------------------------------------------------- | ----- |
+| [List]&lt;[OLSCompetitionInfos](#olscompetitioninfos-structure)&gt; | infos |
 
 ### (14) QueryCompetitionsHistory
 
@@ -239,10 +239,10 @@ This method does not take any parameters.
 
 #### Response
 
-| Type                                                                      | Name    |
-| ------------------------------------------------------------------------- | ------- |
-| [List]&#x3C;[OLSCompetitionResult](#olscompetitionresult-structure)&#x3E; | history |
-| Uint32                                                                    | total   |
+| Type                                                                  | Name    |
+| --------------------------------------------------------------------- | ------- |
+| [List]&lt;[OLSCompetitionResult](#olscompetitionresult-structure)&gt; | history |
+| Uint32                                                                | total   |
 
 ### (15) QueryCompetitionOfTheDay
 
@@ -289,8 +289,8 @@ This method does not take any parameters.
 
 ### OLSRichProfile ([Structure])
 
-| Type | Name |
-| --- | --- |
+| Type     | Name                 |
+| -------- | -------------------- |
 | Sint32   | PID                  |
 | [String] | Name                 |
 | [String] | PlatformID           |
@@ -342,18 +342,18 @@ This method does not take any parameters.
 
 ### OLSMessage ([Structure])
 
-| Type                                                      | Name               |
-| --------------------------------------------------------- | ------------------ |
-| Sint8                                                     | message_type       |
-| Bool                                                      | message_prompt     |
-| Bool                                                      | message_drc        |
-| Bool                                                      | message_bloomberg  |
-| [DateTime]                                                | message_date       |
-| Uint32                                                    | message_duration   |
-| [String]                                                  | message_title      |
-| [String]                                                  | message_body       |
-| [List]&#x3C;[String]&#x3E;                                | message_buttons    |
-| [List]&#x3C;[OLSAttribute](#olsattribute-structure)&#x3E; | message_attributes |
+| Type                                                  | Name               |
+| ----------------------------------------------------- | ------------------ |
+| Sint8                                                 | message_type       |
+| Bool                                                  | message_prompt     |
+| Bool                                                  | message_drc        |
+| Bool                                                  | message_bloomberg  |
+| [DateTime]                                            | message_date       |
+| Uint32                                                | message_duration   |
+| [String]                                              | message_title      |
+| [String]                                              | message_body       |
+| [List]&lt;[String]&gt;                                | message_buttons    |
+| [List]&lt;[OLSAttribute](#olsattribute-structure)&gt; | message_attributes |
 
 ### OLSCompetitionResult ([Structure])
 
@@ -394,17 +394,17 @@ This method does not take any parameters.
 
 ### OLSCompetitionInfos ([Structure])
 
-| Type                                                            | Name              |
-| --------------------------------------------------------------- | ----------------- |
-| Uint32                                                          | id_competition    |
-| Uint32                                                          | participants      |
-| [List]&#x3C;Uint32&#x3E;                                        | friends           |
-| Uint32                                                          | level_id          |
-| Uint32                                                          | mode              |
-| Uint32                                                          | my_rank           |
-| Uint32                                                          | remaining_seconds |
-| [List]&#x3C;[OLSSelectionRow](#olsselectionrow-structure)&#x3E; | competitors       |
-| Uint32                                                          | unit              |
+| Type                                                        | Name              |
+| ----------------------------------------------------------- | ----------------- |
+| Uint32                                                      | id_competition    |
+| Uint32                                                      | participants      |
+| [List]&lt;Uint32&gt;                                        | friends           |
+| Uint32                                                      | level_id          |
+| Uint32                                                      | mode              |
+| Uint32                                                      | my_rank           |
+| Uint32                                                      | remaining_seconds |
+| [List]&lt;[OLSSelectionRow](#olsselectionrow-structure)&gt; | competitors       |
+| Uint32                                                      | unit              |
 
 ### OLSLdbRow ([Structure])
 

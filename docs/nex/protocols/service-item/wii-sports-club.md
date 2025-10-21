@@ -6,30 +6,30 @@ title: Wii Sports Club (119)
 
 ## Methods
 
-| Method ID | Method Name |
-| --- | --- |
-| 1 | [Hello](#1-hello) |
-| 2 | [HttpGetRequest](#2-httpgetrequest) |
-| 3 | [HttpGetResponse](#3-httpgetresponse) |
-| 4 | [PurchaseServiceItemRequest](#4-purchaseserviceitemrequest) |
-| 5 | [PurchaseServiceItemResponse](#5-purchaseserviceitemresponse) |
-| 6 | [ListServiceItemRequest](#6-listserviceitemrequest) |
-| 7 | [ListServiceItemResponse](#7-listserviceitemresponse) |
-| 8 | [GetBalanceRequest](#8-getbalancerequest) |
-| 9 | [GetBalanceResponse](#9-getbalanceresponse) |
-| 10 | [GetPrepurchaseInfoRequest](#10-getprepurchaseinforequest) |
-| 11 | [GetPrepurchaseInfoResponse](#11-getprepurchaseinforesponse) |
-| 12 | [GetServiceItemRightRequest](#12-getserviceitemrightrequest) |
-| 13 | [GetServiceItemRightResponse](#13-getserviceitemrightresponse) |
-| 14 | [GetPurchaseHistoryRequest](#14-getpurchasehistoryrequest) |
-| 15 | [GetPurchaseHistoryResponse](#15-getpurchasehistoryresponse) |
-| 16 | [GetNotice](#16-getnotice) |
-| 17 | [UpdateAndGetTicketInfo](#17-updateandgetticketinfo) |
-| 18 | [LoadUserInfo](#18-loaduserinfo) |
-| 19 | [SaveUserInfo](#19-saveuserinfo) |
-| 20 | [StartChallenge](#20-startchallenge) |
-| 21 | [EndChallenge](#21-endchallenge) |
-| 22 | [RequestTicketRestoration](#22-requestticketrestoration) |
+| Method ID | Method Name                                                    |
+| --------- | -------------------------------------------------------------- |
+| 1         | [Hello](#1-hello)                                              |
+| 2         | [HttpGetRequest](#2-httpgetrequest)                            |
+| 3         | [HttpGetResponse](#3-httpgetresponse)                          |
+| 4         | [PurchaseServiceItemRequest](#4-purchaseserviceitemrequest)    |
+| 5         | [PurchaseServiceItemResponse](#5-purchaseserviceitemresponse)  |
+| 6         | [ListServiceItemRequest](#6-listserviceitemrequest)            |
+| 7         | [ListServiceItemResponse](#7-listserviceitemresponse)          |
+| 8         | [GetBalanceRequest](#8-getbalancerequest)                      |
+| 9         | [GetBalanceResponse](#9-getbalanceresponse)                    |
+| 10        | [GetPrepurchaseInfoRequest](#10-getprepurchaseinforequest)     |
+| 11        | [GetPrepurchaseInfoResponse](#11-getprepurchaseinforesponse)   |
+| 12        | [GetServiceItemRightRequest](#12-getserviceitemrightrequest)   |
+| 13        | [GetServiceItemRightResponse](#13-getserviceitemrightresponse) |
+| 14        | [GetPurchaseHistoryRequest](#14-getpurchasehistoryrequest)     |
+| 15        | [GetPurchaseHistoryResponse](#15-getpurchasehistoryresponse)   |
+| 16        | [GetNotice](#16-getnotice)                                     |
+| 17        | [UpdateAndGetTicketInfo](#17-updateandgetticketinfo)           |
+| 18        | [LoadUserInfo](#18-loaduserinfo)                               |
+| 19        | [SaveUserInfo](#19-saveuserinfo)                               |
+| 20        | [StartChallenge](#20-startchallenge)                           |
+| 21        | [EndChallenge](#21-endchallenge)                               |
+| 22        | [RequestTicketRestoration](#22-requestticketrestoration)       |
 
 ### (1) Hello
 
@@ -265,10 +265,10 @@ title: Wii Sports Club (119)
 
 #### Response
 
-| Type                                                                        | Name        |
-| --------------------------------------------------------------------------- | ----------- |
-| [List]&#x3C;[ServiceItemTicketInfo](#serviceitemticketinfo-structure)&#x3E; | ticketInfos |
-| [List]&#x3C;[ServiceItemEvent](#serviceitemevent-structure)&#x3E;           | events      |
+| Type                                                                    | Name        |
+| ----------------------------------------------------------------------- | ----------- |
+| [List]&lt;[ServiceItemTicketInfo](#serviceitemticketinfo-structure)&gt; | ticketInfos |
+| [List]&lt;[ServiceItemEvent](#serviceitemevent-structure)&gt;           | events      |
 
 ### (18) LoadUserInfo
 
@@ -381,9 +381,9 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                            | Name                 |
-| ------------------------------------------------------------------------------- | -------------------- |
-| [List]&#x3C;[ServiceItemPurchaceInfo](#serviceitempurchaceinfo-structure)&#x3E; | nullablePurchaceInfo |
+| Type                                                                        | Name                 |
+| --------------------------------------------------------------------------- | -------------------- |
+| [List]&lt;[ServiceItemPurchaceInfo](#serviceitempurchaceinfo-structure)&gt; | nullablePurchaceInfo |
 
 ### ServiceItemListServiceItemParam ([Structure])
 
@@ -410,30 +410,30 @@ This method does not return anything
 
 ### ServiceItemListItem ([Structure])
 
-| Type                                                                      | Name                |
-| ------------------------------------------------------------------------- | ------------------- |
-| [String]                                                                  | itemCode            |
-| [ServiceItemAmount](#serviceitemamount-structure)                         | regularPrice        |
-| Bool                                                                      | taxExcluded         |
-| Bool                                                                      | initialPurchaseOnly |
-| [ServiceItemLimitation](#serviceitemlimitation-structure)                 | limitation          |
-| [List]&#x3C;[ServiceItemAttribute](#serviceitemattribute-structure)&#x3E; | attributes          |
+| Type                                                                  | Name                |
+| --------------------------------------------------------------------- | ------------------- |
+| [String]                                                              | itemCode            |
+| [ServiceItemAmount](#serviceitemamount-structure)                     | regularPrice        |
+| Bool                                                                  | taxExcluded         |
+| Bool                                                                  | initialPurchaseOnly |
+| [ServiceItemLimitation](#serviceitemlimitation-structure)             | limitation          |
+| [List]&lt;[ServiceItemAttribute](#serviceitemattribute-structure)&gt; | attributes          |
 
 ### ServiceItemCatalog ([Structure])
 
-| Type                                                                    | Name      |
-| ----------------------------------------------------------------------- | --------- |
-| Uint32                                                                  | totalSize |
-| Uint32                                                                  | offset    |
-| [List]&#x3C;[ServiceItemListItem](#serviceitemlistitem-structure)&#x3E; | listItems |
+| Type                                                                | Name      |
+| ------------------------------------------------------------------- | --------- |
+| Uint32                                                              | totalSize |
+| Uint32                                                              | offset    |
+| [List]&lt;[ServiceItemListItem](#serviceitemlistitem-structure)&gt; | listItems |
 
 ### ServiceItemListServiceItemResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                  | Name            |
-| --------------------------------------------------------------------- | --------------- |
-| [List]&#x3C;[ServiceItemCatalog](#serviceitemcatalog-structure)&#x3E; | nullableCatalog |
+| Type                                                              | Name            |
+| ----------------------------------------------------------------- | --------------- |
+| [List]&lt;[ServiceItemCatalog](#serviceitemcatalog-structure)&gt; | nullableCatalog |
 
 ### ServiceItemGetBalanceParam ([Structure])
 
@@ -446,9 +446,9 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                | Name            |
-| ------------------------------------------------------------------- | --------------- |
-| [List]&#x3C;[ServiceItemAmount](#serviceitemamount-structure)&#x3E; | nullableBalance |
+| Type                                                            | Name            |
+| --------------------------------------------------------------- | --------------- |
+| [List]&lt;[ServiceItemAmount](#serviceitemamount-structure)&gt; | nullableBalance |
 
 ### ServiceItemGetPrepurchaseInfoParam ([Structure])
 
@@ -475,9 +475,9 @@ This method does not return anything
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                                  | Name                    |
-| ------------------------------------------------------------------------------------- | ----------------------- |
-| [List]&#x3C;[ServiceItemPrepurchaseInfo](#serviceitemprepurchaseinfo-structure)&#x3E; | nullablePrepurchaseInfo |
+| Type                                                                              | Name                    |
+| --------------------------------------------------------------------------------- | ----------------------- |
+| [List]&lt;[ServiceItemPrepurchaseInfo](#serviceitemprepurchaseinfo-structure)&gt; | nullablePrepurchaseInfo |
 
 ### ServiceItemGetServiceItemRightParam ([Structure])
 
@@ -495,24 +495,24 @@ This method does not return anything
 
 ### ServiceItemRightInfo ([Structure])
 
-| Type                                                                            | Name          |
-| ------------------------------------------------------------------------------- | ------------- |
-| [String]                                                                        | referenceId   |
-| [List]&#x3C;[ServiceItemAccountRight](#serviceitemaccountright-structure)&#x3E; | accountRights |
+| Type                                                                        | Name          |
+| --------------------------------------------------------------------------- | ------------- |
+| [String]                                                                    | referenceId   |
+| [List]&lt;[ServiceItemAccountRight](#serviceitemaccountright-structure)&gt; | accountRights |
 
 ### ServiceItemRightInfos ([Structure])
 
-| Type                                                                      | Name       |
-| ------------------------------------------------------------------------- | ---------- |
-| [List]&#x3C;[ServiceItemRightInfo](#serviceitemrightinfo-structure)&#x3E; | rightInfos |
+| Type                                                                  | Name       |
+| --------------------------------------------------------------------- | ---------- |
+| [List]&lt;[ServiceItemRightInfo](#serviceitemrightinfo-structure)&gt; | rightInfos |
 
 ### ServiceItemGetServiceItemRightResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                        | Name               |
-| --------------------------------------------------------------------------- | ------------------ |
-| [List]&#x3C;[ServiceItemRightInfos](#serviceitemrightinfos-structure)&#x3E; | nullableRightInfos |
+| Type                                                                    | Name               |
+| ----------------------------------------------------------------------- | ------------------ |
+| [List]&lt;[ServiceItemRightInfos](#serviceitemrightinfos-structure)&gt; | nullableRightInfos |
 
 ### ServiceItemGetPurchaseHistoryParam ([Structure])
 
@@ -539,19 +539,19 @@ This method does not return anything
 
 ### ServiceItemPurchaseHistory ([Structure])
 
-| Type                                                                          | Name         |
-| ----------------------------------------------------------------------------- | ------------ |
-| Uint32                                                                        | totalSize    |
-| Uint32                                                                        | offset       |
-| [List]&#x3C;[ServiceItemTransaction](#serviceitemtransaction-structure)&#x3E; | transactions |
+| Type                                                                      | Name         |
+| ------------------------------------------------------------------------- | ------------ |
+| Uint32                                                                    | totalSize    |
+| Uint32                                                                    | offset       |
+| [List]&lt;[ServiceItemTransaction](#serviceitemtransaction-structure)&gt; | transactions |
 
 ### ServiceItemGetPurchaseHistoryResponse ([Structure])
 > This structure [inherits](/docs/nex/types#structure-inheritance) from [ServiceItemEShopResponse](#serviceitemeshopresponse-structure)
 {: .prompt-info }
 
-| Type                                                                                  | Name                    |
-| ------------------------------------------------------------------------------------- | ----------------------- |
-| [List]&#x3C;[ServiceItemPurchaseHistory](#serviceitempurchasehistory-structure)&#x3E; | nullablePurchaseHistory |
+| Type                                                                              | Name                    |
+| --------------------------------------------------------------------------------- | ----------------------- |
+| [List]&lt;[ServiceItemPurchaseHistory](#serviceitempurchasehistory-structure)&gt; | nullablePurchaseHistory |
 
 ### ServiceItemGetNoticeParam ([Structure])
 

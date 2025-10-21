@@ -31,9 +31,9 @@ title: TrackingExtensionProtocol
 | Uint32 | usergroup |
 
 #### Response
-| Type                       | Name | Description |
-| -------------------------- | ---- | ----------- |
-| [List]&#x3C;[String]&#x3E; | tags |             |
+| Type                   | Name | Description |
+| ---------------------- | ---- | ----------- |
+| [List]&lt;[String]&gt; | tags |             |
 
 [String]: /docs/nex/types#string
 [List]: /docs/nex/types#list

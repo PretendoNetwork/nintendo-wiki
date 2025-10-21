@@ -15,36 +15,36 @@ title: ChallengeHelperProtocol
 ### (1) GenerateMyFriendChallenges
 #### Request
 
-| Type                    | Name       |
-| ----------------------- | ---------- |
-| [List]&#x3C;[PID]&#x3E; | friendPIDs |
+| Type                | Name       |
+| ------------------- | ---------- |
+| [List]&lt;[PID]&gt; | friendPIDs |
 
 #### Response
-| Type                                                            | Name   |
-| --------------------------------------------------------------- | ------ |
-| [List]&#x3C;[FriendChallenge](#friendchallenge-structure)&#x3E; | result |
+| Type                                                        | Name   |
+| ----------------------------------------------------------- | ------ |
+| [List]&lt;[FriendChallenge](#friendchallenge-structure)&gt; | result |
 
 ### (2) GenerateFriendChallenges
 #### Request
 
-| Type                    | Name       |
-| ----------------------- | ---------- |
-| [PID]                   | targetPID  |
-| [List]&#x3C;[PID]&#x3E; | friendPIDs |
+| Type                | Name       |
+| ------------------- | ---------- |
+| [PID]               | targetPID  |
+| [List]&lt;[PID]&gt; | friendPIDs |
 
 #### Response
-| Type                                                            | Name   |
-| --------------------------------------------------------------- | ------ |
-| [List]&#x3C;[FriendChallenge](#friendchallenge-structure)&#x3E; | result |
+| Type                                                        | Name   |
+| ----------------------------------------------------------- | ------ |
+| [List]&lt;[FriendChallenge](#friendchallenge-structure)&gt; | result |
 
 ### (3) GetOnlineChallenges
 #### Request
 This method does not take any parameters.
 
 #### Response
-| Type                                                            | Name             |
-| --------------------------------------------------------------- | ---------------- |
-| [List]&#x3C;[OnlineChallenge](#onlinechallenge-structure)&#x3E; | onlineChallenges |
+| Type                                                        | Name             |
+| ----------------------------------------------------------- | ---------------- |
+| [List]&lt;[OnlineChallenge](#onlinechallenge-structure)&gt; | onlineChallenges |
 
 ## Types
 
