@@ -37,7 +37,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 25  | [Account management](/docs/nex/protocols/account-management)                 | Yes                  |
 | 26  | Competition                                                                  | No                   |
 | 27  | [Message delivery](/docs/nex/protocols/message-delivery)                     | Yes                  |
-| 28  | Client settings                                                              | No                   |
+| 28  | [Client settings](/docs/nex/protocols/client-settings)                       | No                   |
 | 29  | [Ubi account management](/docs/nex/protocols/ubi-account-management)         | No                   |
 | 30  | Geo localization                                                             | No                   |
 | 31  | [News](/docs/nex/protocols/news)                                             | No                   |
