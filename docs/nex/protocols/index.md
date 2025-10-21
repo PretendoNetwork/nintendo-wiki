@@ -59,7 +59,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 51  | [Title storage](/docs/nex/protocols/title-storage)                           | No                   |
 | 53  | [User storage](/docs/nex/protocols/user-storage)                             | No                   |
 | 55  | [Player stats](/docs/nex/protocols/player-stats)                             | No                   |
-| 60  | Spark                                                                        | No                   |
+| 60  | [Spark](/docs/nex/protocols/spark)                                           | No                   |
 | 71  | [Offline game notifications](/docs/nex/protocols/offline-game-notifications) | No                   |
 | 72  | [User account management](/docs/nex/protocols/user-account-management)       | No                   |
 | 84  | Siege admin                                                                  | No                   |
