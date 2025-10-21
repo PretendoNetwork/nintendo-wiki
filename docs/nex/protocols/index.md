@@ -15,26 +15,61 @@ Each protocol is assigned a unique protocol ID, with multiple ranges of protocol
 | 200+  | Nintendo reserved | Nintendo appears to have added their own range of "reserved" protocol IDs on top of the developer range. This range seems to allow developers to add game-specific protocols on top of the common protocols provided by NEX. Similar conventions may exist in other titles, but this is not guaranteed. As a rule of thumb, all protocols with IDs 100+ should be assumed to be game-specific. |
 
 
-## Common Protocols
+## Core protocols
+Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games as they always use the original Quazal Rendez-Vous library.
 
-| ID  | Protocol                                                         |
-| --- | ---------------------------------------------------------------- |
-| 1   | [Remote log device](/docs/nex/protocols/remote-log-device)       |
-| 3   | [NAT traversal](/docs/nex/protocols/nat-traversal)               |
-| 10  | [Ticket granting](/docs/nex/protocols/authentication)            |
-| 11  | [Secure connection](/docs/nex/protocols/secure-connection)       |
-| 14  | [Notification events](/docs/nex/protocols/notifications)         |
-| 18  | [Health](/docs/nex/protocols/health)                             |
-| 19  | [Monitoring](/docs/nex/protocols/monitoring)                     |
-| 20  | [Friends](/docs/nex/protocols/friends)                           |
-| 21  | [Match making](/docs/nex/protocols/match-making)                 |
-| 23  | [Messaging](/docs/nex/protocols/messaging)                       |
-| 24  | [Persistent store](/docs/nex/protocols/persistent-store)         |
-| 25  | [Account management](/docs/nex/protocols/account-management)     |
-| 27  | [Message delivery](/docs/nex/protocols/message-delivery)         |
-| 50  | [Match making (extension)](/docs/nex/protocols/match-making-ext) |
+| ID  | Protocol                                                                     | Provided by Nintendo |
+| --- | ---------------------------------------------------------------------------- | Y------------------s |
+| 1   | [Remote log device](/docs/nex/protocols/remote-log-device)                   | Yes                  |
+| 3   | [NAT traversal](/docs/nex/protocols/nat-traversal)                           | Yes                  |
+| 10  | [Ticket granting](/docs/nex/protocols/authentication)                        | Yes                  |
+| 11  | [Secure connection](/docs/nex/protocols/secure-connection)                   | Yes                  |
+| 12  | Back end management                                                          | No                   |
+| 14  | [Notification events](/docs/nex/protocols/notifications)                     | Yes                  |
+| 16  | [Simple authentication](/docs/nex/protocols/simple-authentication)           | No                   |
+| 17  | Siege                                                                        | No                   |
+| 18  | [Health](/docs/nex/protocols/health)                                         | Yes                  |
+| 19  | [Monitoring](/docs/nex/protocols/monitoring)                                 | Yes                  |
+| 20  | [Friends](/docs/nex/protocols/friends)                                       | Yes                  |
+| 21  | [Match making](/docs/nex/protocols/match-making)                             | Yes                  |
+| 23  | [Messaging](/docs/nex/protocols/messaging)                                   | Yes                  |
+| 24  | [Persistent store](/docs/nex/protocols/persistent-store)                     | Yes                  |
+| 25  | [Account management](/docs/nex/protocols/account-management)                 | Yes                  |
+| 26  | Competition                                                                  | No                   |
+| 27  | [Message delivery](/docs/nex/protocols/message-delivery)                     | Yes                  |
+| 28  | Client settings                                                              | No                   |
+| 29  | [Ubi account management](/docs/nex/protocols/ubi-account-management)         | No                   |
+| 30  | Geo localization                                                             | No                   |
+| 31  | [News](/docs/nex/protocols/news)                                             | No                   |
+| 35  | [Privileges](/docs/nex/protocols/privileges)                                 | No                   |
+| 36  | [Tracking 3](/docs/nex/protocols/tracking-3)                                 | No                   |
+| 39  | [Localization](/docs/nex/protocols/localization)                             | No                   |
+| 42  | [Game session](/docs/nex/protocols/game-session)                             | No                   |
+| 44  | Sub account management                                                       | No                   |
+| 45  | IP to location                                                               | No                   |
+| 46  | IP to location admin                                                         | No                   |
+| 47  | Ubi friends                                                                  | No                   |
+| 48  | Skill rating                                                                 | No                   |
+| 49  | [Uplay win](/docs/nex/protocols/uplay-win)                                   | No                   |
+| 50  | [Match making (extension)](/docs/nex/protocols/match-making-ext)             | Yes                  |
+| 51  | [Title storage](/docs/nex/protocols/title-storage)                           | No                   |
+| 53  | [User storage](/docs/nex/protocols/user-storage)                             | No                   |
+| 55  | [Player stats](/docs/nex/protocols/player-stats)                             | No                   |
+| 60  | Spark                                                                        | No                   |
+| 71  | [Offline game notifications](/docs/nex/protocols/offline-game-notifications) | No                   |
+| 72  | [User account management](/docs/nex/protocols/user-account-management)       | No                   |
+| 84  | Siege admin                                                                  | No                   |
 
-## Nintendo Only
+# Unknown protocols
+These protocols do not have known protocol IDs, and as such we do not know whether they are game-specific or belong to the core protocols. Information about these protocols was obtained by scanning a games [DDL information](/docs/ddl).
+
+| ID  | Protocol                                                                   | Provided by Nintendo |
+| --- | -------------------------------------------------------------------------- | -------------------- |
+| ?   | [Web notifications storage](/docs/nex/protocols/web-notifications-storage) | No                   |
+| ?   | [Title storage admin](/docs/nex/protocols/title-storage-admin)             | No                   |
+| ?   | [User storage admin](/docs/nex/protocols/user-storage-admin)               | No                   |
+
+## Nintendo protocols
 
 | ID  | Protocol                                                                                        |
 | --- | ----------------------------------------------------------------------------------------------- |
@@ -63,42 +98,8 @@ Each protocol is assigned a unique protocol ID, with multiple ranges of protocol
 | 200 | Rayman Legends             | [OLS storage](/docs/nex/protocols/ols-storage) |
 | 201 | Super Smash Bros. Ultimate | [Tournament](/docs/nex/protocols/tournament)   |
 
-## Not provided by NEX
-Ubisoft games always use the original Quazal Rendez-Vous library instead of NEX. The following protocols are not implemented by NEX, but may seen in Ubisoft games:
-
-| ID  | Protocol                                                                     |
-| --- | ---------------------------------------------------------------------------- |
-| 12  | Back end management                                                          |
-| 16  | [Simple authentication](/docs/nex/protocols/simple-authentication)           |
-| 17  | Siege                                                                        |
-| 26  | Competition                                                                  |
-| 28  | Client settings                                                              |
-| 29  | [Ubi account management](/docs/nex/protocols/ubi-account-management)         |
-| 30  | Geo localization                                                             |
-| 31  | [News](/docs/nex/protocols/news)                                             |
-| 35  | [Privileges](/docs/nex/protocols/privileges)                                 |
-| 36  | [Tracking 3](/docs/nex/protocols/tracking-3)                                 |
-| 39  | [Localization](/docs/nex/protocols/localization)                             |
-| 42  | [Game session](/docs/nex/protocols/game-session)                             |
-| 44  | Sub account management                                                       |
-| 45  | IP to location                                                               |
-| 46  | IP to location admin                                                         |
-| 47  | Ubi friends                                                                  |
-| 48  | Skill rating                                                                 |
-| 49  | [Uplay win](/docs/nex/protocols/uplay-win)                                   |
-| 51  | [Title storage](/docs/nex/protocols/title-storage)                           |
-| 53  | [User storage](/docs/nex/protocols/user-storage)                             |
-| 55  | [Player stats](/docs/nex/protocols/player-stats)                             |
-| 60  | Spark                                                                        |
-| 71  | [Offline game notifications](/docs/nex/protocols/offline-game-notifications) |
-| 72  | [User account management](/docs/nex/protocols/user-account-management)       |
-| 84  | Siege admin                                                                  |
-| ?   | [Web notifications storage](/docs/nex/protocols/web-notifications-storage)   |
-| ?   | [Title storage admin](/docs/nex/protocols/title-storage-admin)               |
-| ?   | [User storage admin](/docs/nex/protocols/user-storage-admin)                 |
-
 ## Internal protocols
-These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [Debug](/docs/nex/protocols/debug) protocol. However some games implement subsets of these protocols
+These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [Debug](/docs/nex/protocols/debug) protocol. However some games implement subsets of these protocols.
 
 | ID  | Protocol                                                                        |
 | --- | ------------------------------------------------------------------------------- |
