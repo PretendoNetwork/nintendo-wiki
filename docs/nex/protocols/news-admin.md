@@ -244,9 +244,9 @@ This method does not return anything.
 ### (18) UpdateNewsFeedLink
 #### Request
 
-| Type         | Name         |
-| ------------ | ------------ |
-| NewsFeedLink | newsFeedLink |
+| Type                                    | Name         |
+| --------------------------------------- | ------------ |
+| [NewsFeedLink](#newsfeedlink-structure) | newsFeedLink |
 
 #### Response
 This method does not return anything.
