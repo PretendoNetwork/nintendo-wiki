@@ -28,7 +28,7 @@ title: LocalizationAdminProtocol (40)
 | ------------------------------------------------------------- | ------------------- |
 | [String]                                                      | localizationContext |
 | [String]                                                      | localizationName    |
-| [List]&gt;[TranslatedString](#translatedstring-structure)&lt; | translatedStrings   |
+| [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings   |
 
 ## Response
 
@@ -43,7 +43,7 @@ title: LocalizationAdminProtocol (40)
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |
 | uint32                                                        | localizedStringID |
-| [List]&gt;[TranslatedString](#translatedstring-structure)&lt; | translatedStrings |
+| [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings |
 
 ## Response
 This method does not return anything.
@@ -82,7 +82,7 @@ This method does not take any parameters.
 
 | Type                   | Name                 |
 | ---------------------- | -------------------- |
-| [List]&gt;[String]&lt; | localizationContexts |
+| [List]&lt;[String]&gt; | localizationContexts |
 
 # (6) GetTranslatedStrings
 
@@ -96,7 +96,7 @@ This method does not take any parameters.
 
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |
-| [List]&gt;[TranslatedString](#translatedstring-structure)&lt; | translatedStrings |
+| [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings |
 
 # (7) GetTranslatedString
 
@@ -131,7 +131,7 @@ This method does not return anything.
 
 | Type                   | Name                 |
 | ---------------------- | -------------------- |
-| [List]&gt;[String]&lt; | localizationContexts |
+| [List]&lt;[String]&gt; | localizationContexts |
 | char                   | delimiter            |
 
 ## Response
@@ -177,7 +177,7 @@ This method does not return anything.
 | ------------------------------------------------------------- | --------------------- |
 | [String]                                                      | m_localizationContext |
 | [String]                                                      | m_localizedStringName |
-| [List]&gt;[TranslatedString](#translatedstring-structure)&lt; | m_translatedStrings   |
+| [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | m_translatedStrings   |
 
 ## LocalizationArg ([Structure])
 
@@ -192,7 +192,7 @@ This method does not return anything.
 | ------------------------------------------------ | --------------------- |
 | [String]                                         | m_localizationContext |
 | [String]                                         | m_localizedStringName |
-| [List]&gt;[LocalizationArg](LocalizationArg)&lt; | m_arguments           |
+| [List]&lt;[LocalizationArg](LocalizationArg)&gt; | m_arguments           |
 
 [String]: /docs/nex/types#string
 [List]: /docs/nex/types#list

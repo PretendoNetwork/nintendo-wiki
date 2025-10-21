@@ -67,7 +67,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsChannelIDs |
+| [List]&lt;uint32&gt; | newsChannelIDs |
 
 ## Response
 This method does not return anything.
@@ -84,7 +84,7 @@ This method does not return anything.
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
-| [List]&gt;[NewsChannel](#newschannel-structure)&lt; | channels |
+| [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
 # (5) GetChannelsByTypes
 
@@ -92,14 +92,14 @@ This method does not return anything.
 
 | Type                 | Name             |
 | -------------------- | ---------------- |
-| [List]&gt;string&lt; | newsChannelTypes |
+| [List]&lt;string&gt; | newsChannelTypes |
 | ResultRange          | resultRange      |
 
 ## Response
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
-| [List]&gt;[NewsChannel](#newschannel-structure)&lt; | channels |
+| [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
 # (6) GetChannelsByIDs
 
@@ -107,13 +107,13 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsChannelIDs |
+| [List]&lt;uint32&gt; | newsChannelIDs |
 
 ## Response
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
-| [List]&gt;[NewsChannel](#newschannel-structure)&lt; | channels |
+| [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
 # (7) UpdateChannel
 
@@ -132,13 +132,13 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsChannelIDs |
+| [List]&lt;uint32&gt; | newsChannelIDs |
 
 ## Response
 
 | Type                                                  | Name          |
 | ----------------------------------------------------- | ------------- |
-| [List]&gt;[NewsFeedLink](#newsfeedlink-structure)&lt; | newsFeedLinks |
+| [List]&lt;[NewsFeedLink](#newsfeedlink-structure)&gt; | newsFeedLinks |
 
 # (9) GetNumberOfNewsFeedLinks
 
@@ -146,7 +146,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsChannelIDs |
+| [List]&lt;uint32&gt; | newsChannelIDs |
 
 ## Response
 
@@ -174,7 +174,7 @@ This method does not return anything.
 
 | Type                 | Name            |
 | -------------------- | --------------- |
-| [List]&gt;uint32&lt; | newsFeedLinkIDs |
+| [List]&lt;uint32&gt; | newsFeedLinkIDs |
 
 ## Response
 This method does not return anything.
@@ -185,7 +185,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsMessageIDs |
+| [List]&lt;uint32&gt; | newsMessageIDs |
 
 ## Response
 This method does not return anything.
@@ -214,7 +214,7 @@ This method does not return anything.
 
 | Type                     | Name        |
 | ------------------------ | ----------- |
-| [List]&gt;NewsHeader&lt; | newsHeaders |
+| [List]&lt;NewsHeader&gt; | newsHeaders |
 
 # (15) GetNewsMessages
 
@@ -222,13 +222,13 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&gt;uint32&lt; | newsMessageIDs |
+| [List]&lt;uint32&gt; | newsMessageIDs |
 
 ## Response
 
 | Type                      | Name         |
 | ------------------------- | ------------ |
-| [List]&gt;NewsMessage&lt; | newsMessages |
+| [List]&lt;NewsMessage&gt; | newsMessages |
 
 # (16) GetNumberOfNews
 
