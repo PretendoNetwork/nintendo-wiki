@@ -33,14 +33,14 @@ title: LocalizationAdminProtocol (40)
 
 | Type   | Name              |
 | ------ | ----------------- |
-| uint32 | localizedStringID |
+| Uint32 | localizedStringID |
 
 ### (2) UpdateLocalization
 #### Request
 
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |
-| uint32                                                        | localizedStringID |
+| Uint32                                                        | localizedStringID |
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings |
 
 #### Response
@@ -51,7 +51,7 @@ This method does not return anything.
 
 | Type   | Name              |
 | ------ | ----------------- |
-| uint32 | localizedStringID |
+| Uint32 | localizedStringID |
 
 #### Response
 This method does not return anything.
@@ -63,7 +63,7 @@ This method does not take any parameters.
 
 | Type   | Name                        |
 | ------ | --------------------------- |
-| uint32 | numberOfLocalizationContext |
+| Uint32 | numberOfLocalizationContext |
 
 ### (5) GetLocalizationContexts
 #### Request
@@ -83,7 +83,7 @@ This method does not take any parameters.
 
 | Type   | Name              |
 | ------ | ----------------- |
-| uint32 | localizedStringID |
+| Uint32 | localizedStringID |
 
 #### Response
 

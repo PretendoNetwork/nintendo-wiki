@@ -47,14 +47,14 @@ title: NewsProtocolAdmin (32)
 
 | Type   | Name          |
 | ------ | ------------- |
-| uint32 | newsChannelID |
+| Uint32 | newsChannelID |
 
 ### (2) DeleteChannel
 #### Request
 
 | Type   | Name          |
 | ------ | ------------- |
-| uint32 | newsChannelID |
+| Uint32 | newsChannelID |
 
 #### Response
 This method does not return anything.
@@ -64,7 +64,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsChannelIDs |
+| [List]&lt;Uint32&gt; | newsChannelIDs |
 
 #### Response
 This method does not return anything.
@@ -101,7 +101,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsChannelIDs |
+| [List]&lt;Uint32&gt; | newsChannelIDs |
 
 #### Response
 
@@ -124,7 +124,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsChannelIDs |
+| [List]&lt;Uint32&gt; | newsChannelIDs |
 
 #### Response
 
@@ -137,13 +137,13 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsChannelIDs |
+| [List]&lt;Uint32&gt; | newsChannelIDs |
 
 #### Response
 
 | Type   | Name                  |
 | ------ | --------------------- |
-| uint32 | numberOfNewsFeedLinks |
+| Uint32 | numberOfNewsFeedLinks |
 
 ### (10) LinkNewsFeed
 #### Request
@@ -156,14 +156,14 @@ This method does not return anything.
 
 | Type   | Name           |
 | ------ | -------------- |
-| uint32 | newsFeedLinkID |
+| Uint32 | newsFeedLinkID |
 
 ### (11) UnlinkNewsFeeds
 #### Request
 
 | Type                 | Name            |
 | -------------------- | --------------- |
-| [List]&lt;uint32&gt; | newsFeedLinkIDs |
+| [List]&lt;Uint32&gt; | newsFeedLinkIDs |
 
 #### Response
 This method does not return anything.
@@ -173,7 +173,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsMessageIDs |
+| [List]&lt;Uint32&gt; | newsMessageIDs |
 
 #### Response
 This method does not return anything.
@@ -207,7 +207,7 @@ This method does not return anything.
 
 | Type                 | Name           |
 | -------------------- | -------------- |
-| [List]&lt;uint32&gt; | newsMessageIDs |
+| [List]&lt;Uint32&gt; | newsMessageIDs |
 
 #### Response
 
@@ -226,7 +226,7 @@ This method does not return anything.
 
 | Type   | Name         |
 | ------ | ------------ |
-| uint32 | numberOfNews |
+| Uint32 | numberOfNews |
 
 ### (17) PublishNews
 #### Request
@@ -281,7 +281,7 @@ This method does not return anything.
 | Type     | Name           |
 | -------- | -------------- |
 | [String] | name           |
-| uint32   | feedTemplateID |
+| Uint32   | feedTemplateID |
 
 #### Response
 This method does not return anything.
@@ -342,8 +342,8 @@ This method does not take any parameters.
 ## NewsChannel ([Structure])
 | Type       | Name             |
 | ---------- | ---------------- |
-| uint32     | m_ID             |
-| uint32     | m_ownerPID       |
+| Uint32     | m_ID             |
+| Uint32     | m_ownerPID       |
 | [String]   | m_name           |
 | [String]   | m_description    |
 | [DateTime] | m_creationTime   |
@@ -355,10 +355,10 @@ This method does not take any parameters.
 ## NewsHeader ([Structure])
 | Type       | Name              |
 | ---------- | ----------------- |
-| uint32     | m_ID              |
-| uint32     | m_recipientID     |
-| uint32     | m_recipientType   |
-| uint32     | m_publisherPID    |
+| Uint32     | m_ID              |
+| Uint32     | m_recipientID     |
+| Uint32     | m_recipientType   |
+| Uint32     | m_publisherPID    |
 | [String]   | m_publisherName   |
 | [DateTime] | m_publicationTime |
 | [DateTime] | m_displayTime     |
@@ -377,25 +377,25 @@ This method does not take any parameters.
 ### NewsRecipient ([Structure])
 | Type   | Name            |
 | ------ | --------------- |
-| uint32 | m_recipientID   |
-| uint32 | m_recipientType |
+| Uint32 | m_recipientID   |
+| Uint32 | m_recipientType |
 
 ### NewsFeedLink ([Structure])
 | Type       | Name                             |
 | ---------- | -------------------------------- |
-| uint32     | m_ID                             |
-| uint32     | m_newsChannelID                  |
+| Uint32     | m_ID                             |
+| Uint32     | m_newsChannelID                  |
 | [String]   | m_URL                            |
 | [String]   | m_description                    |
 | [DateTime] | m_feedUpdatedParseTime           |
 | [DateTime] | m_lastUpdatedTime                |
 | [DateTime] | m_nextRefreshTime                |
-| uint32     | m_refreshElapsedTimeMilliseconds |
-| uint32     | m_refreshPeriodSeconds           |
+| Uint32     | m_refreshElapsedTimeMilliseconds |
+| Uint32     | m_refreshPeriodSeconds           |
 | bool       | m_refreshEnabled                 |
-| uint32     | m_refreshMethod                  |
+| Uint32     | m_refreshMethod                  |
 | [DateTime] | m_newestMessageTime              |
-| uint32     | m_messageAdded                   |
+| Uint32     | m_messageAdded                   |
 
 [String]: /docs/nex/types#string
 [List]: /docs/nex/types#list

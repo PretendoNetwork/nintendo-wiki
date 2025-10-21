@@ -17,7 +17,7 @@ This method does not take any parameters
 #### Response
 | Type                          | Name        |
 | ----------------------------- | ----------- |
-| [Map]&lt;[String], uint32&gt; | lstSettings |
+| [Map]&lt;[String], Uint32&gt; | lstSettings |
 
 [Map]: /docs/nex/types#map
 [String]: /docs/nex/types#string

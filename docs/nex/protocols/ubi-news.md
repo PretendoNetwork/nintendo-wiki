@@ -52,7 +52,7 @@ This method does not take any parameters.
 ### NewsChannel ([Structure])
 | Type       | Name             |
 | ---------- | ---------------- |
-| uint32     | m_ID             |
+| Uint32     | m_ID             |
 | [PID]      | m_ownerPID       |
 | [String]   | m_name           |
 | [String]   | m_description    |
@@ -65,9 +65,9 @@ This method does not take any parameters.
 ### NewsHeader ([Structure])
 | Type       | Name              |
 | ---------- | ----------------- |
-| uint32     | m_ID              |
+| Uint32     | m_ID              |
 | [PID]      | m_recipientID     |
-| uint32     | m_recipientType   |
+| Uint32     | m_recipientType   |
 | [PID]      | m_publisherPID    |
 | [String]   | m_publisherName   |
 | [DateTime] | m_publicationTime |

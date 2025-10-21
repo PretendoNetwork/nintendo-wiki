@@ -30,8 +30,8 @@ This method does not take any parameters
 | [String] | m_regionCode     |
 | [String] | m_regionName     |
 | [String] | m_cityName       |
-| float    | m_latitude       |
-| float    | m_longitude      |
+| Float    | m_latitude       |
+| Float    | m_longitude      |
 | Uint32   | m_countryGeoCode |
 | Uint32   | m_regionGeoCode  |
 | Uint32   | m_cityGeoCode    |

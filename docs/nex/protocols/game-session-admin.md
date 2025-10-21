@@ -44,7 +44,7 @@ This method does not take any parameters.
 
 | Type   | Name             |
 | ------ | ---------------- |
-| uint32 | nbOfAffectedRows |
+| Uint32 | nbOfAffectedRows |
 
 ### (4) CleanupOnBootURLs
 #### Request
@@ -53,7 +53,7 @@ This method does not take any parameters.
 
 | Type   | Name             |
 | ------ | ---------------- |
-| uint32 | nbOfAffectedRows |
+| Uint32 | nbOfAffectedRows |
 
 ### (5) GetURLs
 #### Request
@@ -74,7 +74,7 @@ This method does not take any parameters.
 | Type   | Name |
 | ------ | ---- |
 | [PID]  | pid  |
-| uint32 | did  |
+| Uint32 | did  |
 
 #### Response
 This method does not return anything.
@@ -84,8 +84,8 @@ This method does not return anything.
 
 | Type   | Name                 |
 | ------ | -------------------- |
-| uint32 | typeID               |
-| uint32 | throttlingPercentage |
+| Uint32 | typeID               |
+| Uint32 | throttlingPercentage |
 
 #### Response
 This method does not return anything.
@@ -95,8 +95,8 @@ This method does not return anything.
 
 | Type   | Name                   |
 | ------ | ---------------------- |
-| uint32 | typeID                 |
-| uint32 | throttlingDelaySeconds |
+| Uint32 | typeID                 |
+| Uint32 | throttlingDelaySeconds |
 
 #### Response
 This method does not return anything.

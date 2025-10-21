@@ -52,15 +52,15 @@ title: SkillRatingProtocol (48)
 #### Response
 | Type                     | Name           |
 | ------------------------ | -------------- |
-| [List]&#x3C;double&#x3E; | matchQualities |
+| [List]&#x3C;Double&#x3E; | matchQualities |
 
 ## Types
 
 ### SkillRating ([Structure])
 | Type   | Name                    |
 | ------ | ----------------------- |
-| double | m_mean                  |
-| double | m_standardDeviation     |
+| Double | m_mean                  |
+| Double | m_standardDeviation     |
 | Uint32 | m_normalizedSkillRating |
 
 ### PlayerSkillRating ([Structure])
