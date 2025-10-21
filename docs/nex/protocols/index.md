@@ -19,7 +19,7 @@ Each protocol is assigned a unique protocol ID, with multiple ranges of protocol
 Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games as they always use the original Quazal Rendez-Vous library.
 
 | ID  | Protocol                                                                     | Provided by Nintendo |
-| --- | ---------------------------------------------------------------------------- | Y------------------s |
+| --- | ---------------------------------------------------------------------------- | -------------------- |
 | 1   | [Remote log device](/docs/nex/protocols/remote-log-device)                   | Yes                  |
 | 3   | [NAT traversal](/docs/nex/protocols/nat-traversal)                           | Yes                  |
 | 10  | [Ticket granting](/docs/nex/protocols/authentication)                        | Yes                  |
@@ -41,6 +41,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 29  | [Ubi account management](/docs/nex/protocols/ubi-account-management)         | No                   |
 | 30  | Geo localization                                                             | No                   |
 | 31  | [News](/docs/nex/protocols/news)                                             | No                   |
+| 31  | [News admin](/docs/nex/protocols/news-admin)                                 | No                   |
 | 35  | [Privileges](/docs/nex/protocols/privileges)                                 | No                   |
 | 36  | [Tracking 3](/docs/nex/protocols/tracking-3)                                 | No                   |
 | 39  | [Localization](/docs/nex/protocols/localization)                             | No                   |
