@@ -52,7 +52,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in Ubisoft games
 | 44  | Sub account management                                                       | No                   |
 | 45  | [IP to location](/docs/nex/protocols/ip-2-location)                          | No                   |
 | 46  | [IP to location admin](/docs/nex/protocols/ip-2-location-admin)              | No                   |
-| 47  | Ubi friends                                                                  | No                   |
+| 47  | [Ubi friends](/docs/nex/protocols/ubi-friends)                               | No                   |
 | 48  | [Skill rating](/docs/nex/protocols/skill-rating)                             | No                   |
 | 49  | [Uplay win](/docs/nex/protocols/uplay-win)                                   | No                   |
 | 50  | [Match making (extension)](/docs/nex/protocols/match-making-ext)             | Yes                  |
