@@ -12,7 +12,7 @@ title: IP2LocationProtocol (45)
 
 ### (1) GetLocationFromIP
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 | Type                                | Name     |

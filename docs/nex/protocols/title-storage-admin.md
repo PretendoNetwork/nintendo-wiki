@@ -20,7 +20,7 @@ title: Title Storage Admin
 ### (1) GetContentTypesDescription
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
@@ -45,7 +45,7 @@ This method does not take any parameters
 ### (3) BrowseContents
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

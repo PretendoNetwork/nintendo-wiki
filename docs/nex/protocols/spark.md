@@ -53,7 +53,7 @@ title: SparkProtocol (60)
 | [String] | gameName |
 
 #### Response
-Unknown response format
+The response format of this method is unknown.
 
 ### (15) EndGame
 #### Request
@@ -81,7 +81,7 @@ Unknown request format
 | [String] | LbType |
 
 #### Response
-Unknown response format
+The response format of this method is unknown.
 
 ### (20) BrowseMatchesWithHostUrls
 #### Request
@@ -91,7 +91,7 @@ Unknown response format
 | [String] | hostUrls |
 
 #### Response
-Unknown response format
+The response format of this method is unknown.
 
 ### (21) QuickMatchWithHostUrls
 #### Request
@@ -101,6 +101,6 @@ Unknown response format
 | Uint32 | matchType |
 
 #### Response
-Unknown response format
+The response format of this method is unknown.
 
 [String]: /docs/nex/types#string

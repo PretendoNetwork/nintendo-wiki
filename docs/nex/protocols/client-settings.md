@@ -12,7 +12,7 @@ title: ClientSettingsProtocol (28)
 
 ### (1) GetAllClientSettings
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 | Type                          | Name        |

@@ -13,7 +13,7 @@ title: Monitoring (19)
 
 ### (1) PingDaemon
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

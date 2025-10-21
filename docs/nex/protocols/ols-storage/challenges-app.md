@@ -30,7 +30,7 @@ This page contains an early version of the [OLS Storage](/docs/nex/protocols/ols
 ### (1) LoadVersion
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
@@ -111,7 +111,7 @@ This method does not return anything
 ### (6) QueryUbisoftProfiles
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
@@ -135,7 +135,7 @@ This method does not return anything
 ### (8) QueryMessage
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
@@ -219,7 +219,7 @@ This method does not return anything
 ### (13) QueryCompetitionsInfos
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

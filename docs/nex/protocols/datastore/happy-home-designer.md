@@ -189,7 +189,7 @@ This method does not return anything.
 ### (57) GetContestEntryCount
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 

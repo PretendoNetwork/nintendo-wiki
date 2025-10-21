@@ -273,7 +273,7 @@ title: Wii Sports Club (119)
 ### (18) LoadUserInfo
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
