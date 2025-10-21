@@ -18,109 +18,97 @@ title: GameSessionAdminProtocol (43)
 | 8         | [SetThrottlingDelay](#8-setthrottlingdelay)             |
 | 9         | [GetSession](#9-getsession)                             |
 
-# (1) GetTableStatuses
-
-## Request
+### (1) GetTableStatuses
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type                                                                      | Name                     |
 | ------------------------------------------------------------------------- | ------------------------ |
 | [List]&lt;[GameSessionTableStatus](#gamesessiontablestatus-structure)&gt; | gameSessionTableStatuses |
 
-# (2) ForceCustomTableSync
-
-## Request
+### (2) ForceCustomTableSync
+#### Request
 
 | Type                                                                      | Name                    |
 | ------------------------------------------------------------------------- | ----------------------- |
 | [List]&lt;[GameSessionTableDetail](#gamesessiontabledetail-structure)&gt; | gameSessionTableDetails |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (3) CleanupOnBootSessions
-
-## Request
+### (3) CleanupOnBootSessions
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type   | Name             |
 | ------ | ---------------- |
 | uint32 | nbOfAffectedRows |
 
-# (4) CleanupOnBootURLs
-
-## Request
+### (4) CleanupOnBootURLs
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type   | Name             |
 | ------ | ---------------- |
 | uint32 | nbOfAffectedRows |
 
-# (5) GetURLs
-
-## Request
+### (5) GetURLs
+#### Request
 
 | Type  | Name |
 | ----- | ---- |
 | [PID] | pid  |
 
-## Response
+#### Response
 
 | Type                       | Name |
 | -------------------------- | ---- |
 | [List]&lt;[StationURL]&gt; | urls |
 
-# (6) UpdateURLsDID
-
-## Request
+### (6) UpdateURLsDID
+#### Request
 
 | Type   | Name |
 | ------ | ---- |
 | [PID]  | pid  |
 | uint32 | did  |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (7) SetThrottlingProbability
-
-## Request
+### (7) SetThrottlingProbability
+#### Request
 
 | Type   | Name                 |
 | ------ | -------------------- |
 | uint32 | typeID               |
 | uint32 | throttlingPercentage |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (8) SetThrottlingDelay
-
-## Request
+### (8) SetThrottlingDelay
+#### Request
 
 | Type   | Name                   |
 | ------ | ---------------------- |
 | uint32 | typeID                 |
 | uint32 | throttlingDelaySeconds |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (9) GetSession
-
-## Request
+### (9) GetSession
+#### Request
 
 | Type             | Name           |
 | ---------------- | -------------- |
 | [GameSessionKey] | gameSessionKey |
 
-## Response
+#### Response
 
 | Type                      | Name         |
 | ------------------------- | ------------ |

@@ -12,44 +12,41 @@ title: SkillRatingProtocol (48)
 | 2         | [UpdateSkillRating](#2-updateskillrating)         |
 | 3         | [CalculateMatchQuality](#3-calculatematchquality) |
 
-# (1) GetSkillRatings
-
-## Request
+### (1) GetSkillRatings
+#### Request
 | Type                     | Name         |
 | ------------------------ | ------------ |
 | Uint32                   | skillBoardID |
 | [List]&#x3C;Uint32&#x3E; | playerPIDs   |
 
-## Response
+#### Response
 | Type                                                                | Name               |
 | ------------------------------------------------------------------- | ------------------ |
 | [List]&#x3C;[PlayerSkillRating](#playerskillrating-structure)&#x3E; | playerSkillRatings |
 | [SkillRating](#skillrating-structure)                               | averageSkillRating |
 
-# (2) UpdateSkillRating
-
-## Request
+### (2) UpdateSkillRating
+#### Request
 | Type                                                            | Name             |
 | --------------------------------------------------------------- | ---------------- |
 | Uint32                                                          | skillBoardID     |
 | [List]&#x3C;[SkillRatingTeam](#skillratingteam-structure)&#x3E; | skillRatingTeams |
 | Uint32                                                          | matchID          |
 
-## Response
+#### Response
 | Type                                                                | Name               |
 | ------------------------------------------------------------------- | ------------------ |
 | [List]&#x3C;[PlayerSkillRating](#playerskillrating-structure)&#x3E; | playerSkillRatings |
 
-# (3) CalculateMatchQuality
-
-## Request
+### (3) CalculateMatchQuality
+#### Request
 | Type                                                    | Name                |
 | ------------------------------------------------------- | ------------------- |
 | Uint32                                                  | skillBoardID        |
 | [SkillRating](#skillrating-structure)                   | userSkillRating     |
 | [List]&#x3C;[SkillRating](#skillrating-structure)&#x3E; | sessionSkillRatings |
 
-## Response
+#### Response
 | Type                     | Name           |
 | ------------------------ | -------------- |
 | [List]&#x3C;double&#x3E; | matchQualities |

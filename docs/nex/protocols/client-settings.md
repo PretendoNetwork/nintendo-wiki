@@ -10,12 +10,10 @@ title: ClientSettingsProtocol (28)
 | --------- | ----------------------------------------------- |
 | 1         | [GetAllClientSettings](#1-getallclientsettings) |
 
-# (1) GetAllClientSettings
-
-## Request
+### (1) GetAllClientSettings
+#### Request
 This method does not take any parameters
-
-## Response
+#### Response
 | Type                          | Name        |
 | ----------------------------- | ----------- |
 | [Map]&lt;[String], uint32&gt; | lstSettings |

@@ -36,301 +36,272 @@ title: NewsProtocolAdmin (32)
 | 26        | [GetLocalDateTime](#26-getlocaldatetime)                           |
 | 27        | [GetSystemDateTime](#27-getsystemdatetime)                         |
 
-# (1) CreateChannel
-
-## Request
+### (1) CreateChannel
+#### Request
 
 | Type                                  | Name    |
 | ------------------------------------- | ------- |
 | [NewsChannel](#newschannel-structure) | channel |
 
-## Response
+#### Response
 
 | Type   | Name          |
 | ------ | ------------- |
 | uint32 | newsChannelID |
 
-# (2) DeleteChannel
-
-## Request
+### (2) DeleteChannel
+#### Request
 
 | Type   | Name          |
 | ------ | ------------- |
 | uint32 | newsChannelID |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (3) DeleteChannels
-
-## Request
+### (3) DeleteChannels
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsChannelIDs |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (4) GetChannels
-
-## Request
+### (4) GetChannels
+#### Request
 
 | Type        | Name        |
 | ----------- | ----------- |
 | ResultRange | resultRange |
 
-## Response
+#### Response
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
 | [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
-# (5) GetChannelsByTypes
-
-## Request
+### (5) GetChannelsByTypes
+#### Request
 
 | Type                 | Name             |
 | -------------------- | ---------------- |
 | [List]&lt;string&gt; | newsChannelTypes |
 | ResultRange          | resultRange      |
 
-## Response
+#### Response
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
 | [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
-# (6) GetChannelsByIDs
-
-## Request
+### (6) GetChannelsByIDs
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsChannelIDs |
 
-## Response
+#### Response
 
 | Type                                                | Name     |
 | --------------------------------------------------- | -------- |
 | [List]&lt;[NewsChannel](#newschannel-structure)&gt; | channels |
 
-# (7) UpdateChannel
-
-## Request
+### (7) UpdateChannel
+#### Request
 
 | Type                                  | Name    |
 | ------------------------------------- | ------- |
 | [NewsChannel](#newschannel-structure) | channel |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (8) GetNewsFeedLinks
-
-## Request
+### (8) GetNewsFeedLinks
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsChannelIDs |
 
-## Response
+#### Response
 
 | Type                                                  | Name          |
 | ----------------------------------------------------- | ------------- |
 | [List]&lt;[NewsFeedLink](#newsfeedlink-structure)&gt; | newsFeedLinks |
 
-# (9) GetNumberOfNewsFeedLinks
-
-## Request
+### (9) GetNumberOfNewsFeedLinks
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsChannelIDs |
 
-## Response
+#### Response
 
 | Type   | Name                  |
 | ------ | --------------------- |
 | uint32 | numberOfNewsFeedLinks |
 
-# (10) LinkNewsFeed
-
-## Request
+### (10) LinkNewsFeed
+#### Request
 
 | Type                                    | Name         |
 | --------------------------------------- | ------------ |
 | [NewsFeedLink](#newsfeedlink-structure) | newsFeedLink |
 
-## Response
+#### Response
 
 | Type   | Name           |
 | ------ | -------------- |
 | uint32 | newsFeedLinkID |
 
-# (11) UnlinkNewsFeeds
-
-## Request
+### (11) UnlinkNewsFeeds
+#### Request
 
 | Type                 | Name            |
 | -------------------- | --------------- |
 | [List]&lt;uint32&gt; | newsFeedLinkIDs |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (12) DeleteNewsMessages
-
-## Request
+### (12) DeleteNewsMessages
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsMessageIDs |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (13) DeleteNewsMessagesByRecipient
-
-## Request
+### (13) DeleteNewsMessagesByRecipient
+#### Request
 
 | Type                                      | Name      |
 | ----------------------------------------- | --------- |
 | [NewsRecipient](#newsrecipient-structure) | recipient |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (14) GetNewsHeaders
-
-## Request
+### (14) GetNewsHeaders
+#### Request
 
 | Type                                      | Name      |
 | ----------------------------------------- | --------- |
 | [NewsRecipient](#newsrecipient-structure) | recipient |
 | [ResultRange]                             | range     |
 
-## Response
+#### Response
 
 | Type                     | Name        |
 | ------------------------ | ----------- |
 | [List]&lt;NewsHeader&gt; | newsHeaders |
 
-# (15) GetNewsMessages
-
-## Request
+### (15) GetNewsMessages
+#### Request
 
 | Type                 | Name           |
 | -------------------- | -------------- |
 | [List]&lt;uint32&gt; | newsMessageIDs |
 
-## Response
+#### Response
 
 | Type                      | Name         |
 | ------------------------- | ------------ |
 | [List]&lt;NewsMessage&gt; | newsMessages |
 
-# (16) GetNumberOfNews
-
-## Request
+### (16) GetNumberOfNews
+#### Request
 
 | Type                                      | Name      |
 | ----------------------------------------- | --------- |
 | [NewsRecipient](#newsrecipient-structure) | recipient |
 
-## Response
+#### Response
 
 | Type   | Name         |
 | ------ | ------------ |
 | uint32 | numberOfNews |
 
-# (17) PublishNews
-
-## Request
+### (17) PublishNews
+#### Request
 
 | Type                                  | Name        |
 | ------------------------------------- | ----------- |
 | [NewsMessage](#newsmessage-structure) | newsMessage |
 
-## Response
+#### Response
 
 | Type                                  | Name                |
 | ------------------------------------- | ------------------- |
 | [NewsMessage](#newsmessage-structure) | modifiedNewsMessage |
 
-# (18) UpdateNewsFeedLink
-
-## Request
+### (18) UpdateNewsFeedLink
+#### Request
 
 | Type         | Name         |
 | ------------ | ------------ |
 | NewsFeedLink | newsFeedLink |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (19) SingleNewsFeedParsingJob
-
-## Request
+### (19) SingleNewsFeedParsingJob
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 This method does not return anything.
 
-# (20) MultipleNewsFeedParsingJob
-
-## Request
+### (20) MultipleNewsFeedParsingJob
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 This method does not return anything.
 
-# (21) NewsMessageCleaningJob
-
-## Request
+### (21) NewsMessageCleaningJob
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 This method does not return anything.
 
-# (22) NewsChannelCleaningJob
-
-## Request
+### (22) NewsChannelCleaningJob
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 This method does not return anything.
 
-# (23) CreateRSSFeed
-
-## Request
+### (23) CreateRSSFeed
+#### Request
 
 | Type     | Name           |
 | -------- | -------------- |
 | [String] | name           |
 | uint32   | feedTemplateID |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (24) GetDateTimeDelta
-
-## Request
+### (24) GetDateTimeDelta
+#### Request
 
 | Type       | Name |
 | ---------- | ---- |
 | [DateTime] | dt1  |
 | [DateTime] | dt2  |
 
-## Response
+#### Response
 
 | Type  | Name  |
 | ----- | ----- |
 | int64 | delta |
 
-# (25) AddDateTime
-
-## Request
+### (25) AddDateTime
+#### Request
 
 | Type       | Name    |
 | ---------- | ------- |
@@ -342,29 +313,25 @@ This method does not return anything.
 | int32      | minutes |
 | int32      | seconds |
 
-## Response
+#### Response
 
 | Type       | Name |
 | ---------- | ---- |
 | [DateTime] | dt2  |
 
-# (26) GetLocalDateTime
-
-## Request
+### (26) GetLocalDateTime
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type       | Name |
 | ---------- | ---- |
 | [DateTime] | dt   |
 
-# (27) GetSystemDateTime
-
-## Request
+### (27) GetSystemDateTime
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type       | Name |
 | ---------- | ---- |

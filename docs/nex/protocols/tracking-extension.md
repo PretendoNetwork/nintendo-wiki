@@ -11,26 +11,24 @@ title: TrackingExtensionProtocol
 | 1         | [GetTrackingUserGroup](#1-gettrackingusergroup)         |
 | 2         | [GetTrackingUserGroupTags](#2-gettrackingusergrouptags) |
 
-# (1) GetTrackingUserGroup
-
-## Request
+### (1) GetTrackingUserGroup
+#### Request
 | Type   | Name |
 | ------ | ---- |
 | Uint32 | pid  |
 
-## Response
+#### Response
 | Type   | Name      |
 | ------ | --------- |
 | Uint32 | usergroup |
 
-# (2) GetTrackingUserGroupTags
-
-## Request
+### (2) GetTrackingUserGroupTags
+#### Request
 | Type   | Name      |
 | ------ | --------- |
 | Uint32 | usergroup |
 
-## Response
+#### Response
 | Type                       | Name | Description |
 | -------------------------- | ---- | ----------- |
 | [List]&#x3C;[String]&#x3E; | tags |             |

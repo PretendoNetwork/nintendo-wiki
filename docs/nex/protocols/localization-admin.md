@@ -20,9 +20,8 @@ title: LocalizationAdminProtocol (40)
 | 10        | [DeleteAllLocalizationsInContext](#10-deletealllocalizationsincontext) |
 | 11        | [DeleteLocaleCodeForPID](#11-deletelocalecodeforpid)                   |
 
-# (1) CreateLocalization
-
-## Request
+### (1) CreateLocalization
+#### Request
 
 | Type                                                          | Name                |
 | ------------------------------------------------------------- | ------------------- |
@@ -30,136 +29,125 @@ title: LocalizationAdminProtocol (40)
 | [String]                                                      | localizationName    |
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings   |
 
-## Response
+#### Response
 
 | Type   | Name              |
 | ------ | ----------------- |
 | uint32 | localizedStringID |
 
-# (2) UpdateLocalization
-
-## Request
+### (2) UpdateLocalization
+#### Request
 
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |
 | uint32                                                        | localizedStringID |
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (3) DeleteLocalization
-
-## Request
+### (3) DeleteLocalization
+#### Request
 
 | Type   | Name              |
 | ------ | ----------------- |
 | uint32 | localizedStringID |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (4) GetNumberOfLocalizationContext
-
-## Request
+### (4) GetNumberOfLocalizationContext
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type   | Name                        |
 | ------ | --------------------------- |
 | uint32 | numberOfLocalizationContext |
 
-# (5) GetLocalizationContexts
-
-## Request
+### (5) GetLocalizationContexts
+#### Request
 
 | Type          | Name  |
 | ------------- | ----- |
 | [ResultRange] | range |
 
-## Response
+#### Response
 
 | Type                   | Name                 |
 | ---------------------- | -------------------- |
 | [List]&lt;[String]&gt; | localizationContexts |
 
-# (6) GetTranslatedStrings
-
-## Request
+### (6) GetTranslatedStrings
+#### Request
 
 | Type   | Name              |
 | ------ | ----------------- |
 | uint32 | localizedStringID |
 
-## Response
+#### Response
 
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | translatedStrings |
 
-# (7) GetTranslatedString
-
-## Request
+### (7) GetTranslatedString
+#### Request
 
 | Type                                                  | Name                |
 | ----------------------------------------------------- | ------------------- |
 | [LocalizationArgList](#localizationarglist-structure) | localizationArgList |
 | [String]                                              | localeCode          |
 
-## Response
+#### Response
 
 | Type                                            | Name             |
 | ----------------------------------------------- | ---------------- |
 | [TranslatedString](#translatedstring-structure) | translatedString |
 
-# (8) LoadLocalizationFile
-
-## Request
+### (8) LoadLocalizationFile
+#### Request
 
 | Type     | Name                    |
 | -------- | ----------------------- |
 | [String] | localizationFileContent |
 | bool     | onDuplicateKeyUpdate    |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (9) GetLocalizationFileContent
-
-## Request
+### (9) GetLocalizationFileContent
+#### Request
 
 | Type                   | Name                 |
 | ---------------------- | -------------------- |
 | [List]&lt;[String]&gt; | localizationContexts |
 | char                   | delimiter            |
 
-## Response
+#### Response
 
 | Type     | Name                    |
 | -------- | ----------------------- |
 | [String] | localizationFileContent |
 
-# (10) DeleteAllLocalizationsInContext
-
-## Request
+### (10) DeleteAllLocalizationsInContext
+#### Request
 
 | Type     | Name                |
 | -------- | ------------------- |
 | [String] | localizationContext |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (11) DeleteLocaleCodeForPID
-
-## Request
+### (11) DeleteLocaleCodeForPID
+#### Request
 
 | Type  | Name |
 | ----- | ---- |
 | [PID] | pid  |
 
-## Response
+#### Response
 This method does not return anything.
 
 # Types

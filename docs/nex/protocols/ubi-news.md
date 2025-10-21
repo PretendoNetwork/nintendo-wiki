@@ -12,40 +12,36 @@ title: UbiNewsProtocol (33)
 | 2         | [GetNewsHeaders](#2-getnewsheaders)   |
 | 3         | [GetNewsMessages](#3-getnewsmessages) |
 
-# (1) GetChannel
-
-## Request
+### (1) GetChannel
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type                                  | Name        |
 | ------------------------------------- | ----------- |
 | [NewsChannel](#newschannel-structure) | newsChannel |
 
-# (2) GetNewsHeaders
-
-## Request
+### (2) GetNewsHeaders
+#### Request
 
 | Type          | Name  |
 | ------------- | ----- |
 | [ResultRange] | range |
 
-## Response
+#### Response
 
 | Type                                              | Name        |
 | ------------------------------------------------- | ----------- |
 | [List]&lt;[NewsHeader](#newsheader-structure)&gt; | newsHeaders |
 
-# (3) GetNewsMessages
-
-## Request
+### (3) GetNewsMessages
+#### Request
 
 | Type          | Name  |
 | ------------- | ----- |
 | [ResultRange] | range |
 
-## Response
+#### Response
 
 | Type                                                | Name         |
 | --------------------------------------------------- | ------------ |

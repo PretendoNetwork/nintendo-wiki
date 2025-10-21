@@ -16,78 +16,70 @@ title: UbiFriendsProtocol (47)
 | 6         | [RemoveFromBlacklist](#6-removefromblacklist)   |
 | 7         | [GetRelationshipsList](#7-getrelationshipslist) |
 
-# (1) RequestFriendship
-
-## Request
-
-| Type                                  | Name |
-| ------------------------------------- | ---- |
-| [AccountInfo](#accountinfo-structure) | to   |
-
-## Response
-This method does not return anything.
-
-# (2) AcceptFriendship
-
-## Request
+### (1) RequestFriendship
+#### Request
 
 | Type                                  | Name |
 | ------------------------------------- | ---- |
 | [AccountInfo](#accountinfo-structure) | to   |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (3) ClearRelationship
-
-## Request
+### (2) AcceptFriendship
+#### Request
 
 | Type                                  | Name |
 | ------------------------------------- | ---- |
 | [AccountInfo](#accountinfo-structure) | to   |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (4) DeclineFriendship
-
-## Request
+### (3) ClearRelationship
+#### Request
 
 | Type                                  | Name |
 | ------------------------------------- | ---- |
 | [AccountInfo](#accountinfo-structure) | to   |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (5) AddToBlacklist
-
-## Request
+### (4) DeclineFriendship
+#### Request
 
 | Type                                  | Name |
 | ------------------------------------- | ---- |
 | [AccountInfo](#accountinfo-structure) | to   |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (6) RemoveFromBlacklist
-
-## Request
+### (5) AddToBlacklist
+#### Request
 
 | Type                                  | Name |
 | ------------------------------------- | ---- |
 | [AccountInfo](#accountinfo-structure) | to   |
 
-## Response
+#### Response
 This method does not return anything.
 
-# (7) GetRelationshipsList
+### (6) RemoveFromBlacklist
+#### Request
 
-## Request
+| Type                                  | Name |
+| ------------------------------------- | ---- |
+| [AccountInfo](#accountinfo-structure) | to   |
+
+#### Response
+This method does not return anything.
+
+### (7) GetRelationshipsList
+#### Request
 This method does not take any parameters.
-
-## Response
+#### Response
 
 | Type                                                          | Name              |
 | ------------------------------------------------------------- | ----------------- |

@@ -10,14 +10,13 @@ title: GameSessionExProtocol
 | --------- | ----------------------------------- |
 | 1         | [SearchSessions](#1-searchsessions) |
 
-# (1) SearchSessions
-
-## Request
+### (1) SearchSessions
+#### Request
 | Type             | Name             |
 | ---------------- | ---------------- |
 | GameSessionQuery | gameSessionQuery |
 
-## Response
+#### Response
 | Type                                                                                | Name          |
 | ----------------------------------------------------------------------------------- | ------------- |
 | [List]&#x3C;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&#x3E; | searchResults |

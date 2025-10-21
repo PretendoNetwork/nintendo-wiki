@@ -10,12 +10,10 @@ title: IP2LocationProtocol (45)
 | --------- | ----------------------------------------- |
 | 1         | [GetLocationFromIP](#1-getlocationfromip) |
 
-# (1) GetLocationFromIP
-
-## Request
+### (1) GetLocationFromIP
+#### Request
 This method does not take any parameters
-
-## Response
+#### Response
 | Type                                | Name     |
 | ----------------------------------- | -------- |
 | [IPLocation](#iplocation-structure) | location |

@@ -10,14 +10,13 @@ title: IP2LocationProtocolAdmin (46)
 | --------- | ----------------------------------------- |
 | 1         | [GetLocationFromIP](#1-getlocationfromip) |
 
-# (1) GetLocationFromIP
-
-## Request
+### (1) GetLocationFromIP
+#### Request
 | Type     | Name |
 | -------- | ---- |
 | [String] | ip   |
 
-## Response
+#### Response
 | Type                                | Name     |
 | ----------------------------------- | -------- |
 | [IPLocation](#iplocation-structure) | location |

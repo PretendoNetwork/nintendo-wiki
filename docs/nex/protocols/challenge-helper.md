@@ -12,37 +12,33 @@ title: ChallengeHelperProtocol
 | 2         | [GenerateFriendChallenges](#2-generatefriendchallenges)     |
 | 3         | [GetOnlineChallenges](#3-getonlinechallenges)               |
 
-# (1) GenerateMyFriendChallenges
-
-## Request
+### (1) GenerateMyFriendChallenges
+#### Request
 | Type                     | Name       |
 | ------------------------ | ---------- |
 | [List]&#x3C;Uint32&#x3E; | friendPIDs |
 
-## Response
+#### Response
 | Type                                                            | Name   |
 | --------------------------------------------------------------- | ------ |
 | [List]&#x3C;[FriendChallenge](#friendchallenge-structure)&#x3E; | result |
 
-# (2) GenerateFriendChallenges
-
-## Request
+### (2) GenerateFriendChallenges
+#### Request
 | Type                     | Name       |
 | ------------------------ | ---------- |
 | Uint32                   | targetPID  |
 | [List]&#x3C;Uint32&#x3E; | friendPIDs |
 
-## Response
+#### Response
 | Type                                                            | Name   |
 | --------------------------------------------------------------- | ------ |
 | [List]&#x3C;[FriendChallenge](#friendchallenge-structure)&#x3E; | result |
 
-# (3) GetOnlineChallenges
-
-## Request
+### (3) GetOnlineChallenges
+#### Request
 This method does not take any parameters
-
-## Response
+#### Response
 | Type                                                            | Name             |
 | --------------------------------------------------------------- | ---------------- |
 | [List]&#x3C;[OnlineChallenge](#onlinechallenge-structure)&#x3E; | onlineChallenges |
