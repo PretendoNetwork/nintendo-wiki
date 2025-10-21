@@ -85,17 +85,15 @@ This method does not take any parameters.
 | ------------------------------------------------------------- | ----------------- |
 | [List]&lt;[RelationshipInfo](#relationshipinfo-structure)&gt; | relationshipsList |
 
-# Types
+## Types
 
-## AccountInfo ([Structure])
-
+### AccountInfo ([Structure])
 | Type     | Name           |
 | -------- | -------------- |
 | [PID]    | m_principalId  |
 | [String] | m_ubiAccountId |
 
-## RelationshipInfo ([Structure])
-
+### RelationshipInfo ([Structure])
 | Type                                  | Name           |
 | ------------------------------------- | -------------- |
 | [AccountInfo](#accountinfo-structure) | m_from         |

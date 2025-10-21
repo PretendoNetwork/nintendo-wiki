@@ -47,10 +47,9 @@ This method does not take any parameters.
 | --------------------------------------------------- | ------------ |
 | [List]&lt;[NewsMessage](#newsmessage-structure)&gt; | newsMessages |
 
-# Types
+## Types
 
-## NewsChannel ([Structure])
-
+### NewsChannel ([Structure])
 | Type       | Name             |
 | ---------- | ---------------- |
 | uint32     | m_ID             |
@@ -63,8 +62,7 @@ This method does not take any parameters.
 | [String]   | m_locale         |
 | bool       | m_subscribable   |
 
-## NewsHeader ([Structure])
-
+### NewsHeader ([Structure])
 | Type       | Name              |
 | ---------- | ----------------- |
 | uint32     | m_ID              |
@@ -78,8 +76,9 @@ This method does not take any parameters.
 | [String]   | m_title           |
 | [String]   | m_link            |
 
-## NewsMessage ([Structure])
-Extends `NewsHeader`.
+### NewsMessage ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [NewsHeader](#newsheader-structure)
+{: .prompt-info }
 
 | Type     | Name   |
 | -------- | ------ |

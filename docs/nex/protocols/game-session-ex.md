@@ -21,10 +21,11 @@ title: GameSessionExProtocol
 | ----------------------------------------------------------------------------------- | ------------- |
 | [List]&#x3C;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&#x3E; | searchResults |
 
-# Types
+## Types
 
-## GameSessionSearchResultEx ([Structure])
-> This structure inherits from GameSessionSearchResult
+### GameSessionSearchResultEx ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [GameSessionSearchResult]
+{: .prompt-info }
 
 | Type                                     | Name           |
 | ---------------------------------------- | -------------- |
@@ -32,3 +33,4 @@ title: GameSessionExProtocol
 
 [Structure]: /docs/nex/types#structure
 [List]: /docs/nex/types#list
+[GameSessionSearchResult]: /docs/nex/protocols/game-session#gamesessionsearchresult-structure

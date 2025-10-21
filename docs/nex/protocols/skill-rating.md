@@ -51,30 +51,30 @@ title: SkillRatingProtocol (48)
 | ------------------------ | -------------- |
 | [List]&#x3C;double&#x3E; | matchQualities |
 
-# Types
+## Types
 
-## SkillRating ([Structure])
+### SkillRating ([Structure])
 | Type   | Name                    |
 | ------ | ----------------------- |
 | double | m_mean                  |
 | double | m_standardDeviation     |
 | Uint32 | m_normalizedSkillRating |
 
-## PlayerSkillRating ([Structure])
+### PlayerSkillRating ([Structure])
 | Type                                  | Name          |
 | ------------------------------------- | ------------- |
 | Uint32                                | m_playerPID   |
 | [SkillRating](#skillrating-structure) | m_skillRating |
 | Uint32                                | m_matchCount  |
 
-## SkillRatingTeamParticipant ([Structure])
+### SkillRatingTeamParticipant ([Structure])
 | Type   | Name                      |
 | ------ | ------------------------- |
 | Uint32 | m_playerPID               |
 | Uint32 | m_partialPlayPercentage   |
 | Uint32 | m_partialUpdatePercentage |
 
-## SkillRatingTeam ([Structure])
+### SkillRatingTeam ([Structure])
 | Type                                                                                  | Name           |
 | ------------------------------------------------------------------------------------- | -------------- |
 | [List]&#x3C;[SkillRatingTeamParticipant](#skillratingteamparticipant-structure)&#x3E; | m_participants |

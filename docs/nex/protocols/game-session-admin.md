@@ -114,18 +114,16 @@ This method does not return anything.
 | ------------------------- | ------------ |
 | [GameSessionSearchResult] | searchResult |
 
-# Types
+## Types
 
-## GameSessionTableStatus ([Structure])
-
+### GameSessionTableStatus ([Structure])
 | Type       | Name           |
 | ---------- | -------------- |
 | [String]   | m_tableName    |
 | [String]   | m_engine       |
 | [DateTime] | m_creationTime |
 
-## GameSessionTableDetail ([Structure])
-
+### GameSessionTableDetail ([Structure])
 | Type     | Name               |
 | -------- | ------------------ |
 | [String] | m_tableName        |

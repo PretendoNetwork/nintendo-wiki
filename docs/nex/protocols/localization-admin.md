@@ -150,32 +150,28 @@ This method does not return anything.
 #### Response
 This method does not return anything.
 
-# Types
+## Types
 
-## TranslatedString ([Structure])
-
+### TranslatedString ([Structure])
 | Type     | Name          |
 | -------- | ------------- |
 | [String] | m_localeCode  |
 | [String] | m_translation |
 
-## LocalizedString ([Structure])
-
+### LocalizedString ([Structure])
 | Type                                                          | Name                  |
 | ------------------------------------------------------------- | --------------------- |
 | [String]                                                      | m_localizationContext |
 | [String]                                                      | m_localizedStringName |
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | m_translatedStrings   |
 
-## LocalizationArg ([Structure])
-
+### LocalizationArg ([Structure])
 | Type     | Name    |
 | -------- | ------- |
 | [String] | m_key   |
 | [String] | m_value |
 
-## LocalizationArgList ([Structure])
-
+### LocalizationArgList ([Structure])
 | Type                                             | Name                  |
 | ------------------------------------------------ | --------------------- |
 | [String]                                         | m_localizationContext |

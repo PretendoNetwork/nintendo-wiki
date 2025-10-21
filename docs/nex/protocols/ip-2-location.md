@@ -13,14 +13,15 @@ title: IP2LocationProtocol (45)
 ### (1) GetLocationFromIP
 #### Request
 This method does not take any parameters
+
 #### Response
 | Type                                | Name     |
 | ----------------------------------- | -------- |
 | [IPLocation](#iplocation-structure) | location |
 
-# Types
+## Types
 
-## IPLocation ([Structure])
+### IPLocation ([Structure])
 | Type     | Name             |
 | -------- | ---------------- |
 | Uint32   | m_ipStart        |

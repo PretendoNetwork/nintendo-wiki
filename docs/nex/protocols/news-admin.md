@@ -337,10 +337,9 @@ This method does not take any parameters.
 | ---------- | ---- |
 | [DateTime] | dt   |
 
-# Types
+## Types
 
 ## NewsChannel ([Structure])
-
 | Type       | Name             |
 | ---------- | ---------------- |
 | uint32     | m_ID             |
@@ -354,7 +353,6 @@ This method does not take any parameters.
 | bool       | m_subscribable   |
 
 ## NewsHeader ([Structure])
-
 | Type       | Name              |
 | ---------- | ----------------- |
 | uint32     | m_ID              |
@@ -368,22 +366,21 @@ This method does not take any parameters.
 | [String]   | m_title           |
 | [String]   | m_link            |
 
-## NewsMessage ([Structure])
-Extends `NewsHeader`.
+### NewsMessage ([Structure])
+> This structure [inherits](/docs/nex/types#structure-inheritance) from [NewsHeader](#newsheader-structure)
+{: .prompt-info }
 
 | Type     | Name   |
 | -------- | ------ |
 | [String] | m_body |
 
-## NewsRecipient ([Structure])
-
+### NewsRecipient ([Structure])
 | Type   | Name            |
 | ------ | --------------- |
 | uint32 | m_recipientID   |
 | uint32 | m_recipientType |
 
-## NewsFeedLink ([Structure])
-
+### NewsFeedLink ([Structure])
 | Type       | Name                             |
 | ---------- | -------------------------------- |
 | uint32     | m_ID                             |

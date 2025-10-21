@@ -38,14 +38,15 @@ title: ChallengeHelperProtocol
 ### (3) GetOnlineChallenges
 #### Request
 This method does not take any parameters
+
 #### Response
 | Type                                                            | Name             |
 | --------------------------------------------------------------- | ---------------- |
 | [List]&#x3C;[OnlineChallenge](#onlinechallenge-structure)&#x3E; | onlineChallenges |
 
-# Types
+## Types
 
-## FriendChallenge ([Structure])
+### FriendChallenge ([Structure])
 | Type   | Name              |
 | ------ | ----------------- |
 | Uint32 | m_ChallengeType   |
@@ -54,7 +55,7 @@ This method does not take any parameters
 | Uint32 | m_ValueOnHand     |
 | Uint32 | m_ValueToBeat     |
 
-## OnlineChallenge ([Structure])
+### OnlineChallenge ([Structure])
 | Type       | Name          |
 | ---------- | ------------- |
 | Uint32     | m_ChallengeID |
