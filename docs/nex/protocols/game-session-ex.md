@@ -1,0 +1,35 @@
+---
+layout: post
+toc: true
+title: GameSessionExProtocol
+---
+
+## Methods
+
+| Method ID | Method Name                         |
+| --------- | ----------------------------------- |
+| 1         | [SearchSessions](#1-searchsessions) |
+
+# (1) SearchSessions
+
+## Request
+| Type             | Name             |
+| ---------------- | ---------------- |
+| GameSessionQuery | gameSessionQuery |
+
+## Response
+| Type                                                                                | Name          |
+| ----------------------------------------------------------------------------------- | ------------- |
+| [List]&#x3C;[GameSessionSearchResultEx](#gamesessionsearchresultex-structure)&#x3E; | searchResults |
+
+# Types
+
+## GameSessionSearchResultEx ([Structure])
+> This structure inherits from GameSessionSearchResult
+
+| Type                                     | Name           |
+| ---------------------------------------- | -------------- |
+| [List]&#x3C;GameSessionParticipant&#x3E; | m_participants |
+
+[Structure]: /docs/nex/types#structure
+[List]: /docs/nex/types#list
