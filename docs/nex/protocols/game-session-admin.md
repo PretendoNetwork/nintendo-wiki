@@ -21,6 +21,7 @@ title: GameSessionAdminProtocol (43)
 ### (1) GetTableStatuses
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type                                                                      | Name                     |
@@ -40,6 +41,7 @@ This method does not return anything.
 ### (3) CleanupOnBootSessions
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type   | Name             |
@@ -49,6 +51,7 @@ This method does not take any parameters.
 ### (4) CleanupOnBootURLs
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type   | Name             |
@@ -117,6 +120,7 @@ This method does not return anything.
 ## Types
 
 ### GameSessionTableStatus ([Structure])
+
 | Type       | Name           |
 | ---------- | -------------- |
 | [String]   | m_tableName    |
@@ -124,6 +128,7 @@ This method does not return anything.
 | [DateTime] | m_creationTime |
 
 ### GameSessionTableDetail ([Structure])
+
 | Type     | Name               |
 | -------- | ------------------ |
 | [String] | m_tableName        |

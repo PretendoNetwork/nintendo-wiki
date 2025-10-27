@@ -52,6 +52,7 @@ This method does not take any parameters.
 ## Types
 
 ### FriendChallenge ([Structure])
+
 | Type   | Name              |
 | ------ | ----------------- |
 | Uint32 | m_ChallengeType   |
@@ -61,6 +62,7 @@ This method does not take any parameters.
 | Uint32 | m_ValueToBeat     |
 
 ### OnlineChallenge ([Structure])
+
 | Type       | Name          |
 | ---------- | ------------- |
 | Uint32     | m_ChallengeID |

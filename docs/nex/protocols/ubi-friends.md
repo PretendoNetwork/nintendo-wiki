@@ -79,6 +79,7 @@ This method does not return anything.
 ### (7) GetRelationshipsList
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type                                                          | Name              |
@@ -88,12 +89,14 @@ This method does not take any parameters.
 ## Types
 
 ### AccountInfo ([Structure])
+
 | Type     | Name           |
 | -------- | -------------- |
 | [PID]    | m_principalId  |
 | [String] | m_ubiAccountId |
 
 ### RelationshipInfo ([Structure])
+
 | Type                                  | Name           |
 | ------------------------------------- | -------------- |
 | [AccountInfo](#accountinfo-structure) | m_from         |

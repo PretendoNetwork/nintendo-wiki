@@ -244,8 +244,8 @@ This method does not return anything.
 ### (18) UpdateNewsFeedLink
 #### Request
 
-| Type         | Name         |
-| ------------ | ------------ |
+| Type                                    | Name         |
+| --------------------------------------- | ------------ |
 | [NewsFeedLink](#newsfeedlink-structure) | newsFeedLink |
 
 #### Response
@@ -254,24 +254,28 @@ This method does not return anything.
 ### (19) SingleNewsFeedParsingJob
 #### Request
 This method does not take any parameters.
+
 #### Response
 This method does not return anything.
 
 ### (20) MultipleNewsFeedParsingJob
 #### Request
 This method does not take any parameters.
+
 #### Response
 This method does not return anything.
 
 ### (21) NewsMessageCleaningJob
 #### Request
 This method does not take any parameters.
+
 #### Response
 This method does not return anything.
 
 ### (22) NewsChannelCleaningJob
 #### Request
 This method does not take any parameters.
+
 #### Response
 This method does not return anything.
 
@@ -322,6 +326,7 @@ This method does not return anything.
 ### (26) GetLocalDateTime
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type       | Name |
@@ -331,6 +336,7 @@ This method does not take any parameters.
 ### (27) GetSystemDateTime
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type       | Name |
@@ -340,6 +346,7 @@ This method does not take any parameters.
 ## Types
 
 ## NewsChannel ([Structure])
+
 | Type       | Name             |
 | ---------- | ---------------- |
 | Uint32     | m_ID             |
@@ -353,6 +360,7 @@ This method does not take any parameters.
 | bool       | m_subscribable   |
 
 ## NewsHeader ([Structure])
+
 | Type       | Name              |
 | ---------- | ----------------- |
 | Uint32     | m_ID              |
@@ -375,12 +383,14 @@ This method does not take any parameters.
 | [String] | m_body |
 
 ### NewsRecipient ([Structure])
+
 | Type   | Name            |
 | ------ | --------------- |
 | Uint32 | m_recipientID   |
 | Uint32 | m_recipientType |
 
 ### NewsFeedLink ([Structure])
+
 | Type       | Name                             |
 | ---------- | -------------------------------- |
 | Uint32     | m_ID                             |

@@ -26,6 +26,7 @@ title: IP2LocationProtocolAdmin (46)
 ## Types
 
 ### IPLocation ([Structure])
+
 | Type     | Name             |
 | -------- | ---------------- |
 | Uint32   | m_ipStart        |

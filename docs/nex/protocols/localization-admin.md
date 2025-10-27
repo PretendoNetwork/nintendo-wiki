@@ -59,6 +59,7 @@ This method does not return anything.
 ### (4) GetNumberOfLocalizationContext
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type   | Name                        |
@@ -153,12 +154,14 @@ This method does not return anything.
 ## Types
 
 ### TranslatedString ([Structure])
+
 | Type     | Name          |
 | -------- | ------------- |
 | [String] | m_localeCode  |
 | [String] | m_translation |
 
 ### LocalizedString ([Structure])
+
 | Type                                                          | Name                  |
 | ------------------------------------------------------------- | --------------------- |
 | [String]                                                      | m_localizationContext |
@@ -166,12 +169,14 @@ This method does not return anything.
 | [List]&lt;[TranslatedString](#translatedstring-structure)&gt; | m_translatedStrings   |
 
 ### LocalizationArg ([Structure])
+
 | Type     | Name    |
 | -------- | ------- |
 | [String] | m_key   |
 | [String] | m_value |
 
 ### LocalizationArgList ([Structure])
+
 | Type                                             | Name                  |
 | ------------------------------------------------ | --------------------- |
 | [String]                                         | m_localizationContext |

@@ -23,6 +23,7 @@ This method does not take any parameters.
 ## Types
 
 ### IPLocation ([Structure])
+
 | Type     | Name             |
 | -------- | ---------------- |
 | Uint32   | m_ipStart        |

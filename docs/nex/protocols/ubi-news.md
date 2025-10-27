@@ -15,6 +15,7 @@ title: UbiNewsProtocol (33)
 ### (1) GetChannel
 #### Request
 This method does not take any parameters.
+
 #### Response
 
 | Type                                  | Name        |
@@ -50,6 +51,7 @@ This method does not take any parameters.
 ## Types
 
 ### NewsChannel ([Structure])
+
 | Type       | Name             |
 | ---------- | ---------------- |
 | Uint32     | m_ID             |
@@ -63,6 +65,7 @@ This method does not take any parameters.
 | bool       | m_subscribable   |
 
 ### NewsHeader ([Structure])
+
 | Type       | Name              |
 | ---------- | ----------------- |
 | Uint32     | m_ID              |
