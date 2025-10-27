@@ -49,12 +49,12 @@ This page describes the methods that are only seen in the 3DS version of Miitopi
 
 ### MiiTubeSearchResult ([Structure])
 
-| Type                                                          | Name    |
-| ------------------------------------------------------------- | ------- |
-| [List]&#x3C;[MiiTubeMiiInfo](#miitubemiiinfo-structure)&#x3E; | result  |
-| Uint32                                                        | count   |
-| Uint32                                                        | page    |
-| Bool                                                          | hasNext |
+| Type                                                      | Name    |
+| --------------------------------------------------------- | ------- |
+| [List]&lt;[MiiTubeMiiInfo](#miitubemiiinfo-structure)&gt; | result  |
+| Uint32                                                    | count   |
+| Uint32                                                    | page    |
+| Bool                                                      | hasNext |
 
 [Result]: /docs/nex/types#result
 [String]: /docs/nex/types#string

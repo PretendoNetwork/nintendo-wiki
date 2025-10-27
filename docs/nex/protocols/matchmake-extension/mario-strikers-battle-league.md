@@ -6,7 +6,7 @@ title: "Mario Strikers: Battle League"
 
 This page describes the methods that are only seen in Mario Strikers: Battle League.#
 
-# Methods
+## Methods
 
 | Method ID | Method Name                      |
 | --------- | -------------------------------- |

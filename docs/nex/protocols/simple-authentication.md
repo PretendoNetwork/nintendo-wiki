@@ -30,7 +30,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -46,7 +46,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -63,7 +63,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -80,7 +80,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -96,7 +96,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -112,7 +112,7 @@ title: Simple Authentication (116)
 | Type         | Name            |
 | ------------ | --------------- |
 | [Result]     | %retval%        |
-| Uint32       | pidConnectionID |
+| [PID]        | pidConnectionID |
 | [StationURL] | urlPublic       |
 
 ### (7) RegisterEx
@@ -128,7 +128,7 @@ title: Simple Authentication (116)
 | Type         | Name            |
 | ------------ | --------------- |
 | [Result]     | %retval%        |
-| Uint32       | pidConnectionID |
+| [PID]        | pidConnectionID |
 | [StationURL] | urlPublic       |
 
 ### (8) LoginWithTokenCafe
@@ -143,7 +143,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -160,7 +160,7 @@ title: Simple Authentication (116)
 | Type               | Name            |
 | ------------------ | --------------- |
 | [Result]           | %retval%        |
-| Uint32             | pidPrincipal    |
+| [PID]              | pidPrincipal    |
 | [RVConnectionData] | pConnectionData |
 | [String]           | strReturnMsg    |
 
@@ -176,3 +176,4 @@ title: Simple Authentication (116)
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
 [RVConnectionData]: /docs/nex/types#rvconnectiondata-structure
+[PID]: /docs/nex/types#pid

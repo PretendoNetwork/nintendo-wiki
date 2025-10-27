@@ -59,7 +59,7 @@ This method does not return anything.
 
 | Type       | Name        |
 | ---------- | ----------- |
-| Uint32     | pid         |
+| [PID]      | pid         |
 | [String]   | reason      |
 | Bool       | banContents |
 | [DateTime] | expireDate  |
@@ -73,7 +73,7 @@ This method does not return anything.
 | Type       | Name        |
 | ---------- | ----------- |
 | Uint32     | typeID      |
-| Uint32     | pid         |
+| [PID]      | pid         |
 | [String]   | reason      |
 | Bool       | banContents |
 | [DateTime] | expireDate  |
@@ -84,9 +84,9 @@ This method does not return anything.
 ### (6) UnbanUser
 #### Request
 
-| Type   | Name |
-| ------ | ---- |
-| Uint32 | pid  |
+| Type  | Name |
+| ----- | ---- |
+| [PID] | pid  |
 
 #### Response
 This method does not return anything.
@@ -97,7 +97,7 @@ This method does not return anything.
 | Type   | Name   |
 | ------ | ------ |
 | Uint32 | typeID |
-| Uint32 | pid    |
+| [PID]  | pid    |
 
 #### Response
 This method does not return anything.
@@ -141,3 +141,4 @@ This method does not return anything.
 [Data]: /docs/nex/types#anydataholder
 [StationURL]: /docs/nex/types#stationurl
 [Variant]: /docs/nex/types#variant
+[PID]: /docs/nex/types#pid

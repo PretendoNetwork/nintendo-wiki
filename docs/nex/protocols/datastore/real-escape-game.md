@@ -9,7 +9,7 @@ This page describes the methods that are only seen in Real Escape Game × Ninten
 ## Methods
 
 | Method ID | Method Name                                            |
-|-----------|--------------------------------------------------------|
+| --------- | ------------------------------------------------------ |
 | 45        | [GetApplicationConfig](#45-getapplicationconfig)       |
 | 46        | [SetApplicationConfig](#46-setapplicationconfig)       |
 | 47        | [DeleteApplicationConfig](#47-deleteapplicationconfig) |
@@ -31,20 +31,20 @@ This page describes the methods that are only seen in Real Escape Game × Ninten
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 
 #### Response
 
-| Type                     | Name   |
-|--------------------------|--------|
-| [List]&#x3C;Uint32&#x3E; | config |
+| Type                 | Name   |
+| -------------------- | ------ |
+| [List]&lt;Uint32&gt; | config |
 
 ### (46) SetApplicationConfig
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint32 | key           |
 | Uint32 | value         |
@@ -56,7 +56,7 @@ This method does not return anything.
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint32 | key           |
 
@@ -68,33 +68,33 @@ This method does not return anything.
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 
 #### Response
 
 | Type   | Name    |
-|--------|---------|
+| ------ | ------- |
 | Uint32 | entryId |
 
 ### (49) GetShopRequestInfo
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 
 #### Response
 
 | Type                                          | Name  |
-|-----------------------------------------------|-------|
+| --------------------------------------------- | ----- |
 | [ShopRequestInfo](#shoprequestinfo-structure) | pInfo |
 
 ### (50) CancelShopRequest
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 
 #### Response
@@ -104,7 +104,7 @@ This method does not return anything.
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint8  | sign          |
 
@@ -114,22 +114,22 @@ This method does not return anything.
 ### (52) GetCount
 #### Request
 
-| Type                     | Name              |
-|--------------------------|-------------------|
-| [List]&#x3C;Uint32&#x3E; | applicationIdList |
+| Type                 | Name              |
+| -------------------- | ----------------- |
+| [List]&lt;Uint32&gt; | applicationIdList |
 
 #### Response
 
-| Type                                                    | Name    |
-|---------------------------------------------------------|---------|
-| [List]&#x3C;[CountResult](#countresult-structure)&#x3E; | pResult |
-| [List]&#x3C;Uint32&#x3E;                                | config  |
+| Type                                                | Name    |
+| --------------------------------------------------- | ------- |
+| [List]&lt;[CountResult](#countresult-structure)&gt; | pResult |
+| [List]&lt;Uint32&gt;                                | config  |
 
 ### (53) EntryRanking
 #### Request
 
 | Type                                                          | Name          |
-|---------------------------------------------------------------|---------------|
+| ------------------------------------------------------------- | ------------- |
 | Uint32                                                        | applicationId |
 | [CustomRankingEntryParam](#customrankingentryparam-structure) | param         |
 
@@ -140,21 +140,21 @@ This method does not return anything.
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint32 | count         |
 
 #### Response
 
-| Type                                                                | Name    |
-|---------------------------------------------------------------------|---------|
-| [List]&#x3C;[CustomRankingData](#customrankingdata-structure)&#x3E; | pResult |
+| Type                                                            | Name    |
+| --------------------------------------------------------------- | ------- |
+| [List]&lt;[CustomRankingData](#customrankingdata-structure)&gt; | pResult |
 
 ### (55) CancelRanking
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 
 #### Response
@@ -164,22 +164,22 @@ This method does not return anything.
 #### Request
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint32 | count         |
 
 #### Response
 
-| Type                             | Name         |
-|----------------------------------|--------------|
-| [Map]&#x3C;[String],Uint32&#x3E; | pAnswerCount |
+| Type                         | Name         |
+| ---------------------------- | ------------ |
+| [Map]&lt;[String],Uint32&gt; | pAnswerCount |
 
 ### (57) InvalidateCounts
 #### Request
 
-| Type                     | Name              |
-|--------------------------|-------------------|
-| [List]&#x3C;Uint32&#x3E; | applicationIdList |
+| Type                 | Name              |
+| -------------------- | ----------------- |
+| [List]&lt;Uint32&gt; | applicationIdList |
 
 #### Response
 This method does not return anything.
@@ -194,9 +194,9 @@ This method does not return anything.
 ### (59) DeleteRankings
 #### Request
 
-| Type                     | Name              |
-|--------------------------|-------------------|
-| [List]&#x3C;Uint32&#x3E; | applicationIdList |
+| Type                 | Name              |
+| -------------------- | ----------------- |
+| [List]&lt;Uint32&gt; | applicationIdList |
 
 #### Response
 This method does not return anything.
@@ -212,7 +212,7 @@ This method does not return anything.
 ### ShopRequestInfo ([Structure])
 
 | Type   | Name      |
-|--------|-----------|
+| ------ | --------- |
 | Uint32 | currentId |
 | Uint32 | lastId    |
 | Uint32 | total     |
@@ -220,14 +220,14 @@ This method does not return anything.
 ### CountResult ([Structure])
 
 | Type   | Name          |
-|--------|---------------|
+| ------ | ------------- |
 | Uint32 | applicationId |
 | Uint32 | count         |
 
 ### CustomRankingData ([Structure])
 
 | Type      | Name      |
-|-----------|-----------|
+| --------- | --------- |
 | Uint32    | score     |
 | [qBuffer] | buffer    |
 | Uint32    | hintCount |
@@ -235,7 +235,7 @@ This method does not return anything.
 ### CustomRankingEntryParam ([Structure])
 
 | Type                                              | Name              |
-|---------------------------------------------------|-------------------|
+| ------------------------------------------------- | ----------------- |
 | [CustomRankingData](#customrankingdata-structure) | customRankingData |
 | [String]                                          | answer            |
 

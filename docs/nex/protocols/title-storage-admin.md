@@ -20,13 +20,13 @@ title: Title Storage Admin
 ### (1) GetContentTypesDescription
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
-| Type                                                                          | Name                |
-| ----------------------------------------------------------------------------- | ------------------- |
-| [List]&#x3C;[ContentTypeDescription](#contenttypedescription-structure)&#x3E; | contentDescriptions |
+| Type                                                                      | Name                |
+| ------------------------------------------------------------------------- | ------------------- |
+| [List]&lt;[ContentTypeDescription](#contenttypedescription-structure)&gt; | contentDescriptions |
 
 ### (2) GetContentTypeDescription
 
@@ -38,20 +38,20 @@ This method does not take any parameters
 
 #### Response
 
-| Type                                                                                | Name            |
-| ----------------------------------------------------------------------------------- | --------------- |
-| [List]&#x3C;[ContentTypeExtensionField](#contenttypeextensionfield-structure)&#x3E; | extensionFields |
+| Type                                                                            | Name            |
+| ------------------------------------------------------------------------------- | --------------- |
+| [List]&lt;[ContentTypeExtensionField](#contenttypeextensionfield-structure)&gt; | extensionFields |
 
 ### (3) BrowseContents
 
 #### Request
-This method does not take any parameters
+This method does not take any parameters.
 
 #### Response
 
-| Type                                                                | Name     |
-| ------------------------------------------------------------------- | -------- |
-| [List]&#x3C;[AdminTitleContent](#admintitlecontent-structure)&#x3E; | contents |
+| Type                                                            | Name     |
+| --------------------------------------------------------------- | -------- |
+| [List]&lt;[AdminTitleContent](#admintitlecontent-structure)&gt; | contents |
 
 ### (4) GetContentDetails
 
@@ -86,12 +86,12 @@ This method does not take any parameters
 
 #### Response
 
-| Type                               | Name           |
-| ---------------------------------- | -------------- |
-| Uint32                             | contentId      |
-| [String]                           | uploadURL      |
-| [String]                           | uploadMimeType |
-| [Map]&#x3C;[String],[String]&#x3E; | uploadBody     |
+| Type                           | Name           |
+| ------------------------------ | -------------- |
+| Uint32                         | contentId      |
+| [String]                       | uploadURL      |
+| [String]                       | uploadMimeType |
+| [Map]&lt;[String],[String]&gt; | uploadBody     |
 
 ### (6) RemoveContent
 
@@ -154,10 +154,10 @@ This method does not take any parameters
 
 ### ContentTypeDescription ([Structure])
 
-| Type                                                                                | Name              |
-| ----------------------------------------------------------------------------------- | ----------------- |
-| [String]                                                                            | m_ContentType     |
-| [List]&#x3C;[ContentTypeExtensionField](#contenttypeextensionfield-structure)&#x3E; | m_extensionFields |
+| Type                                                                            | Name              |
+| ------------------------------------------------------------------------------- | ----------------- |
+| [String]                                                                        | m_ContentType     |
+| [List]&lt;[ContentTypeExtensionField](#contenttypeextensionfield-structure)&gt; | m_extensionFields |
 
 ### ContentDescription ([Structure])
 
