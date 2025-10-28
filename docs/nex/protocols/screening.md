@@ -70,3 +70,4 @@ Enum representing the kind of content being reported.
 
 [String]: /docs/nex/types#string
 [List]: /docs/nex/types#list
+[Structure]: /docs/nex/types#structure
