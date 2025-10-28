@@ -22,7 +22,7 @@ Creates a report for a given piece of DataStore content (UGC).
 | [ScreeningUgcViolationParam](#screeningugcviolationparam-structure)         | pViolationParam |
 
 #### Response
-The response format of this method is unknown.
+This method does not return anything.
 
 ## Types
 ### ScreeningDataStoreContentParam ([Structure])
