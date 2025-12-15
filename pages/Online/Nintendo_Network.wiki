@@ -7,7 +7,7 @@ Nintendo Network is made up of many different services, all providing specific f
 {| class="wikitable"
 ! Service !! Description
 |-
-| [[{{FULLPAGENAME}}/Conntest|Conntest]] || Connection test
+| [[{{FULLPAGENAME}}/Connection_Test|Connection Test]] || Connection test
 |-
 | [[{{FULLPAGENAME}}/NEX|NEX]] || Online games using Nintendo's multiplayer framework
 |-
