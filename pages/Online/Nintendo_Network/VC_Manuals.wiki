@@ -1,0 +1,91 @@
+__NOTOC__
+
+Nintendo provides downloads of manuals for Virtual Console games as standard PDF files. These are hosted at <code>http://m1.nintendo.net/docvc/<console>/<region>/<gameid>/<gameid>_<language>.pdf</code>.
+
+For example, https://m1.nintendo.net/docvc/RVL/EUR/RMGP/RMGP_E.pdf is the English manual for the European release of Super Mario Galaxy.
+
+{| class="wikitable"
+|-
+! Section !! Description
+|-
+| <code>console</code> || The consoles code name
+|-
+| <code>region</code> || The games region
+|-
+| <code>gameid</code> || The games internal product ID
+|-
+| <code>language</code> || Translation language
+|}
+
+== Consoles ==
+
+Only the following <code>console</code> values exist on the server:
+
+{| class="wikitable"
+|-
+! Code Name !! Console
+|-
+| <code>NTR</code> || Nintendo DS
+|-
+| <code>NUS</code> || Nintendo 64
+|-
+| <code>RVL</code> || Nintendo Wii
+|}
+
+== Regions ==
+
+Only the following <code>region</code> values exist on the server:
+
+{| class="wikitable"
+|-
+! Code Name !! Console
+|-
+| <code>JPN</code> || Japan
+|-
+| <code>USA</code> || United States
+|-
+| <code>EUR</code> || Europe
+|-
+| <code>CHN</code> || China
+|-
+| <code>KOR</code> || Korea
+|-
+| <code>TWN</code> || Taiwan
+|}
+
+== Game IDs ==
+
+<code>gameid</code> is the games internal product ID.
+
+For example, <code>RMGP</code> refers to [https://www.gametdb.com/Wii/RMGP01 Super Mario Galaxy].
+
+== Languages ==
+
+<code>language</code> is a 1 character language identifier for the manuals translation. If an invalid language is specified, the server returns the English manual.
+
+{| class="wikitable"
+|-
+! Identifier !! Language
+|-
+| J || Japanese
+|-
+| E || English
+|-
+| F || French
+|-
+| G || German
+|-
+| I || Italian
+|-
+| S || Spanish
+|-
+| K || Korean
+|-
+| D || Dutch
+|-
+| P || Portuguese
+|-
+| R || Russian
+|-
+| T || Traditional Chinese
+|}
