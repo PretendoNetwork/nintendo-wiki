@@ -1,0 +1,101 @@
+__NOTOC__
+
+This server is used to detect NAT properties of the router in order to perform NAT traversal, along with some currently unknown usage. In order to detect NAT properties, the console sends a series of UDP messages to the NNCS servers, and depending on which messages the console gets back it can determine both it's NAT mapping and filtering modes. This is due to the fact that there are 2 servers (a "primary" server, named NNCS1, and "secondary" server, named NNCS2), each on their own dedicated IP addresses (they cannot share an IP address), and each with 2 ports (a "primary" port and a "secondary" port). Depending on the clients NAT properties, only certain responses will be visible, and thus the client knows it's NAT properties.
+
+Nintendo Network uses the following servers:
+
+{| class="wikitable"
+! Server !! Type !! Primary Port !! Secondary Port !! Other Known Ports
+|-
+| nncs1.app.nintendowifi.net || Primary || 10025 || 10125 || 33334, 33335
+|-
+| nncs2.app.nintendowifi.net || Secondary || 10025 || 10125 || 33334, 33335
+|}
+
+Each UDP message, including responses, is always 16 bytes long, encoded in big-endian byte order. The messages have the following structure:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x4 || Message type
+|-
+| 0x4 || 0x4 || External port number. This is only populated by the server responses
+|-
+| 0x8 || 0x4 || External IP address. This is only populated by the server responses
+|-
+| 0xC || 0x4 || Sender IP address. If the client, this is the external IP recieved from the server. If the server, this is the servers ''local'' IP address
+|}
+
+The following message types are known to exist, however only types 101-103 appear to be used:
+
+{| class="wikitable"
+! Type !! Response !! Usage
+|-
+| 1 || The server replies from the requested IP address and port || Used to check if NNCS is reachable at all, to measure the time that it takes to receive a response, and to figure out the clients own external IP address and port
+|-
+| 2 || The server replies from a different IP address and port || Used to determine the NAT filtering mode
+|-
+| 3 || The server replies from its requested IP address but from a different port || Used to determine the NAT filtering mode
+|-
+| 4 || The server replies from its requested IP address and port || Used to determine the NAT mapping mode
+|-
+| 5 || The server replies from its requested IP address and port || Used to determine the NAT mapping mode
+|-
+| 101 || The server replies from its requested IP address and port || Used to determine the NAT mapping mode
+|-
+| 102 || The server replies from its requested IP address but from a different port || Used to determine the NAT filtering mode
+|-
+| 103 || The server replies from its requested IP address and port || Used to determine the NAT mapping mode
+|}
+
+The client always sends the following packets, in this order, without waiting for a reply. Each message is sent 5 times, presumably to ensure the packet reaches the server:
+
+{| class="wikitable"
+! Destination !! Message
+|-
+| NNCS1:10025 || <code>0000006500000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006500000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006500000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006500000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006500000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006600000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006600000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006600000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006600000000000000000000000000000000</code>
+|-
+| NNCS1:10025 || <code>0000006600000000000000000000000000000000</code>
+|-
+| NNCS2:10025 || <code>0000006700000000000000000000000000000000</code>
+|-
+| NNCS2:10025 || <code>0000006700000000000000000000000000000000</code>
+|-
+| NNCS2:10025 || <code>0000006700000000000000000000000000000000</code>
+|-
+| NNCS2:10025 || <code>0000006700000000000000000000000000000000</code>
+|-
+| NNCS2:10025 || <code>0000006700000000000000000000000000000000</code>
+|}
+
+After which the client begins to wait for responses.
+
+Outside of the known NAT detection system, the NNCS servers also have 2 ports open with unknown uses. These are ports 33334 and 33335. Clients do not always contact these ports, but may do so both before and after detecting the clients NAT properties. The data sent to each port also seems to change based on unknown factors. The client seems to sometimes send 5 packets to NNCS1 on either port 33334/33335, with the payloads all being 16 null bytes, prior to the standard NAT detection process. After the NAT detection process, the client begins sending many packets to NNCS1:33335. Some clients send only 2 byte payloads, though sometimes a client may send a more complex payload with the following structure:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x8 || Seems to be static data. Does not appear to change between packets
+|-
+| 0x8 || 0x6 || Most data does not change between packets, but some bytes do change between packets
+|-
+| 0xE || 0x1A || Seems to be static data. Does not appear to change between packets. Contains the ASCII string "Dummy"
+|-
+| 0x28 || 0x10 || Changes between packets. Possibly a hash, due to the size?
+|}
