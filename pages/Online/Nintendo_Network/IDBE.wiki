@@ -1,0 +1,168 @@
+__NOTOC__
+
+The IDBE ('''I'''con '''D'''ata'''B'''ase '''E'''ncrypted?) provides clients with information about titles, in an encrypted container format. These files contain both icon graphics and minimal metadata about the title such as names and publishers. When a console needs to display information about a title which it does not have installed (such as when a friend is displayed in the friend list as playing a game the client does not onw), it will request the data from this server.
+
+'''Note:''' ''Each platform has it's own subdomain, however all contents are available to all subdomains. On the Switch and Switch 2, the IDBE server is only used for 3DS and Wii U titles after an Amiibo has been used. For Switch and Switch 2 titles, the [[Switch/Atum|atum server]] is used instead.''
+
+{| class="wikitable"
+|-
+! Platform !! Server
+|-
+| 3DS || https://idbe-ctr.cdn.nintendo.net
+|-
+| Wii U || https://idbe-wup.cdn.nintendo.net
+|-
+| Switch || https://idbe-hac.cdn.nintendo.net
+|-
+| Switch 2 || https://idbe-p01.cdn.nintendo.net
+|}
+
+{| class="wikitable"
+|-
+! Path !! Description
+|-
+| <code>/icondata/<id>/<titleid>.idbe</code> || Provides the latest icon data for a title
+|-
+| <code>/icondata/<id>/<titleid>-<version>.idbe</code> || Provides the icon data for a specific version of a title
+|}
+
+The title id must be specified as 16 uppercase hex digits. The first id should be <code>(titleid >> 8) & 0xFF</code>. For example, if the title id is <code>0005000010137D00</code> then the first id should be <code>7D</code>. The server seems to ignore this value though, and so any value will work.
+
+== Encryption ==
+
+IDBE files encrypt the title information using AES-CBC. The IV is always <code>a46987ae47d82bb4fa8abc0450285fa4</code>. The console has a list of 4 keys an IDBE file can use, and the index of the key the file needs to use is stored in the IDBE file.
+
+{| class="wikitable"
+|-
+! Index !! Key
+|-
+| 0 || <code>4ab9a40e146975a84bb1b4f3ecefc47b</code>
+|-
+| 1 || <code>90a0bb1e0e864ae87d13a6a03d28c9b8</code>
+|-
+| 2 || <code>ffbb57c14e98ec6975b384fcf40786b5</code>
+|-
+| 3 || <code>80923799b41f36a6a75fb8b48c95f66f</code>
+|}
+
+== IDBE File Format ==
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x1 || Always 0
+|-
+| 0x1 || 0x1 || Key index
+|-
+| 0x2 || Remainder || Encrypted [[#Icon Data Format|icon data]]
+|}
+
+== Icon Data Format ==
+
+Wii U files are encoded in big-endian byte order, 3DS files in little-endian byte order.
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x20 || SHA256 checksum of all of the following data
+|-
+| 0x20 || 0x8 || Title id
+|-
+| 0x28 || 0x4 || Title version
+|-
+| 0x2C || 0x4 || Unknown
+|-
+| 0x30 || 0x4 || Unknown
+|-
+| 0x34 || 0x10 || Unknown
+|-
+| 0x44 || 0x4 || Unknown
+|-
+| 0x48 || 0x8 || Unknown
+|-
+| 0x50 || 0x2000 || [[#Title Info|Title info]] in different [[#Languages|languages]]
+|-
+| 0x2050 || Remainder || [[#Icon Graphics|Icon graphics]]
+|}
+
+== Icon Graphics ==
+
+'''Wii U:'''
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x2050 || Remainder || Original TGA file
+|}
+
+'''3DS:'''
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x2050 || 0x480 || 24x24 pixel RGB565 icon
+|-
+| 0x24D0 || 0x1200 || 48x48 pixel RGB565 icon
+|}
+
+The RGB565 icons use the same tiling method used in SMDH files, much like the rest of the 3DS. For more information on how this tiling system works, see [https://3dbrew.org/wiki/SMDH#Icon_graphics https://3dbrew.org/wiki/SMDH#Icon_graphics]
+
+== Title Info ==
+
+Contains the title name (both short and full) and the publisher. All strings are encoded using UTF-16. Not all strings will use all available space, or even any space depending on the [[#Languages|language]].
+
+{| class="wikitable"
+|-
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x80 || Title name (short)
+|-
+| 0x80 || 0x100 || Title name (long)
+|-
+| 0x180 || 0x80 || Publisher name
+|}
+
+== Languages ==
+
+[[#Title Info|Title info]] is stored as a list of translated strings in different languages. Data for 16 languages is allocated, however only 12 are actually used. The remaining languages have empty strings.
+
+{| class="wikitable"
+|-
+! Index !! Language
+|-
+| 0 || Japanese
+|-
+| 1 || English
+|-
+| 2 || French
+|-
+| 3 || German
+|-
+| 4 || Italian
+|-
+| 5 || Spanish
+|-
+| 6 || Chinese (simple)
+|-
+| 7 || Korean
+|-
+| 8 || Dutch
+|-
+| 9 || Portuguese
+|-
+| 10 || Russian
+|-
+| 11 || Chinese (traditional)
+|-
+| 12 || Unknown
+|-
+| 13 || Unknown
+|-
+| 14 || Unknown
+|-
+| 15 || Unknown
+|}
