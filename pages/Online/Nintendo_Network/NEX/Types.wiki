@@ -1,0 +1,558 @@
+__NOTOC__
+
+Rendez-Vous ships with custom implementations of common types, including primitive types. These types are used all throughout the library to keep implementations consistent.
+
+This page documents the way these types are encoded for network use.
+
+'''Note:''' ''These are the types found in NEX/stock Rendez-Vous. Some games may extend these common types, or make modifications to existing ones. Instances a type is known to have been modified in at least one game will be noted on the type.''
+
+== Primitive Types ==
+
+These are primitive data types that represent simple data like strings, streams of bytes, etc.
+
+=== String ===
+
+All strings are UTF-8 encoded and include a null terminator. Some titles may use different data types for the length field (e.g., Rock Band 3 uses UInt32). Unlike [[#Buffer]] and [[#qBuffer]] which are distinct types with differing length fields, changing the data type of the string length field affects all strings in the entire binary.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt16 || String length, including the null terminator
+|-
+| Bytes || UTF-8 encoded, null terminated, string
+|}
+
+=== Buffer ===
+
+Represents a stream of arbitrary data.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Length
+|-
+| Bytes || Data
+|}
+
+=== qBuffer ===
+
+Effectively the same as [[#Buffer]], but represents smaller portions of data. Saves 2 bytes in the length field when you know the data should never be larger than <code>0xFFFF</code> bytes.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt16 || Length
+|-
+| Bytes || Data
+|}
+
+=== List ===
+
+A List can encode any data type, both primitive and complex, but only one data type at a time.
+
+'''Note:''' ''A List may appear to hold more than one data type if the List stores a [[#Holder]] type or if the List type is a [[#Classes|class]] inherited from in many children.''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Number of entries
+|-
+| || Entries
+|}
+
+=== Map ===
+
+This is, effectively, a [[#List]] of key-value pairs. A Map can, technically, use any data type (including classes/complex data types) as both the key and value type. However only one type of data may be used as the key/value at a time. That being said, officially only [[#Primitive Types]] were used as keys.
+
+Every entry first encodes the key, which is immediately followed by the key's value.
+
+'''Note:''' ''A Map may appear to hold more than one data type if the key/value type is a [[#Holder]] type or is a [[#Classes|class]] inherited from in many children.''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Number of entries
+|-
+| || Entries
+|}
+
+=== PID ===
+
+PIDs represent unique IDs assigned to targets in NEX/Rendez-Vous. Targets are almost always other players, however they can also represent internal accounts/servers (e.g, PID 2 always represents the games secure server in NEX, and data owned by the server is almost always assigned to this PID).
+
+In the original Rendez-Vous library these values are represented with a UInt32. In NEX 4 Nintendo bumped the size to a UInt64.
+
+Internally most games treat a PID exactly the same as its underlying type, with no indication it's really a PID.
+
+<tabs items="NEX 3 and below,NEX 4.0+" storagekey="pid">
+	<tab name="NEX 3 and below">
+		{| class="wikitable"
+		! Type !! Description
+		|-
+		| UInt32 || Value
+		|}
+	</tab>
+
+	<tab name="NEX 4.0+">
+		{| class="wikitable"
+		! Type !! Description
+		|-
+		| UInt64 || Value
+		|}
+	</tab>
+</tabs>
+
+=== Result ===
+
+Represents the result of an operation, similar to an [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status HTTP status code]. In NEX, if an [[Online/Nintendo_Network/NEX/RMC|RMC]] fails, the server sends the client back an error result code. Some methods may also return various result codes as part of otherwise successful responses.
+
+If the MSB is set, the result code triggers error handling.
+
+For a full list of result codes, see [[Online/Nintendo_Network/NEX/Result_Codes|Result Codes]].
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Result code
+|}
+
+=== DateTime ===
+
+Represents a date/time as a timestamp. This is not a standard timestamp, instead it is a bit field encoding the date/time.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt64 || Timestamp
+|}
+
+{| class="wikitable"
+|-
+! Bits !! Description
+|-
+| 63 - 26 || Year
+|-
+| 25 - 22 || Month
+|-
+| 21 - 17 || Day
+|-
+| 16 - 12 || Hour
+|-
+| 11 - 6 || Minute
+|-
+| 5 - 0 || Second
+|}
+
+=== StationURL ===
+
+Represents a connectable target. Used in instances like connecting to game servers, establishing p2p connections with other players, connecting to relays, etc.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[#String]] || URL
+|}
+
+==== Structure ====
+
+StationURLs use a custom URI format designed by Quazal, based on standard web URLs. They begin with a scheme, followed by a series of standard parameters, followed by optional custom parameters. URLs can be a maximum of 1,024 characters long.
+
+'''Example:'''
+<pre>
+prudps:/address=35.166.88.148;port=60151;CID=1;PID=2;sid=1;stream=10;type=2
+</pre>
+
+==== Schemes ====
+
+URLs can use multiple different schemes. These schemes tell the client how to connect to the target. NEX always uses the <code>prudps</code> scheme.
+
+{| class="wikitable"
+! Scheme !! Value !! Description
+|-
+| <code>prudp</code> || 1 || PRUDP connection
+|-
+| <code>prudps</code> || 2 || Secure PRUDP connection
+|-
+| <code>udp</code> || 3 || Raw UDP connection
+|}
+
+==== Standard Parameters ====
+
+Following the scheme are a series of parameters about the target. These help the connecting client better understand the capabilities of the target, as well as some metadata about them. NEX does not use many of these fields, and some games have certain features (like relays) gutted entirely. Because of this, not much is known about the parameters NEX does not use. Some fields also seem to be used mostly internally (such as during station probing for establishing a p2p connection), and thus a server implementation does not need to handle them.
+
+'''Note:''' ''"String" in this context does NOT refer to a [[#String]]. "Boolean" refers to a 0 (false) or 1 (true) value.''
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>address</code> || String (max 256) || Address of the target. NEX/Rendez-Vous supports DNS when using a domain for a station, however [[Online/Nintendo_Network/NNAS|NNAS]] can only send addresses up to 15 characters long before truncating, since Nintendo only ever used IP addresses
+|-
+| <code>port</code> || UInt16 (0-65535) || Port number
+|-
+| <code>type</code> || UInt8 || Station type flags (see [[#Station Type Flags]])
+|-
+| <code>sid</code> || UInt8 || Stream ID (see [[Online/Nintendo_Network/NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
+|-
+| <code>stream</code> || UInt8 || Stream type (see [[Online/Nintendo_Network/NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
+|-
+| <code>NodeId</code> || UInt16 || Node ID. Unknown use
+|-
+| <code>PID</code> || UInt64 || [[#PID]] of the target. See also [[Online/Nintendo_Network/NEX#Accounts|NEX#Accounts]]
+|-
+| <code>CID</code> || UInt32 || Connection ID. Unclear how this differs from <code>RVCID</code>
+|-
+| <code>RVCID</code> || UInt32 || Rendez-Vous connection ID. A single user may, technically, connect to the same game server multiple times. This connection ID differentiates between them
+|-
+| <code>PRID</code> || UInt32 || Probe request ID. Unknown use, presumed to be used during p2p connections
+|-
+| <code>fastproberesponse</code> || Boolean || Enable fast probe response. Unknown use, presumed to be used during p2p connections
+|-
+| <code>natm</code> || UInt8 || NAT mapping properties (see [[#NAT Mapping]])
+|-
+| <code>natf</code> || UInt8 || NAT filtering properties (see [[#NAT Filtering]])
+|-
+| <code>probeinit</code> || Boolean || Initiate probing. Unknown use, presumed to be used during p2p connections
+|-
+| <code>upnp</code> || Boolean || UPnP support enabled (see https://en.wikipedia.org/wiki/Universal_Plug_and_Play)
+|-
+| <code>pmp</code> || Boolean || NAT-PMP support enabled (see https://en.wikipedia.org/wiki/NAT_Port_Mapping_Protocol)
+|-
+| <code>Rsa</code> || String || Relay server address. Relays are never used by NEX. Presumably the client connects to this address instead of the real client address, which then forwards packets as needed
+|-
+| <code>Rsp</code> || UInt16 || Relay server port. Relays are never used by NEX
+|-
+| <code>Ra</code> || String || Relay address. Unclear how this differs from <code>Rsa</code>
+|-
+| <code>Rp</code> || UInt16 || Relay port. Unclear how this differs from <code>Rsp</code>
+|-
+| <code>R</code> || Boolean || Enables the use of a relay server
+|-
+| <code>Pl</code> || UInt8 || Platform type. 0=Unknown. In NEX 1=3DS, 2=Wii U, 3=Switch
+|-
+| <code>Uri</code> || String || Optional URI. Unknown use
+|-
+| <code>Tpt</code> || UInt32 || Transport protocol type. Unknown use, presumably used to tell the client what protocol (UDP, WebSocket, etc.) to use PRUDP over? <code>0xFFFFFFFF</code>=Unknown. Seems to be an enum of values 0-2. Assumed values are 0=UDP, 1=TCP, 3=WebSocket
+|-
+| <code>Ntrpp</code> || UInt16 (0-65535) || NAT traversal requester private port. Unknown use, presumably used during NAT traversal to a p2p client?
+|-
+| <code>Ntrpa</code> || String || NAT traversal requester private address. Unknown use, presumably used during NAT traversal to a p2p client?
+|}
+
+==== Custom Parameters ====
+
+Following the standard parameters, a developer can define a series of custom parameters as well. These will always have game/context specific meanings. Every parameter following the <code>#</code> character is interpreted as a custom parameter.
+
+'''Example:'''
+
+<pre>
+scheme:/param1=value1;param2=value2#custom1=value1;custom2=value2;
+</pre>
+
+==== Station Type Flags ====
+
+Indicates properties about the station's address.
+
+{| class="wikitable"
+! Value !! Flag !! Description
+|-
+| 1 || <code>BehindNAT</code> || The station is behind NAT
+|-
+| 2 || <code>Public</code> || The station has a public address
+|-
+| 4 || <code>DetectedByNatCheck</code> || The public address was detected by [[Online/Nintendo_Network/NNCS|NNCS]]?
+|-
+| 8 || <code>DetectedByNgs</code> || The public address was detected by the game server?
+|}
+
+==== NAT Mapping ====
+
+Indicates the targets NAT mapping mode (see [https://datatracker.ietf.org/doc/html/rfc4787 RFC 4787]):
+
+{| class="wikitable"
+! Value !! Description
+|-
+| 1 || Endpoint-Independent Mapping
+|-
+| 2 || Endpoint-Dependent Mapping
+|}
+
+==== NAT Filtering ====
+
+Indicates the targets NAT filtering mode (see [https://datatracker.ietf.org/doc/html/rfc4787 RFC 4787]):
+
+{| class="wikitable"
+! Value !! Description
+|-
+| 1 || Port-Independent Filtering
+|-
+| 2 || Port-Dependent Filtering
+|}
+
+=== Variant ===
+
+A Variant can represent multiple types. This is effectively a [[#Holders|Holder]] but for primitive types rather than [[#Classes]].
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt8 || Type ID
+|-
+| || Type data
+|}
+
+'''Note:''' ''A developer may change these type IDs.''
+
+{| class="wikitable"
+! Type ID !! Type
+|-
+| 0 || No data
+|-
+| 1 || SInt64
+|-
+| 2 || Double
+|-
+| 3 || Boolean
+|-
+| 4 || [[#String]]
+|-
+| 5 || [[#DateTime]]
+|-
+| 6 || UInt64
+|-
+| 7 || [[#qUUID]]. Not seen in NEX, Ubisoft-specific?
+|}
+
+=== qUUID ===
+
+Represents a UUID, typically a UUIDv4 with the "variant" bits set to 8, however it can be any UUID version. This type is not seen in NEX, but seems to be part of Rendez-Vous based on it's inclusion in Ubisoft titles. The data is not transported as a string. Instead, it is transported in a format similar to Microsoft's [https://learn.microsoft.com/en-us/windows/win32/api/guiddef/ns-guiddef-guid GUID] type.
+
+It is encoded as 16 bytes, which is then split into 7 sections of varying size. Sections 1-4 are the first 4 sections of the UUID, and sections 5-7 are used to build the 5th section of the UUID. Each section has it's byte order flipped.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| Bytes (4) || Section 1
+|-
+| Bytes (2) || Section 2
+|-
+| Bytes (2) || Section 3
+|-
+| Bytes (2) || Section 4
+|-
+| Bytes (2) || Section 5 part 1
+|-
+| Bytes (2) || Section 5 part 2
+|-
+| Bytes (2) || Section 5 part 3
+|}
+
+''Example:'' The qUUID <code>ae5e3e66297d8c4aa98420499ad98c3e</code> translates to <code>663e5eae-7d29-4a8c-84a9-4920d99a3e8c</code>
+
+== Holders ==
+
+"Holder" types are used when multiple underlying types need to be supported in a strictly typed situation. For example, in MatchMaking when multiple types of sessions are supported by certain methods, where each session type is defined as its own class. These are similar to the [[#Variant]] type, but for [[#Classes]] rather than primitive types.
+
+=== AnyObjectHolder ===
+
+This type is never actually seen in the network itself, but is used internally to build the concept of a "Holder". These are somewhat complex internally and are the foundation for the entire "Holder" concept, thus it is important to understand how this type works as well before working with any "Holder" types. The original implementation for "Holder" types is actually more complex, making use of several additional template/adapter classes, however this section only covers what is necessary for understanding a games network traffic.
+
+AnyObjectHolder is the base for all other "Holder" types. It is a C++ template, and takes 2 parameters:
+
+'''Note:''' ''All remarks regarding the "identifer type" have not been fully verified. They are educated guesses based on observations from several games.''
+
+{| class="wikitable"
+! Name !! Description
+|-
+| Root class || The root class type the holder can hold
+|-
+| Identifier type || The data type used to identify the held class. In NEX this is always [[#String]]
+|}
+
+The root class defines the base type that any held class must inherit from, as it's upper-most class. The identifier type is used to encode an identifer for the receiving end.
+
+For example, <code>nn::nex::AnyObjectHolder<nn::nex::Data, nn::nex::String></code> can hold any class that inherits from [[#Data]], and identifies the held class using a [[#String]] when encoded.
+
+Once a "Holder" is defined using AnyObjectHolder, the newly created template can then be further used as a base for even more specific encapsulation, where a new root is defined. "Holders" defined this way will only accept classes which inherit from the new root, but no others, even if both the root and a child share a common root. See the below example.
+
+[[Online/Nintendo_Network/NEX/DDL|DDLs]] will often define "Holder" types using generic types like <code>any</code>, or as simply the root class, with no additional type information. Thus, further reverse engineering is required to manually determine how to handle any given "Holder".
+
+'''Example:'''
+
+<pre>
+#include <iostream>
+#include <string>
+#include <memory>
+
+// Helper macro, real NEX gives classes a GetDataType method which this emulates
+#define DECLARE_DATA_TYPE(ClassName) \
+	static std::string GetDataType() { return #ClassName; }
+
+// Root class
+class Data {
+public:
+	DECLARE_DATA_TYPE(Data);
+
+	virtual void print() const = 0;
+};
+
+// Child 1, inherits from root Data
+class LoginData : public Data {
+	std::string name;
+public:
+	DECLARE_DATA_TYPE(LoginData);
+
+	LoginData(const std::string& n) : name(n) {}
+	void print() const override {
+		std::cout << "LoginData: " << name << std::endl;
+	}
+};
+
+// Child 2, inherits from root Data
+class UserMessage : public Data {
+public:
+	DECLARE_DATA_TYPE(UserMessage);
+
+	virtual void print() const override = 0;
+};
+
+// Child 3, inherits from both UserMessage and root Data
+class TextMessage : public UserMessage {
+	std::string text;
+public:
+	DECLARE_DATA_TYPE(TextMessage);
+
+	TextMessage(const std::string& t) : text(t) {}
+	void print() const override {
+		std::cout << "TextMessage: " << text << std::endl;
+	}
+};
+
+template<typename RootClass, typename IdentifierType> class AnyObjectHolder {
+	IdentifierType typeName;
+	std::unique_ptr<RootClass> object;
+
+public:
+	AnyObjectHolder(const IdentifierType& name, RootClass* obj) : typeName(name), object(obj) {}
+
+	void print() const {
+		std::cout << "Type: " << typeName << ", ";
+		if (object) {
+			object->print();
+		}
+	}
+};
+
+// Can only hold class which inherits from root Data
+using DataHolder = AnyObjectHolder<Data, std::string>;
+
+// Can only hold class which inherits from T, but no others, even if the class inherits from root Data
+template<typename T=Data> class CustomDataHolder : public DataHolder {
+public:
+	CustomDataHolder(const std::string& name, T* obj) : DataHolder(name, obj) {}
+};
+
+int main() {
+	// Works because LoginData inherits from root Data
+	DataHolder holder1(LoginData::GetDataType(), new LoginData("Alice"));
+	holder1.print(); // Type: LoginData, LoginData: Alice
+
+	// Works because TextMessage inherits from UserMessage
+	CustomDataHolder<UserMessage> holder2(TextMessage::GetDataType(), new TextMessage("Hello!"));
+	holder2.print(); // Type: TextMessage, TextMessage: Hello!
+
+	// Results in a compiler error because LoginData does not inherit from UserMessage
+	/*
+	CustomDataHolder<UserMessage> holder3(LoginData::GetDataType(), new LoginData("Bob"));
+	holder3.print();
+	*/
+
+	return 0;
+}
+</pre>
+
+=== Holder Encoding ===
+
+The holder encodes both an identifier of what class is being held and the length of the class data, followed by the held classes encoded data. The type identifier is used to tell the other end which class is being held, so it knows how to decode it.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| || Type identifier. In NEX, this is always a [[#String]] type, and is the name of the class
+|-
+| UInt32 || Length of the following field
+|-
+| [[#Buffer]] || Encoded class data
+|}
+
+=== DataHolder ===
+
+An [[#AnyObjectHolder]] that can hold any class which uses [[#Data]] as its root class.
+
+=== CustomDataHolder ===
+
+Abstraction built on top of [[#DataHolder]] to restrict which classes can be held to a more refined set, disallowing certain classes even if they inherit from [[#Data]].
+
+== Classes ==
+
+Some types are defined as a class. These are referred to as <code>DDLClass</code> internally. For simplicity, this wiki will refer to these as simply "classes". These represent complex data types with several fields, which are best represented as C++ classes. All types found defined in protocols, besides [[#Holder]] types, are classes.
+
+A <code>DDLClass</code> type can also inherit from another <code>DDLClass</code> type. In order to do this, the parent is encoded first and is immediately followed by the child data, each with their own class header (if applicable).
+
+In some cases you may see a class documented with its real class field names. These field names, along with the names of the classes themselves, come from a mix of leftover debugging data as well as from a games [[Online/Nintendo_Network/NEX/DDL|DDLs]].
+
+=== Header ===
+
+Prior to NEX 3.5.0, classes had no header, and the data of the class was encoded directly into the stream. However as time progressed, classes needed to have fields changed/added/removed. To maintain compatibility, Nintendo introduced the class header. This header defines the version of the class and the length of the encoded class data. This way the receiving end knows how to process the incoming data. Changes to classes are referred to as "revisions".
+
+'''Note:''' ''Changes to classes could still happen prior to NEX 3.5.0. In these cases, the structure of a class is often tied to the NEX version. Though some games may make changes to classes without changing NEX versions. It is also common for games to make changes to classes without changing the class version number even after NEX 3.5.0, and when upgrading to certain versions like NEX 4.0.0 the class version numbers are often reset back to 0.''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt8 || Class version
+|-
+| UInt32 || Class data
+|}
+
+Class data is encoded immediately after the header.
+
+Some games, like WATCH_DOGS, however, do not include this header at all. Instead, the class version information is sent in the [[Online/Nintendo_Network/NEX/RMC#ClassVersionContainer|RMC#ClassVersionContainer]]. To differentiate between these 2 methods, the version with structure headers is colloquially called "packed RMC", whereas the version with the ClassVersionContainer is colloquially called "verbose RMC". See [[Online/Nintendo_Network/NEX/RMC|RMC]] for more details on these 2 modes.
+
+=== Data ===
+
+This class has no fields. It's only purpose seems to be the root class from which other classes can inherit from, in order to allow those classes to be used in [[#DataHolder]].
+
+This is specifically different from [[Online/Nintendo_Network/NEX/Protocols/TicketGranting#NullData|TicketGranting#NullData]], which also has no fields, as it indicates no data is present, whereas this class is purely a root class.
+
+=== ResultRange ===
+
+Some methods query a large set of objects. These methods normally take a ResultRange parameter that limits the number of objects that are returned. Effectively <code>OFFSET</code> and <code>LIMIT</code> in SQL-like databases.
+
+Most protocol methods have additional limits/special cases for certain offset/size values. See each protocol's documentation for specifics.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || m_uiOffset || Search offset
+|-
+| UInt32 || m_uiSize || Number of entries to return
+|}
+
+==== ResultRange Constants ====
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>RESULTRANGE_DEFAULT_SIZE</code> || 20 || The default number of entries to return
+|-
+| <code>RESULTRANGE_ANY_OFFSET</code> || <code>0xFFFFFFFF</code> || If used, the server picks a random offset. Useful to get pesudo-random data back from the server when other means to do so are not available
+|}
+
+=== NullData ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
+<div style="padding: 5px;">This class inherits from [[#Data]]</div>
+</div>
+
+This class has no fields. Used when a [[#DataHolder]] field needs to be empty.
