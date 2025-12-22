@@ -543,7 +543,7 @@ Some games, like WATCH_DOGS, however, do not include this header at all. Instead
 
 This class has no fields. It's only purpose seems to be the root class from which other classes can inherit from, in order to allow those classes to be used in [[#DataHolder]].
 
-This is specifically different from [[Online/Nintendo_Network/NEX/Protocols/TicketGranting#NullData|TicketGranting#NullData]], which also has no fields, as it indicates no data is present, whereas this class is purely a root class.
+This is specifically different from [[#NullData]], which also has no fields, as it indicates no data is present, whereas this class is purely a root class.
 
 === ResultRange ===
 
