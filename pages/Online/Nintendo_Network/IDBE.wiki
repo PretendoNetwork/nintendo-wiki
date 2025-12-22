@@ -2,7 +2,10 @@ __NOTOC__
 
 The IDBE ('''I'''con '''D'''ata'''B'''ase '''E'''ncrypted?) provides clients with information about titles, in an encrypted container format. These files contain both icon graphics and minimal metadata about the title such as names and publishers. When a console needs to display information about a title which it does not have installed (such as when a friend is displayed in the friend list as playing a game the client does not onw), it will request the data from this server.
 
-'''Note:''' ''Each platform has it's own subdomain, however all contents are available to all subdomains. On the Switch and Switch 2, the IDBE server is only used for 3DS and Wii U titles after an Amiibo has been used. For Switch and Switch 2 titles, the [[Switch/Atum|atum server]] is used instead.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Each platform has it's own subdomain, however all contents are available to all subdomains. On the Switch and Switch 2, the IDBE server is only used for 3DS and Wii U titles after an Amiibo has been used. For Switch and Switch 2 titles, the [[Switch/Atum|atum server]] is used instead.''</div>
+</div>
 
 {| class="wikitable"
 |-

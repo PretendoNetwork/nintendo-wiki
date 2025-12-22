@@ -4,7 +4,10 @@ Rendez-Vous ships with custom implementations of common types, including primiti
 
 This page documents the way these types are encoded for network use.
 
-'''Note:''' ''These are the types found in NEX/stock Rendez-Vous. Some games may extend these common types, or make modifications to existing ones. Instances a type is known to have been modified in at least one game will be noted on the type.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''These are the types found in NEX/stock Rendez-Vous. Some games may extend these common types, or make modifications to existing ones. Instances a type is known to have been modified in at least one game will be noted on the type.''</div>
+</div>
 
 == Primitive Types ==
 
@@ -50,7 +53,10 @@ Effectively the same as [[#Buffer]], but represents smaller portions of data. Sa
 
 A List can encode any data type, both primitive and complex, but only one data type at a time.
 
-'''Note:''' ''A List may appear to hold more than one data type if the List stores a [[#Holder]] type or if the List type is a [[#Classes|class]] inherited from in many children.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''A List may appear to hold more than one data type if the List stores a [[#Holder]] type or if the List type is a [[#Classes|class]] inherited from in many children.''</div>
+</div>
 
 {| class="wikitable"
 ! Type !! Description
@@ -66,7 +72,10 @@ This is, effectively, a [[#List]] of key-value pairs. A Map can, technically, us
 
 Every entry first encodes the key, which is immediately followed by the key's value.
 
-'''Note:''' ''A Map may appear to hold more than one data type if the key/value type is a [[#Holder]] type or is a [[#Classes|class]] inherited from in many children.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''A Map may appear to hold more than one data type if the key/value type is a [[#Holder]] type or is a [[#Classes|class]] inherited from in many children.''</div>
+</div>
 
 {| class="wikitable"
 ! Type !! Description
@@ -180,7 +189,10 @@ URLs can use multiple different schemes. These schemes tell the client how to co
 
 Following the scheme are a series of parameters about the target. These help the connecting client better understand the capabilities of the target, as well as some metadata about them. NEX does not use many of these fields, and some games have certain features (like relays) gutted entirely. Because of this, not much is known about the parameters NEX does not use. Some fields also seem to be used mostly internally (such as during station probing for establishing a p2p connection), and thus a server implementation does not need to handle them.
 
-'''Note:''' ''"String" in this context does NOT refer to a [[#String]]. "Boolean" refers to a 0 (false) or 1 (true) value.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''"String" in this context does NOT refer to a [[#String]]. "Boolean" refers to a 0 (false) or 1 (true) value.''</div>
+</div>
 
 {| class="wikitable"
 ! Parameter !! Type !! Description
@@ -300,7 +312,10 @@ A Variant can represent multiple types. This is effectively a [[#Holders|Holder]
 | || Type data
 |}
 
-'''Note:''' ''A developer may change these type IDs.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''These IDs may be different depending on the game. These are the IDs used by NEX.''</div>
+</div>
 
 {| class="wikitable"
 ! Type ID !! Type
@@ -358,7 +373,10 @@ This type is never actually seen in the network itself, but is used internally t
 
 AnyObjectHolder is the base for all other "Holder" types. It is a C++ template, and takes 2 parameters:
 
-'''Note:''' ''All remarks regarding the "identifer type" have not been fully verified. They are educated guesses based on observations from several games.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''All remarks regarding the "identifer type" have not been fully verified. They are educated guesses based on observations from several games and on the encoded data structure.''</div>
+</div>
 
 {| class="wikitable"
 ! Name !! Description
@@ -504,7 +522,10 @@ In some cases you may see a class documented with its real class field names. Th
 
 Prior to NEX 3.5.0, classes had no header, and the data of the class was encoded directly into the stream. However as time progressed, classes needed to have fields changed/added/removed. To maintain compatibility, Nintendo introduced the class header. This header defines the version of the class and the length of the encoded class data. This way the receiving end knows how to process the incoming data. Changes to classes are referred to as "revisions".
 
-'''Note:''' ''Changes to classes could still happen prior to NEX 3.5.0. In these cases, the structure of a class is often tied to the NEX version. Though some games may make changes to classes without changing NEX versions. It is also common for games to make changes to classes without changing the class version number even after NEX 3.5.0, and when upgrading to certain versions like NEX 4.0.0 the class version numbers are often reset back to 0.''
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Changes to classes could still happen prior to NEX 3.5.0. In these cases, the structure of a class is often tied to the NEX version. Though some games may make changes to classes without changing NEX versions. It is also common for games to make changes to classes without changing the class version number even after NEX 3.5.0, and when upgrading to certain versions like NEX 4.0.0 the class version numbers are often reset back to 0.''</div>
+</div>
 
 {| class="wikitable"
 ! Type !! Description
