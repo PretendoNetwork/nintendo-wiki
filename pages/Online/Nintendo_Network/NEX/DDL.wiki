@@ -1,0 +1,388 @@
+__NOTOC__
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This page needs better descriptions of each of the data types and what they do.''</div>
+</div>
+
+When creating Rendez-Vous, Quazal designed a [https://en.wikipedia.org/wiki/Data_definition_language Data Definition Language] (DDL for short) for encoding metadata about the various [Online/Nintendo_Network/NEX/Protocols|protocols] and other services. This metadata includes the real protocol name, real protocol method names, real protocol class names, and the method request, method response and class structures including data types and the real field names, though some data types lose information when encoded (e.g., the [Online/Nintendo_Network/NEX/Types#PID|PID] type is often seen as just either a UInt32/UInt64). What this data does not include is the protocol ID, references to past protocol versions, enums/constants, etc.
+
+It is believed that this data was used during development to automatically generate the client code needed to handle [Online/Nintendo_Network/NEX/RMC|RMCs], however many clients have this metadata still in their code along with the (presumed) generated client code.
+
+This data is also often seen referred to as "DDL Parse Trees", given the tree-like structure. For an example parser, see https://github.com/PretendoNetwork/ddl-parser and https://github.com/PretendoNetwork/nex-documentation-generator.
+
+Clients may have multiple of these definitions, and elements can be encoded in any order. They are always encoded in big-endian byte order regardless of platform, and start with a short header:
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| UInt32 || Magic number <code>0xCD652312</code>
+|-
+| UInt8 || Unknown. Always 0
+|-
+| UInt32 || Major version
+|-
+| UInt32 || Minor version
+|-
+| UInt32 || Patch version
+|-
+| UInt32 || Build version
+|-
+| [[#NameSpace]] || Root
+|}
+
+== NameSpace ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| UInt32 || Number of elements
+|-
+| || List of [[#Element|elements]], encoded directly one after another
+|}
+
+== Element ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| UInt8 || Type ID
+|-
+| || Element data
+|}
+
+{| class="wikitable"
+|-
+! ID !! Type
+|-
+| 1 || [[#NameSpaceItem]]
+|-
+| 2 || [[#Declaration]]
+|-
+| 3 || [[#DOClassDeclaration]]
+|-
+| 4 || [[#DatasetDeclaration]]
+|-
+| 5 || [[#TypeDeclaration]]
+|-
+| 6 || [[#Variable]]
+|-
+| 8 || [[#RMC]]
+|-
+| 9 || [[#Action]]
+|-
+| 10 || [[#AdapterDeclaration]]
+|-
+| 11 || [[#PropertyDeclaration]]
+|-
+| 12 || [[#ProtocolDeclaration]]
+|-
+| 13 || [[#Parameter]]
+|-
+| 14 || [[#ReturnValue]]
+|-
+| 15 || [[#ClassDeclaration]]
+|-
+| 16 || [[#TemplateDeclaration]]
+|-
+| 17 || [[#SimpleTypeDeclaration]]
+|-
+| 18 || [[#TemplateInstance]]
+|-
+| 19 || [[#DDLUnitDeclaration]]
+|-
+| 20 || [[#DupSpaceDeclaration]]
+|}
+
+== String ==
+
+Strings do not have a null-terminator
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| UInt32 || String length
+|-
+| Bytes || String data
+|}
+
+== DeclarationUse ==
+
+Holds the name of a given type, such as the types of class fields and method parameters
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| UInt8 || Type ID (see [[#Element]])
+|-
+| [[#String]] || Full type name
+|}
+
+If declaration type is [[#TemplateInstance]], the following data is also present:
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#String]] || Base type name
+|-
+| UInt8 || Number of arguments
+|-
+| || List of [[#DeclarationUse]] arguments, encoded directly one after another
+|}
+
+== ParseTreeItem ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#String]] || Name
+|}
+
+== NameSpaceItem ==
+
+The second parse tree item is always the same as the first parse tree item. It is not known why it's stored twice.
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#ParseTreeItem]] || Parse tree item
+|-
+| [[#ParseTreeItem]] || Parse tree item
+|}
+
+== Declaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#NameSpaceItem]] || Namespace item
+|-
+| [[#String]] || DDL unit name
+|-
+| [[#NameSpace]] || Properties
+|}
+
+== DOClassDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|-
+| [[#String]] || Parent class name
+|-
+| UInt32 || Class ID
+|-
+| [[#NameSpace]] || Namespace
+|}
+
+== DatasetDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|-
+| [[#NameSpace]] || Variables
+|}
+
+== TypeDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|}
+
+== MethodDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|-
+| [[#NameSpace]] || Parameters
+|}
+
+== Variable ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#NameSpaceItem]] || Namespace item
+|-
+| [[#DeclarationUse]] || Declaration use
+|-
+| UInt32 || Array size
+|}
+
+== RMC ==
+
+Holds the metadata describing a single protocol method
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#MethodDeclaration]] || Method declaration. Seems to only really be used to encode the method name
+|-
+| [[#NameSpace]] || Parameters
+|}
+
+== Action ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#MethodDeclaration]] || Method declaration
+|-
+| [[#NameSpace]] || Parameters
+|}
+
+== AdapterDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|}
+
+== PropertyDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|-
+| UInt32 || Category mask
+|-
+| UInt32 || Allowed target mask
+|}
+
+== ProtocolDeclaration ==
+
+Holds the metadata describing the protocol
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Protocol name and associated foundation
+|-
+| [[#NameSpace]] || Protocol method definitions. Each element should be a [[#RMC]]
+|}
+
+== Parameter ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Variable]] || Variable
+|-
+| [[#DeclarationUse]] || Declaration use
+|-
+| UInt32 || Array size
+|-
+| UInt8 || Type (1=input, 2=output, 3=both)
+|}
+
+== ReturnValue ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Variable]] || Variable
+|-
+| [[#DeclarationUse]] || Declaration use
+|-
+| UInt32 || Array size
+|}
+
+== ClassDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#TypeDeclaration]] || Type declaration
+|-
+| [[#String]] || Parent class name
+|-
+| [[#NameSpace]] || Class members
+|}
+
+== TemplateDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#TypeDeclaration]] || Type declaration
+|-
+| UInt32 || Number of template arguments
+|}
+
+== SimpleTypeDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#TypeDeclaration]] || Type declaration
+|}
+
+== TemplateInstance ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#TypeDeclaration]] || Type declaration
+|-
+| [[#String]] || Base type name
+|-
+| UInt32 || Number of template arguments
+|-
+| || List of [[#String]] template arguments, encoded directly one after another
+|}
+
+== DDLUnitDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|-
+| [[#String]] || Unit name
+|-
+| [[#String]] || Unit dir
+|}
+
+== DupSpaceDeclaration ==
+
+{| class="wikitable"
+|-
+! Type !! Description
+|-
+| [[#Declaration]] || Declaration
+|}
