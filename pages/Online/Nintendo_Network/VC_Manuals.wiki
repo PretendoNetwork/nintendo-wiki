@@ -38,7 +38,7 @@ Only the following <code>region</code> values exist on the server:
 
 {| class="wikitable"
 |-
-! Code Name !! Console
+! Value !! Region
 |-
 | <code>JPN</code> || Japan
 |-
