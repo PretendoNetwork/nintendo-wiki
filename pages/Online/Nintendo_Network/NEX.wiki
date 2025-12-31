@@ -6,11 +6,11 @@ NEX was not made from scratch by Nintendo. It is based on [http://web.archive.or
 
 == Transport ==
 
-NEX uses UDP with a custom reliability layer called [[{{FULLPAGENAME}}/PRUDP|PRUDP]]. The connection to the server uses similar (and at times, the same) concepts as what is used to connect to other players via p2p, and each connection uses a version of [[{{FULLPAGENAME}}/Kerberos|kerberos]] where the target user is the game server.
+NEX uses UDP with a custom reliability layer called [[Online/Nintendo_Network/NEX/PRUDP|PRUDP]]. The connection to the server uses similar (and at times, the same) concepts as what is used to connect to other players via p2p, and each connection uses a version of [[Online/Nintendo_Network/NEX/Kerberos|kerberos]] where the target user is the game server.
 
 == Service Protocols ==
 
-Once a client has established a [[{{FULLPAGENAME}}/PRUDP|PRUDP]] connection to the server, each end of the connection may begin sending messages to each other. These messages encode the target [[{{FULLPAGENAME}}/Protocols|service protocol]], target protocol method, and method parameters/response values.
+Once a client has established a [[Online/Nintendo_Network/NEX/PRUDP|PRUDP]] connection to the server, each end of the connection may begin sending messages to each other. These messages encode the target [[Online/Nintendo_Network/NEX/Protocols|service protocol]], target protocol method, and method parameters/response values.
 
 == Servers ==
 
@@ -21,13 +21,13 @@ There are always at least 2 servers used by NEX, the ''authentication server'' a
 <div style="padding: 5px;">''The users game server account is NOT the same as their network account. See below for details.''</div>
 </div>
 
-The ''authentication server'' only implements [[{{FULLPAGENAME}}/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. After passing authentication, the ''authentication server'' sends the client the address of the ''secure server'' as well as a connection ticket. The client then disconnects from the ''authentication server'' and connects to the ''secure server'' with the ticket. The ''secure server'' is where the games actual protocols live.
+The ''authentication server'' only implements [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. After passing authentication, the ''authentication server'' sends the client the address of the ''secure server'' as well as a connection ticket. The client then disconnects from the ''authentication server'' and connects to the ''secure server'' with the ticket. The ''secure server'' is where the games actual protocols live.
 
 Optionally, the ''authentication server'' may also send the client the address of a ''special server'', and a list of protocol IDs which belong to said server. If used, the client connects to both the main ''secure server'' and the ''special server'', and any requests sent for "special" protocols are directed to the ''special server'' instead. For example, a game could put matchmaking on the ''secure server'' and leaderboards on the ''special server'' in order to not split server resources between protocols. Nintendo never used the ''special server''.
 
 == Accounts ==
 
-Since Nintendo did not make NEX from scratch, they had to integrate certain Rendez-Vous concepts into their own servers. One of these concepts being accounts. Rendez-Vous ships with, and is designed to use, it's own integrated account system. Rendez-Vous was also designed before the concept of multi-server game networks existed, so each server is designed to be entirely self contained. To get around this, Nintendo creates game server accounts when registering for network accounts, ties these game server accounts to the network account, and then syncs the newly created game server account to all game servers on the network. This means that, technically, on Nintendo Network you have a single dedicated account on every game server that exists in the network, which Nintendo keeps in sync. This also means that, by using the [[{{FULLPAGENAME}}/Protocols/AccountManagementProtocol|AccountManagementProtocol]] protocol, you can login with your own game server account and create a new game server account on that game server. This account would not be tied to a network account, and may or may not be synced properly to other games in the network.
+Since Nintendo did not make NEX from scratch, they had to integrate certain Rendez-Vous concepts into their own servers. One of these concepts being accounts. Rendez-Vous ships with, and is designed to use, it's own integrated account system. Rendez-Vous was also designed before the concept of multi-server game networks existed, so each server is designed to be entirely self contained. To get around this, Nintendo creates game server accounts when registering for network accounts, ties these game server accounts to the network account, and then syncs the newly created game server account to all game servers on the network. This means that, technically, on Nintendo Network you have a single dedicated account on every game server that exists in the network, which Nintendo keeps in sync. This also means that, by using the [[Online/Nintendo_Network/NEX/Protocols/AccountManagementProtocol|AccountManagementProtocol]] protocol, you can login with your own game server account and create a new game server account on that game server. This account would not be tied to a network account, and may or may not be synced properly to other games in the network.
 
 Each game server account has the following core parts:
 
@@ -47,7 +47,7 @@ Each game server account has the following core parts:
 | Extra data || Any additional data tied to the account. There are several methods available to create accounts, including Nintendo-specific methods, which all take in different data.
 |}
 
-The accounts password is typically not sent to the game server directly after creating the account. Instead, it is used to generate the users connection ticket. See [[{{FULLPAGENAME}}/Kerberos|Kerberos]] for more details on connection tickets. Since the password is used to create and validate the connection ticket, this means that the password does not need to be sent over the wire to login.
+The accounts password is typically not sent to the game server directly after creating the account. Instead, it is used to generate the users connection ticket. See [[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] for more details on connection tickets. Since the password is used to create and validate the connection ticket, this means that the password does not need to be sent over the wire to login.
 
 There are also a number of special accounts. These are used mostly for internal processes, besides the <code>guest</code> account which is available for all users. The special accounts available, and their uses, may differ between Rendez-Vous-based titles. Based on the gaps in accounts, and by the ranges where other games have their own special accounts, PIDs 1-99 are likely reserved for Rendez-Vous specifically, whereas PIDs 100+ are available for developer use.
 
@@ -58,7 +58,7 @@ The following special accounts exist on Nintendo Network:
 |-
 | 1 || <code>Quazal Authentication</code> || Represents the ''authentication server''. This is never seen in typical usage ||
 |-
-| 2 || <code>Quazal Rendez-Vous</code> || Represents the ''secure server''. This is target user in [[{{FULLPAGENAME}}/Kerberos|kerberos]] ||
+| 2 || <code>Quazal Rendez-Vous</code> || Represents the ''secure server''. This is target user in [[Online/Nintendo_Network/NEX/Kerberos|kerberos]] ||
 |-
 | 100 || <code>guest</code> || Represents a common guest account anyone can login to. The password is static and known to all clients. Permissions and functionality is typically limited. On Nintendo Network, this account can only be used to inform the game server that a new account has been created and is only available on the friends list server. || <code>MMQea3n!fsik</code>
 |-
