@@ -1,0 +1,865 @@
+__NOTOC__
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''PRUDP is a very extensible protocol, and some games may have made modifications to the protocol which are not documented here. This page aims to only document the protocol as seen in stock Rendez-Vous titles and the modifications Nintendo made for their NEX library. Other modifications may be added on a case-by-case basis, assuming they do not distract from the main goal of the page and are applicable to a large number of titles.''</div>
+</div>
+
+PRUDP is a proprietary transport-like protocol developed by Quazal. Originally built on top of UDP, the protocol gives UDP some TCP-like features (persistent connections, reliable packet transfer, etc.) without the overhead of TCP, while also allowing the developer to use unreliable packets where needed, and adding in some extra features like automatic fragmentation/reconstruction, compression/encryption, etc. PRUDP was later also used on top of other protocols like TCP/WebSockets, not just UDP, but the same core concepts apply regardless of the underlying transport protocol.
+
+== Sandbox Access Key ==
+
+Every game server has a unique sandbox access key. This can also be seen as the "game server access key", they are the same. This is used to calculate the [[#Packet Signature]] and [[#Packet Checksum]]. All NEX titles use access keys which are 8 lowercase hex characters, with the sole exception of the Friends server whose access key is <code>ridfebb9</code>. This limitation is only imposed by NEX, however. Rendez-Vous clients do not limit themselves to 8 lowercase hex characters, and may also use uppercase and non-hex characters. It seems that the access key may also be allowed to be up to 128 characters long, though no games are currently known to use anything larger than 8.
+
+The only way to find the access key of a server is by checking the client, as they are often hard-coded. In most cases this involves disassembling the game, however some games have been known to store their access keys in external files (such as [https://github.com/kinnay/NintendoClients/issues/2#issuecomment-429662502 Metroid Prime: Federation Force]). For NEX titles, tools such as https://github.com/PretendoNetwork/access-key-extractor exist to attempt to automate the extraction of these keys. A key may also be brute forced, as several valid keys exist for all servers due to their small size.
+
+== Packet Structure ==
+
+Depending on the library variation, there are several versions of PRUDP packets and the underlying protocol. Most changes are minor, however. NEX game servers will only ever use PRUDPv0, PRUDPv1, or PRUDPLite. Non-NEX game servers will use either the default Rendez-Vous variation, or be customized in some other way.
+
+PRUDPv0 and PRUDPv1 are used by NEX game servers on the Nintendo Wii U and 3DS. Any game server which supports PRUDPv1 can also communicate using PRUDPv0. Some game servers which use PRUDPv0 may also support PRUDPv1, but this assumption is not always safe.
+
+PRUDPLite will only be used on NEX game servers on the Nintendo Switch, and is the only version supported by those clients.
+
+<tabs items="Rendez-Vous,NEX PRUDPv0,NEX PRUDPv1,NEX PRUDPLite" storagekey="PRUDPPacketStructure">
+	<tab name="Rendez-Vous">
+		The original PRUDP packet structure developed by Quazal for Rendez-Vous. All other variations are built from this.
+
+		{| class="wikitable"
+		! Offset !! Size !! Description
+		|-
+		| 0x0 || 0x1 || Source [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x1 || 0x1 || Destination [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x2 || 0x1 || [[#Flags and Type|Packet flags and packet type]]. The upper 5 bits are the packet flags. The remaining 3 bits are the packets type
+		|-
+		| 0x3 || 0x1 || [[#Sessions|Session]] ID
+		|-
+		| 0x4 || 0x4 || [[#Rendez-Vous Packet Signature|Packet signature]]
+		|-
+		| 0x8 || 0x2 || [[#Sequence ID]]
+		|-
+		| 0xA || || [[#Packet Specific Data]]
+		|-
+		| || || Payload
+		|-
+		| || 0x1 or 0x4 || [[#Packet Checksum]]
+		|}
+	</tab>
+
+	<tab name="NEX PRUDPv0">
+		The first version of PRUDP used by NEX. This is almost identical to the original structure, however the "packet flags and packet type" field has been updated from a UInt8 to a UInt16.
+
+		{| class="wikitable"
+		! Offset !! Size !! Description
+		|-
+		| 0x0 || 0x1 || Source [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x1 || 0x1 || Destination [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x2 || 0x2 || [[#Flags and Type|Packet flags and packet type]]. The upper 12 bits are the packet flags. The remaining 4 bits are the packets type
+		|-
+		| 0x4 || 0x1 || [[#Sessions|Session]] ID
+		|-
+		| 0x5 || 0x4 || [[#NEX PRUDPv0 Packet Signature|Packet signature]]
+		|-
+		| 0x9 || 0x2 || [[#Sequence ID]]
+		|-
+		| 0xB || || [[#Packet Specific Data]]
+		|-
+		| || || Payload
+		|-
+		| || 0x1 or 0x4 || [[#Packet Checksum]]
+		|}
+	</tab>
+
+	<tab name="NEX PRUDPv1">
+		The second version of PRUDP used by NEX. This version expands some of the capabilities of PRUDPv0, such as additional options, substreams, etc.
+
+		{| class="wikitable"
+		! Offset !! Size !! Description
+		|-
+		| 0x00 || 0x02 || Magic <code>0xEAD0</code>
+		|-
+		| 0x02 || 0x0C || Header
+		|-
+		| 0x0E || 0x10 || [[#NEX PRUDPv1 Packet Signature|Packet signature]]
+		|-
+		| 0x1E || || [[#Packet Specific Data]]
+		|-
+		| || || Payload
+		|}
+
+		'''Header:'''
+
+		{| class="wikitable"
+		! Offset !! Size !! Description
+		|-
+		| 0x0 || 0x1 || PRUDP version (always 1)
+		|-
+		| 0x1 || 0x1 || Packet-specific data size
+		|-
+		| 0x2 || 0x2 || Payload size
+		|-
+		| 0x4 || 0x1 || Source [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x5 || 0x1 || Destination [[#Virtual Ports|Virtual Port]]
+		|-
+		| 0x6 || 0x2 || [[#Flags and Type|Packet flags and packet type]]. The upper 12 bits are the packet flags. The remaining 4 bits are the packets type
+		|-
+		| 0x8 || 0x1 || [[#Sessions|Session]] ID
+		|-
+		| 0x9 || 0x1 || [[#Substreams|Substream]] ID
+		|-
+		| 0xA || 0x2 || [[#Sequence ID]]
+		|}
+	</tab>
+
+	<tab name="NEX PRUDPLite">
+		The third version of PRUDP used by NEX. This version was added in NEX 4.0 and is mostly seen in Nintendo Switch titles.
+
+		{| class="wikitable"
+		! Offset !! Size !! Description
+		|-
+		| 0x0 || 0x1 || Magic <code>0x80</code>
+		|-
+		| 0x1 || 0x1 || Packet-specific data size
+		|-
+		| 0x2 || 0x2 || Payload size
+		|-
+		| 0x4 || 0x1 || [[#Virtual Ports|Virtual Port]] stream types. The upper 4 bits are the source stream type, and the lower 4 bits are the destination stream type
+		|-
+		| 0x5 || 0x1 || Source [[#Virtual Ports|Virtual Port]] stream ID
+		|-
+		| 0x6 || 0x1 || Destination [[#Virtual Ports|Virtual Port]] stream ID
+		|-
+		| 0x7 || 0x1 || [[#Fragment ID]]
+		|-
+		| 0x8 || 0x2 || [[#Flags and Type|Packet flags and packet type]]. The upper 12 bits are the packet flags. The remaining 4 bits are the packets type
+		|-
+		| 0xA || 0x2 || [[#Sequence ID]]
+		|-
+		| 0xC || || [[#Packet Specific Data]]
+		|-
+		| || || Payload
+		|}
+	</tab>
+</tabs>
+
+== Endpoints / Stations ==
+
+PRUDP does not use the traditional concept of a "server", where there is a clear separation of "server" and "client" in terms of operation, implementation, and responsibilities. In reality, the "server" is more analogous to another client. This is because "server" code can often be found inside clients, PRUDP clients locate/connect to "servers" using the same mechanisms they use to locate/connect to each other (though the underlying transport may differ, see [[Online/Nintendo_Network/NEX/P2P]] for details), and the PRUDP connection/[[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] ticket targets an internal server user (see [[Online/Nintendo_Network/NEX#Accounts]] for details). For simplicity, these documents will simply refer to any Station (see below) which is not explicitly another client as a server.
+
+A "Station" refers to any connectable entity in Rendez-Vous/NEX. Stations are assigned one or more [[Online/Nintendo_Network/NEX/Types#StationURL|StationURLs]] (for other clients, this is usually both a "public" URL with the users public IP address and a "private" URL with the users local IP address).
+
+A PRUDPEndPoint (official name, simply "Endpoint" for short) represents a connection target on a Station. Each open Endpoint is assigned a [[#Virtual Ports|Virtual Port]]. A server has at least one Endpoint open at all times, but may have as many as there are [[#Virtual Ports]] available. For example, NEX on the Nintendo Wii U/3DS utilizes 2 different physical servers per game, each with their own address; the authentication server and secure server. Each server has a single Endpoint open, each using stream type "RVSecure" and stream ID 1. In contrast, NEX on the Nintendo Switch uses a single physical server for both authentication and secure connections. This server has 2 Endpoints open on the same address, both using stream type "RVSecure" and stream IDs 1 and 2 for the authentication and secure connections respectively.
+
+== Virtual Ports ==
+
+A "virtual port" is a mechanism that allows a single physical socket to create/accept multiple PRUDP connections by distinguishing connections through metadata in each packet. They can also be seen in systems like p2p connections, however that is not the focus of this document.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way virtual ports are encoded, stream ID/type ranges, etc. can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
+</div>
+
+=== Connection Multiplexing ===
+
+When a client needs multiple PRUDP connections, it does not create a new socket for each connection. Instead, a single socket is reused to create multiple PRUDP connections. Each connection is represented by a distinct "stream" that is assigned to a virtual port. The same happens whenever a server needs to open a new [[#Endpoints / Stations|Endpoint]].
+
+Every PRUDP packet contains both a source and destination virtual port to identify which connection the packet belongs to. A virtual port consists of two components:
+
+* '''Stream Type''': Identifies the category of connection. The source and destination stream types will always match
+* '''Stream ID''': An ID used to distinguish between multiple connections, even if they share the same type
+
+A client may have any number of virtual port connections open, including multiple virtual ports of the same stream type, so long as there are available stream IDs. Each virtual port, even of the same type, is treated as a wholly unique connection as if the connection was made with a dedicated physical socket.
+
+=== Virtual Port Encoding ===
+
+How virtual ports are encoded in packets depends on the PRUDP protocol variation:
+
+'''Rendez-Vous, NEX PRUDPv0, and NEX PRUDPv1:'''
+
+* Virtual port uses a single byte
+** Upper 4 bits: stream type
+** Lower 4 bits: stream ID
+* Stream IDs range from 1 to <code>0xF</code>
+
+'''NEX PRUDPLite:'''
+
+* Stream types are encoded in a single byte:
+** Upper 4 bits: source stream type
+** Lower 4 bits: destination stream type
+* Source and destination stream IDs are each encoded in dedicated single bytes
+* Stream IDs range from 1 to <code>0x1F</code>
+
+=== Stream Types ===
+
+Every connection is assigned a stream type. The stream type provides context for the intent/use of the stream, and allows for clients to set different settings for different streams based on client needs.
+
+{| class="wikitable"
+|-
+! Stream type !! Name !! Description
+|-
+| 1 || DO || "Duplicate Object". Used for P2P connections using [[Online/Nintendo_Network/NEX/P2P/NetZ|NetZ]]
+|-
+| 2 || RVAuthentication || Unknown
+|-
+| 3 || OldRVSecure || Original "secure" stream type. Used by clients until RVSecure became available. Uses a less secure payload encryption algorithm. See [[#Payload Encryption]] for details
+|-
+| 4 || SandBoxMgmt || Unknown
+|-
+| 5 || NAT || Used for NAT traversal between users using [[Online/Nintendo_Network/NEX/P2P/NetZ|NetZ]]
+|-
+| 6 || SessionDiscovery || Unknown
+|-
+| 7 || NATEcho || Unknown
+|-
+| 8 || Routing || Unknown
+|-
+| 9 || Game || Unknown
+|-
+| 10 || RVSecure || New "secure" stream type. Used by NEX 2.0+ (possibly as early as NEX 1.1.0, as this is what the Nintendo Network friends server uses). Always used by NEX when available. Uses a more secure payload encryption algorithm. See [[#Payload Encryption]] for details
+|-
+| 11 || Relay || Unknown
+|}
+
+Each stream type (not individual stream) may have its own configuration, referred to as "Stream Settings" internally, which controls different aspects of how the client should behave during a connection. Every client may have different settings for each stream type on a per-game basis. Reverse engineering the client is required to know how each stream is configured for a specific game.
+
+The following aspects of the client are configurable on a per-stream-type basis:
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Setting field names based on https://github.com/PretendoNetwork/nex-go/blob/79f9e2216f9cb52d41c674fffaa8eafa9bc83fc6/stream_settings.go. Default values based on WATCH_DOGS/Xenoblade Chronicles.''</div>
+</div>
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| Packet bundling || Presumably controls how the sender can bundle multiple packets into a single packet on the wire
+|-
+| ExtraRetransmitTimeoutTrigger || The number of times a [[#Reliability|reliable]] packet can be retransmitted before the "extra retransmit timeout multiplier" is used
+|-
+| MaxPacketRetransmissions || The number of times a [[#Reliability|reliable]] packet can be retransmitted before the timeout time is checked
+|-
+| KeepAliveTimeout || Presumably the time a packet can be alive for without acknowledgement (milliseconds)
+|-
+| Key || [[#Packet Checksum]] key
+|-
+| FaultDetectionEnabled || Presumably used to detect connection issues?
+|-
+| InitialRTT || The initial connection RTT used for all non-SYN packets
+|-
+| SynInitialRTT || The initial connection RTT used for all SYN packets
+|-
+| EncryptionAlgorithm || [[#Payload Encryption]] algorithm
+|-
+| ExtraRetransmitTimeoutMultiplier || Used as part of the RTO calculations when retransmitting a packet. Only used if ExtraRetransmitTimeoutTrigger has been reached
+|-
+| WindowSize || The max number of (reliable?) packets allowed in a SlidingWindow
+|-
+| CompressionAlgorithm || [[#Payload Compression]] algorithm
+|-
+| RTTRetransmit || The number of times that a retried packet will be included in RTT calculations if we receive an ACK packet for it
+|-
+| RetransmitTimeoutMultiplier || Used as part of the RTO calculations when retransmitting a packet. Only used if ExtraRetransmitTimeoutTrigger has not been reached
+|-
+| MaxSilenceTime || Presumably the time a connection can go without any packets from the other side (milliseconds)
+|}
+
+=== Stream ID Assignment ===
+
+The server can seemingly select any stream ID at will, usually starting at 1 and counting up. This can be seen in NEX on the Nintendo Switch, where the authentication connection uses stream ID 1 and the secure connection uses stream ID 2.
+
+Client stream IDs are assigned counting down, using the highest unused ID ≤ the max stream ID.
+
+== Flags and Type ==
+
+Each packet is marked as a specific type of packet, and has a series of control flags. Each packet type has different semantic meanings, and the packet flags tell the receiver additional metadata about how to process the packet. Each packet's flags and type are encoded together as a single bit field. Rendez-Vous encodes this in a single byte, however NEX expanded this field to 2 bytes in order to support more flags.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet types/flags are handled can be modified/replaced should a developer want to. This means additional/different packet types/flags may be seen, and they may be encoded differently. Additional reverse engineering may be required for some games.''</div>
+</div>
+
+=== Packet Types ===
+
+Each packet is assigned a specific type that determines its role in the connection lifecycle. Rendez-Vous uses these types to manage connection establishment, data transfer, and teardown in a manner similar to TCP, providing a stateful protocol layer on top of UDP.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''PRUDP packets may also sometimes be seen in cases such as p2p connections, relay servers, etc. Due to this, some packet types/flags may exist which are not relevant to standard client-server communications.''</div>
+</div>
+
+{| class="wikitable"
+! ID !! Name !! Description
+|-
+| 0x0 || <code>SYN</code> || Connection initiation - the first packet sent when establishing a new connection (analogous to TCP's SYN)
+|-
+| 0x1 || <code>CONNECT</code> || Connection completion - confirms successful establishment of the connection (analogous to TCP's ACK after receiving the server's SYN-ACK)
+|-
+| 0x2 || <code>DATA</code> || Payload transmission - carries the actual application data once connection is established
+|-
+| 0x3 || <code>DISCONNECT</code> || Connection termination - signals the receiver to cleanly close the connection
+|-
+| 0x4 || <code>PING</code> || [[#Heartbeat]] - maintains connection and checks if the other side is still responsive
+|-
+| 0x5 || <code>USER</code> || Unknown
+|-
+| 0x6 || <code>ROUTE</code> || Unknown
+|-
+| 0x7 || <code>RAW</code> || Unknown
+|}
+
+=== Packet Flags ===
+
+Packet flags provide additional metadata about how the packet should be processed and acknowledged. These flags work in combination to implement reliability guarantees, flow control, and acknowledgment mechanisms on top of the underlying transport layer.
+
+{| class="wikitable"
+! Flag !! Name !! Description
+|-
+| 0x001 || <code>ACK</code> || Acknowledgment - indicates this packet is acknowledging receipt of a previous packet. See [[#Acknowledgment]] for details
+|-
+| 0x002 || <code>RELIABLE</code> || Reliable delivery - marks this packet for guaranteed delivery. See [[#Reliability]] for details
+|-
+| 0x004 || <code>NEED_ACK</code> || Requires acknowledgment - sender expects an <code>ACK</code> response for this packet. See [[#Acknowledgment]] for details
+|-
+| 0x008 || <code>HAS_SIZE</code> || Size field present - indicates the packet includes an explicit payload size. See [[#Packet Specific Data]] for details
+|-
+| 0x200 || <code>MULTI_ACK</code> || Multiple acknowledgments - allows acknowledging multiple packets in a single response. See [[#Acknowledgment]] for details
+|}
+
+== Sessions ==
+
+Each connection from the client is a unique session. The client chooses its own session ID locally. The server also chooses a session ID, which does not have to match the ID of the client. These IDs are not globally unique, and are picked at random.
+
+Each session is secured with a session key. This is obtained from the [[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] ticket during login. The session key is used as the starting RC4 key for packet encryption in NEX.
+
+== Packet Signature ==
+
+All variations of PRUDP (besides PRUDPLite) make use of a packet signature of some kind, though the way it is encoded/calculated, and the semantics surrounding it, depend both on the PRUDP variation and, at times, the game.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet signatures are handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
+</div>
+
+=== Rendez-Vous Packet Signature ===
+
+In all Rendez-Vous packets, the signature is the [[#Connection Signature]] that was received during the connection handshake.
+
+=== NEX PRUDPv0 Packet Signature ===
+
+'''Friends server:'''
+
+* In <code>DATA</code> packets with an empty payload, the signature is always set to <code>0x12345678</code>
+* In all other <code>DATA</code> packets, the signature is the first 4 bytes of the HMAC-MD5 of the encrypted payload. The key for the HMAC is the MD5 hash of the [[#Sandbox Access Key]]
+* In all other packets, the signature is the [[#Connection Signature]] received during the connection handshake
+
+'''Game servers:'''
+
+In <code>DATA</code> and <code>DISCONNECT</code> packets, the signature is the first 4 bytes of the HMAC-MD5 of the following data. The key for the HMAC is the MD5 hash of the [[#Sandbox Access Key]].
+
+{| class="wikitable"
+! Size !! Description
+|-
+| 0x0, 0x10, or 0x20 || [[#Sessions|Session]] key. Not used if connecting to the games authentication server
+|-
+| 0x2 || [[#Sequence ID]]
+|-
+| 0x1 || [[#Fragment ID]]
+|-
+| || Encrypted payload
+|}
+
+In all other packets, the signature is the [[#Connection Signature]] received during the connection handshake.
+
+=== NEX PRUDPv1 Packet Signature ===
+
+The signature is the first 4 bytes of the HMAC-MD5 of the following data. The key for the HMAC is the MD5 hash of the [[#Sandbox Access Key]].
+
+{| class="wikitable"
+! Size !! Description
+|-
+| 0x8 || Bytes 0x4-0xC of the packet header
+|-
+| 0x0, 0x10, or 0x20 || [[#Sessions|Session]] key. Not used if connecting to the games authentication server
+|-
+| 0x4 || Sum of all the bytes of the [[#Sandbox Access Key]]. Little-endian
+|-
+| 0x0 or 0x10 || [[#Connection Signature]]. Nothing if it hasn't been received yet
+|-
+| || Packet-specific data
+|-
+| || Encrypted payload
+|}
+
+== Sequence ID ==
+
+The sequence ID is an incrementing value assigned to each packet, used to track the order the packets were sent in. The receiver should reorder any out of order reliable packets before handling new ones. See [[#Reliability]] for details on packet reliability. The counters for client→server and server→client packets are independent.
+
+Both the server and client maintain at least 3 different sequence ID counters:
+
+# [[#Reliability|Reliable]] packets. These are handled by their respective reliable [[#Substreams|substream]]. Each reliable [[#Substreams|substream]] has its own sequence ID counter
+# [[#Reliability|Unreliable]] <code>PING</code> packets use a separate sequence ID counter
+# [[#Reliability|Unreliable]] <code>DATA</code> packets use a separate sequence ID counter
+
+Counters typically start with ID 0, however the starting ID for [[#Reliability|unreliable]] <code>DATA</code> packets is determined during connection establishment when using PRUDPv1 (starting ID is 1 in other variations). See [[#Packet Specific Data]] for details. The <code>SYN</code> and <code>CONNECT</code> packet types always use the default [[#Substreams|substream]] sequence ID counter for their sequence IDs, regardless of whether the packets use the <code>RELIABLE</code> flag.
+
+The sequence ID is also used in [[#Acknowledgment]], to tell the sender the packet was received correctly.
+
+== Packet Specific Data ==
+
+Some packets have context-specific data attached to them. This data will not always be present, and even when it is present the contents of the data will not always be the same. The kind of data available, how it is encoded, and when it appears in certain packets all depend on the protocol variation.
+
+=== Rendez-Vous / NEX PRUDPv0 Packet Specific Data ===
+
+Packet specific data is encoded as a continuous stream of bytes. There is no header or metadata information to know what data is available. The structure of the data must be known beforehand and relies entirely on the packet type and flags. Data is encoded in the following order:
+
+{| class="wikitable"
+! Only present if !! Size !! Description
+|-
+| Type is <code>SYN</code> or <code>CONNECT</code> || 0x4 || [[#Connection Signature]]
+|-
+| Type is <code>DATA</code> || 0x1 || [[#Fragmentation|Fragment]] ID
+|-
+| Flag <code>HAS_SIZE</code> is set || 0x2 || Payload size
+|}
+
+=== NEX PRUDPv1 Packet Specific Data ===
+
+See [[#Packet Specific Data Options]] for details on how data is encoded. The following options are used:
+
+{| class="wikitable"
+! Option Type !! Only present if
+|-
+| 0x0 || Type is <code>SYN</code> or <code>CONNECT</code>
+|-
+| 0x1 || Type is <code>SYN</code> or <code>CONNECT</code>
+|-
+| 0x2 || Type is <code>DATA</code>
+|-
+| 0x3 || Type is <code>CONNECT</code>
+|-
+| 0x4 || Type is <code>SYN</code> or <code>CONNECT</code>
+|}
+
+=== NEX PRUDPLite Packet Specific Data ===
+
+See [[#Packet Specific Data Options]] for details on how data is encoded. The following options are used:
+
+{| class="wikitable"
+! Option Type !! Only present if
+|-
+| 0x00 || Type is <code>SYN</code> or <code>CONNECT</code>
+|-
+| 0x01 || Type is <code>SYN</code> and flag <code>ACK</code> is set
+|-
+| 0x80 || Type is <code>CONNECT</code> and flag <code>ACK</code> is NOT set
+|}
+
+=== Packet Specific Data Options ===
+
+Starting with NEX PRUDPv1, packet specific data is now officially called "options" internally. Each option is now encoded with both an option type and the size of the options data, removing the ambiguity from earlier PRUDP versions in the order of which the data is encoded:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x1 || Option type
+|-
+| 0x1 || 0x1 || Option data length
+|-
+| 0x2 || || Option data
+|}
+
+The following options are available:
+
+{| class="wikitable"
+! Option Type !! Size !! Description
+|-
+| 0x00 || 0x4 || [[#Supported Functions]]
+|-
+| 0x01 || 0x10 || [[#Connection Signature]]
+|-
+| 0x02 || 0x1 || [[#Fragmentation|Fragment]] ID
+|-
+| 0x03 || 0x2 || Initial [[#Sequence ID]] for [[#Reliability|unreliable]] <code>DATA</code> packets
+|-
+| 0x04 || 0x1 || Maximum [[#Substreams|substream]] ID
+|-
+| 0x80 || 0x10 || [[#Lite Signature]]
+|}
+
+== Packet Checksum ==
+
+Rendez-Vous and NEX PRUDPv0 use checksums to verify a packet's integrity. The checksum is calculated over the entire packet (including the header and encrypted payload), using a keyed checksum algorithm. The key used by the checksum algorithm depends on the connections [[#Virtual Ports]]. In NEX only a single stream is used and the key is the sum of all the bytes of the [[#Sandbox Access Key]].
+
+Checksums have 2 variations, a 1 byte checksum and a 4 byte checksum, which both use slightly different algorithms. By default the 1 byte checksum is used, but a game may optionally configure itself to use the 4 byte variation. The 4 byte variation is called the "enhanced checksum" internally.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, the checksum algorithm can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games. For example, WATCH_DOGS on the Nintendo Wii U calculates the checksum key by passing the [[#Sandbox Access Key]] to the checksum algorithm itself (with a key of 0), and uses an entirely different checksum algorithm altogether.''</div>
+</div>
+
+=== Default Checksum Algorithm ===
+
+<pre>
+def calc_checksum(data: bytes, key: int) -> int:
+	"""
+	Split the data into a list of little endian uint32's
+	If there is not enough data for a uint32, discard it
+	EX: b"abcdefghijk" (0x6162636465666768696A6B)
+	becomes (1684234849, 1751606885), aka (0x64636261, 0x68676665)
+	"""
+	words = struct.unpack_from("<%iI" %(len(data) // 4), data)
+	temp = sum(words) & 0xFFFFFFFF # Add the values and truncate to a uint32
+	main = struct.pack("I", temp) # Pack the sum of the main data back into bytes
+	remaining = data[len(data) & ~3:] # The data left over from the above
+
+	checksum = key
+	checksum += sum(remaining) # Add the remaining data first
+	checksum += sum(main) # Add the main data last
+
+	return checksum & 0xFF # Truncate to a uint8
+</pre>
+
+=== Enhanced Checksum Algorithm ===
+
+<pre>
+def calc_checksum(data: bytes, key: int) -> int:
+	data += b"\0" * (4 - len(data) % 4) # Pad data to nearest multiple of 4
+
+	"""
+	Split the data into a list of little endian uint32's
+	EX: b"abcdefgh" (0x6162636465666768)
+	becomes (1684234849, 1751606885), aka (0x64636261, 0x68676665)
+	"""
+	words = struct.unpack("<%iI" %(len(data) // 4), data)
+	checksum = key & 0xFF # Checksum key, truncated to uint8
+	checksum += sum(words) # Add the packet data sum
+
+	return checksum & 0xFFFFFFFF # Truncate to a uint32
+</pre>
+
+== Substreams ==
+
+NEX PRUDPv1 introduces support for multiple reliable substreams within a single connection. These can be thought of as sort of an extension of [[#Virtual Ports]], further splitting the client state. Each substream maintains independent state for encryption, sequence ID counters, retransmission, etc. Each substream is assigned an ID starting from 0, counting up to the maximum substream ID as negotiated during the connection [[#Handshake]] in the [[#Packet Specific Data]]. NEX only officially uses a single substream, whose ID is always 0.
+
+Every reliable packet belongs to a substream. Unreliable packets do not belong to a substream. The exception to this is the <code>SYN</code> and <code>CONNECT</code> packets, which always belong to the default substream.
+
+== Connection Protocol ==
+
+=== Handshake ===
+
+Despite being based on UDP (a connectionless protocol), neither the server nor the client can properly communicate without establishing a "connection". To do this, the client initiates a handshake. This handshake alerts the server that a client is attempting to connect, and then both ends negotiate their [[#Supported Functions|capabilities]].
+
+Before the client can initiate the handshake, it must first locate the server and target an endpoint. How these are located is an implementation detail, and does not matter. The client then selects a desired stream type and stream ID (see [[#Virtual Ports]]) and the following communications occur:
+
+{| class="wikitable"
+! Source !! Destination !! Packet !! Description
+|-
+| Client || Server || <code>SYN</code> || Client attempts to open a connection. Starting in NEX PRUDPv1, this also sends the client [[#Supported Functions|capabilities]]
+|-
+| Server || Client || <code>SYN</code> flag <code>ACK</code> || Server acknowledges the attempt and sends back its [[#Connection Signature]]. Starting in NEX PRUDPv1, this also sends the server [[#Supported Functions|capabilities]]
+|-
+| Client || Server || <code>CONNECT</code> || Client sends its session ID. In NEX PRUDPv0/v1, this also sends the clients [[#Connection Signature]]. In PRUDPLite, this also sends the [[#Lite Signature]]. Starting in NEX PRUDPv1, the client also checks the server [[#Supported Functions|capabilities]] and sends ones it selects, and sends the initial sequence ID for its unreliable DATA packets, and sends its maximum [[#Substreams|substream]] ID
+|-
+| Server || Client || <code>CONNECT</code> flag <code>ACK</code> || Server accepts the connection attempt and sends back its session ID. Starting in NEX PRUDPv1, the server also verifies the [[#Supported Functions|capabilities]] the client selected and sends back the ones it selects (should match the client), and sends the initial sequence ID for its unreliable DATA packets, and sends its maximum [[#Substreams|substream]] ID
+|}
+
+If at any point either end decides it does not want to, or cannot, proceed with the connection, such as if there are no compatible [[#Supported Functions]], it can reject the attempt. Once the server successfully acknowledges the clients <code>CONNECT</code> packet, the connection has been established and both ends may begin sending <code>DATA</code> packets to each other. See [[#Data Transfer]] for details.
+
+==== Secure Server Connection ====
+
+In connections to the authentication server, the payload of both <code>CONNECT</code> packets should be empty.
+
+In connections to the secure server, the payload of the client <code>CONNECT</code> packet should contain the following:
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || [[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] ticket data, obtained from the authentication server
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || User verification data. This data is [[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] encrypted using the session key
+|}
+
+The user verification data is as follows:
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || PID of the connecting user
+|-
+| UInt32 || CID of the secure server [[#Endpoints / Stations|station]]
+|-
+| UInt32 || Response check value
+|}
+
+The server uses this data to validate that the connecting user has passed authentication, communicates the session key to the secure server, and validates that the user is who they say they are.
+
+The payload of the server <code>CONNECT</code> acknowledgement packet should contain the following:
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || Response check value + 1
+|}
+
+The client validates this check value to ensure the server has correctly interpreted and accepted the ticket/verification data. If either end has any issues with the other's data, the connection is aborted.
+
+=== Data Transfer ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, payload contents and the available encryption/compression algorithms/order may differ between games. Additional reverse engineering may be required for some games.''</div>
+</div>
+
+Once the PRUDP handshake has been completed, each end of the connection may begin sending <code>DATA</code> packets to each other. These packets carry the actual application data. Payloads contain [[Online/Nintendo_Network/NEX/RMC|RMCs]]. In Rendez-Vous/NEX PRUDPv0 the size of the packet payload is set in the [[#Packet Specific Data]]. If the payload is not explicitly set, it can be inferred based on the amount of remaining data in the packet + the configured checksum size (if applicable), but that is not always reliable as the socket may receive multiple PRUDP packets per network message. NEX PRUDPv1/PRUDPLite always encodes the payload size in the main packet data.
+
+Payloads cannot be any size. If a payload's size exceeds the maximum length (BEFORE ENCRYPTION/COMPRESSION), the payload is split between multiple packets. The maximum size of a payload depends on the client settings and PRUDP variation. See [[#Fragmentation]] for details.
+
+Either end may send the other request [[Online/Nintendo_Network/NEX/RMC|RMCs]]. Typically the server only sends the client a request when sending a notification (see [[Online/Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]] and [[Online/Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for details), however the client always has functionality for handling requests for all methods in all protocols.
+
+==== Payload Compression ====
+
+<code>DATA</code> packets can have their payloads optionally compressed before transfer. Compression happens BEFORE encryption. NEX never uses compressed payloads. Rendez-Vous provides several compression algorithms. The most commonly seen are ZLib and LZO, though a developer may use any algorithm they choose.
+
+Which algorithm is used, if any, depends on the [[#Virtual Ports|Virtual Port]] stream type settings.
+
+When compression is enabled, the payload contents become:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x1 || Compression ratio
+|-
+| 0x1 || || Compressed payload
+|}
+
+The compression ratio is the size of the uncompressed payload divided by the size of the compressed payload, rounded up. This is used to determine how much space to allocate when decompressing the payload. If the compression ratio is 0 while compression is enabled, the payload is uncompressed.
+
+==== Payload Encryption ====
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''The following only applies to connections which do NOT use WebSockets. WebSocket connections, like those on the Nintendo Switch, do not encrypt payloads at all, as the entire connection is already encrypted with SSL.''</div>
+</div>
+
+<code>DATA</code> packets can have their payloads optionally encrypted before transfer. Encryption happens AFTER compression. If encryption is enabled, the payload contents become the encrypted payload with no header. If compression is enabled, the encryption algorithm encrypts the entire payload (including the compression ratio).
+
+Which algorithm is used, if any, depends on the [[#Virtual Ports|Virtual Port]] stream type settings. In both Rendez-Vous and NEX every packet is encrypted using RC4 by default. The default RC4 key is <code>CD&ML</code> ("'''C'''ana'''D'''a and '''M'''ontrea'''L'''", where Quazal was originally headquartered).
+
+When the stream type <code>OldRVSecure</code> is used each packet uses its own RC4 stream, reusing the same key each time.
+
+When the stream type <code>RVSecure</code> is used, a more sophisticated method is employed:
+
+When connecting to the authentication [[#Endpoints / Stations|Endpoint]], the key for all incoming and outgoing streams is always the default key. Once connected to the secure [[#Endpoints / Stations|Endpoint]], reliable and unreliable <code>DATA</code> packets are then encrypted differently from each other:
+
+'''Reliable:'''
+
+Each connection has separate incoming and outgoing RC4 streams for each of its reliable [[#Substreams]]. The streams are not reset, unlike Rendez-Vous, and packets must be processed in [[#Sequence ID]] order.
+
+The initial key is the [[#Sessions|session]] key obtained from the [[Online/Nintendo_Network/NEX/Kerberos|Kerberos]] ticket during login. For all additional [[#Substreams]], the key is calculated using the previous substreams key as a base, starting with the initial substreams key. The key generation algorithm is as follows:
+
+<pre>
+def modify_key(key):
+	key = bytearray(key)
+
+	# Only the first half of the key is modified
+	add = len(key) // 2 + 1
+	for i in range(len(key) // 2):
+		key[i] = (key[i] + add - i) & 0xFF
+
+	return bytes(key)
+
+session_key = b'abcdefghijklmnop' # Example. This would be used as the key for the first substream
+key2 = modify_key(session_key) # This modified key would be used for the second substream
+key3 = modify_key(key2) # This modified key would be used for the third substream
+key4 = modify_key(key3) # This modified key would be used for the fourth substream
+# And so on
+</pre>
+
+'''Unreliable:'''
+
+Unreliable <code>DATA</code> packets do not belong to a substream. Since the packets can be received and processed in any order, a single RC4 stream cannot be used, or else the RC4 state would become desynchronized. To solve this, a unique RC4 stream is used for each unreliable data packet. Unlike in Rendez-Vous however, which uses the same key for every packet, each unreliable <code>DATA</code> packet in NEX has its own unique key. To accomplish this, each end of the connection generates the unreliable packet key on the fly. The key generation algorithm is as follows:
+
+<pre>
+def make_unreliable_key(packet, session_key):
+	# Generate a new key from the session key
+	part1 = combine_keys(session_key, bytes.fromhex("18d8233437e4e3fe"))
+	part2 = combine_keys(session_key, bytes.fromhex("233e600123cdab80"))
+	base_key = part1 + part2
+
+	# Modify the key such that no two packets use the same key
+	key = list(base_key)
+	key[0] = (key[0] + packet.sequence_id) & 0xFF
+	key[1] = (key[1] + (packet.sequence_id >> 8)) & 0xFF
+	key[31] = (key[31] + packet.session_id) & 0xFF
+
+	return bytes(key)
+
+def combine_keys(key1, key2):
+	return hashlib.md5(key1 + key2).digest()
+</pre>
+
+=== Heartbeat ===
+
+Once a connection has been established, a heartbeat timer begins. Whenever a packet is received from the other end of the connection, the heartbeat resets. If either side has not seen any packets from the other in a certain amount of time, it will begin to send <code>PING</code> packets to the other to keep the connection alive. If no packets are received after a certain amount of time, the connection is assumed dead. The amount of time each end will wait before sending a <code>PING</code> packet, and the amount of silence time before a connection is presumed dead, depends on the [[#Virtual Ports|Virtual Port]] stream type settings.
+
+=== Disconnecting ===
+
+Either end of the connection may terminate the connection at any time. This is done by sending the other end a <code>DISCONNECT</code> packet. Once received, the receiver acknowledges the packet 3 times, presumably to ensure the acknowledgment is received, and then the connection is terminated/cleaned up.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Some NEX game clients may ignore <code>DISCONNECT</code> packets sent from the server. Therefore, this may not be a reliable way to kill a connection from the server, such as when you want to kick a client. The only known 100% reliable way to force a client to disconnect is to either stop responding to packets, or to corrupt the RC4 stream such that the client can no longer process packets, forcing the client to kill the connection itself. However this will not act as an immediate kick if the client is already in a multiplayer session, as these take place over p2p, and so is often not viable either.''</div>
+</div>
+
+=== Reliability ===
+
+PRUDP adds a reliability layer on top of UDP. Every packet, reliable or not, is assigned a [[#Sequence ID]]. This ID is used for [[#Acknowledgment]] when the <code>NEED_ACK</code> flag is set, and for reordering/resending reliable packets.
+
+When a packet is marked with the <code>RELIABLE</code> flag, it is treated similar to a TCP packet. Reliable packets always have the <code>NEED_ACK</code> flag set and are guaranteed to deliver. If the sender does not receive an <code>ACK</code> response for a reliable packet after a certain amount of time, it will resend it until it determines that the connection has died. The receiver should keep track of the [[#Sequence ID]] of the reliable packets it receives, and wait to process them until the next expected [[#Sequence ID]] has been found. This guarantees not only delivery, but processing order as well. Every reliable packet belongs to a [[#Substreams|substream]].
+
+Certain reliability features are configured on the connections [[#Virtual Ports|Virtual Port]] stream type settings.
+
+When a packet is NOT marked with the <code>RELIABLE</code> flag, it is treated effectively as a standard UDP packet. An unreliable packet may still have the <code>NEED_ACK</code> flag set, but there are no delivery guarantees in this mode. NEX never uses unreliable <code>DATA</code> packets.
+
+=== Acknowledgment ===
+
+Acknowledgement is a feature of the [[#Reliability]] layer which ensures packets are received. If a packet is not acknowledged after the configured amount of time (see [[#Virtual Ports|Virtual Port]] stream type settings), the sender will resend the packet. The receiver should acknowledge all packets which have the <code>NEED_ACK</code> flag set.
+
+There are 2 forms of acknowledgement, individual and aggregate. Individual acknowledgement can only acknowledge a single packet at a time. Aggregate allows for more than one packet to be acknowledged at once, using either a list of sequence IDs, or a stop and stop range of sequence IDs.
+
+==== Individual Acknowledgement ====
+
+When using individual acknowledgement, the receiver sends the sender a packet of the same type with the <code>ACK</code> flag set. The sequence ID of this packet is the same sequence ID as the packet being acknowledged. This form of acknowledgement is always used in Rendez-Vous, NEX PRUDPv0, and for the <code>SYN</code> and <code>CONNECT</code> packets during [[#Handshake|connection establishment]] even when using NEX PRUDPv1.
+
+==== Aggregate Acknowledgement ====
+
+When using aggregate acknowledgement, the receiver sends the sender a packet of the same type with the <code>MULTI_ACK</code> flag set. Neither Rendez-Vous or NEX PRUDPv0 support aggregate acknowledgement. Whether or not NEX PRUDPv1 supports aggregate acknowledgement is determined during [[#Handshake|connection establishment]].
+
+There are multiple versions of aggregate acknowledgement. Which version is being used is determined during [[#Handshake|connection establishment]] for NEX PRUDPv1. NEX PRUDPLite always uses the new version.
+
+==== Aggregate Acknowledgement (Old) ====
+
+The acknowledgement packet's sequence ID is set to the highest pending received sequence ID. All packets with sequence IDs up to this sequence ID are considered acknowledged. The packet may also optionally specify additional sequence IDs in the payload to acknowledge:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x2 || Additional sequence ID
+|-
+| 0x2 || 0x2 || Additional sequence ID
+|-
+| ... || ... || ...
+|}
+
+==== Aggregate Acknowledgement (New) ====
+
+The sequence ID of the acknowledgement packet is always 0. The packets payload now determines which packets are being acknowledged:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x0 || 0x1 || [[#Substreams|Substream]] ID
+|-
+| 0x1 || 0x1 || Number of additional sequence ID
+|-
+| 0x2 || 0x2 || Sequence ID. All packets up to this ID are acknowledged
+|-
+| 0x4 || 0x2 || Additional sequence ID
+|-
+| 0x6 || 0x2 || Additional sequence ID
+|-
+| ... || ... || ...
+|}
+
+=== Fragmentation ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet fragmentation is handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
+</div>
+
+When a packet's payload exceeds the maximum transmission unit (MTU), it must be fragmented into multiple PRUDP packets. Each fragment is compressed and encrypted separately. Each fragment is assigned an incrementing fragment ID before it is sent. The receiver uses the fragment IDs to reorder packets before decompressing/decrypting the payloads. Once each fragment payload is decompressed/decrypted, the receiver reconstructs the original, larger, payload from the fragments.
+
+==== Fragment Size ====
+
+The maximum fragment size is generally determined by subtracting the packet overhead from the MTU, but does not have to be the case. This value can vary by implementation. Always verify the target client's implementation.
+
+{| class="wikitable"
+|-
+! Version !! MTU !! Max Payload Size
+|-
+| Rendez-Vous and clients which only support NEX PRUDPv0 || 1000 bytes || 962 bytes
+|-
+| Clients which support NEX PRUDPv1 and newer || 1364 bytes || 1300 bytes
+|-
+| NEX PRUDPv0, when used in clients which support NEX PRUDPv1 and newer || 1364 bytes || 1264 bytes
+|}
+
+==== Fragment ID ====
+
+When a payload is fragmented, each PRUDP packet is assigned a fragment ID. These IDs start at 1 and count up. The final fragment will have fragment ID 0. The default fragment ID is also always 0, so that non-fragmented packets can be handled by the same mechanism as fragmented packets. Once fragment ID 0 has been received and each fragment payload has been decompressed/decrypted, the receiver reconstructs the original payload.
+
+Since the only identifier sent is the fragment ID, and each fragment is sent as a normal PRUDP packet, if a fragmented payload is being sent no other packets can be sent until it is completed (fragmented or not). Otherwise the fragment IDs would conflict and the payloads would be unable to be reconstructed properly.
+
+'''Example:''' A packet split into four fragments would have the following fragment IDs:
+
+{| class="wikitable"
+|-
+! Position !! Fragment ID
+|-
+| First || 1
+|-
+| Second || 2
+|-
+| Third || 3
+|-
+| Fourth (final) || 0
+|}
+
+=== Supported Functions ===
+
+Starting with PRUDPv1, a set of "supported functions" is used during the PRUDP negotiation process. These are used to determine what features the other side supports, to ensure the connection can be made correctly and that the 2 ends can properly communicate.
+
+The least significant byte of this field describes the minor version of the protocol. The remaining bits seem to be individual feature flags. In practice the feature flags seem to be ignored, and the client only seems to select the highest protocol minor version that both ends support? The following table lists the changes that have been made between minor versions:
+
+{| class="wikitable"
+! Minor Version !! Description
+|-
+| 0 || Base version, no new features
+|-
+| 1 || The first version of aggregate [[#Acknowledgment]] is now available
+|-
+| 2 || The second version of aggregate [[#Acknowledgment]] is now available, and a new signature method is added
+|-
+| 3 || [[Online/Nintendo_Network/NEX/Types#Classes|Classes]] now have headers
+|-
+| 4 || Unknown
+|-
+| 5 || Unknown
+|-
+| 6 || Unknown
+|}
+
+=== Connection Signature ===
+
+If present, the connection signature is the HMAC-MD5 of the perceived ip and port of the other end. Since the client does not know its own public address, it cannot verify this signature. The server could potentially verify this signature, if configured to know its public address, however in practice this never happens.
+
+A connection signature is only ever potentially sent in a <code>SYN</code> and <code>CONNECT</code> packets. Whether or not the connection signature is present depends on the packets [[#Packet Specific Data]]. Other <code>SYN</code> and <code>CONNECT</code> packets have this field set to all 0.
+
+=== Lite Signature ===
+
+Only seen in PRUDPLite. This signature is verified by the server, unlike the [[#Connection Signature]]. It is the HMAC-MD5 of the following data, with the key being the MD5 hash of the [[#Sandbox Access Key]]:
+
+{| class="wikitable"
+! Offset !! Size !! Description
+|-
+| 0x00 || 0x10 || MD5 hash of the [[#Sandbox Access Key]]
+|-
+| 0x10 || 0x10 || [[#Connection Signature]] received from server
+|}
