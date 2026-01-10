@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 Rendez-Vous ships with custom implementations of common types, including primitive types. These types are used all throughout the library to keep implementations consistent.
 

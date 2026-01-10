@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 The IDBE ('''I'''con '''D'''ata'''B'''ase '''E'''ncrypted?) provides clients with information about titles, in an encrypted container format. These files contain both icon graphics and minimal metadata about the title such as names and publishers. When a console needs to display information about a title which it does not have installed (such as when a friend is displayed in the friend list as playing a game the client does not onw), it will request the data from this server.
 

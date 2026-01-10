@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 Before using any online features, the console must first verify that it can connect to the internet. To do this, it first contacts a "connection test" server. Both the 3DS and Wii U use the same server. This test usually happens when connecting to the internet in the system settings, but may also be contacted afterwards as well.
 

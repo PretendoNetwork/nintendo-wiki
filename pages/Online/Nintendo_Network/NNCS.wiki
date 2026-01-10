@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 This server is used to detect NAT properties of the router in order to perform NAT traversal, along with some currently unknown usage. In order to detect NAT properties, the console sends a series of UDP messages to the NNCS servers, and depending on which messages the console gets back it can determine both it's NAT mapping and filtering modes. This is due to the fact that there are 2 servers (a "primary" server, named NNCS1, and "secondary" server, named NNCS2), each on their own dedicated IP addresses (they cannot share an IP address), and each with 2 ports (a "primary" port and a "secondary" port). Depending on the clients NAT properties, only certain responses will be visible, and thus the client knows it's NAT properties.
 

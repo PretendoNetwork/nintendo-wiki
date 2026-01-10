@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 Nintendo provides downloads of manuals for Virtual Console games as standard PDF files. These are hosted at <code>http://m1.nintendo.net/docvc/<console>/<region>/<gameid>/<gameid>_<language>.pdf</code>.
 

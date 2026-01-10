@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 Nintendo Network was Nintendo's second attempt at online services. It was available starting on the 3DS, later being added to the Wii U, and was a substantial upgrade from their previous attempt, Nintendo Wi-Fi Connection, both in terms of features and complexity. Early portions of the network reused several concepts from Nintendo Wi-Fi Connection, iterating on earlier ideas to make improvements. Though later additions, such as the introduction of Nintendo Network IDs, were wholely unique to the platform.
 

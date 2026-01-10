@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 Game server responsibilities (authentication, matchmaking, UGC, etc.) are organized into separate protocols, sometimes also seen called "services", with each protocol having a series of methods representing specific actions a server/client can make. A game server may have any number of protocols implemented (so long as there are not protocol ID conflicts), and can selectively enable/disable entire protocols/specific protocol methods at will to fit the games needs. That being said, there are 2 requirements:
 

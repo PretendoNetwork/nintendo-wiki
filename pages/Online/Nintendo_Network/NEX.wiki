@@ -1,4 +1,4 @@
-__NOTOC__
+== Overview ==
 
 NEX is Nintendo's networking library for game servers. All first party online 3DS and Wii U titles use NEX. 3rd party developers could also use NEX for their 3DS and Wii U games if they wished. Nintendo continued to use NEX into the Nintendo Switch era, however it was replaced with [[Online/Nintendo_Switch_Online/NPLN|NPLN]] in 2021. See [[Online/Nintendo_Switch_Online/NEX|NEX (NSO)]] for details on the Nintendo Switch's implementation of NEX.
 
