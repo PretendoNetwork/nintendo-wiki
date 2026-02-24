@@ -1,0 +1,4072 @@
+== Overview ==
+
+NNAS ('''N'''intendo '''N'''etwork '''A'''ccount '''S'''erver) is the more modern replacement for [[Online/Nintendo_Network/NASC|NASC]]. It provides a more robust REST API for interacting with the newly added Nintendo Network ID (NNID) system than what is found on [[Online/Nintendo_Network/NASC|NASC]]. Unlike the 3DS, the Wii U uses NNAS for all of it's online account handling (despite the fact that the Wii U predates Nintendo Network IDs), however the 3DS also has a select number of titles which rely on NNIDs and thus also uses NNAS.
+
+Some functionality may have changed between firmware versions, and not all endpoints may be used anymore or as they were in older versions. This documentation is based off findings from firmware version 5.5.6.
+
+== Environments ==
+
+Several environments exist which a client may be assigned to. The capabilities and available servers/services of each environment may differ from each other. A retail unit will always be in the production environment by default.
+
+Unless otherwise specified, all information on this page refers to the production environment.
+
+Each environment is assigned a label. This label is made up of 2 parts; the environment ID (denoting the environment itself) and a number 1-9. For example, the default environment label for retail units is <code>L1</code>.
+
+{| class="wikitable"
+! Environment ID !! Notes
+|-
+| <code>L</code> || Used by the production (live) environment. Default on retail units
+|-
+| <code>D</code> || Used by the game development environment. Default for debug mode on developer units
+|-
+| <code>S</code> || Used by the staging environment
+|-
+| <code>T</code> || Used by the library development environment
+|-
+| <code>J</code> || Used by the system development environment
+|}
+
+Each environment also has it's own set of domains it uses when online:
+
+{| class="wikitable"
+! Domain !! Notes
+|-
+| <code>account.nintendo.net</code> || Used by the <code>Lx</code> (production) environment
+|-
+| <code>game-dev.account.nintendo.net</code> || Used by the game development environment
+|-
+| <code>system-dev.account.nintendo.net</code> || Used by the system development environment
+|-
+| <code>library-dev.account.nintendo.net</code> || Used by the library development environment
+|-
+| <code>staging.account.nintendo.net</code> || Used by the staging environment
+|}
+
+== Requests ==
+
+Every request to NNAS contains a set of common headers. These headers identify both the device and specific title being used to make the requests. Some endpoints/devices may add additional headers.
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Host</code> || See [[#Environments]]
+|-
+| <code>X-Nintendo-Platform-ID</code> || 0 = 3DS, 1 = Wii U
+|-
+| <code>X-Nintendo-Device-Type</code> || 1 = Debug, 2 = Retail
+|-
+| <code>X-Nintendo-Device-ID</code> || Console-unique ID. This is also stored in the [[#Device Certificate]]
+|-
+| <code>X-Nintendo-Serial-Number</code> || Console serial number. On the 3DS, the final number (the check digit) is not present
+|-
+| <code>X-Nintendo-System-Version</code> || System version (<code>%04X</code>). This is NOT the firmware version. On Wii U this is taken from <code>version.bin</code>
+|-
+| <code>X-Nintendo-Region</code> || 1 = JPN, 2 = USA, 4 = EUR, 8 = AUS, 16 = CHN, 32 = KOR, 64 = TWN
+|-
+| <code>X-Nintendo-Country</code> || JP for Japan, DE for Germany, etc.
+|-
+| <code>Accept-Language</code> || https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Language. Regardless of this header, all responses are in English
+|-
+| <code>X-Nintendo-Client-ID</code> || Client ID. See [[#Client Credentials]] for details
+|-
+| <code>X-Nintendo-Client-Secret</code> || Client secret. See [[#Client Credentials]] for details
+|-
+| <code>Accept</code> || Always <code>*/*</code> officially. See [[#Responses]] for details
+|-
+| <code>X-Nintendo-FPD-Version</code> || The FPD ('''F'''riends '''P'''resence '''D'''ata?) version (<code>%04X</code>). Always <code>0000</code>
+|-
+| <code>X-Nintendo-Environment</code> || Environment label. See [[#Environments]]
+|-
+| <code>X-Nintendo-Title-ID</code> || Title ID of the title making the request. See https://3dsdb.com and https://wiiubrew.org/wiki/Title_database
+|-
+| <code>X-Nintendo-Unique-ID</code> || Section of the title ID (<code>%05X</code>). For example if the title ID was <code>000500001018DD00</code>, the unique ID would be <code>018DD</code>
+|-
+| <code>X-Nintendo-Application-Version</code> || Title version (<code>%04X</code>)
+|}
+
+In <code>POST</code>/<code>PUT</code> requests the standard "Content-*" headers are sent:
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-Type</code> || https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Type. Almost always <code>application/xml</code>, besides [[#POST /v1/api/oauth20/access_token/generate]] which uses <code>application/x-www-form-urlencoded</code>. Can also be set to <code>application/json</code> in most endpoints, though this mode is unused officially
+|-
+| <code>Content-Length</code> || Length of the request body in bytes
+|}
+
+Additionally, the 3DS adds the following headers on all requests:
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>X-Nintendo-API-Version</code> || Unknown
+|-
+| <code>X-Nintendo-Device-Model</code> || 3DS system model. See https://3dbrew.org/wiki/Cfg:GetSystemModel#System_Model_Values
+|-
+| <code>X-Nintendo-Device-Cert</code> || [[#Device Certificate]]
+|}
+
+The Wii U only sends the <code>X-Nintendo-Device-Cert</code> header on the following endpoints. On these same endpoints, the 3DS adds the header a 2nd time:
+
+{| class="wikitable"
+! Method !! Path
+|-
+| <code>POST</code> || <code>/v1/api/oauth20/access_token/generate</code>
+|-
+| <code>GET</code> || <code>/v1/api/people/@me/devices/owner</code>
+|-
+| <code>POST</code> || <code>/v1/api/people/@me/devices</code>
+|-
+| <code>POST</code> || <code>/v1/api/people</code>
+|}
+
+== Responses ==
+
+All responses have the following headers set:
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Server</code> || Always <code>Nintendo 3DS (http)</code>
+|-
+| <code>X-Nintendo-Date</code> || Unix timestamp for the <code>Date</code> header. For example, <code>1722737148786</code>
+|-
+| <code>Content-Type</code> || Depends on the <code>Accept</code> header. See below for details
+|-
+| <code>Content-Length</code> || Length of the response body in bytes
+|-
+| <code>Date</code> || The current GMT date. For example, <code>Sun, 04 Aug 2024 02:05:48 GMT</code>
+|-
+| <code>Connection</code> || If an error occurs, this is set to <code>close</code>. Otherwise this is set to <code>keep-alive</code>
+|}
+
+In all official requests, the client sets the <code>Accept</code> header to <code>*/*</code>. In this case, the server always sends back the response as XML. However the following values are also accepted:
+
+* <code>application/xml</code> - Acts the same as <code>*/*</code>, returns responses as XML
+* <code>application/json</code> - Returns responses as JSON
+
+== JSON Mode ==
+
+The official servers only make use of XML data in both requests and responses, besides [[#POST /v1/api/oauth20/access_token/generate]] which uses <code>application/x-www-form-urlencoded</code> for it's request body. However there is an unused "JSON mode" a client can opt-in to by specifying <code>application/json</code> in the <code>Content-type</code> header (for requests) and/or the <code>Accept</code> header (for responses). This mode goes unused officially, so not all endpoints may respect these changes and may still default to XML. There is no way for a console to use this mode officially. If applicable, the JSON version will also be provided for a given endpoint.
+
+JSON responses seem to be a planned feature which was scrapped, as indicated by the fact that some endpoints/situations explictly ignore the <code>Accept</code> header and always return XML. This seems to imply a level of intent in the handling of JSON responses.
+
+Conversely, it seems that the fact that endpoints can accept JSON request bodies is an unintended feature that Nintendo may not have been aware of, as indicated by the fact that we know Nintendo wrote NNAS (and other related services) in Java (as seen by some error/crash messages) and frameworks like Spring make it trivial to accept multiple content types in routes transparently so long as the input data can be deserialized to the expected class. Some endpoints require odd JSON bodies to work, such as [[#POST /v1/api/people/@me/devices/@current/attributes]], which seems to imply this was not intended and just happens to accidentially deserialize correctly.
+
+== Client Credentials ==
+
+Each device client has a set of client credentials used to identify the calling client and ensure it can access the API. These appear as the <code>X-Nintendo-Client-ID</code> and <code>X-Nintendo-Client-Secret</code> headers. They are static values common to all devices of the same type.
+
+{| class="wikitable"
+! Device !! Client ID !! Client Secret
+|-
+| Wii U || <code>a2efa818a34fa16b8afbc8a74eba3eda</code> || <code>c91cdb5658bd4954ade78533a339cf9a</code>
+|-
+| 3DS || <code>ea25c66c26b403376b4c5ed94ab9cdea</code> || <code>d137be62cb6a2b831cad8c013b92fb55</code>
+|}
+
+== Device Certificate ==
+
+The device certificate is a unique certificate tied to a given device. See https://3dbrew.org/wiki/Certificates for general certificate structures. The device certificate is used for 2 main functions:
+
+# To sign/validate eShop purchase tickets
+# To validate that a client is legitimate
+
+The official NNAS seems to largely ignore the device certificate however. Most endpoints do not required the certificate at all, and when sent to endpoints it seems to be ignored. That being said, the certificate IS sent to "critical" endpoints, such as the registration/sign in endpoints, making it viable for custom server implementations to safely validate the certificate using their public keys. Only Nintendo can sign certificates, making them effective targets for console bans. The device certificate "name" field contains the associated device ID, which is also seen in the <code>X-Nintendo-Device-ID</code> header.
+
+{| class="wikitable"
+! Device !! Signature Method !! Issuer !! Public Key
+|-
+| Wii U || ECDSA with SHA256 || <code>Root-CA00000003-MS00000012</code> || <code>MFIwEAYHKoZIzj0CAQYFK4EEABsDPgAEAP1WBBgs8XUJIQDDCK5IOZEbb5+h1TqVrwgzSUcrAAFxMWm1kf/TDL9z2nZkuo0N+VtNEQREZDXA7aQv</code>
+|-
+| 3DS || ECDSA with SHA256 || <code>Nintendo CA - G3_NintendoCTR2prod</code> || <code>MFIwEAYHKoZIzj0CAQYFK4EEABsDPgAEAE47t01dlZ5ozpAENP6eSj8JSjN3H6fA5LAjJk2YAUyh/HmdP6UhcdX5vVsXd+wP73o40Wabv4MDJYQ6</code>
+|}
+
+== PIDs ==
+
+Every NNID is assigned a unique ID known as a "Principal ID" (PID). This PID is the same as the PID for the [[Online/Nintendo_Network/NEX#Accounts|NEX account]] associated with the NNID. Once Nintendo released NNAS and the NNID system, the PID counter was set to 1800000000 and counts down for every new account made. This means the first valid PID on Nintendo Network after the introduction of NNIDs is 1799999999 (username <code>prodtest1</code>), though there are many [[Online/Nintendo_Network/NEX#Accounts|NEX accounts]] with higher PIDs created prior to NNIDs. PIDs are used to reference NNIDs in many situations.
+
+== Password Hashing ==
+
+Originally logins were made using the NNIDs plaintext username and password. Eventually however Nintendo upgraded NNAS to support pre-hashed passwords. All modern firmware versions of both the Wii U and 3DS use the pre-hashed password mode, such that your NNID password is never sent over the wire after registration.
+
+The algorithm is simple. SHA256 hash the password after salting it with the NNID [[#PIDs|PID]] and the static bytes <code>02654346</code>. The official implementation of this hashing on consoles allows for the password to be hashed with this algorithm over multiple iterations, however clients only ever run 1 iteration. Since this salting uses different data for each user, this also means that NNIDs who share the same password will have different hashes.
+
+<pre>
+function nintendoPasswordHash(password: string, pid: number): string {
+  const pidBuffer = Buffer.alloc(4);
+  pidBuffer.writeUInt32LE(pid);
+
+  const saltedPasswordBuffer = Buffer.concat([
+    pidBuffer,
+    Buffer.from('02654346', 'hex'),
+    Buffer.from(password)
+  ]);
+
+  return crypto.createHash('sha256').update(saltedPasswordBuffer).digest().toString('hex');
+}
+</pre>
+
+== Device Attributes ==
+
+When linking a NNID to a console, several pieces of metadata are sent about the console and the local user account. This metadata is called the "device attributes". Each attribute is a key-value pair. Note that "local user" refers to the user profile on the console prior to linking the NNID to it.
+
+{| class="wikitable"
+! Key !! Value
+|-
+| <code>uuid_account</code> || UUIDv1 for the local user. Generated when the profile was created?
+|-
+| <code>uuid_common</code> || UUIDv1 common for all local NNIDs. Generated when the console was first setup?
+|-
+| <code>persistent_id</code> || The local user ID. This is a counter each console has that counts up by 1 for each new local user
+|-
+| <code>transferable_id_base</code> || Unknown
+|-
+| <code>transferable_id_base_common</code> || Unknown
+|-
+| <code>ctr_nex_account</code> || '''Only sent by the 3DS'''. The [[Online/Nintendo_Network/NEX#Accounts|NEX account]] identifer for the console in the form <code>[[#Environments|ENVIRONMENT]]_[[#PIDs|PID]]</code>. For example <code>L1_1799999999</code>
+|-
+| <code>ctr_nex_password</code> || '''Only sent by the 3DS'''. The [[Online/Nintendo_Network/NEX#Accounts|NEX account]] password
+|-
+| <code>ctr_nex_environment</code> || '''Only sent by the 3DS'''. The [[Online/Nintendo_Network/NEX#Accounts|NEX account]] [[#Environments|environment label]]
+|}
+
+Additionally, if the list is in the response of a request an optional <code>created_date</code> tag is added to each object containing the date/time the attribute was linked to the NNID in the format <code><created_date>2023-03-07T14:49:03</created_date></code>.
+
+== Authorization ==
+
+There are 3 methods that a client authorizes itself with NNAS.
+
+{| class="wikitable"
+! Method !! Description
+|-
+| <code>Bearer</code> tokens || These are OAuth access tokens issued by <code>[[#POST /v1/api/oauth20/access_token/generate]]</code>. They function as standard OAuth tokens
+|-
+| <code>Basic</code> tokens || These are similar to [https://datatracker.ietf.org/doc/html/rfc7617 standard <code>Basic</code> tokens]. However instead of using the format <code>username:password</code>, Nintendo uses the format <code>username password</code>
+|-
+| <code>HasedBasic</code> tokens || These are similar to [https://datatracker.ietf.org/doc/html/rfc7617 standard <code>Basic</code> tokens]. However instead of using the format <code>username:password</code>, Nintendo uses the format <code>username [[#Password Hashing|passwordhash]]</code>
+|}
+
+== NNID Profile ==
+
+Several endpoints return the same profile object. This object contains data about a NNID and it's linked devices.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>person</code> || NNID profile data
+|-
+| <code>person.accounts</code> || '''Optional'''. List of account objects holding information about additional accounts tied to the NNID? Seems to only be used for linking the 3DS device eShop account to the NNID?
+|-
+| <code>person.accounts.account.attributes</code> || List of attribute objects for this account
+|-
+| <code>person.accounts.account.attributes.attribute.id</code> || Unknown. Likely just some internal identifer?
+|-
+| <code>person.accounts.account.attributes.attribute.name</code> || Name of the attribute. Only known values are <code>ctr_initial_device_account_id</code> and <code>environment</code>
+|-
+| <code>person.accounts.account.attributes.attribute.updated_by</code> || Unknown. Presumably who updated the account data? Seems to always be <code>USER</code>?
+|-
+| <code>person.accounts.account.attributes.attribute.value</code> || Value of the attribute. If <code>ctr_initial_device_account_id</code>, this value is the 3DS device SOAP account ID. If <code>environment</code>, this value is the accounts environment (seems to always be <code>PROD</code> on production units?)
+|-
+| <code>person.accounts.account.domain</code> || Unknown. Presumably the domain the account is tied to? Seems to always be <code>ESHOP.NINTENDO.NET</code>, but this is not a live domain?
+|-
+| <code>person.accounts.account.type</code> || Unknown. Presumably the account type? Seems to always be <code>INTERNAL</code>?
+|-
+| <code>person.accounts.account.username</code> || Unknown. Presumably the account username? Seems to very similar to the value for <code>ctr_initial_device_account_id</code>?
+|-
+| <code>person.active_flag</code> || Unknown. Seems to always be <code>Y</code>?
+|-
+| <code>person.birth_date</code> || The NNIDs birthday in the format <code>YYYY-MM-DD</code>
+|-
+| <code>person.country</code> || NNIDs ISO 2 country code
+|-
+| <code>person.create_date</code> || Date/time the NNID was created
+|-
+| <code>person.device_attributes</code> || '''Optional'''. List of [[#Device Attributes]] objects. If the NNID profile is being loaded from a device the NNID is not linked to, such as calling [[#GET /v1/api/people/@me/profile]] with a valid token but different device headers, then this field is NEVER sent
+|-
+| <code>person.gender</code> || Either <code>M</code> or <code>F</code>
+|-
+| <code>person.language</code> || NNIDs ISO 639 language code
+|-
+| <code>person.updated</code> || Date/time the NNID data was last updated
+|-
+| <code>person.marketing_flag</code> || Whether or not you want to receive marketing ("commercial") emails. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.off_device_flag</code> || If set, the NNID cannot be logged into outside of the console it's linked to. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.pid</code> || The NNID [[#PIDs|PID]]
+|-
+| <code>person.email</code> || Details about the NNIDs email address
+|-
+| <code>person.email.address</code> || The NNIDs email address
+|-
+| <code>person.email.id</code> || Unknown. Likely just some internal identifer?
+|-
+| <code>person.email.parent</code> || Unknown. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.primary</code> || Unknown, "is this a primary email"? Officially NNIDs can only have one email address. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.reachable</code> || Whether the address is able to receive emails. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.type</code> || Unknown. Seems to always be <code>DEFAULT</code>?
+|-
+| <code>person.email.updated_by</code> || Who updated the email. Always initially set to <code>INTERNAL WS</code> (internal web server?), but then changes to the NNID username after calling [[#PUT /v1/api/people/@me/emails/@primary]]
+|-
+| <code>person.email.validated</code> || Has the email been validated. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.validated_date</code> || Date/time the email was validated
+|-
+| <code>person.mii</code> || Details about the NNIDs Mii
+|-
+| <code>person.mii.status</code> || Mii rendering status. Either <code>COMPLETED</code> (Mii has finished rendering) or <code>STARTED</code> (Mii is being rendered)
+|-
+| <code>person.mii.data</code> || Base64 encoded Mii data
+|-
+| <code>person.mii.id</code> || Unknown. Likely just some internal identifer?
+|-
+| <code>person.mii.mii_hash</code> || Unknown. Likely just some internal identifer?
+|-
+| <code>person.mii.mii_images</code> || List of Mii image objects, same as [[#GET /v1/api/miis]]. Only the <code>standard</code> Mii is populated
+|-
+| <code>person.mii.name</code> || Mii nickname name
+|-
+| <code>person.mii.primary</code> || Unknown, "is this a primary Mii"? Officially NNIDs can only have one Mii. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.region</code> || [[Online/Nintendo_Network/Region_IDs|Region ID]] in decimal
+|-
+| <code>person.tz_name</code> || NNID timezone name as seen in [[#GET /v1/api/content/time_zones/%s/%s]]
+|-
+| <code>person.user_id</code> || NNID username
+|-
+| <code>person.utc_offset</code> || NNID timezone UTC offset as seen in [[#GET /v1/api/content/time_zones/%s/%s]]
+|-
+| <code>person.coppa_required_flag</code> || '''Optional'''. User is under 13? Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.coppa_code</code> || '''Optional'''. COPPA code, as seen in [[#GET /v1/api/support/parental_approval/send_email/coppa_code]]
+|-
+| <code>person.parent_email</code> || '''Optional'''. Parent email, as seen in [[#GET /v1/api/support/parental_approval/send_email/coppa_code]]
+|-
+| <code>person.parental_consents</code> || '''Optional'''. Details about parental approval
+|-
+| <code>person.parental_consents.parental_consent</code> || Details about parental consent
+|-
+| <code>person.parental_consents.parental_consent.approval_id</code> || COPPA approval ID, as seen in [[#POST /v1/api/support/coppa/authorization]]
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASNNIDProfile">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <accounts>
+    <account>
+      <attributes>
+        <attribute>
+          <id>12345678</id>
+          <name>ctr_initial_device_account_id</name>
+          <updated_by>USER</updated_by>
+          <value>123456789</value>
+        </attribute>
+        <attribute>
+          <id>87654321</id>
+          <name>environment</name>
+          <updated_by>USER</updated_by>
+          <value>PROD</value>
+        </attribute>
+      </attributes>
+      <domain>ESHOP.NINTENDO.NET</domain>
+      <type>INTERNAL</type>
+      <username>987654321</username>
+    </account>
+  </accounts>
+  <active_flag>Y</active_flag>
+  <birth_date>1990-01-01</birth_date>
+  <country>US</country>
+  <create_date>2017-12-29T04:11:24</create_date>
+  <device_attributes>
+    <device_attribute>
+      <created_date>2023-03-07T14:49:03</created_date>
+      <name>persistent_id</name>
+      <value>80000086</value>
+    </device_attribute>
+    <device_attribute>
+      <created_date>2023-03-07T14:49:03</created_date>
+      <name>transferable_id_base</name>
+      <value>abababababababab</value>
+    </device_attribute>
+    <device_attribute>
+      <created_date>2023-03-07T14:49:03</created_date>
+      <name>transferable_id_base_common</name>
+      <value>cdcdcdcdcdcdcdcd</value>
+    </device_attribute>
+    <device_attribute>
+      <created_date>2023-03-07T14:49:03</created_date>
+      <name>uuid_account</name>
+      <value>47374816-f86f-11f0-b535-325096b39f47</value>
+    </device_attribute>
+    <device_attribute>
+      <created_date>2023-03-07T14:49:03</created_date>
+      <name>uuid_common</name>
+      <value>4c01ae90-f86f-11f0-9ed2-325096b39f47</value>
+    </device_attribute>
+  </device_attributes>
+  <gender>M</gender>
+  <language>en</language>
+  <updated>2026-01-21T00:07:09</updated>
+  <marketing_flag>Y</marketing_flag>
+  <off_device_flag>Y</off_device_flag>
+  <pid>1738007193</pid>
+  <email>
+    <address>email@example.com</address>
+    <id>12345678</id>
+    <parent>N</parent>
+    <primary>Y</primary>
+    <reachable>Y</reachable>
+    <type>DEFAULT</type>
+    <updated_by>INTERNAL WS</updated_by>
+    <validated>Y</validated>
+    <validated_date>2017-12-29T04:12:32</validated_date>
+  </email>
+  <mii>
+    <status>COMPLETED</status>
+    <data>AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9</data>
+    <id>1234567890</id>
+    <mii_hash>u2jg043u028x</mii_hash>
+    <mii_images>
+      <mii_image>
+        <cached_url>https://mii-secure.account.nintendo.net/u2jg043u028x_standard.tga</cached_url>
+        <id>9876543210</id>
+        <url>https://mii-secure.account.nintendo.net/u2jg043u028x_standard.tga</url>
+        <type>standard</type>
+      </mii_image>
+    </mii_images>
+    <name>mii_name</name>
+    <primary>Y</primary>
+  </mii>
+  <region>822870016</region>
+  <tz_name>America/New_York</tz_name>
+  <user_id>username</user_id>
+  <utc_offset>-18000</utc_offset>
+</person>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "mii": {
+    "id": 1234567890,
+    "name": "mii_name",
+    "data": "AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9",
+    "primary": "Y",
+    "status": "COMPLETED",
+    "mii_images": [
+      {
+        "id": 9876543210,
+        "type": "standard",
+        "url": "https://mii-secure.account.nintendo.net/2qmugv4178vpf_standard.tga",
+        "cached_url": "https://mii-secure.account.nintendo.net/2qmugv4178vpf_standard.tga"
+      }
+    ],
+    "mii_hash": "2qmugv4178vpf"
+  },
+  "email": {
+    "address": "email@example.com",
+    "id": 12345678,
+    "parent": "N",
+    "primary": "Y",
+    "type": "DEFAULT",
+    "validated": "Y",
+    "validated_date": "2021-03-05T13:43:12",
+    "reachable": "Y",
+    "updated_by": "USER"
+  },
+  "accounts": [
+    {
+      "type": "INTERNAL",
+      "domain": "ESHOP.NINTENDO.NET",
+      "username": "987654321",
+      "attributes": [
+        {
+          "id": 12345678,
+          "name": "ctr_initial_device_account_id",
+          "value": "123456789",
+          "updated_by": "USER"
+        },
+        {
+          "id": 87654321,
+          "name": "environment",
+          "value": "PROD",
+          "updated_by": "USER"
+        }
+      ]
+    }
+  ],
+  "device_attributes": [
+    {
+      "name": "ctr_nex_account",
+      "value": "L1_1234567890",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "ctr_nex_environment",
+      "value": "L1",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "ctr_nex_password",
+      "value": "nex_account_password",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "persistent_id",
+      "value": "00000000",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "transferable_id_base",
+      "value": "0000000000000000",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "transferable_id_base_common",
+      "value": "0000000000000000",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "uuid_account",
+      "value": "47374816-f86f-11f0-b535-325096b39f47",
+      "created_date": "2021-03-05T13:41:58"
+    },
+    {
+      "name": "uuid_common",
+      "value": "4c01ae90-f86f-11f0-9ed2-325096b39f47",
+      "created_date": "2021-03-05T13:41:58"
+    }
+  ],
+  "updated": "2021-03-05T13:41:58",
+  "pid": 1740844997,
+  "active_flag": "Y",
+  "user_id": "username",
+  "language": "ja",
+  "region": "16777216",
+  "birth_date": "1990-01-01",
+  "tz_name": "Asia/Tokyo",
+  "marketing_flag": "N",
+  "off_device_flag": "N",
+  "country": "JP",
+  "gender": "M",
+  "utc_offset": 32400,
+  "create_date": "2021-03-05T13:41:58"
+}
+		</pre>
+	</tab>
+</tabs>
+
+== Errors ==
+
+An error may occur on any endpoint. When an error occurs, the server sends back a list of one or more error objects, though it typically only sends one. Each error object contains the following fields:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>cause</code> || '''Optional'''. The offending data that triggered the error. Sometimes this tag is present but empty, and may even be omitted entirely
+|-
+| <code>code</code> || The [[#Error Codes|error code]]. Error codes are not always unique to error conditions, a single error code may be triggered by multiple different kinds of errors. The error code is used by the client to display various ErrEula popups
+|-
+| <code>message</code> || The error message. This field may be empty, but is always present. This field is not typically shown to the client, but in some cases it is used as part of the ErrEula popup
+|}
+
+Not all errors respect the <code>Accept</code> header, and may return XML regardless of the requested mode. Clients should always account for this and check the responses <code>Content-Type</code> header.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASErrorFormat">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<errors>
+  <error>
+    <code>client_id</code>
+    <code>0004</code>
+    <message>API application invalid or incorrect application credentials</message>
+  </error>
+</errors>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "errors": [
+    {
+      "cause": "client_id",
+      "code": "0004",
+      "message": "API application invalid or incorrect application credentials"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+=== Common Errors ===
+
+These errors can be thrown on any endpoint. Endpoints will have their own specific errors on top of these
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Invalid route || 404 || Yes || <code>Not Found</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| Invalid HTTP method for route || 405 || Yes || <code>Method Not Allowed</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| Invalid <code>Content-Type</code> value for the route || 415 || Yes || <code>Unsupported Media Type</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| The request body could not be deserialized correctly, either because the request body is not valid syntax for the <code>Content-Type</code> or because the request body did not have the expected structure (including unknown extra fields) in [[#JSON Mode]] || 400 || Yes || <code>The request sent by the client was syntactically incorrect.</code> || <code>1500</code> || <code>Bad Request Error</code>
+|-
+| <code>X-Nintendo-Platform-ID</code> is missing || 400 || No || Omitted || <code>0002</code> || <code>platformId format is invalid</code>
+|-
+| <code>X-Nintendo-Platform-ID</code> is invalid || 400 || No || Omitted || <code>0110</code> || <code>Unlinked device</code>
+|-
+| <code>X-Nintendo-Device-Type</code> is missing or invalid || 400 || No || Omitted || <code>0113</code> || <code>Unauthorized device</code>
+|-
+| <code>X-Nintendo-Device-ID</code> is missing || 400 || No || Omitted || <code>0002</code> || <code>deviceId format is invalid</code>
+|-
+| <code>X-Nintendo-Device-ID</code> is invalid || 400 || No || Omitted || <code>0110</code> || <code>Unlinked device</code>
+|-
+| <code>X-Nintendo-Serial-Number</code> is missing || 400 || No || Omitted || <code>0002</code> || <code>serialNumber format is invalid</code>
+|-
+| <code>X-Nintendo-Serial-Number</code> is invalid || 400 || No || Omitted || <code>0110</code> || <code>Unlinked device</code>
+|-
+| <code>X-Nintendo-System-Version</code> is missing or invalid || 400 || No || Omitted || <code>0002</code> || <code>version format is invalid</code>
+|-
+| <code>X-Nintendo-Region</code> is missing or invalid || 400 || No || <code>X-Nintendo-Region</code> || <code>0002</code> || <code>X-Nintendo-Region format is invalid</code>
+|-
+| Either <code>X-Nintendo-Client-ID</code> or <code>X-Nintendo-Client-Secret</code> is missing or invalid || 401 || Yes || <code>client_id</code> || <code>0004</code> || <code>API application invalid or incorrect application credentials</code>
+|-
+| Permanent device ban || 400 || Yes || Omitted || <code>0012</code> || <code>Device has been banned</code>
+|-
+| Firmware version is out of date || 400 || Yes || Omitted || <code>0011</code> || <code>System update is required</code>
+|}
+
+== Error Codes ==
+
+{| class="wikitable"
+! NNAS Error Code !! Display Support Code !! Name !! Notes
+|-
+| <code>0001</code> || <code>102-2401</code> || <code>BAD_FORMAT_PARAMETER</code> ||
+|-
+| <code>0002</code> || <code>102-2402</code> || <code>BAD_FORMAT_REQUEST</code> ||
+|-
+| <code>0003</code> || <code>102-2403</code> || <code>REQUEST_PARAMETER_MISSING</code> ||
+|-
+| <code>0004</code> || <code>102-2458</code> || <code>UNAUTHORIZED_CLIENT</code> ||
+|-
+| <code>0005</code> || <code>102-2642</code> || <code>INVALID_ACCOUNT_TOKEN</code> ||
+|-
+| <code>0006</code> || <code>102-2641</code> || <code>ACCOUNT_TOKEN_EXPIRED</code> ||
+|-
+| <code>0007</code> || <code>102-2522</code> || <code>REQUEST_FORBIDDEN</code> ||
+|-
+| <code>0008</code> || <code>102-2534</code> || <code>REQUEST_NOT_FOUND</code> ||
+|-
+| <code>0009</code> || <code>102-2404</code> || <code>WRONG_HTTP_METHOD</code> ||
+|-
+| <code>0010</code> || <code>102-2451</code> || <code>INVALID_PLATFORM_ID</code> ||
+|-
+| <code>0011</code> || <code>102-2511</code> || <code>SYSTEM_UPDATE_REQUIRED</code> ||
+|-
+| <code>0012</code> || <code>102-2812</code> || <code>BANNED_DEVICE_ALL</code> ||
+|-
+| <code>0100</code> || <code>102-2571</code> || <code>ACCOUNT_ID_ALREADY_EXISTS</code> ||
+|-
+| <code>0101</code> || <code>102-2572</code> || <code>ACCOUNT_ID_NOT_ACCEPTABLE</code> ||
+|-
+| <code>0103</code> || <code>102-2575</code> || <code>MAIL_ADDRESS_NOT_ACCEPTABLE</code> ||
+|-
+| <code>0104</code> || <code>102-2452</code> || <code>UNAUTHORIZED_DEVICE</code> ||
+|-
+| <code>0105</code> || <code>102-2592</code> || <code>REACHED_REGISTRATION_LIMIT</code> ||
+|-
+| <code>0106</code> || || || Reenter NNID password
+|-
+| <code>0107</code> || <code>102-2502</code> || <code>COUNTRY_MISMATCH</code> ||
+|-
+| <code>0108</code> || <code>102-2802</code> || <code>BANNED_ACCOUNT_ALL</code> ||
+|-
+| <code>0109</code> || || || Network service agreement updated
+|-
+| <code>0110</code> || <code>102-2501</code> || <code>DEVICE_MISMATCH</code> ||
+|-
+| <code>0111</code> || || || "Your Nintendo Network ID was changed to the following:". Uses the contents of the <code>message</code> field as the new username. Unused by the official servers, Nintendo did not allow name changes for Nintendo Network
+|-
+| <code>0112</code> || || || NNID deleted cant use network services
+|-
+| <code>0113</code> || <code>102-2452</code> || <code>UNAUTHORIZED_DEVICE</code> ||
+|-
+| <code>0114</code> || <code>102-2593</code> || <code>COPPA_NOT_ACCEPTED</code> ||
+|-
+| <code>0115</code> || <code>102-2591</code> || <code>REACHED_ASSOCIATION_LIMIT</code> ||
+|-
+| <code>0116</code> || <code>102-2614</code> || <code>WRONG_CONFIRMATION_CODE</code> ||
+|-
+| <code>0117</code> || <code>102-2651</code> || <code>CONFIRMATION_CODE_EXPIRED</code> ||
+|-
+| <code>0118</code> || <code>102-2484</code> || <code>GAME_SERVER_ID_UNIQUE_ID_NOT_LINKED</code> ||
+|-
+| <code>0119</code> || <code>102-2803</code> || <code>BANNED_ACCOUNT_IN_APPLICATION</code> ||
+|-
+| <code>0120</code> || <code>102-2813</code> || <code>BANNED_DEVICE_IN_APPLICATION</code> ||
+|-
+| <code>0121</code> || <code>102-2804</code> || <code>BANNED_ACCOUNT_IN_NEX_SERVICE</code> ||
+|-
+| <code>0122</code> || <code>102-2814</code> || <code>BANNED_DEVICE_IN_NEX_SERVICE</code> ||
+|-
+| <code>0123</code> || <code>102-2882</code> || <code>SERVICE_CLOSED</code> ||
+|-
+| <code>0124</code> || <code>102-2512</code> || <code>APPLICATION_UPDATE_REQUIRED</code> ||
+|-
+| <code>0125</code> || <code>102-2485</code> || <code>CLIENT_ID_UNIQUE_ID_NOT_LINKED</code> ||
+|-
+| <code>0126</code> || <code>102-2805</code> || <code>BANNED_ACCOUNT_IN_INDEPENDENT_SERVICE</code> ||
+|-
+| <code>0127</code> || <code>102-2815</code> || <code>BANNED_DEVICE_IN_INDEPENDENT_SERVICE</code> ||
+|-
+| <code>0128</code> || <code>102-2661</code> || <code>MAIL_ADDRESS_NOT_VALIDATED</code> ||
+|-
+| <code>0129</code> || <code>102-2615</code> || <code>WRONG_BIRTH_DATE_OR_MAIL_ADDRESS</code> ||
+|-
+| <code>0130</code> || <code>102-2531</code> || <code>PID_NOT_FOUND</code> ||
+|-
+| <code>0131</code> || <code>102-2616</code> || <code>WRONG_ACCOUNT_MAIL</code> ||
+|-
+| <code>0132</code> || <code>102-2822</code> || <code>BANNED_ACCOUNT_ALL_TEMPORARILY</code> ||
+|-
+| <code>0133</code> || <code>102-2832</code> || <code>BANNED_DEVICE_ALL_TEMPORARILY</code> ||
+|-
+| <code>0134</code> || <code>102-2823</code> || <code>BANNED_ACCOUNT_IN_APPLICATION_TEMPORARILY</code> ||
+|-
+| <code>0135</code> || <code>102-2833</code> || <code>BANNED_DEVICE_IN_APPLICATION_TEMPORARILY</code> ||
+|-
+| <code>0136</code> || <code>102-2824</code> || <code>BANNED_ACCOUNT_IN_NEX_SERVICE_TEMPORARILY</code> ||
+|-
+| <code>0137</code> || <code>102-2834</code> || <code>BANNED_DEVICE_IN_NEX_SERVICE_TEMPORARILY</code> ||
+|-
+| <code>0138</code> || <code>102-2825</code> || <code>BANNED_ACCOUNT_IN_INDEPENDENT_SERVICE_TEMPORARILY</code> ||
+|-
+| <code>0139</code> || <code>102-2835</code> || <code>BANNED_DEVICE_IN_INDEPENDENT_SERVICE_TEMPORARILY</code> ||
+|-
+| <code>0142</code> || <code>102-2635</code> || <code>COPPA_AGREEMENT_CANCELED</code> ||
+|-
+| <code>0143</code> || || || "The link to this Nintendo Network ID has been temporarliy removed"
+|-
+| <code>1004</code> || || || Network service agreement updated
+|-
+| <code>1006</code> || <code>102-2471</code> || <code>INVALID_UNIQUE_ID</code> ||
+|-
+| <code>1016</code> || <code>102-2532</code> || <code>NEX_ACCOUNT_NOT_FOUND</code> ||
+|-
+| <code>1017</code> || <code>102-2483</code> || <code>GAME_SERVER_ID_ENVIRONMENT_NOT_FOUND</code> ||
+|-
+| <code>1018</code> || <code>102-2533</code> || <code>GENERATE_TOKEN_FAILURE</code> ||
+|-
+| <code>1019</code> || <code>102-2481</code> || <code>INVALID_NEX_CLIENT_ID</code> ||
+|-
+| <code>1020</code> || <code>102-2473</code> || <code>INVALID_CLIENT_KEY</code> ||
+|-
+| <code>1021</code> || <code>102-2482</code> || <code>INVALID_GAME_SERVER_ID</code> ||
+|-
+| <code>1022</code> || <code>102-2472</code> || <code>INVALID_CLIENT_ID</code> ||
+|-
+| <code>1023</code> || <code>102-2612</code> || <code>WRONG_MAIL_ADDRESS</code> ||
+|-
+| <code>1024</code> || <code>102-2535</code> || <code>MASTER_PIN_NOT_FOUND</code> ||
+|-
+| <code>1025</code> || <code>102-2536</code> || <code>MAIL_TEXT_NOT_FOUND</code> ||
+|-
+| <code>1031</code> || <code>102-2537</code> || <code>SEND_MAIL_FAILURE</code> ||
+|-
+| <code>1032</code> || <code>102-2636</code> || <code>DOMAIN_ACCOUNT_ALREADY_EXISTS</code> ||
+|-
+| <code>1033</code> || <code>102-2662</code> || <code>EXCESSIVE_MAIL_SEND_REQUEST</code> ||
+|-
+| <code>1035</code> || <code>102-2671</code> || <code>CREDIT_CARD_GENERAL_FAILURE</code> ||
+|-
+| <code>1036</code> || <code>102-2679</code> || <code>CREDIT_CARD_DATE_EXPIRED</code> ||
+|-
+| <code>1037</code> || <code>102-2672</code> || <code>CREDIT_CARD_DECLINED</code> ||
+|-
+| <code>1038</code> || <code>102-2674</code> || <code>INVALID_CREDIT_CARD_NUMBER</code> ||
+|-
+| <code>1039</code> || <code>102-2680</code> || <code>CREDIT_CARD_NUMBER_WRONG</code> ||
+|-
+| <code>1040</code> || <code>102-2675</code> || <code>INVALID_CREDIT_CARD_DATE</code> ||
+|-
+| <code>1041</code> || <code>102-2673</code> || <code>CREDIT_CARD_BLACKLISTED</code> ||
+|-
+| <code>1042</code> || <code>102-2676</code> || <code>INVALID_CREDIT_CARD_PIN</code> ||
+|-
+| <code>1043</code> || <code>102-2681</code> || <code>CREDIT_CARD_PIN_WRONG</code> ||
+|-
+| <code>1044</code> || <code>102-2678</code> || <code>INVALID_LOCATION</code> ||
+|-
+| <code>1045</code> || <code>102-2677</code> || <code>INVALID_POSTAL_CODE</code> ||
+|-
+| <code>1046</code> || <code>102-2596</code> || <code>DEVICE_EULA_COUNTRY_MISMATCH</code> ||
+|-
+| <code>1100</code> || <code>102-2541</code> || <code>INVALID_EULA_COUNTRY</code> ||
+|-
+| <code>1101</code> || <code>102-2542</code> || <code>INVALID_EULA_COUNTRY_AND_VERSION</code> ||
+|-
+| <code>1103</code> || <code>102-2594</code> || <code>PARENTAL_CONTROLS_REQUIRED</code> ||
+|-
+| <code>1104</code> || <code>102-2576</code> || <code>ACCOUNT_ID_FORMAT_INVALID</code> ||
+|-
+| <code>1105</code> || <code>102-2613</code> || <code>WRONG_ACCOUNT_PASSWORD_OR_MAIL_ADDRESS</code> ||
+|-
+| <code>1106</code> || <code>102-2633</code> || <code>AUTHENTICATION_LOCKED</code> || Triggers after a number of failed login attempts
+|-
+| <code>1107</code> || <code>102-2577</code> || <code>ACCOUNT_ID_PASSWORD_SAME</code> ||
+|-
+| <code>1111</code> || <code>102-2538</code> || <code>APPROVAL_ID_NOT_FOUND</code> ||
+|-
+| <code>1115</code> || <code>102-2597</code> || <code>PENDING_MIGRATION</code> ||
+|-
+| <code>1125</code> || <code>102-2585</code> || <code>MAIL_ADDRESS_DOMAIN_NAME_NOT_ACCEPTABLE</code> ||
+|-
+| <code>1126</code> || <code>102-2586</code> || <code>MAIL_ADDRESS_DOMAIN_NAME_NOT_RESOLVED</code> ||
+|-
+| <code>1134</code> || <code>102-2587</code> || <code>idk_name</code> ||
+|-
+| <code>1200</code> || <code>102-2884</code> || <code>NOT_PROVIDED_COUNTRY</code> ||
+|-
+| <code>2001</code> || || || HTTP status is 500 and <code>message</code> is <code>Internal server error</code>
+|-
+| <code>2002</code> || <code>102-2881</code> || <code>UNDER_MAINTENANCE</code> ||
+|-
+| || <code>102-0000</code> || <code>MY_SUCCESS</code> ||
+|-
+| || <code>102-0001</code> || <code>MAIL_ADDRESS_NOT_CONFIRMED</code> ||
+|-
+| || <code>102-0500</code> || <code>LIBRARY_ERROR</code> ||
+|-
+| || <code>102-0501</code> || <code>NOT_INITIALIZED</code> ||
+|-
+| || <code>102-0502</code> || <code>ALREADY_INITIALIZED</code> ||
+|-
+| || <code>102-0511</code> || <code>BUSY</code> ||
+|-
+| || <code>102-0591</code> || <code>NOT_IMPLEMENTED</code> ||
+|-
+| || <code>102-0592</code> || <code>DEPRECATED</code> ||
+|-
+| || <code>102-0593</code> || <code>DEVELOPMENT_ONLY</code> ||
+|-
+| || <code>102-0600</code> || <code>INVALID_ARGUMENT</code> ||
+|-
+| || <code>102-0601</code> || <code>INVALID_POINTER</code> ||
+|-
+| || <code>102-0602</code> || <code>OUT_OF_RANGE</code> ||
+|-
+| || <code>102-0603</code> || <code>INVALID_SIZE</code> ||
+|-
+| || <code>102-0604</code> || <code>INVALID_FORMAT</code> ||
+|-
+| || <code>102-0605</code> || <code>INVALID_HANDLE</code> ||
+|-
+| || <code>102-0606</code> || <code>INVALID_VALUE</code> ||
+|-
+| || <code>102-0700</code> || <code>INTERNAL_ERROR</code> ||
+|-
+| || <code>102-0701</code> || <code>END_OF_STREAM</code> ||
+|-
+| || <code>102-0710</code> || <code>FILE_ERROR</code> ||
+|-
+| || <code>102-0711</code> || <code>FILE_NOT_FOUND</code> ||
+|-
+| || <code>102-0712</code> || <code>FILE_VERSION_MISMATCH</code> ||
+|-
+| || <code>102-0713</code> || <code>FILE_IO_ERROR</code> ||
+|-
+| || <code>102-0714</code> || <code>FILE_TYPE_MISMATCH</code> ||
+|-
+| || <code>102-0730</code> || <code>OUT_OF_RESOURCE</code> ||
+|-
+| || <code>102-0731</code> || <code>SHORT_OF_BUFFER</code> ||
+|-
+| || <code>102-0740</code> || <code>OUT_OF_MEMORY</code> ||
+|-
+| || <code>102-0741</code> || <code>OUT_OF_GLOBAL_HEAP</code> ||
+|-
+| || <code>102-0742</code> || <code>OUT_OF_CROSS_PROCESS_HEAP</code> ||
+|-
+| || <code>102-0743</code> || <code>OUT_OF_PROCESS_LOCAL_HEAP</code> ||
+|-
+| || <code>102-0744</code> || <code>OUT_OF_MXML_HEAP</code> ||
+|-
+| || <code>102-0800</code> || <code>UC_ERROR</code> ||
+|-
+| || <code>102-0801</code> || <code>UC_OPEN_ERROR</code> ||
+|-
+| || <code>102-0802</code> || <code>UC_READ_SYS_CONFIG_ERROR</code> ||
+|-
+| || <code>102-0810</code> || <code>MCP_ERROR</code> ||
+|-
+| || <code>102-0811</code> || <code>MCP_OPEN_ERROR</code> ||
+|-
+| || <code>102-0812</code> || <code>MCP_GET_INFO_ERROR</code> ||
+|-
+| || <code>102-0820</code> || <code>ISO_ERROR</code> ||
+|-
+| || <code>102-0821</code> || <code>ISO_INIT_FAILURE</code> ||
+|-
+| || <code>102-0822</code> || <code>ISO_GET_COUNTRY_CODE_FAILURE</code> ||
+|-
+| || <code>102-0823</code> || <code>ISO_GET_LANGUAGE_CODE_FAILURE</code> ||
+|-
+| || <code>102-0850</code> || <code>MXML_ERROR</code> ||
+|-
+| || <code>102-0900</code> || <code>IOS_ERROR</code> ||
+|-
+| || <code>102-0901</code> || <code>IOS_OPEN_ERROR</code> ||
+|-
+| || <code>102-1000</code> || <code>ACCOUNT_MANAGEMENT_ERROR</code> ||
+|-
+| || <code>102-1001</code> || <code>ACCOUNT_NOT_FOUND</code> ||
+|-
+| || <code>102-1002</code> || <code>SLOTS_FULL</code> ||
+|-
+| || <code>102-1011</code> || <code>ACCOUNT_NOT_LOADED</code> ||
+|-
+| || <code>102-1012</code> || <code>ACCOUNT_ALREADY_LOADED</code> ||
+|-
+| || <code>102-1013</code> || <code>ACCOUNT_LOCKED</code> ||
+|-
+| || <code>102-1021</code> || <code>NOT_NETWORK_ACCOUNT</code> ||
+|-
+| || <code>102-1022</code> || <code>NOT_LOCAL_ACCOUNT</code> ||
+|-
+| || <code>102-1023</code> || <code>ACCOUNT_NOT_COMMITTED</code> ||
+|-
+| || <code>102-1101</code> || <code>NETWORK_CLOCK_INVALID</code> ||
+|-
+| || <code>102-2000</code> || <code>AUTHENTICATION_ERROR</code> ||
+|-
+| || <code>102-2100</code> || <code>HTTP_ERROR</code> ||
+|-
+| || <code>102-2101</code> || <code>HTTP_UNSUPPORTED_PROTOCOL</code> ||
+|-
+| || <code>102-2102</code> || <code>HTTP_FAILED_INIT</code> ||
+|-
+| || <code>102-2103</code> || <code>HTTP_URL_MALFORMAT</code> ||
+|-
+| || <code>102-2104</code> || <code>HTTP_NOT_BUILT_IN</code> ||
+|-
+| || <code>102-2105</code> || <code>HTTP_COULDNT_RESOLVE_PROXY</code> ||
+|-
+| || <code>102-2106</code> || <code>HTTP_COULDNT_RESOLVE_HOST</code> ||
+|-
+| || <code>102-2107</code> || <code>HTTP_COULDNT_CONNECT</code> ||
+|-
+| || <code>102-2108</code> || <code>HTTP_FTP_WEIRD_SERVER_REPLY</code> ||
+|-
+| || <code>102-2109</code> || <code>HTTP_REMOTE_ACCESS_DENIED</code> ||
+|-
+| || <code>102-2110</code> || <code>HTTP_OBSOLETE10</code> ||
+|-
+| || <code>102-2111</code> || <code>HTTP_FTP_WEIRD_PASS_REPLY</code> ||
+|-
+| || <code>102-2112</code> || <code>HTTP_OBSOLETE12</code> ||
+|-
+| || <code>102-2113</code> || <code>HTTP_FTP_WEIRD_PASV_REPLY</code> ||
+|-
+| || <code>102-2114</code> || <code>HTTP_FTP_WEIRD_227_FORMAT</code> ||
+|-
+| || <code>102-2115</code> || <code>HTTP_FTP_CANT_GET_HOST</code> ||
+|-
+| || <code>102-2116</code> || <code>HTTP_OBSOLETE16</code> ||
+|-
+| || <code>102-2117</code> || <code>HTTP_FTP_COULDNT_SET_TYPE</code> ||
+|-
+| || <code>102-2118</code> || <code>HTTP_PARTIAL_FILE</code> ||
+|-
+| || <code>102-2119</code> || <code>HTTP_FTP_COULDNT_RETR_FILE</code> ||
+|-
+| || <code>102-2120</code> || <code>HTTP_OBSOLETE20</code> ||
+|-
+| || <code>102-2121</code> || <code>HTTP_QUOTE_ERROR</code> ||
+|-
+| || <code>102-2122</code> || <code>HTTP_HTTP_RETURNED_ERROR</code> ||
+|-
+| || <code>102-2123</code> || <code>HTTP_WRITE_ERROR</code> ||
+|-
+| || <code>102-2124</code> || <code>HTTP_OBSOLETE24</code> ||
+|-
+| || <code>102-2125</code> || <code>HTTP_UPLOAD_FAILED</code> ||
+|-
+| || <code>102-2126</code> || <code>HTTP_READ_ERROR</code> ||
+|-
+| || <code>102-2127</code> || <code>HTTP_OUT_OF_MEMORY</code> ||
+|-
+| || <code>102-2128</code> || <code>HTTP_OPERATION_TIMEDOUT</code> ||
+|-
+| || <code>102-2129</code> || <code>HTTP_OBSOLETE29</code> ||
+|-
+| || <code>102-2130</code> || <code>HTTP_FTP_PORT_FAILED</code> ||
+|-
+| || <code>102-2131</code> || <code>HTTP_FTP_COULDNT_USE_REST</code> ||
+|-
+| || <code>102-2132</code> || <code>HTTP_OBSOLETE32</code> ||
+|-
+| || <code>102-2133</code> || <code>HTTP_RANGE_ERROR</code> ||
+|-
+| || <code>102-2134</code> || <code>HTTP_HTTP_POST_ERROR</code> ||
+|-
+| || <code>102-2135</code> || <code>HTTP_SSL_CONNECT_ERROR</code> ||
+|-
+| || <code>102-2136</code> || <code>HTTP_BAD_DOWNLOAD_RESUME</code> ||
+|-
+| || <code>102-2137</code> || <code>HTTP_FILE_COULDNT_READ_FILE</code> ||
+|-
+| || <code>102-2138</code> || <code>HTTP_LDAP_CANNOT_BIND</code> ||
+|-
+| || <code>102-2139</code> || <code>HTTP_LDAP_SEARCH_FAILED</code> ||
+|-
+| || <code>102-2140</code> || <code>HTTP_OBSOLETE40</code> ||
+|-
+| || <code>102-2141</code> || <code>HTTP_FUNCTION_NOT_FOUND</code> ||
+|-
+| || <code>102-2142</code> || <code>HTTP_ABORTED_BY_CALLBACK</code> ||
+|-
+| || <code>102-2143</code> || <code>HTTP_BAD_FUNCTION_ARGUMENT</code> ||
+|-
+| || <code>102-2144</code> || <code>HTTP_OBSOLETE44</code> ||
+|-
+| || <code>102-2145</code> || <code>HTTP_INTERFACE_FAILED</code> ||
+|-
+| || <code>102-2146</code> || <code>HTTP_OBSOLETE46</code> ||
+|-
+| || <code>102-2147</code> || <code>HTTP_TOO_MANY_REDIRECTS</code> ||
+|-
+| || <code>102-2148</code> || <code>HTTP_UNKNOWN_OPTION</code> ||
+|-
+| || <code>102-2149</code> || <code>HTTP_TELNET_OPTION_SYNTAX</code> ||
+|-
+| || <code>102-2150</code> || <code>HTTP_OBSOLETE50</code> ||
+|-
+| || <code>102-2151</code> || <code>HTTP_PEER_FAILED_VERIFICATION</code> ||
+|-
+| || <code>102-2152</code> || <code>HTTP_GOT_NOTHING</code> ||
+|-
+| || <code>102-2153</code> || <code>HTTP_SSL_ENGINE_NOTFOUND</code> ||
+|-
+| || <code>102-2154</code> || <code>HTTP_SSL_ENGINE_SETFAILED</code> ||
+|-
+| || <code>102-2155</code> || <code>HTTP_SEND_ERROR</code> ||
+|-
+| || <code>102-2156</code> || <code>HTTP_RECV_ERROR</code> ||
+|-
+| || <code>102-2157</code> || <code>HTTP_OBSOLETE57</code> ||
+|-
+| || <code>102-2158</code> || <code>HTTP_SSL_CERTPROBLEM</code> ||
+|-
+| || <code>102-2159</code> || <code>HTTP_SSL_CIPHER</code> ||
+|-
+| || <code>102-2160</code> || <code>HTTP_SSL_CACERT</code> ||
+|-
+| || <code>102-2161</code> || <code>HTTP_BAD_CONTENT_ENCODING</code> ||
+|-
+| || <code>102-2162</code> || <code>HTTP_LDAP_INVALID_URL</code> ||
+|-
+| || <code>102-2163</code> || <code>HTTP_FILESIZE_EXCEEDED</code> ||
+|-
+| || <code>102-2164</code> || <code>HTTP_USE_SSL_FAILED</code> ||
+|-
+| || <code>102-2165</code> || <code>HTTP_SEND_FAIL_REWIND</code> ||
+|-
+| || <code>102-2166</code> || <code>HTTP_SSL_ENGINE_INITFAILED</code> ||
+|-
+| || <code>102-2167</code> || <code>HTTP_LOGIN_DENIED</code> ||
+|-
+| || <code>102-2168</code> || <code>HTTP_TFTP_NOTFOUND</code> ||
+|-
+| || <code>102-2169</code> || <code>HTTP_TFTP_PERM</code> ||
+|-
+| || <code>102-2170</code> || <code>HTTP_REMOTE_DISK_FULL</code> ||
+|-
+| || <code>102-2171</code> || <code>HTTP_TFTP_ILLEGAL</code> ||
+|-
+| || <code>102-2172</code> || <code>HTTP_TFTP_UNKNOWNID</code> ||
+|-
+| || <code>102-2173</code> || <code>HTTP_REMOTE_FILE_EXISTS</code> ||
+|-
+| || <code>102-2174</code> || <code>HTTP_TFTP_NOSUCHUSER</code> ||
+|-
+| || <code>102-2175</code> || <code>HTTP_CONV_FAILED</code> ||
+|-
+| || <code>102-2176</code> || <code>HTTP_CONV_REQD</code> ||
+|-
+| || <code>102-2177</code> || <code>HTTP_SSL_CACERT_BADFILE</code> ||
+|-
+| || <code>102-2178</code> || <code>HTTP_REMOTE_FILE_NOT_FOUND</code> ||
+|-
+| || <code>102-2179</code> || <code>HTTP_SSH</code> ||
+|-
+| || <code>102-2180</code> || <code>HTTP_SSL_SHUTDOWN_FAILED</code> ||
+|-
+| || <code>102-2181</code> || <code>HTTP_AGAIN</code> ||
+|-
+| || <code>102-2182</code> || <code>HTTP_SSL_CRL_BADFILE</code> ||
+|-
+| || <code>102-2183</code> || <code>HTTP_SSL_ISSUER_ERROR</code> ||
+|-
+| || <code>102-2184</code> || <code>HTTP_FTP_PRET_FAILED</code> ||
+|-
+| || <code>102-2185</code> || <code>HTTP_RTSP_CSEQ_ERROR</code> ||
+|-
+| || <code>102-2186</code> || <code>HTTP_RTSP_SESSION_ERROR</code> ||
+|-
+| || <code>102-2187</code> || <code>HTTP_FTP_BAD_FILE_LIST</code> ||
+|-
+| || <code>102-2188</code> || <code>HTTP_CHUNK_FAILED</code> ||
+|-
+| || <code>102-2189</code> || <code>HTTP_NSSL_NO_CTX</code> ||
+|-
+| || <code>102-2210</code> || <code>SO_ERROR</code> ||
+|-
+| || <code>102-2211</code> || <code>SO_SELECT_ERROR</code> ||
+|-
+| || <code>102-2400</code> || <code>REQUEST_ERROR</code> ||
+|-
+| || <code>102-2420</code> || <code>RESPONSE_ERROR</code> ||
+|-
+| || <code>102-2421</code> || <code>BAD_FORMAT_RESPONSE</code> ||
+|-
+| || <code>102-2422</code> || <code>RESPONSE_ITEM_MISSING</code> ||
+|-
+| || <code>102-2423</code> || <code>RESPONSE_TOO_LARGE</code> ||
+|-
+| || <code>102-2441</code> || <code>NOT_MODIFIED</code> ||
+|-
+| || <code>102-2450</code> || <code>INVALID_COMMON_PARAMETER</code> ||
+|-
+| || <code>102-2453</code> || <code>INVALID_SERIAL_ID</code> ||
+|-
+| || <code>102-2454</code> || <code>INVALID_MAC_ADDRESS</code> ||
+|-
+| || <code>102-2455</code> || <code>INVALID_REGION</code> ||
+|-
+| || <code>102-2456</code> || <code>INVALID_COUNTRY</code> ||
+|-
+| || <code>102-2457</code> || <code>INVALID_LANGUAGE</code> ||
+|-
+| || <code>102-2459</code> || <code>DEVICE_ID_EMPTY</code> ||
+|-
+| || <code>102-2460</code> || <code>SERIAL_ID_EMPTY</code> ||
+|-
+| || <code>102-2461</code> || <code>PLATFORM_ID_EMPTY</code> ||
+|-
+| || <code>102-2503</code> || <code>EULA_NOT_ACCEPTED</code> ||
+|-
+| || <code>102-2510</code> || <code>UPDATE_REQUIRED</code> ||
+|-
+| || <code>102-2520</code> || <code>UNAUTHORIZED_REQUEST</code> ||
+|-
+| || <code>102-2530</code> || <code>RESOURCE_NOT_FOUND</code> ||
+|-
+| || <code>102-2540</code> || <code>INVALID_EULA_PARAMETER</code> ||
+|-
+| || <code>102-2543</code> || <code>EULA_NOT_FOUND</code> ||
+|-
+| || <code>102-2570</code> || <code>PHRASE_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2573</code> || <code>ACCOUNT_PASSWORD_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2574</code> || <code>MII_NAME_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2578</code> || <code>ACCOUNT_ID_CHAR_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2579</code> || <code>ACCOUNT_ID_SUCCESSIVE_SYMBOL</code> ||
+|-
+| || <code>102-2580</code> || <code>ACCOUNT_ID_SYMBOL_POSITION_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2581</code> || <code>ACCOUNT_ID_TOO_MANY_DIGIT</code> ||
+|-
+| || <code>102-2582</code> || <code>ACCOUNT_PASSWORD_CHAR_NOT_ACCEPTABLE</code> ||
+|-
+| || <code>102-2583</code> || <code>ACCOUNT_PASSWORD_TOO_FEW_CHAR_TYPES</code> ||
+|-
+| || <code>102-2584</code> || <code>ACCOUNT_PASSWORD_SUCCESSIVE_SAME_CHAR</code> ||
+|-
+| || <code>102-2595</code> || <code>MII_NOT_REGISTERED</code> ||
+|-
+| || <code>102-2610</code> || <code>WRONG_USER_INPUT</code> ||
+|-
+| || <code>102-2611</code> || <code>WRONG_ACCOUNT_PASSWORD</code> ||
+|-
+| || <code>102-2631</code> || <code>ACCOUNT_ALREADY_DELETED</code> ||
+|-
+| || <code>102-2632</code> || <code>ACCOUNT_ID_CHANGED</code> ||
+|-
+| || <code>102-2634</code> || <code>DEVICE_INACTIVE</code> ||
+|-
+| || <code>102-2643</code> || <code>AUTHENTICATION_REQUIRED</code> ||
+|-
+| || <code>102-2670</code> || <code>CREDIT_CARD_ERROR</code> ||
+|-
+| || <code>102-2800</code> || <code>BANNED</code> ||
+|-
+| || <code>102-2801</code> || <code>BANNED_ACCOUNT</code> ||
+|-
+| || <code>102-2811</code> || <code>BANNED_DEVICE</code> ||
+|-
+| || <code>102-2821</code> || <code>BANNED_ACCOUNT_TEMPORARILY</code> ||
+|-
+| || <code>102-2831</code> || <code>BANNED_DEVICE_TEMPORARILY</code> ||
+|-
+| || <code>102-2880</code> || <code>SERVICE_NOT_PROVIDED</code> ||
+|-
+| || <code>102-2883</code> || <code>NINTENDO_NETWORK_CLOSED</code> ||
+|-
+| || <code>102-2900</code> || <code>RESTRICTION_ERROR</code> ||
+|-
+| || <code>102-2901</code> || <code>RESTRICTED_BY_AGE</code> ||
+|-
+| || <code>102-2910</code> || <code>RESTRICTED_BY_PARENTAL_CONTROLS</code> ||
+|-
+| || <code>102-2911</code> || <code>ON_GAME_INTERNET_COMMUNICATION_RESTRICTED</code> ||
+|-
+| || <code>102-2931</code> || <code>INTERNAL_SERVER_ERROR</code> ||
+|-
+| || <code>102-2932</code> || <code>UNKNOWN_SERVER_ERROR</code> ||
+|-
+| || <code>102-2998</code> || <code>UNAUTHENTICATED_AFTER_SALVAGE</code> ||
+|-
+| || <code>102-2999</code> || <code>AUTHENTICATION_FAILURE_UNKNOWN</code> ||
+|}
+
+== Parental Controls ==
+
+Parents/guardians can enable Parental Controls. Parental Controls is a system-wide feature, not tied to any specific user account. Parental Controls are secured with both a 4-digit pin and a parents email address, which is used to have a master key sent to reset the local PIN if it is forgotten. Requesting the master key involves contacting Nintendo, however tools such as https://mkey.salthax.org can be used to generate the master key manually.
+
+Once enabled, Parental Controls can be used by the parents/guardians to restrict the types of games/features each user account can access, including limiting games by rating, friend registrations, online features, Miiverse access, etc.
+
+== Common Flows ==
+
+Below are some HTTP request flows for common actions performed by the console.
+
+=== Creating A NNID ===
+
+# [[#GET /v1/api/devices/@current/status]]
+# [[#GET /v1/api/content/agreements/%s/%s/%s|#GET /v1/api/content/agreements/%s/%s/%s?length=2048]]
+# [[#GET /v1/api/content/time_zones/%s/%s]]
+# [[#GET /v1/api/people/%s]]
+# [[#POST /v1/api/support/validate/email]]
+# [[#POST /v1/api/people]]
+
+=== Deleting A NNID ===
+
+# [[#POST /v1/api/oauth20/access_token/generate]]
+# [[#GET /v1/api/people/@me/profile]]
+# [[#GET /v1/api/people/@me/devices]]
+# [[#POST /v1/api/people/@me/deletion]]
+
+=== Unlinking A NNID ===
+
+# [[#POST /v1/api/oauth20/access_token/generate]] (this happens twice)
+# [[#GET /v1/api/people/@me/profile]]
+# [[#POST /v1/api/oauth20/access_token/generate]]
+# [[#GET /v1/api/people/@me/profile]]
+# [[#GET /v1/api/people/@me/devices]]
+# [[#PUT /v1/api/people/@me/devices/@current/inactivate]]
+
+=== Relinking An Unlinked A NNID ===
+
+# [[#POST /v1/api/oauth20/access_token/generate]] (will fail with code <code>0143</code>)
+# [[#GET /v1/api/devices/@current/status]]
+# [[#GET /v1/api/people/@me/devices/owner]]
+# [[#POST /v1/api/people/@me/devices]]
+
+=== Linking An Existing NNID For The First Time ===
+
+# [[#GET /v1/api/devices/@current/status]]
+# [[#GET /v1/api/people/@me/devices/owner]]
+# [[#POST /v1/api/people/@me/devices]]
+# [[#POST /v1/api/oauth20/access_token/generate]]
+# [[#GET /v1/api/people/@me/profile]]
+# [[#PUT /v1/api/people/@me/miis/@primary]]
+
+=== Change Password ===
+
+# [[#POST /v1/api/oauth20/access_token/generate]] (this happens twice)
+# [[#GET /v1/api/people/@me/profile]]
+# [[#POST /v1/api/oauth20/access_token/generate]]
+# [[#GET /v1/api/people/@me/profile]]
+# [[#PUT /v1/api/people/@me]]
+
+=== Factory Reset ===
+
+# [[#PUT /v1/api/devices/@current/inactivate]]
+
+=== Setup Parental Controls ===
+
+# [[#POST /v1/api/support/validate/email]]
+# [[#GET /v1/api/support/send_confirmation/pin/%s]]
+
+== Endpoints ==
+
+{| class="wikitable"
+! Method !! Path
+|-
+| <code>GET</code> || <code>[[#GET /v1/account-settings/ui/profile|/v1/account-settings/ui/profile]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/admin/mapped_ids|/v1/api/admin/mapped_ids]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/admin/time|/v1/api/admin/time]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/content/agreements/%s/%s/%s|/v1/api/content/agreements/%s/%s/%s]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/content/time_zones/%s/%s|/v1/api/content/time_zones/%s/%s]]</code>
+|-
+| <code>DELETE</code> || <code>[[#DELETE /v1/api/devices/@current|/v1/api/devices/@current]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/devices/@current/inactivate|/v1/api/devices/@current/inactivate]]</code>
+|-
+| <code>DELETE</code> || <code>[[#DELETE /v1/api/devices/@current/migrations|/v1/api/devices/@current/migrations]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/devices/@current/migrations|/v1/api/devices/@current/migrations]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/devices/@current/migrations/commit|/v1/api/devices/@current/migrations/commit]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/devices/@current/status|/v1/api/devices/@current/status]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/miis|/v1/api/miis]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/oauth20/access_token/generate|/v1/api/oauth20/access_token/generate]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/people|/v1/api/people]]</code>
+|-
+| <code>DELETE</code> || <code>[[#DELETE /v1/api/people/@me|/v1/api/people/@me]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/people/@me|/v1/api/people/@me]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/people/@me/agreements|/v1/api/people/@me/agreements]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/people/@me/deletion|/v1/api/people/@me/deletion]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/people/@me/devices|/v1/api/people/@me/devices]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/people/@me/devices|/v1/api/people/@me/devices]]</code>
+|-
+| <code>DELETE</code> || <code>[[#DELETE /v1/api/people/@me/devices/@current|/v1/api/people/@me/devices/@current]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/people/@me/devices/@current/attributes|/v1/api/people/@me/devices/@current/attributes]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/people/@me/devices/@current/inactive|/v1/api/people/@me/devices/@current/inactive]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/people/@me/devices/owner|/v1/api/people/@me/devices/owner]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/people/@me/emails|/v1/api/people/@me/emails]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/people/@me/emails/@primary|/v1/api/people/@me/emails/@primary]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/people/@me/miis/@primary|/v1/api/people/@me/miis/@primary]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/people/@me/profile|/v1/api/people/@me/profile]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/people/%s|/v1/api/people/%s]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/provider/nex_token/@me|/v1/api/provider/nex_token/@me]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/provider/service_token/@me|/v1/api/provider/service_token/@me]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v2/api/provider/service_token/@me|/v2/api/provider/service_token/@me]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/support/coppa/authorization|/v1/api/support/coppa/authorization]]</code>
+|-
+| <code>PUT</code> || <code>[[#PUT /v1/api/support/email_confirmation/%s/%s|/v1/api/support/email_confirmation/%s/%s]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/support/forgotten_password/%s|/v1/api/support/forgotten_password/%s]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/support/parental_approval|/v1/api/support/parental_approval]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/support/parental_approval/send_email/coppa_code|/v1/api/support/parental_approval/send_email/coppa_code]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/support/resend_confirmation|/v1/api/support/resend_confirmation]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/support/send_confirmation/pin/%s|/v1/api/support/send_confirmation/pin/%s]]</code>
+|-
+| <code>GET</code> || <code>[[#GET /v1/api/support/send_forgotten/pin/%s/%s|/v1/api/support/send_forgotten/pin/%s/%s]]</code>
+|-
+| <code>POST</code> || <code>[[#POST /v1/api/support/validate/email|/v1/api/support/validate/email]]</code>
+|}
+
+=== GET /v1/account-settings/ui/profile ===
+
+The Nintendo Network ID settings page used by the Wii U. Unlike the other endpoints on NNAS, this is the only one which returns actual HTML. The account settings app loads this endpoint as it's webpage.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>X-Nintendo-Service-Token</code> || Service token for the current user. See <code>[[#GET /v1/api/provider/service_token/@me]]</code>
+|}
+
+==== Response ====
+
+===== Body =====
+
+HTML web page. Can be anything the server needs it to send, all content is implementation-specific.
+
+=== GET /v1/api/admin/mapped_ids ===
+
+Maps between usernames and user [[#PIDs]].
+
+==== Request ====
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>input_type</code> || Either <code>user_id</code> or <code>pid</code>. If this is set to <code>user_id</code>, then inputs are "normalized" without errors. For example, the input <code>prod.....test1...</code> returns the data for user <code>prodtest1</code>
+|-
+| <code>output_type</code> || Either <code>user_id</code> or <code>pid</code>. If both this and <code>input_type</code> are set to <code>user_id</code>, the output is the normalized username. For example, the input <code>prod.....test1...</code> returns the string <code>prodtest1</code> in the output
+|-
+| <code>input</code> || Comma separated list of usernames/[[#PIDs]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+Mapped IDs list. Each item is returned in the order they were defined in <code>input</code>. Duplicates are allowed and appear as separate entries. <code>in_id</code> is ALWAYS the input as seen from <code>input</code> '''unnormalized'''. If either <code>input_type</code> or <code>output_type</code> are not valid, or if an input value does not exist, <code>out_id</code> for that entry is always an empty string. The first valid PID on the official servers is 1799999999 (username <code>prodtest1</code>), counting down by 1 for every new account.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apiadminmapped_ids">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapped_ids>
+  <mapped_id>
+    <in_id>prod.....test1...</in_id>
+    <out_id>1799999999</out_id>
+  </mapped_id>
+</mapped_ids>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "mapped_ids": [
+    {
+      "in_id": "prod.....test1...",
+      "out_id": "1799999999"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>input_type</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>output_type</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>input</code> is missing or is empty || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|}
+
+=== GET /v1/api/admin/time ===
+
+Takes no request data and returns no response body. Used by the consoles to simply get the current time from the <code>X-Nintendo-Date</code> header.
+
+=== GET /v1/api/content/agreements/%s/%s/%s ===
+
+Loads an "agreement" for the user to read and accept. The console seems to be capable of loading multiple different types/versions of agreements, however officially only the latest version of the Nintendo Network EULA is ever loaded. Each agreement has translations for multiple languages including the text displayed on the UI buttons.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The agreement to load. Always <code>Nintendo-Network-EULA</code>
+|-
+| 2 || The ISO 2 country code for the country the agreement applies to
+|-
+| 3 || The version of the agreement to load. Always <code>@latest</code>
+|}
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>length</code> || '''Optional'''. Length of each agreements <code>main_text</code> field chunk. Real client uses a value of 2048, but it can be any value. If omitted then the <code>main_text</code> fields are not chunked. The first chunk starts with <code>index="1"</code> and increments up by 1 for every subsequent chunk
+|}
+
+==== Response ====
+
+===== Body =====
+
+The agreement requested, plus it's translations. Note that the specific agreement details/available translations may differ between agreement types/countries.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apicontentagreementssss">
+	<tab name="XML Mode">
+		<pre>
+<agreements>
+  <agreement>
+    <country>US</country>
+    <language>en</language>
+    <language_name>English</language_name>
+    <publish_date>2014-09-29T20:07:35</publish_date>
+    <texts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="chunkedStoredAgreementText">
+      <agree_text><![CDATA[I Accept]]></agree_text>
+      <main_title><![CDATA[Nintendo Network Services Agreement]]></main_title>
+      <non_agree_text><![CDATA[I Decline]]></non_agree_text>
+      <main_text index="1"><![CDATA[English agreement text chunk here]]></main_text>
+    </texts>
+    <type>NINTENDO-NETWORK-EULA</type>
+    <version>0300</version>
+  </agreement>
+  <agreement>
+    <country>US</country>
+    <language>es</language>
+    <language_name>Español</language_name>
+    <publish_date>2014-09-29T20:07:36</publish_date>
+    <texts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="chunkedStoredAgreementText">
+      <agree_text><![CDATA[Acepto]]></agree_text>
+      <main_title><![CDATA[Acuerdo de Servicios de red de Nintendo]]></main_title>
+      <non_agree_text><![CDATA[No acepto]]></non_agree_text>
+      <main_text index="1"><![CDATA[Spanish agreement text chunk here]]></main_text>
+    </texts>
+    <type>NINTENDO-NETWORK-EULA</type>
+    <version>0300</version>
+  </agreement>
+  <agreement>
+    <country>US</country>
+    <language>fr</language>
+    <language_name>Français</language_name>
+    <publish_date>2014-09-29T20:07:37</publish_date>
+    <texts xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:type="chunkedStoredAgreementText">
+      <agree_text><![CDATA[J'accepte]]></agree_text>
+      <main_title><![CDATA[Contrat d'utilisation des services en ligne]]></main_title>
+      <non_agree_text><![CDATA[Je n'accepte pas]]></non_agree_text>
+      <main_text index="1"><![CDATA[French agreement text chunk here]]></main_text>
+    </texts>
+    <type>NINTENDO-NETWORK-EULA</type>
+    <version>0300</version>
+  </agreement>
+</agreements>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "agreements": [
+    {
+      "country": "US",
+      "language": "en",
+      "language_name": "English",
+      "version": "0300",
+      "texts": {
+        "main_title": "Nintendo Network Services Agreement",
+        "main_text": [
+          {
+            "index": 1,
+            "value": "English agreement text chunk here"
+          }
+        ],
+        "agree_text": "I Accept",
+        "non_agree_text": "I Decline"
+      },
+      "type": "NINTENDO-NETWORK-EULA",
+      "publish_date": "2014-09-29T20:07:35"
+    },
+    {
+      "country": "US",
+      "language": "es",
+      "language_name": "Español",
+      "version": "0300",
+      "texts": {
+        "main_title": "Acuerdo de Servicios de red de Nintendo",
+        "main_text": [
+          {
+            "index": 1,
+            "value": "Spanish agreement text chunk here"
+          }
+        ],
+        "agree_text": "Acepto",
+        "non_agree_text": "No acepto"
+      },
+      "type": "NINTENDO-NETWORK-EULA",
+      "publish_date": "2014-09-29T20:07:36"
+    },
+    {
+      "country": "US",
+      "language": "fr",
+      "language_name": "Français",
+      "version": "0300",
+      "texts": {
+        "main_title": "Contrat d'utilisation des services en ligne",
+        "main_text": [
+          {
+            "index": 1,
+            "value": "French agreement text chunk here"
+          }
+        ],
+        "agree_text": "J'accepte",
+        "non_agree_text": "Je n'accepte pas"
+      },
+      "type": "NINTENDO-NETWORK-EULA",
+      "publish_date": "2014-09-29T20:07:37"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+=== GET /v1/api/content/time_zones/%s/%s ===
+
+Loads a list of timezones for a given country.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The ISO 2 country code for the country whose timezones to load
+|-
+| 2 || The ISO 639 language code to translate the <code>name</code> fields
+|}
+
+==== Response ====
+
+===== Body =====
+
+Example from the US/en timezones.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apicontenttime_zonesss">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<timezones>
+  <timezone>
+    <area>Pacific/Midway</area>
+    <language>en</language>
+    <name>Midway Island, Samoa</name>
+    <utc_offset>-39600</utc_offset>
+    <order>1</order>
+  </timezone>
+  <timezone>
+    <area>America/Adak</area>
+    <language>en</language>
+    <name>Adak</name>
+    <utc_offset>-36000</utc_offset>
+    <order>2</order>
+  </timezone>
+  <timezone>
+    <area>Pacific/Honolulu</area>
+    <language>en</language>
+    <name>Hawaii</name>
+    <utc_offset>-36000</utc_offset>
+    <order>3</order>
+  </timezone>
+  <timezone>
+    <area>America/Anchorage</area>
+    <language>en</language>
+    <name>Alaska</name>
+    <utc_offset>-32400</utc_offset>
+    <order>4</order>
+  </timezone>
+  <timezone>
+    <area>America/Los_Angeles</area>
+    <language>en</language>
+    <name>Pacific Time (US &amp;amp; Canada)</name>
+    <utc_offset>-28800</utc_offset>
+    <order>5</order>
+  </timezone>
+  <timezone>
+    <area>America/Boise</area>
+    <language>en</language>
+    <name>Mountain Time (US &amp;amp; Canada)</name>
+    <utc_offset>-25200</utc_offset>
+    <order>6</order>
+  </timezone>
+  <timezone>
+    <area>America/Phoenix</area>
+    <language>en</language>
+    <name>Arizona</name>
+    <utc_offset>-25200</utc_offset>
+    <order>7</order>
+  </timezone>
+  <timezone>
+    <area>America/Chicago</area>
+    <language>en</language>
+    <name>Central Time (US &amp;amp; Canada)</name>
+    <utc_offset>-21600</utc_offset>
+    <order>8</order>
+  </timezone>
+  <timezone>
+    <area>America/Indiana/Knox</area>
+    <language>en</language>
+    <name>Indiana (Central)</name>
+    <utc_offset>-21600</utc_offset>
+    <order>9</order>
+  </timezone>
+  <timezone>
+    <area>America/Indiana/Indianapolis</area>
+    <language>en</language>
+    <name>Indiana (East)</name>
+    <utc_offset>-18000</utc_offset>
+    <order>10</order>
+  </timezone>
+  <timezone>
+    <area>America/New_York</area>
+    <language>en</language>
+    <name>Eastern Time (US &amp;amp; Canada)</name>
+    <utc_offset>-18000</utc_offset>
+    <order>11</order>
+  </timezone>
+  <timezone>
+    <area>America/Puerto_Rico</area>
+    <language>en</language>
+    <name>Georgetown, La Paz, San Juan</name>
+    <utc_offset>-14400</utc_offset>
+    <order>12</order>
+  </timezone>
+  <timezone>
+    <area>Pacific/Guam</area>
+    <language>en</language>
+    <name>Guam, Port Moresby</name>
+    <utc_offset>36000</utc_offset>
+    <order>13</order>
+  </timezone>
+  <timezone>
+    <area>Pacific/Wake</area>
+    <language>en</language>
+    <name>Wake Island</name>
+    <utc_offset>43200</utc_offset>
+    <order>14</order>
+  </timezone>
+</timezones>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "timezones": [
+    {
+      "area": "Pacific/Midway",
+      "order": 1,
+      "utc_offset": -39600,
+      "name": "Midway Island, Samoa",
+      "language": "en"
+    },
+    {
+      "area": "America/Adak",
+      "order": 2,
+      "utc_offset": -36000,
+      "name": "Adak",
+      "language": "en"
+    },
+    {
+      "area": "Pacific/Honolulu",
+      "order": 3,
+      "utc_offset": -36000,
+      "name": "Hawaii",
+      "language": "en"
+    },
+    {
+      "area": "America/Anchorage",
+      "order": 4,
+      "utc_offset": -32400,
+      "name": "Alaska",
+      "language": "en"
+    },
+    {
+      "area": "America/Los_Angeles",
+      "order": 5,
+      "utc_offset": -28800,
+      "name": "Pacific Time (US & Canada)",
+      "language": "en"
+    },
+    {
+      "area": "America/Boise",
+      "order": 6,
+      "utc_offset": -25200,
+      "name": "Mountain Time (US & Canada)",
+      "language": "en"
+    },
+    {
+      "area": "America/Phoenix",
+      "order": 7,
+      "utc_offset": -25200,
+      "name": "Arizona",
+      "language": "en"
+    },
+    {
+      "area": "America/Chicago",
+      "order": 8,
+      "utc_offset": -21600,
+      "name": "Central Time (US & Canada)",
+      "language": "en"
+    },
+    {
+      "area": "America/Indiana/Knox",
+      "order": 9,
+      "utc_offset": -21600,
+      "name": "Indiana (Central)",
+      "language": "en"
+    },
+    {
+      "area": "America/Indiana/Indianapolis",
+      "order": 10,
+      "utc_offset": -18000,
+      "name": "Indiana (East)",
+      "language": "en"
+    },
+    {
+      "area": "America/New_York",
+      "order": 11,
+      "utc_offset": -18000,
+      "name": "Eastern Time (US & Canada)",
+      "language": "en"
+    },
+    {
+      "area": "America/Puerto_Rico",
+      "order": 12,
+      "utc_offset": -14400,
+      "name": "Georgetown, La Paz, San Juan",
+      "language": "en"
+    },
+    {
+      "area": "Pacific/Guam",
+      "order": 13,
+      "utc_offset": 36000,
+      "name": "Guam, Port Moresby",
+      "language": "en"
+    },
+    {
+      "area": "Pacific/Wake",
+      "order": 14,
+      "utc_offset": 43200,
+      "name": "Wake Island",
+      "language": "en"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+=== DELETE /v1/api/devices/@current ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This endpoint is only used when a console is in debug mode.''</div>
+</div>
+
+Not available in the production environment. Presumably deletes device data from the server, or potentially deletes all associated NNID device association datas?
+
+=== PUT /v1/api/devices/@current/inactivate ===
+
+Removes a NNID device association. Any issued tokens for the linked NNIDs will immediately become invalid.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || '''Optional'''. [[#Authorization|<code>Bearer</code> token]]. If no token is sent, all users tied to the device are unlinked
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is present but invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| User is not already tied to the target console. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|}
+
+=== DELETE /v1/api/devices/@current/migrations ===
+
+Cancels an in-progress NNID system transfer, if one has started.
+
+==== Response ====
+
+===== Body =====
+
+The <code>devices</code> list seems to always be empty, even if a system transfer has been previously started?
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASDELETEv1apidevicescurrentmigrations">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<devices></devices>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+[]
+		</pre>
+	</tab>
+</tabs>
+
+=== POST /v1/api/devices/@current/migrations ===
+
+Begins a NNID system transfer. The original console sends the details of the new target console the NNID is being moved to.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+The official server seems to not care if any of these fields exist?
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>person_migration</code> || The data for the new target console
+|-
+| <code>person_migration.new_platform_id</code> || New console platform type. Does not need to match the origin platform type. 0 = 3DS, 1 = Wii U
+|-
+| <code>person_migration.new_serial_number</code> || New console serial number
+|-
+| <code>person_migration.new_device_id</code> || New console device ID
+|-
+| <code>person_migration.operator</code> || The type of operation? Only known value is <code>ReserveTransfer</code>
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apidevicescurrentmigrations_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<person_migration>
+  <new_platform_id>0</new_platform_id>
+  <new_serial_number>YEM12345678</new_serial_number>
+  <new_device_id>1234567890</new_device_id>
+  <operator>ReserveTransfer</operator>
+</person_migration>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "new_platform_id": "0",
+  "new_serial_number": "YEM12345678",
+  "new_device_id": "1234567890",
+  "operator": "ReserveTransfer"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Body is missing with no <code>Content-type</code> header || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| <code>person_migration</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|}
+
+=== POST /v1/api/devices/@current/migrations/commit ===
+
+Called by the new target device of a NNID system transfer to commit to the transfer. Sends no request body and returns no response body.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-type</code> || <code>application/xml</code>
+|}
+
+=== GET /v1/api/devices/@current/status ===
+
+Verifies that a system can continue with linking a NNID. If not, the appropriate [[#Errors|error]] is thrown, otherwise it responds as normal. This is the first request made when creating a new NNID on, or when linking an existing NNID to, a console. Note that this request does not get sent the device certificate on the Wii U, which means that console bans were done by serial/device ID instead.
+
+==== Response ====
+
+===== Body =====
+
+The <code>device</code> object seems to always be empty?
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apidevicescurrentmigrationscommit">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<device/>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{}
+		</pre>
+	</tab>
+</tabs>
+
+=== GET /v1/api/miis ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This endpoint was shut down by Nintendo in May 2024 and is no longer usable.''</div>
+</div>
+
+Retrieves a list of Miis for the requested NNIDs. Each object contains not only the NNIDs standard Mii, but also several expressions.
+
+==== Request ====
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>pids</code> || Comma separated list of [[#PIDs]] to retrieve Miis for
+|}
+
+==== Response ====
+
+===== Body =====
+
+A list of user Miis. Each NNIDs Miis are defined in a <code>mii</code> object. Duplicates are allowed and appear as separate entries. The Mii <code>id</code> has an unknown use, likely just an internal identifer?
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apidevicescurrentstatus">
+	<tab name="XML Mode">
+		Since this endpoint has been shut down officially, this example comes from [https://github.com/PretendoNetwork/account/blob/d99d02cb0a56b76c52f985b005047b36878acd9d/src/services/nnas/routes/miis.ts Pretendo Network]
+
+		<pre>
+<?xml version="1.0"?>
+<miis>
+  <mii>
+    <data>AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9</data>
+    <id>1598949904</id>
+    <images>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png</url>
+        <type>standard</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/frustrated.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/frustrated.png</url>
+        <type>frustrated_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/smile_open_mouth.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/smile_open_mouth.png</url>
+        <type>happy_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/wink_left.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/wink_left.png</url>
+        <type>like_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png</url>
+        <type>normal_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/sorrow.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/sorrow.png</url>
+        <type>puzzled_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/surprised_open_mouth.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/surprised_open_mouth.png</url>
+        <type>surprised_face</type>
+      </image>
+      <image>
+        <cached_url>https://r2-cdn.pretendo.cc/mii/1424784406/body.png</cached_url>
+        <id>1598949904</id>
+        <url>https://r2-cdn.pretendo.cc/mii/1424784406/body.png</url>
+        <type>whole_body</type>
+      </image>
+    </images>
+    <name>Jon</name>
+    <pid>1424784406</pid>
+    <primary>Y</primary>
+    <user_id>PN_Jon</user_id>
+  </mii>
+</miis>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		It is not known if this endpoint supported JSON mode when it was available, but we can assume the format looked something like the following based on other endpoints if it did support JSON mode.
+
+		<pre>
+{
+  "miis": [
+    {
+      "data": "AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9",
+      "id": 1598949904,
+      "images": [
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png",
+          "type": "standard"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/frustrated.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/frustrated.png",
+          "type": "frustrated_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/smile_open_mouth.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/smile_open_mouth.png",
+          "type": "happy_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/wink_left.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/wink_left.png",
+          "type": "like_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/normal_face.png",
+          "type": "normal_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/sorrow.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/sorrow.png",
+          "type": "puzzled_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/surprised_open_mouth.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/surprised_open_mouth.png",
+          "type": "surprised_face"
+        },
+        {
+          "cached_url": "https://r2-cdn.pretendo.cc/mii/1424784406/body.png",
+          "id": 1598949904,
+          "url": "https://r2-cdn.pretendo.cc/mii/1424784406/body.png",
+          "type": "whole_body"
+        }
+      ],
+      "name": "Jon",
+      "pid": 1424784406,
+      "primary": true,
+      "user_id": "PN_Jon"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Any request after May 2024 || 403 || Yes || Empty string || <code>0007</code> || <code>Forbidden request</code>
+|-
+| <code>pids</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|}
+
+=== POST /v1/api/oauth20/access_token/generate ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This endpoint does not support JSON mode on succesful responses. Errors may still support it, however.''</div>
+</div>
+
+Generates OAuth tokens for the user. The access token is only usable by NNAS itself, no other services. If another service would like details about the logged in user, it may request either a service or NEX token depending on the kind of service. A client may authenticate with either a username/password or with a refresh token.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-Type</code> || <code>application/x-www-form-urlencoded</code>
+|}
+
+===== Body =====
+
+When logging in with a username/password:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>grant_type</code> || <code>password</code>
+|-
+| <code>user_id</code> || NNID username
+|-
+| <code>password</code> || NNID password. If <code>password_type</code> is set to <code>hash</code> then this is expected to be [[#Password Hashing|hashed]]
+|-
+| <code>password_type</code> || '''Optional'''. Always <code>hash</code>
+|}
+
+When logging in with a refresh token:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>grant_type</code> || <code>refresh_token</code>
+|-
+| <code>refresh_token</code> || Refresh token
+|}
+
+==== Response ====
+
+===== Body =====
+
+User OAuth tokens. The access token is valid for <code>expires_in</code> seconds. The refresh token is only valid for 24 hours and are single use only. If a user updates their password, any issued tokens for the NNID will immediately become invalid, even if the new password is the same as the old.
+
+The access token is truncated to 32 characters, and the refresh token to 40 characters, by the client. Both tokens are officially sent as lowercase hex, but any characters are valid.
+
+<pre>
+<OAuth20>
+  <access_token>
+    <token>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</token>
+    <refresh_token>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</refresh_token>
+    <expires_in>3600</expires_in>
+  </access_token>
+</OAuth20>
+</pre>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>grant_type</code> is missing or invalid || 400 || Yes || <code>grant_type</code> || <code>0004</code> || <code>Invalid Grant Type</code>
+|-
+| <code>refresh_token</code> is missing or invalid || 401 || Yes || <code>refresh_token</code> || <code>0106</code> || <code>Invalid Refresh Token</code>
+|-
+| <code>user_id</code> is missing || 400 || No || <code>user_id</code> || <code>0002</code> || <code>user_id format is invalid</code>
+|-
+| <code>password</code> is missing || 400 || No || <code>password</code> || <code>0002</code> || <code>password format is invalid</code>
+|-
+| Incorrect credentials || 400 || No || Omitted || <code>0106</code> || <code>Invalid account ID or password</code>
+|-
+| Many failed login attempts within a certain time. The exact rates are unknown || 400 || No || Omitted || <code>1106</code> || <code>Account temporarily locked. Wrong password</code>
+|-
+| Account is deleted || 400 || No || Omitted || <code>0112</code> || <code>Account is deleted</code>
+|-
+| Account is not linked to the current device || 400 || No || Omitted || <code>0110</code> || <code>Unlinked device</code>
+|-
+| Account was most recently unlinked from the current device || 401 || No || Omitted || <code>0143</code> || <code>Account is inactive for device</code>
+|}
+
+=== POST /v1/api/people ===
+
+Registers a new NNID.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-type</code> || <code>application/xml</code>
+|}
+
+===== Body =====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>person</code> || The new NNID data
+|-
+| <code>person.birth_date</code> || The NNIDs birthday in the format <code>YYYY-MM-DD</code>
+|-
+| <code>person.user_id</code> || NNID username. Cannot be changed after registering. Must be between 6 and 16 characters long, and can contain letters, numbers, periods, dashes, and underscores. Punctuation cannot be used as the first or last character of the ID. Two or more punctuation characters cannot be used in a row
+|-
+| <code>person.password</code> || Plaintext NNID password. Must be between 6 and 16 characters long, can't be the same as <code>person.user_id</code>, and can contain characters from the categories of letters, numbers, and punctuation. The same character cannot be used three or more times in a row
+|-
+| <code>person.country</code> || NNID country. Cannot be changed after registering. Must match the device country
+|-
+| <code>person.language</code> || NNID language
+|-
+| <code>person.tz_name</code> || NNID timezone name as seen in [[#GET /v1/api/content/time_zones/%s/%s]]
+|-
+| <code>person.agreement</code> || Details about the agreement from [[#GET /v1/api/content/agreements/%s/%s/%s]]
+|-
+| <code>person.agreement.agreement_date</code> || The date the agreement was accepted. Will always match the current time
+|-
+| <code>person.agreement.country</code> || The agreement country
+|-
+| <code>person.agreement.location</code> || Link to the accepted agreement. Official servers always return a link that leads to a 404, however
+|-
+| <code>person.agreement.type</code> || The type of agreement. Always <code>NINTENDO-NETWORK-EULA</code>
+|-
+| <code>person.agreement.version</code> || The agreement version
+|-
+| <code>person.email</code> || Details about the NNIDs email address
+|-
+| <code>person.email.address</code> || The NNIDs email address
+|-
+| <code>person.email.owned</code> || Unknown. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.parent</code> || Unknown. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.primary</code> || Unknown, "is this a primary email"? Officially NNIDs can only have one email address. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.validated</code> || Has the email been validated. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.email.type</code> || Unknown. Seems to always be <code>DEFAULT</code>?
+|-
+| <code>person.mii</code> || Details about the NNIDs Mii
+|-
+| <code>person.mii.name</code> || Mii nickname name
+|-
+| <code>person.mii.primary</code> || Unknown, "is this a primary Mii"? Officially NNIDs can only have one Mii. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.mii.data</code> || Base64 encoded Mii data
+|-
+| <code>person.parental_consent</code> || COPPA details
+|-
+| <code>person.parental_consent.scope</code> || 0 = 3DS, 1 = Wii U, same as the devices <code>X-Nintendo-Platform-ID</code> header
+|-
+| <code>person.parental_consent.consent_date</code> || The date COPPA approval was given
+|-
+| <code>person.parental_consent.approval_id</code> || COPPA approval ID from [[#POST /v1/api/support/coppa/authorization]]
+|-
+| <code>person.gender</code> || Either <code>M</code> or <code>F</code>
+|-
+| <code>person.region</code> || [[Online/Nintendo_Network/Region_IDs|Region ID]] in decimal
+|-
+| <code>person.marketing_flag</code> || Whether or not you want to receive marketing ("commercial") emails. Either <code>Y</code> or <code>N</code>
+|-
+| <code>person.device_attributes</code> || List of [[#Device Attributes]] objects
+|-
+| <code>person.off_device_flag</code> || If set, the NNID cannot be logged into outside of the console it's linked to. Either <code>Y</code> or <code>N</code>
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apipeople_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <birth_date>1990-01-01</birth_date>
+  <user_id>username</user_id>
+  <password>password</password>
+  <country>US</country>
+  <language>en</language>
+  <tz_name>Pacific/Midway</tz_name>
+  <agreement>
+    <agreement_date>2024-08-04T01:53:54</agreement_date>
+    <country>US</country>
+    <location>https://account.nintendo.net/v1/api/content/agreements/Nintendo-Network-EULA/0300</location>
+    <type>NINTENDO-NETWORK-EULA</type>
+    <version>0300</version>
+  </agreement>
+  <email>
+    <address>email@example.com</address>
+    <owned>N</owned>
+    <parent>N</parent>
+    <primary>Y</primary>
+    <validated>N</validated>
+    <type>DEFAULT</type>
+  </email>
+  <mii>
+    <name>t</name>
+    <primary>Y</primary>
+    <data>AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9</data>
+  </mii>
+  <parental_consent>
+    <scope>1</scope>
+    <consent_date>2024-08-04T01:53:54</consent_date>
+    <approval_id>0</approval_id>
+  </parental_consent>
+  <gender>M</gender>
+  <region>822083584</region>
+  <marketing_flag>Y</marketing_flag>
+  <device_attributes>
+    <device_attribute>
+      <name>uuid_account</name>
+      <value>47374816-f86f-11f0-b535-325096b39f47</value>
+    </device_attribute>
+    <device_attribute>
+      <name>uuid_common</name>
+      <value>4c01ae90-f86f-11f0-9ed2-325096b39f47</value>
+    </device_attribute>
+    <device_attribute>
+      <name>persistent_id</name>
+      <value>80000086</value>
+    </device_attribute>
+    <device_attribute>
+      <name>transferable_id_base</name>
+      <value>abababababababab</value>
+    </device_attribute>
+    <device_attribute>
+      <name>transferable_id_base_common</name>
+      <value>cdcdcdcdcdcdcdcd</value>
+    </device_attribute>
+  </device_attributes>
+  <off_device_flag>Y</off_device_flag>
+</person>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		Note that not all fields from XML mode are present.
+
+		<pre>
+{
+  "birth_date": "1990-01-01",
+  "user_id": "username",
+  "password": "password",
+  "country": "US",
+  "language": "en",
+  "tz_name": "Pacific/Midway",
+  "agreement": {
+    "country": "US",
+    "type": "NINTENDO-NETWORK-EULA",
+    "version": "0300"
+  },
+  "email": {
+    "address": "email@example.com",
+    "parent": "N",
+    "primary": "Y",
+    "validated": "N",
+    "type": "DEFAULT"
+  },
+  "mii": {
+    "name": "t",
+    "primary": "Y",
+    "data": "AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9"
+  },
+  "parental_consent": {
+    "scope": "1",
+    "consent_date": "2024-08-04T01:53:54",
+    "approval_id": "0"
+  },
+  "gender": "M",
+  "region": "822083584",
+  "marketing_flag": "Y",
+  "device_attributes": [
+    {
+      "name": "uuid_account",
+      "value": "47374816-f86f-11f0-b535-325096b39f47"
+    },
+    {
+      "name": "uuid_common",
+      "value": "4c01ae90-f86f-11f0-9ed2-325096b39f47"
+    },
+    {
+      "name": "persistent_id",
+      "value": "80000086"
+    },
+    {
+      "name": "transferable_id_base",
+      "value": "abababababababab"
+    },
+    {
+      "name": "transferable_id_base_common",
+      "value": "cdcdcdcdcdcdcdcd"
+    }
+  ],
+  "off_device_flag": "Y"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Response ====
+
+The newly created NNIDs PID. HTTP status 201.
+
+===== Body =====
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apipeople">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+  <pid>1738007193</pid>
+</person>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "pid": 1738007193
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| NNID limit reached for the device. Exact number of NNIDs is unknown at this time || 400 || Yes || Omitted || <code>0105</code> || <code>Maximum number of registration requests exceeded</code>
+|-
+| <code>person</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>person.birth_date</code> is missing or invalid || 400 || Yes || <code>birthDate</code> || <code>0002</code> || <code>birthDate format is invalid</code>
+|-
+| <code>person.birth_date</code> under 13 years old in a region that has COPPA and <code>person.parental_consent.approval_id</code> is not valid || 400 || Yes || Omitted || <code>0114</code> || <code>COPPA approval is not complete</code>
+|-
+| <code>person.user_id</code> is missing or does not meet the username requirements || 400 || Yes || <code>userId</code> || <code>1104</code> || <code>User ID format is not valid</code>
+|-
+| <code>person.user_id</code> is already taken || 400 || Yes || <code>userId</code> || <code>0100</code> || <code>Account ID already exists</code>
+|-
+| <code>person.user_id</code> contains blacklisted words || 400 || Yes || <code>userId</code> || <code>0101</code> || <code>Account ID is not acceptable</code>
+|-
+| <code>person.password</code> is missing or does not meet the password requirements || 400 || Yes || <code>password</code> || <code>0002</code> || <code>password format is invalid</code>
+|-
+| <code>person.password</code> is the same as <code>person.user_id</code> || 400 || Yes || <code>password</code> || <code>1107</code> || <code>Password cannot be the same as User ID</code>
+|-
+| <code>person.country</code> is missing || 400 || Yes || <code>country</code> || <code>0002</code> || <code>country format is invalid</code>
+|-
+| <code>person.country</code> does not match the device country || 400 || Yes || Omitted || <code>0107</code> || <code>Account country and device country do not match</code>
+|-
+| <code>person.language</code> is missing || 400 || Yes || <code>language</code> || <code>0002</code> || <code>language format is invalid</code>
+|-
+| <code>person.tz_name</code> is missing or invalid || 400 || Yes || <code>timezone</code> || <code>0002</code> || <code>timezone format is invalid</code>
+|-
+| <code>person.email</code> is missing || 400 || Yes || <code>email</code> || <code>0103</code> || <code>Email format is invalid</code>
+|-
+| <code>person.email.address</code> is missing or not a valid email || 400 || Yes || <code>address</code> || <code>0103</code> || <code>Email format is invalid</code>
+|-
+| <code>person.gender</code> is missing or invalid || 400 || Yes || <code>gender</code> || <code>0002</code> || <code>gender format is invalid</code>
+|-
+| <code>person.region</code> is missing || 400 || Yes || <code>region</code> || <code>0002</code> || <code>region format is invalid</code>
+|-
+| <code>person.marketing_flag</code> is missing or invalid || 400 || Yes || <code>marketingFlag</code> || <code>0002</code> || <code>marketingFlag format is invalid</code>
+|-
+| If <code>person.mii</code> is missing, <code>HV000028: Unexpected exception during isValid call.</code> is thrown || 500 || N/A || N/A || N/A || N/A
+|-
+| <code>person.mii.name</code> is missing or invalid || 400 || Yes || <code>miiName</code> || <code>0002</code> || <code>miiName format is invalid</code>
+|-
+| <code>person.mii.data</code> is missing or invalid || 400 || Yes || <code>data</code> || <code>0002</code> || <code>data format is invalid</code>
+|}
+
+=== DELETE /v1/api/people/@me ===
+
+Old version of [[#POST /v1/api/people/@me/deletion]]. No longer used by clients, but is still accessible. Seems to function identically to the new endpoint.
+
+=== PUT /v1/api/people/@me ===
+
+Updates a NNIDs profile information.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+Every field is optional. May update any number of fields at a time.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>person</code> || The updated NNID data
+|-
+| <code>person.birth_date</code> || The NNIDs birthday in the format <code>YYYY-MM-DD</code>. Invalid input is ignored and not updated
+|-
+| <code>person.password</code> || Plaintext NNID password. Any existing tokens will immediately become invalid, even if the new password is the same as the old. Must be between 6 and 16 characters long, can't be the same as <code>person.user_id</code>, and can contain characters from the categories of letters, numbers, and punctuation. The same character cannot be used three or more times in a row
+|-
+| <code>person.language</code> || NNID language. Invalid input is ignored and not updated
+|-
+| <code>person.tz_name</code> || NNID timezone name as seen in [[#GET /v1/api/content/time_zones/%s/%s]]
+|-
+| <code>person.gender</code> || Either <code>M</code> or <code>F</code>. Invalid input is ignored and not updated
+|-
+| <code>person.region</code> || [[Online/Nintendo_Network/Region_IDs|Region ID]] in decimal. Input is not validated. No errors are thrown and no validation is done on the official servers to ensure this is a valid region ID
+|-
+| <code>person.marketing_flag</code> || Whether or not you want to receive marketing ("commercial") emails. Either <code>Y</code> or <code>N</code>. Invalid input is ignored and not updated
+|-
+| <code>person.off_device_flag</code> || If set, the NNID cannot be logged into outside of the console it's linked to. Either <code>Y</code> or <code>N</code>. Invalid input is ignored and not updated
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPUTv1apipeopleme_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<person>
+  <birth_date>1990-01-01</birth_date>
+  <password>password</password>
+  <language>en</language>
+  <tz_name>Pacific/Midway</tz_name>
+  <gender>M</gender>
+  <region>822083584</region>
+  <marketing_flag>Y</marketing_flag>
+  <off_device_flag>Y</off_device_flag>
+</person>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "birth_date": "1990-01-01",
+  "password": "password",
+  "language": "en",
+  "tz_name": "Pacific/Midway",
+  "gender": "M",
+  "region": "822083584",
+  "marketing_flag": "Y",
+  "off_device_flag": "Y"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>person</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>person.password</code> does not meet the password requirements || 400 || Yes || <code>password</code> || <code>0002</code> || <code>password format is invalid</code>
+|-
+| <code>person.password</code> is the same as NNID username || 400 || Yes || <code>password</code> || <code>1107</code> || <code>Password cannot be the same as User ID</code>
+|-
+| <code>person.language</code> is invalid || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| <code>person.tz_name</code> is invalid || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|}
+
+=== POST /v1/api/people/@me/agreements ===
+
+Updates the NNID agreement status.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>HashedBasic</code> token]]
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>agreement</code> || Information about the newly agreed to agreement
+|-
+| <code>agreement.agreement_date</code> || The current date/time. Seems to be ignored by the server?
+|-
+| <code>agreement.country</code> || The ISO 2 country code for the country the agreement applies to
+|-
+| <code>agreement.location</code> || Link to the accepted agreement. Official servers always return a link that leads to a 404, however. Seems to be ignored by the server?
+|-
+| <code>agreement.type</code> || The type of agreement. Always <code>NINTENDO-NETWORK-EULA</code>
+|-
+| <code>agreement.version</code> || The agreement version
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apipeoplemeagreements_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<agreement>
+  <agreement_date>2026-01-23T20:31:58</agreement_date>
+  <country>US</country>
+  <location>https://account.nintendo.net/v1/api/content/agreements/Nintendo-Network-EULA/0300</location>
+  <type>NINTENDO-NETWORK-EULA</type>
+  <version>0300</version>
+</agreement>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		Note that the <code>location</code> field is not present.
+
+		<pre>
+{
+  "type": "NINTENDO-NETWORK-EULA",
+  "version": "0300",
+  "country": "US",
+  "agreement_date": "2026-01-23T20:31:58"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> is missing or invalid || 400 || Yes || <code>Authorization</code> || <code>0002</code> || <code>Authorization format is invalid</code>
+|-
+| <code>Authorization</code> credentials are incorrect || 400 || Yes || Omitted || <code>1105</code> || <code>Email address, username, or password, is not valid</code>
+|-
+| <code>agreement</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>agreement.country</code> is missing || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| <code>agreement.type</code> is missing || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| <code>agreement.version</code> is missing || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| No agreement found for the combination of <code>agreement.country</code>, <code>agreement.type</code> and <code>agreement.version</code> || 400 || Yes || Omitted || <code>1101</code> || <code>No stored agreement found for this country: COUNTRY_HERE type: TYPE_HERE and version: VERSION_HERE</code>
+|}
+
+=== POST /v1/api/people/@me/deletion ===
+
+Deletes a NNID. Deleting a NNID cannot be undone and does not free the username for future accounts. Replaced [[#DELETE /v1/api/people/@me]] at some point.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|-
+| <code>Content-type</code> || <code>application/xml</code>
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|}
+
+=== GET /v1/api/people/@me/devices ===
+
+Lists the devices the NNID is currently linked to. A NNID can only be linked to 1 of each type of console at a time, one Wii U and one 3DS.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>devices</code> || List of device objects the NNID is linked to
+|-
+| <code>device.device_id</code> || Devices unique ID, same as the devices <code>X-Nintendo-Device-ID</code> header
+|-
+| <code>device.language</code> || Device (not NNID) language? Or possibly the language the NNID was created with? This does not match the NNID language, but there is no language header for the device
+|-
+| <code>device.updated</code> || The date/time the device association/data was updated
+|-
+| <code>device.pid</code> || The NNID [[#PIDs|PID]]
+|-
+| <code>device.platform_id</code> || 0 = 3DS, 1 = Wii U, same as the devices <code>X-Nintendo-Platform-ID</code> header
+|-
+| <code>device.region</code> || 1 = JPN, 2 = USA, 4 = EUR, 8 = AUS, 16 = CHN, 32 = KOR, 64 = TWN, same as the devices <code>X-Nintendo-Region</code> header
+|-
+| <code>device.serial_number</code> || Devices serial number, same as the devices <code>X-Nintendo-Serial-Number</code> header
+|-
+| <code>device.status</code> || Unknown. Seems to always be <code>ACTIVE</code>?
+|-
+| <code>device.system_version</code> || The devices current firmware version
+|-
+| <code>device.type</code> || Always <code>RETAIL</code> on retail units
+|-
+| <code>device.updated_by</code> || Unknown. Presumably who updated the association/device data? Seems to always be <code>USER</code>?
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apipeoplemedevices">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<devices>
+  <device>
+    <device_id>1234567890</device_id>
+    <language>en</language>
+    <updated>2026-01-22T02:47:38</updated>
+    <pid>1737629755</pid>
+    <platform_id>1</platform_id>
+    <region>2</region>
+    <serial_number>FW123456789</serial_number>
+    <status>ACTIVE</status>
+    <system_version>0270</system_version>
+    <type>RETAIL</type>
+    <updated_by>USER</updated_by>
+  </device>
+</devices>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "devices": [
+    {
+      "pid": 1737629755,
+      "device_id": "1234567890",
+      "platform_id": "1",
+      "language": "en",
+      "region": 2,
+      "system_version": "0270",
+      "status": "ACTIVE",
+      "serial_number": "FW123456789",
+      "type": "RETAIL",
+      "updated": "2026-01-22T02:47:38",
+      "updated_by": "USER"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|}
+
+=== POST /v1/api/people/@me/devices ===
+
+Links a device to a NNID.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Basic</code> token]]
+|-
+| <code>X-Nintendo-EMAIL</code> || NNID email
+|-
+| <code>X-Nintendo-Local-Pin-Flag</code> || "Is parental controls enabled". Either <code>Y</code> or <code>N</code>
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+List of [[#Device Attributes]] objects.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apipeoplemedevices_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<device_attributes>
+  <device_attribute>
+    <name>uuid_account</name>
+    <value>47374816-f86f-11f0-b535-325096b39f47</value>
+  </device_attribute>
+  <device_attribute>
+    <name>uuid_common</name>
+    <value>4c01ae90-f86f-11f0-9ed2-325096b39f47</value>
+  </device_attribute>
+  <device_attribute>
+    <name>persistent_id</name>
+    <value>80000086</value>
+  </device_attribute>
+  <device_attribute>
+    <name>transferable_id_base</name>
+    <value>abababababababab</value>
+  </device_attribute>
+  <device_attribute>
+    <name>transferable_id_base_common</name>
+    <value>cdcdcdcdcdcdcdcd</value>
+  </device_attribute>
+</device_attributes>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "device_attribute": [
+    {
+      "name": "uuid_account",
+      "value": "47374816-f86f-11f0-b535-325096b39f47"
+    },
+    {
+      "name": "uuid_common",
+      "value": "4c01ae90-f86f-11f0-9ed2-325096b39f47"
+    },
+    {
+      "name": "persistent_id",
+      "value": "80000086"
+    },
+    {
+      "name": "transferable_id_base",
+      "value": "abababababababab"
+    },
+    {
+      "name": "transferable_id_base_common",
+      "value": "cdcdcdcdcdcdcdcd"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Response ====
+
+===== Body =====
+
+[[#NNID Profile]]. HTTP status 201.
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> is missing or invalid || 400 || Yes || <code>Authorization</code> || <code>0002</code> || <code>Authorization format is invalid</code>
+|-
+| <code>Authorization</code> credentials are incorrect || 400 || Yes || Omitted || <code>1105</code> || <code>Email address, username, or password, is not valid</code>
+|-
+| <code>X-Nintendo-Local-Pin-Flag</code> is missing or invalid || 400 || Yes || <code>X-Nintendo-Local-Pin-Flag</code> || <code>0002</code> || <code>X-Nintendo-Local-Pin-Flag format is invalid</code>
+|-
+| <code>X-Nintendo-EMAIL</code> is missing or does not match the email of the NNID || 400 || Yes || <code>X-Nintendo-EMail</code> || <code>1105</code> || <code>Email address, username, or password, is not valid</code>
+|-
+| Device country does not match NNID country || 400 || Yes || Omitted || <code>0107</code> || <code>Account country and device country do not match</code>
+|-
+| NNID is linked to the max number of devices already. Does not trigger if the NNID is already linked to the target device || 400 || Yes || Omitted || <code>0115</code> || <code>Device association limit exceeded</code>
+|}
+
+=== DELETE /v1/api/people/@me/devices/@current ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This endpoint is only used when a console is in debug mode, though the endpoint is active for retail use as well.''</div>
+</div>
+
+Deletes the users device association data for the current device. Normally NNAS will keep track of device association information even after a NNID is unlinked for a device. This is done so that the server knows when to throw error <code>0110</code> (the NNID is not linked to the current device, and the current device is not the most recent device the NNID was linked to) or error <code>0143</code> (the NNID is not linked to the current device, and the current device is the most recent device the NNID was linked to, such as immediately after a factory reset).
+
+Calling this endpoint will delete said data, making the server throw <code>0110</code> when <code>0143</code> would be expected, until the user links their NNID to the device again.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|}
+
+=== POST /v1/api/people/@me/devices/@current/attributes ===
+
+Replaces the current devices attributes on the NNID with the input. The Wii U seems to never call this endpoint, and the 3DS only seems to call it when it doesn't detect the <code>ctr_*</code> attributes in the [[#NNID Profile]], however this can be used to set any attribute.
+
+'''The attribute list is REPLACED, not UPDATED. The client MUST send ALL attributes it wants in this request, otherwise attributes missing from the input will be LOST'''.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+List of [[#Device Attributes]] objects.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apipeoplemedevicescurrentattributes_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<device_attributes>
+  <device_attribute>
+    <name>uuid_account</name>
+    <value>47374816-f86f-11f0-b535-325096b39f47</value>
+  </device_attribute>
+  <device_attribute>
+    <name>uuid_common</name>
+    <value>4c01ae90-f86f-11f0-9ed2-325096b39f47</value>
+  </device_attribute>
+  <device_attribute>
+    <name>persistent_id</name>
+    <value>80000086</value>
+  </device_attribute>
+  <device_attribute>
+    <name>transferable_id_base</name>
+    <value>abababababababab</value>
+  </device_attribute>
+  <device_attribute>
+    <name>transferable_id_base_common</name>
+    <value>cdcdcdcdcdcdcdcd</value>
+  </device_attribute>
+</device_attributes>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "device_attribute": [
+    {
+      "name": "uuid_account",
+      "value": "47374816-f86f-11f0-b535-325096b39f47"
+    },
+    {
+      "name": "uuid_common",
+      "value": "4c01ae90-f86f-11f0-9ed2-325096b39f47"
+    },
+    {
+      "name": "persistent_id",
+      "value": "80000086"
+    },
+    {
+      "name": "transferable_id_base",
+      "value": "abababababababab"
+    },
+    {
+      "name": "transferable_id_base_common",
+      "value": "cdcdcdcdcdcdcdcd"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| User is not tied to the target device headers. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|-
+| <code>device_attributes</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>device_attributes</code> is empty || 400 || Yes || <code>deviceAttributes</code> || <code>0002</code> || <code>deviceAttributes format is invalid</code>
+|}
+
+=== PUT /v1/api/people/@me/devices/@current/inactive ===
+
+Removes a NNIDs association with the current device. Sends no request body and returns no response body. Any issued tokens for the NNID will immediately become invalid.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Basic</code> token]]
+|-
+| <code>Content-Type</code> || <code>application/xml</code>
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| User is not tied to the target device headers. No response body is returned || 405 || N/A || N/A || N/A || N/A
+|}
+
+=== GET /v1/api/people/@me/devices/owner ===
+
+Checks if the NNID can be linked to the target device. Effectively the same as [[#GET /v1/api/devices/@current/status]] but for NNIDs instead of consoles.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Basic</code> token]]
+|-
+| <code>X-Nintendo-EMAIL</code> || NNID email
+|-
+| <code>X-Nintendo-Local-Pin-Flag</code> || "Is parental controls enabled". Either <code>Y</code> or <code>N</code>
+|}
+
+==== Response ====
+
+===== Body =====
+
+[[#NNID Profile]]. HTTP status 202.
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> is missing or invalid || 400 || Yes || <code>Authorization</code> || <code>0002</code> || <code>Authorization format is invalid</code>
+|-
+| <code>Authorization</code> credentials are incorrect || 400 || Yes || Omitted || <code>1105</code> || <code>Email address, username, or password, is not valid</code>
+|-
+| <code>X-Nintendo-Local-Pin-Flag</code> is missing or invalid || 400 || Yes || <code>X-Nintendo-Local-Pin-Flag</code> || <code>0002</code> || <code>X-Nintendo-Local-Pin-Flag format is invalid</code>
+|-
+| <code>X-Nintendo-EMAIL</code> is missing or does not match the email of the NNID || 400 || Yes || <code>X-Nintendo-EMail</code> || <code>1105</code> || <code>Email address, username, or password, is not valid</code>
+|-
+| Device country does not match NNID country || 400 || Yes || Omitted || <code>0107</code> || <code>Account country and device country do not match</code>
+|-
+| NNID is linked to the max number of devices already. Does not trigger if the NNID is already linked to the target device || 400 || Yes || Omitted || <code>0115</code> || <code>Device association limit exceeded</code>
+|}
+
+=== GET /v1/api/people/@me/emails ===
+
+Returns a list of emails attached to the NNID.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+List of emails attached to the NNID.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>emails</code> || Email list
+|-
+| <code>emails.email</code> || Details about a specific email
+|-
+| <code>emails.email.address</code> || The email address
+|-
+| <code>emails.email.id</code> || Unknown. Likely just some internal identifer?
+|-
+| <code>emails.email.parent</code> || Unknown. Either <code>Y</code> or <code>N</code>
+|-
+| <code>emails.email.primary</code> || Unknown, "is this a primary email"? Officially NNIDs can only have one email address. Either <code>Y</code> or <code>N</code>
+|-
+| <code>emails.email.reachable</code> || Whether the address is able to receive emails. Either <code>Y</code> or <code>N</code>
+|-
+| <code>emails.email.type</code> || Unknown. Seems to always be <code>DEFAULT</code>?
+|-
+| <code>emails.email.updated_by</code> || Who updated the email. Always initially set to <code>INTERNAL WS</code> (internal web server?), but then changes to the NNID username after calling [[#PUT /v1/api/people/@me/emails/@primary]]
+|-
+| <code>emails.email.validated</code> || Has the email been validated. Either <code>Y</code> or <code>N</code>
+|-
+| <code>emails.email.validated_date</code> || Date/time the email was validated
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apipeoplemeemails">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<emails>
+  <email>
+    <address>email@example.com</address>
+    <id>123454678</id>
+    <parent>N</parent>
+    <primary>Y</primary>
+    <reachable>Y</reachable>
+    <type>DEFAULT</type>
+    <updated_by>INTERNAL WS</updated_by>
+    <validated>Y</validated>
+    <validated_date>2023-08-24T20:36:26</validated_date>
+  </email>
+</emails>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "emails": [
+    {
+      "address": "email@example.com",
+      "id": 123454678,
+      "parent": "N",
+      "primary": "Y",
+      "type": "DEFAULT",
+      "validated": "Y",
+      "validated_date": "2023-08-24T20:36:26",
+      "reachable": "Y",
+      "updated_by": "INTERNAL WS"
+    }
+  ]
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|}
+
+=== PUT /v1/api/people/@me/emails/@primary ===
+
+Updates the NNIDs primary email address. If succesful, the emails <code>validated</code> flag is set back to <code>N</code>, the emails <code>updated_by</code> field is set to the NNID username, and a new email verification email is sent to the user.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+The new email address
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPUTv1apipeoplemeemailsprimary_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<email>
+  <address>email@example.com</address>
+</email>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "address": "email@example.com"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>email</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| <code>email.address</code> is missing || 400 || Yes || <code>address</code> || <code>0002</code> || <code>address format is invalid</code>
+|}
+
+=== PUT /v1/api/people/@me/miis/@primary ===
+
+Updates the NNIDs primary Mii.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|-
+| <code>Content-type</code> || Either <code>application/xml</code> (default) or <code>application/json</code>
+|}
+
+===== Body =====
+
+The new Mii data
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPUTv1apipeoplemeemailsprimary_REQUEST">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<mii>
+  <name>mii_name</name>
+  <primary>Y</primary>
+  <data>AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9</data>
+</mii>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "name": "mii_name",
+  "primary": "Y",
+  "data": "AwAAQOlVognnx0GC2/uogAOzuI0n2QAAAEBEAGUAZgBhAHUAbAB0AAAAAAAAAEBAAAAhAQJoRBgmNEYUgRIXaA0AACkAUkhQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGm9"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>mii</code> is missing || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| Either <code>mii.name</code> or <code>mii.data</code> is missing || 500 || Yes || Omitted || <code>2001</code> || <code>Internal server error</code>
+|-
+| <code>mii.data</code> contains invalid Mii data || 400 || Yes || <code>data</code> || <code>0002</code> || <code>data format is invalid</code>
+|}
+
+=== GET /v1/api/people/@me/profile ===
+
+Retrieves the users [[#NNID Profile]].
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+[[#NNID Profile]].
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|}
+
+=== GET /v1/api/people/%s ===
+
+Checks if a NNID is valid for registration. Checks details like username requirements, profanity, if the name is already taken, etc.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The username to check
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Username does not meet the username requirements || 400 || Yes || <code>userId</code> || <code>1104</code> || <code>User ID format is not valid</code>
+|-
+| Username is already taken || 400 || Yes || <code>userId</code> || <code>0100</code> || <code>Account ID already exists</code>
+|-
+| Username contains blacklisted words || 400 || Yes || <code>userId</code> || <code>0101</code> || <code>Account ID is not acceptable</code>
+|}
+
+=== GET /v1/api/provider/nex_token/@me ===
+
+Gets the login information for a title using the [[Online/Nintendo_Network/NEX|NEX]] framework for online play. Titles which do not use this framework will have their own custom means of locating game servers and logging into them.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>game_server_id</code> || A unique ID used to identify a specific game server. This is used rather than the title ID as the same game server can be reused by multiple title IDs
+|}
+
+==== Response ====
+
+===== Body =====
+
+Login details for the game server. See [[Online/Nintendo_Network/NEX]] for details on how NEX operates.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>nex_token</code> || Details of the game server
+|-
+| <code>nex_token.host</code> || The address of the titles authentication server. Nintendo only ever used IPv4 addresses in this field, but domains are also supported. The client will truncate this to 15 characters however (the max length of an IPv4 address, <code>255.255.255.255</code>) so domains must fit within that limit if used
+|-
+| <code>nex_token.nex_password</code> || The plaintext NEX password for the NNIDs game server account. Unlike the 3DS with NASC, NNAS does send this over the wire on every login despite the client being able to cache it. This does mean, however, that per-title passwords are technically possible, though Nintendo always used the same game server account for all titles
+|-
+| <code>nex_token.pid</code> || The NNIDs game server account [[#PIDs|PID]]. Same as the NNID [[#PIDs|PID]]. Used as the game server account username
+|-
+| <code>nex_token.port</code> || The port of the titles authentication server
+|-
+| <code>nex_token.token</code> || Login token. Official servers send this as 128 bytes, base64 encoded, for a total length of 172 characters. However the client can support tokens up to 512 characters in length, after which the token is truncated
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apiprovidernex_tokenme">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<nex_token>
+  <host>52.40.192.64</host>
+  <nex_password>abcdef1234567890</nex_password>
+  <pid>1799999999</pid>
+  <port>60200</port>
+  <token>ZGw+DPiio1wTdpmGWGv1cQVqZ3EFcX1SHe0uwxFyF4wYzkXjeynlsu2Wv03+VFM+SwtCFVXZLhpamuZX3q/ldJaDs4LDfqqmu5tJMPOOCLjs7hTRTHL2Yw/n+1/rrFRh2k4f2BURgiEJf0/fGwMKHTSWctEN8PFsttKjIx7w69s=</token>
+</nex_token>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "host": "52.40.192.64"
+  "nex_password": "abcdef1234567890"
+  "pid": "1799999999"
+  "port": "60200"
+  "token": "ZGw+DPiio1wTdpmGWGv1cQVqZ3EFcX1SHe0uwxFyF4wYzkXjeynlsu2Wv03+VFM+SwtCFVXZLhpamuZX3q/ldJaDs4LDfqqmu5tJMPOOCLjs7hTRTHL2Yw/n+1/rrFRh2k4f2BURgiEJf0/fGwMKHTSWctEN8PFsttKjIx7w69s="
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>game_server_id</code> is invalid || 400 || Yes || Omitted || <code>1021</code> || <code>The requested game server was not found.</code>
+|-
+| <code>game_server_id</code> is missing, or is not tied to the <code>X-Nintendo-Unique-ID</code> header || 400 || Yes || Omitted || <code>0118</code> || <code>Unique ID and Game Server ID are not linked</code>
+|-
+| Permanent device ban from all online services || 400 || Yes || Omitted || <code>0012</code> || <code>Device has been banned</code>
+|-
+| Temporary device ban from all online services || Unknown || Unknown || Unknown || <code>0133</code> || Unknown
+|-
+| Permanent NNID ban from all online services || Unknown || Unknown || Unknown || <code>0108</code> || Unknown
+|-
+| Temporary NNID ban from all online services || Unknown || Unknown || Unknown || <code>0132</code> || Unknown
+|-
+| Permanent device ban from this specific game server || 400 || Yes || Omitted || <code>0122</code> || <code>Device has been banned by game server</code>
+|-
+| Temporary device ban from this specific game server || Unknown || Unknown || Unknown || <code>0137</code> || Unknown
+|-
+| Permanent NNID ban from this specific game server || Unknown || Unknown || Unknown || <code>0121</code> || Unknown
+|-
+| Temporary NNID ban from this specific game server || Unknown || Unknown || Unknown || <code>0136</code> || Unknown
+|-
+| Game server is undergoing maintenance || Unknown || Unknown || Unknown || <code>2002</code> || Unknown
+|-
+| Game server has been shut down || 400 || Yes || Omitted || <code>0123</code> || <code>Service has expired</code>
+|}
+
+=== GET /v1/api/provider/service_token/@me ===
+
+Gets a token for an "independent service". An "independent service" is a server which a title connects to that is not managed by Nintendo, such as a developers own game servers or supplementary servers used by games which do use Nintendo's game servers (such as the Pokemon legality check server). Service tokens provide developers a way to securely request information about a user from Nintendo for their own purposes (linking Nintendo-managed accounts to a developers own account system, identifying users in supplementary servers, simple ban checks, etc.).
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>client_id</code> || A unique ID used to identify a specific independent service
+|}
+
+==== Response ====
+
+===== Body =====
+
+Independent service token. Service tokens expire after 24 hours.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>service_token</code> || Independent service token
+|-
+| <code>service_token.token</code> || Token. Official servers send this as 128 bytes, base64 encoded, for a total length of 172 characters. However the client can support tokens up to 512 characters in length, after which the token is truncated
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apiproviderservice_tokenme">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<service_token>
+  <token>OAvJMPBoZiwGLLp7HAzZ9xxDoL9udu1LJiINqhPe6FX+kCH9cc4IWHa+nlFQdn5H8MT18wcOdH8doQFfMtG47BC0+FyCRRvAzw6jbtkXQsdUvBzzwEhKePSgnKpzsNrZARNiYCGT8gYrAekGZVaFr62CnJPFsseF7715Iiv7J04=</token>
+</service_token>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "token": "OAvJMPBoZiwGLLp7HAzZ9xxDoL9udu1LJiINqhPe6FX+kCH9cc4IWHa+nlFQdn5H8MT18wcOdH8doQFfMtG47BC0+FyCRRvAzw6jbtkXQsdUvBzzwEhKePSgnKpzsNrZARNiYCGT8gYrAekGZVaFr62CnJPFsseF7715Iiv7J04="
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>client_id</code> is missing or invalid || 400 || Yes || Omitted || <code>1022</code> || <code>The requested client was not found.</code>
+|-
+| Permanent device ban from all online services || 400 || Yes || Omitted || <code>0012</code> || <code>Device has been banned</code>
+|-
+| Temporary device ban from all online services || Unknown || Unknown || Unknown || <code>0133</code> || Unknown
+|-
+| Permanent NNID ban from all online services || Unknown || Unknown || Unknown || <code>0108</code> || Unknown
+|-
+| Temporary NNID ban from all online services || Unknown || Unknown || Unknown || <code>0132</code> || Unknown
+|-
+| Permanent device ban from this independent service || Unknown || Unknown || Unknown || <code>0127</code> || Unknown
+|-
+| Temporary device ban from this independent service || Unknown || Unknown || Unknown || <code>0139</code> || Unknown
+|-
+| Permanent NNID ban from this independent service || Unknown || Unknown || Unknown || <code>0126</code> || Unknown
+|-
+| Temporary NNID ban from this independent service || Unknown || Unknown || Unknown || <code>0138</code> || Unknown
+|-
+| Game server is undergoing maintenance || Unknown || Unknown || Unknown || <code>2002</code> || Unknown
+|-
+| Game server has been shut down || 400 || Yes || Omitted || <code>0123</code> || <code>Service has expired</code>
+|}
+
+=== GET /v2/api/provider/service_token/@me ===
+
+Almost identical to [[#GET /v1/api/provider/service_token/@me]], but upgraded. Requests are exactly the same, but the response now includes a signature and the environment the token was requested for. No clients are known to use this method, but it is available on both the 3DS and Wii U.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Authorization</code> || [[#Authorization|<code>Bearer</code> token]]
+|}
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>client_id</code> || A unique ID used to identify a specific independent service
+|}
+
+==== Response ====
+
+===== Body =====
+
+Independent service token. Service tokens expire after 24 hours.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>service_token</code> || Independent service token
+|-
+| <code>service_token.token</code> || Token. Official servers send this as 128 bytes, base64 encoded, for a total length of 172 characters. However the client can support tokens up to 512 characters in length, after which the token is truncated
+|-
+| <code>service_token.environment</code> || The 2 character [[#Environments|environment]] label the token was requested for
+|-
+| <code>service_token.iv</code> || Unknown. Presumably the IV used for the <code>service_token.signature</code>?
+|-
+| <code>service_token.signature</code> || Unknown. Presumably a signature over <code>service_token.token</code>?
+|}
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv2apiproviderservice_tokenme">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<service_token>
+  <token>gzK0aMaO3xdIF7iK0YeELvLoO0U8mheclOm9/Vad9p2H0h5d5zVldUONMx9TPHQTJqpe/hm4OA9c0RCXAjKrELWRtxsVHvOlZw1MmVSt9kA+xClUGvUO+k5W/qAlT9GuELPRkXWgpjAZ6C8ndXE5zT5uHk+TPSD2JPMh3YsOvUM3LoJl3tnSDuLq4jxrzBkSEkNW6M14zxpTduIlYH+XFA==</token>
+  <environment>L1</environment>
+  <iv>j6tGxe0jQ5ZVtonze1CbNQ==</iv>
+  <signature>TTTb909EFcFynXFYdOjcrk4EBv+lze+CxU9G6EhmsEaGlyxzAon1id2wCIEMeVFgM+XkU0S0ZTIpktOUuTrXC07rjoKkr/hjtDVpjo4YKrJiPOVII2mLeLwMs1ThP/DDRZBd8qdHlFXvabfTMkvn89uZHaQsZ4MEwBaQl7BHoyITZbjHKanT8WTFtnkfUwb1Zc5gJFeUM+gNEiczpjbl9FBs3X01WmefkFmAa6vDDagUtYBPXjPmD56Pf7UZNq7e7i6E40yFsrPcW7UFLfq+v1/h5EGO+4yDHJqjCMb3ty09ab17irvZtVh8jEt1w8L6Q2Fuh/B1b+cvDFO424JWZw==</signature>
+</service_token>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "token":"gzK0aMaO3xdIF7iK0YeELvLoO0U8mheclOm9/Vad9p2H0h5d5zVldUONMx9TPHQTJqpe/hm4OA9c0RCXAjKrELWRtxsVHvOlZw1MmVSt9kA+xClUGvUO+k5W/qAlT9GuELPRkXWgpjAZ6C8ndXE5zT5uHk+TPSD2JPMh3YsOvUM3LoJl3tnSDuLq4jxrzBkSEkNW6M14zxpTduIlYH+XFA==",
+  "iv":"j6tGxe0jQ5ZVtonze1CbNQ==",
+  "signature":"TTTb909EFcFynXFYdOjcrk4EBv+lze+CxU9G6EhmsEaGlyxzAon1id2wCIEMeVFgM+XkU0S0ZTIpktOUuTrXC07rjoKkr/hjtDVpjo4YKrJiPOVII2mLeLwMs1ThP/DDRZBd8qdHlFXvabfTMkvn89uZHaQsZ4MEwBaQl7BHoyITZbjHKanT8WTFtnkfUwb1Zc5gJFeUM+gNEiczpjbl9FBs3X01WmefkFmAa6vDDagUtYBPXjPmD56Pf7UZNq7e7i6E40yFsrPcW7UFLfq+v1/h5EGO+4yDHJqjCMb3ty09ab17irvZtVh8jEt1w8L6Q2Fuh/B1b+cvDFO424JWZw==",
+  "environment":"L1"
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>Authorization</code> token is missing or invalid || 401 || No || <code>access_token</code> || <code>0005</code> || <code>Invalid access token</code>
+|-
+| <code>client_id</code> is missing or invalid || 400 || Yes || Omitted || <code>1022</code> || <code>The requested client was not found.</code>
+|-
+| Permanent device ban from all online services || 400 || Yes || Omitted || <code>0012</code> || <code>Device has been banned</code>
+|-
+| Temporary device ban from all online services || Unknown || Unknown || Unknown || <code>0133</code> || Unknown
+|-
+| Permanent NNID ban from all online services || Unknown || Unknown || Unknown || <code>0108</code> || Unknown
+|-
+| Temporary NNID ban from all online services || Unknown || Unknown || Unknown || <code>0132</code> || Unknown
+|-
+| Permanent device ban from this independent service || Unknown || Unknown || Unknown || <code>0127</code> || Unknown
+|-
+| Temporary device ban from this independent service || Unknown || Unknown || Unknown || <code>0139</code> || Unknown
+|-
+| Permanent NNID ban from this independent service || Unknown || Unknown || Unknown || <code>0126</code> || Unknown
+|-
+| Temporary NNID ban from this independent service || Unknown || Unknown || Unknown || <code>0138</code> || Unknown
+|-
+| Game server is undergoing maintenance || Unknown || Unknown || Unknown || <code>2002</code> || Unknown
+|-
+| Game server has been shut down || 400 || Yes || Omitted || <code>0123</code> || <code>Service has expired</code>
+|}
+
+=== POST /v1/api/support/coppa/authorization ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint was disabled following this change, and thus all information was found via reverse engineering the client and may be incomplete.''</div>
+</div>
+
+Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
+
+Registers a parents email address and verifies the parent is an adult via credit card verification.
+
+==== Request ====
+
+===== Body =====
+
+Parent information.
+
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+    <card_type>Card type ("V": Visa, "M": MasterCard)</card_type>
+    <card_security_code>Card security code</card_security_code>
+    <expiration_month>MM (two-digit month)</expiration_month>
+    <expiration_year>YY (two-digit year)</expiration_year>
+    <postal_code>Postal code</postal_code>
+    <email>Email address</email>
+</request>
+</pre>
+
+==== Response ====
+
+===== Body =====
+
+COPPA approval ID.
+
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<parental_validation>
+    <approval_id>Approval ID (uint32)</approval_id>
+</parental_validation>
+</pre>
+
+=== PUT /v1/api/support/email_confirmation/%s/%s ===
+
+Submits an email confirmation code for the user. Sends no request body and returns no response body.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The NNID [[#PIDs|PID]]
+|-
+| 2 || The email confirmation code
+|}
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-type</code> || <code>application/xml</code>
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Confirmation code is incorrect || 400 || Yes || Omitted || <code>0116</code> || <code>Missing or invalid verification code</code>
+|-
+| Confirmation code is expired || 400 || Yes || Omitted || <code>0117</code> || <code>Verification code has expired</code>
+|-
+| The [[#PIDs|PID]] is not numeric || 404 || Yes || <code>Not Found</code> || <code>1600</code> || <code>Unable to process request</code>
+|}
+
+=== GET /v1/api/support/forgotten_password/%s ===
+
+Begins the "forgot password" sequence. The official servers handle this by generating the user a new temporary password and sends it to them via email. This temporary password is always 8 character long, using characters <code>a-zA-Z0-9</code>, and would become invalid after 24 hours. The user may use this password as many times as they'd like within the 24 hour period, but must request a new one if they do not update their password in time. Issuing a temporary password automatically and immediately invalidates any issued tokens for the NNID.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The NNID [[#PIDs|PID]]
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| User is not tied to the target device headers, or the [[#PIDs|PID]] is invalid. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|-
+| The [[#PIDs|PID]] is not numeric || 404 || Yes || <code>Not Found</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| Email is not confirmed || 400 || Yes || Omitted || <code>0128</code> || <code>Email has not been validated yet</code>
+|-
+| Too many resend attempts in a given time || 400 || Yes || Omitted || <code>1033</code> || <code>Excessive forgot password e-mail attempt</code>
+|}
+
+=== POST /v1/api/support/parental_approval ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''</div>
+</div>
+
+Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
+
+Presumably sends the parent an email regarding COPPA? Either no longer sends emails ever, or only sends the email when the email address is registered.
+
+==== Request ====
+
+===== Query Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| <code>parental_email</code> || Parent's email address
+|-
+| <code>type</code> || Unknown. Only known value is <code>printsend</code>
+|}
+
+==== Response ====
+
+===== Body =====
+
+COPPA code? Seems to be different than the apporval ID? <code>approval_Id</code> is not a typo.
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASPOSTv1apisupportparental_approval">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<approval_Id>
+  <id>3018464</id>
+</approval_Id>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{
+  "id": 3018464
+}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>parental_email</code> is missing or invalid || 400 || Yes || <code>parental_email</code> || <code>0103</code> || <code>Email format is invalid</code>
+|-
+| <code>type</code> is missing || 400 || Yes || <code>type</code> || <code>0002</code> || <code>type format is invalid</code>
+|-
+| <code>type</code> is invalid || 400 || Yes || Omitted || <code>0002</code> || <code>{Value of "type" here} format is invalid</code>
+|}
+
+=== GET /v1/api/support/parental_approval/send_email/coppa_code ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''</div>
+</div>
+
+Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
+
+Sends the parent the COPPA code?
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>X-Nintendo-PID</code> || NNID [[#PIDs|PID]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+COPPA code information?
+
+<pre>
+<?xml version="1.0" encoding="UTF-8"?>
+<parental_validation>
+  <coppa_code>COPPA code (5 characters, sent to email and cross-checked?)</coppa_code>
+  <parent_email>Parent email address</parent_email>
+</parental_validation>
+</pre>
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>X-Nintendo-PID</code> is missing or invalid || 400 || Yes || Omitted || <code>0130</code> || <code>PID has not been registered yet</code>
+|-
+| <code>X-Nintendo-PID</code> has not been registered for COPPA approval || 400 || Yes || Omitted || <code>1111</code> || <code>Parent Approval information cannot be found</code>
+|}
+
+=== GET /v1/api/support/resend_confirmation ===
+
+Resends the users confirmation email. If 24 hours have not passed since the last confirmation code was sent, the same code is sent to the user again. If 24 hours have passed, a new code is generated. Does nothing if the users email is already verified.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>X-Nintendo-PID</code> || NNID [[#PIDs|PID]]
+|}
+
+==== Response ====
+
+===== Body =====
+
+Always empty email object?
+
+<tabs items="XML Mode,JSON Mode" storagekey="NNASGETv1apisupportresend_confirmation">
+	<tab name="XML Mode">
+		<pre>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<email/>
+		</pre>
+	</tab>
+
+	<tab name="JSON Mode">
+		<pre>
+{}
+		</pre>
+	</tab>
+</tabs>
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>X-Nintendo-PID</code> is not tied to the target device headers. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|-
+| <code>X-Nintendo-PID</code> is missing. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|-
+| <code>X-Nintendo-PID</code> is not a PID assigned to a NNID. No response body is returned || 404 || N/A || N/A || N/A || N/A
+|-
+| <code>X-Nintendo-PID</code> is not numeric || 400 || Yes || <code>Bad Request</code> || <code>1600</code> || <code>Unable to process request</code>
+|-
+| Too many resend attempts in a given time. The error message is not a mistake || 400 || Yes || Omitted || <code>1033</code> || <code>Excessive forgot password e-mail attempt</code>
+|}
+
+=== GET /v1/api/support/send_confirmation/pin/%s ===
+
+Registers an email as the parents email for [[#Parental Controls]]. This email only contains instructions for how to request the master key if your local PIN is forgotten.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The [[#Parental Controls]] guardian email to send the email to
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Invalid email address || 400 || Yes || <code>email</code> || <code>1023</code> || <code>Invalid email address provided</code>
+|}
+
+=== GET /v1/api/support/send_forgotten/pin/%s/%s ===
+
+Sends the consoles master key to the [[#Parental Controls]] guardian.
+
+==== Request ====
+
+===== URL Parameters =====
+
+{| class="wikitable"
+! Parameter !! Description
+|-
+| 1 || The [[#Parental Controls]] guardian email
+|-
+| 2 || The master key
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| Invalid email address || 400 || Yes || <code>email</code> || <code>1023</code> || <code>Invalid email address provided</code>
+|-
+| The master key is not numeric || 400 || Yes || Omitted || <code>1024</code> || <code>No master pin provided</code>
+|}
+
+=== POST /v1/api/support/validate/email ===
+
+Validates that an email is formatted correctly, similar to [[#GET /v1/api/people/%s]] but for emails instead of usernames.
+
+==== Request ====
+
+===== Headers =====
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-Type</code> || <code>application/x-www-form-urlencoded</code>
+|}
+
+===== Body =====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>email</code> || The email to validate
+|}
+
+==== Errors ====
+
+{| class="wikitable"
+! Trigger !! HTTP Status !! Respects <code>Accept</code> !! <code>cause</code> !! <code>code</code> !! <code>message</code>
+|-
+| <code>email</code> is missing or invalid || 400 || Yes || <code>email</code> || <code>0103</code> || <code>Email format is invalid</code>
+|}
