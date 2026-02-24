@@ -19,6 +19,23 @@ $WIKI_API_URL = $_ENV["WIKI_API_URL"];
 $WIKI_API_BOT_USERNAME = $_ENV["WIKI_API_BOT_USERNAME"];
 $WIKI_API_BOT_PASSWORD = $_ENV["WIKI_API_BOT_PASSWORD"];
 
+$required_env_vars = [
+	"GITHUB_WEBHOOK_SECRET",
+	"GITHUB_ORG_NAME",
+	"GITHUB_REPO_NAME",
+	"GITHUB_TARGET_REF",
+	"WIKI_API_URL",
+	"WIKI_API_BOT_USERNAME",
+	"WIKI_API_BOT_PASSWORD"
+];
+
+$missing = array_filter($required_env_vars, fn($var) => !isset($_ENV[$var]));
+
+if (!empty($missing)) {
+	http_response_code(500);
+	exit("Missing required environment variables: " . implode(", ", $missing));
+}
+
 $signature = $_SERVER["HTTP_X_HUB_SIGNATURE_256"] ?? "";
 $body = file_get_contents("php://input");
 $expected = "sha256=" . hash_hmac("sha256", $body, $GITHUB_WEBHOOK_SECRET);
