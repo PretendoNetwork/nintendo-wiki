@@ -1,6 +1,6 @@
 == Overview ==
 
-'''TicketGranting''' provides a means for clients to obtain connection tickets for the secure server. This protocol is only present on the authentication server, where it is also the ''only'' protocol available. A client must obtain a ticket from this protocol before being able to connect to the secure server, even if the address of the secure server is already known. Connection tickets are based on Kerberos, where the target is the secure server.
+'''TicketGrantingProtocol''' provides a means for clients to obtain connection tickets for the secure server. This protocol is only present on the authentication server, where it is also the ''only'' protocol available. A client must obtain a ticket from this protocol before being able to connect to the secure server, even if the address of the secure server is already known. Connection tickets are based on Kerberos, where the target is the secure server.
 
 If a server is in maintenance, the <code>%retval%</code> result fields are set to <code>Authentication::UnderMaintenance</code> and the other fields of the response are left with empty values.
 
