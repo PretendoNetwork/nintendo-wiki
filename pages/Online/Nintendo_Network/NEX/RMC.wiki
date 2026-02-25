@@ -1,0 +1,77 @@
+== Overview ==
+
+[[Online/Nintendo_Network/NEX/PRUDP|PRUDP]] packets may have optional payloads. These payloads may contain any data, however <code>DATA</code> packets typically use RMC (Remote Method Call), a standardized protocol for invoking methods on remote services.
+
+The variation in use is known to both the client and server ahead of time. Some games may further customize the RMC message structure, however the same basic principles apply to all versions.
+
+* Either end of the connection may send an RMC request to the other end at any time. In most cases the client will send requests to the server, however the server can send requests to the client (such as when sending notifications)
+* Not all RMC requests will get a response
+* Requests specify a protocol and method to be invoked, along with any parameters
+* Each request carries a call ID, which is used to match it to its corresponding response
+* Responses indicate whether the call succeeded, and carry either the return data or an error code
+
+This page only documents the standard RMC message structure used by NEX games. The following games are known to customize their RMC message structure:
+
+* [[Online/Nintendo_Network/NEX/RMC/WATCH_DOGS (Wii U)|WATCH_DOGS (Wii U)]]
+
+== Request Format ==
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Size, excluding this field
+|-
+| UInt8 || [[Online/Nintendo_Network/NEX/Protocols|Protocol ID]], ORed with <code>0x80</code>
+|-
+| UInt16 || Extended [[Online/Nintendo_Network/NEX/Protocols|protocol ID]]. '''Only present if the [[Online/Nintendo_Network/NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
+|-
+| UInt32 || Call ID. An incrementing value used to match responses to their corresponding requests
+|-
+| UInt32 || Protocol method ID
+|-
+| || Method parameters
+|}
+
+== Response Format ==
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Size, excluding this field
+|-
+| UInt8 || [[Online/Nintendo_Network/NEX/Protocols|Protocol ID]]
+|-
+| UInt16 || Extended [[Online/Nintendo_Network/NEX/Protocols|protocol ID]]. '''Only present if the [[Online/Nintendo_Network/NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
+|-
+| Bool || Success flag
+|}
+
+'''On success:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Call ID of the request
+|-
+| UInt32 || Method ID, ORed with <code>0x8000</code>
+|-
+| || Response data
+|}
+
+'''On error:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Error code. See [[Online/Nintendo_Network/NEX/Result_Codes|Result Codes]]
+|-
+| UInt32 || Call ID of the request
+|}
+
+== Remarks ==
+
+The following protocols never send an RMC response, regardless of whether an error occurred:
+
+* [[Notification Protocol]]
+* [[Nintendo Notification Event Protocol]]
+* [[Message Delivery Protocol]]
