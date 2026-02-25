@@ -1,0 +1,285 @@
+== Overview ==
+
+[[Online/Nintendo_Network/NEX|NEX]] uses a simplified form of [https://en.wikipedia.org/wiki/Kerberos_(protocol) Kerberos authentication]. To connect to a game server, the client must first contact the authentication server, which only provides the [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. This protocol provides the location of the secure server along with a ticket required to establish a connection with it.
+
+On 3DS and Wii U servers, authentication is password-based. On Switch servers, clients must provide an ID token instead.
+
+== Terminology ==
+
+{| class="wikitable"
+! Term !! Description
+|-
+| PID || A unique user identifier
+|-
+| Authentication server || The server responsible for issuing connection tickets
+|-
+| Secure server || The game server itself. A valid ticket from the authentication server is required to establish a connection
+|-
+| Source user || The user requesting a ticket in order to establish a connection with a target user
+|-
+| Target user || The user the source user wishes to connect to. In practice, this is always <code>Quazal Rendez-Vous</code>, representing the secure server
+|-
+| Source key || A key known only to the source user, typically derived from their password
+|-
+| Target key || A key known only to the target user, always derived from their password
+|}
+
+== Credentials ==
+
+Game server accounts are separate from network accounts (Nintendo Network IDs, Nintendo Accounts, etc.). See [[Online/Nintendo_Network/NEX#Accounts|NEX#Accounts]] for details on how they differ. In NEX, usernames and passwords are generated automatically and cannot be changed by the user. In Rendez-Vous, users may be able to change their own account details. Credentials for a game server account are obtained in a platform-specific manner.
+
+In addition to user accounts, a set of [[#Special Accounts|special accounts]] exists on all game servers.
+
+=== 3DS ===
+
+The 3DS predates the Nintendo Network ID system, and thus does not use them for most online features. Instead, the 3DS uses [[Online/Nintendo_Network/NASC|NASC]] for most of it's account needs. When the console detects that no game server account data has been registered, such as during initial setup or after a factory reset, it will silently create the game server account in the background.
+
+The console will first generate a 16 character password using characters between <code>\x21-\x5B</code> and <code>\x5D-\x7D</code>, and then will perform a [[Online/Nintendo_Network/NASC#LOGIN_Action|LOGIN Action]] sending the newly generated password. If the request was succesful, [[Online/Nintendo_Network/NASC|NASC]] will send back a token and the address of the friends server.
+
+The console then logs into the friends server using the <code>guest</code> account and calls [[Online/Nintendo_Network/NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the devices <code>LocalFriendCodeSeed_B</code>, move count, and token from [[Online/Nintendo_Network/NASC|NASC]]. If this is succesful, the console saves the previously generated password, game server account username (the string representation of the accounts PID in this case), and PID HMAC in a system save file, logs out of the <code>guest</code> account, and into the newly created account.
+
+Now when the 3DS needs to go online in most games, it will simply perform another [[Online/Nintendo_Network/NASC#LOGIN_Action|LOGIN Action]] with the game server account username and PID HMAC to get the token and address of the game server.
+
+Certain 3DS titles do require the use of a Nintendo Network ID however, such as Nintendo Badge Arcade. These titles use the same login system as the Wii U.
+
+=== Wii U ===
+
+All online functionality now relies on Nintendo Network IDs. Once a Nintendo Network ID is registered, it is assigned a PID. After registration, the console then logs into the friends server using the <code>guest</code> account and calls [[Online/Nintendo_Network/NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the details of the new Nintendo Network ID and the token from [[Online/Nintendo_Network/NNAS|NNAS]]. If this is successful, the game server account is now tied to the Nintendo Network ID (they share the same PID) and the console logs out of the <code>guest</code> account, and into the newly created account.
+
+Now when the Wii U needs to go online in games, it will request the game server account credentials from [[Online/Nintendo_Network/NNAS#GET_/v1/api/provider/nex_token/@me|/v1/api/provider/nex_token/@me]]. The console does store these credentials locally, however it will always request new ones at every login.
+
+=== Switch ===
+
+Normal user accounts do not have a password. Instead, the client must provide an ID token to authenticate. This token, along with the username, can be retrieved by logging in on the [[Online/Nintendo_Switch_Online/BAAS|BAAS server]] after acquiring a [[Online/Nintendo_Switch_Online/DAuth|device token]] and an [[Online/Nintendo_Switch_Online/AAuth|application token]].
+
+== Special Accounts ==
+
+The <code>guest</code> account password is <code>MMQea3n!fsik</code>, however Nintendo has changed this password on all Wii U and 3DS servers with the exception of the friend server. On Switch servers, all accounts except <code>Quazal Rendez-Vous</code> and <code>SandboxProbe</code> have been removed.
+
+The <code>Quazal Authentication</code> account represents the authentication server, and the <code>Quazal Rendez-Vous</code> account represents the secure server. This distinction is relevant to [[#Kerberos Tickets|Kerberos authentication]].
+
+=== 3DS / Wii U ===
+
+{| class="wikitable"
+! PID !! Name
+|-
+| <code>1</code> || <code>Quazal Authentication</code>
+|-
+| <code>2</code> || <code>Quazal Rendez-Vous</code>
+|-
+| <code>100</code> || <code>guest</code>
+|-
+| <code>101</code> || <code>Administrator</code>
+|-
+| <code>102</code> || <code>eval</code>
+|-
+| <code>103</code> || <code>SandboxProbe</code>
+|-
+| <code>104</code> || <code>LobbyAdministrator</code>
+|-
+| <code>110</code> || <code>BackgroundPlayer0</code>
+|}
+
+=== Switch ===
+
+{| class="wikitable"
+! PID !! Name
+|-
+| <code>243564795342340018</code> || <code>Quazal Authentication</code>
+|-
+| <code>257049437023956657</code> || <code>Quazal Rendez-Vous</code>
+|-
+| <code>564330319085596911</code> || <code>guest</code>
+|-
+| <code>584465510887342041</code> || <code>Administrator</code>
+|-
+| <code>621476855497894457</code> || <code>eval</code>
+|-
+| <code>693188807183308752</code> || <code>SandboxProbe</code>
+|-
+| <code>1279596992968541952</code> || <code>LobbyAdministrator</code>
+|-
+| <code>1405107338776927048</code> || <code>BackgroundPlayer0</code>
+|}
+
+== Kerberos Tickets ==
+
+Kerberos authentication allows a '''source user''' to establish a secure connection with a '''target user'''. In practice, the '''target user''' is always <code>Quazal Rendez-Vous</code>, which represents the secure server.
+
+A Kerberos ticket is issued to the '''source user''' by the authentication server. It contains the following data, encrypted with the '''source key''':
+
+# A random session key, used for subsequent communication with the '''target user'''
+# The PID of the '''target user'''
+# The internal ticket
+
+After decrypting the Kerberos ticket, the '''source user''' transmits the internal ticket to the '''target user''' during connection establishment. The internal ticket contains the following data, encrypted with the '''target key''':
+
+# The time at which the ticket was issued. If the ticket is more than 2 minutes old, the '''target user''' will abort the connection.
+# The PID of the '''source user''', allowing the '''target user''' to identify who is connecting.
+# The session key.
+
+The '''source key''' is a key known only to the source user. The '''target key''' is a key known only to the target user.
+
+== Password Authentication ==
+
+The client's password is never transmitted to the authentication server. Instead, it is used to derive the '''source key'''. This provides a simple but effective authentication mechanism: without knowledge of the password, the [[#Kerberos Tickets|ticket]] cannot be decrypted, and a connection with the '''target user''' cannot be established.
+
+A ticket may be obtained using one of the following methods:
+
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#Login|TicketGrantingProtocol#Login]]
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]]
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]]
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]]
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]]
+
+To determine whether a new ticket must be requested via [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]], NEX compares the '''target user''' ID in the decrypted ticket against the user ID in the secure server's connection info.
+
+== Token Authentication ==
+
+On Switch servers, authentication differs slightly from the password-based approach. Special accounts such as <code>guest</code> continue to use [[#Password Authentication|password-based authentication]], but normal user accounts must provide an ID token. If no token is provided, or if the token is invalid, the server will refuse to issue a ticket and will return an error code.
+
+Because [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]] and [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] do not support ID token parameters, they cannot be used for normal user accounts on Switch servers. Instead, one of the following methods must be used depending on the NEX version:
+
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] (prior to NEX 4.4.0) - The ID token is submitted in the [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]] parameter. If the token is valid, the server returns the '''source key''' alongside the ticket.
+* [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]] (NEX 4.4.0 and later) - Functionally equivalent to the above, but with revised request and response parameters.
+
+== Key Derivation ==
+
+When password-based authentication is used, the '''source''' and '''target key''' are derived as follows:
+
+'''3DS / Wii U:''' The password is MD5-hashed <code>65000 + pid % 1024</code> times.
+
+'''Switch:''' The key is derived as <code>MD5(MD5(password) + PACK("<Q", pid))</code>
+
+In both cases, <code>pid</code> and <code>password</code> refer to the PID and password of the respective '''source''' or '''target user'''.
+
+== Ticket Format ==
+
+Tickets are encrypted using the following scheme: the data is first encrypted with RC4, then an HMAC-MD5 of the encrypted data is appended. Decryption is performed in reverse: the HMAC is verified first, then the data is decrypted.
+
+The [[#Kerberos Tickets|Kerberos ticket]] contains the following data, encrypted with the '''source key''':
+
+{| class="wikitable"
+! Type !! Description
+|-
+| Bytes || A random session key. Always 32 bytes in length, except in NEX 1 or when communicating with the 3DS / Wii U friends server, where it is 16 bytes
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || The PID of the '''target user'''
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || [[#Internal Ticket Format|Internal ticket data]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || Optional null-terminated string containing [[#JSON Attributes|JSON attributes]] (present on newer game servers)
+|}
+
+The optional string is not always present; the client determines its presence by checking whether additional data remains after the internal ticket. This field is supported in NEX 4.3.x and later, and only appears in tickets obtained via [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
+
+=== Internal Ticket Format ===
+
+The internal ticket format was revised at some point. In the original format, the internal ticket data was encrypted directly with the '''target key'''. In the revised format, a randomly generated key is transmitted alongside the encrypted ticket in plaintext and is combined with the '''target key''' to derive the final encryption key.
+
+==== Original Format ====
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
+|}
+
+==== Revised Format ====
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || Random key. The final encryption key is computed as: <code>MD5(target_user_key + random_key)</code>
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
+|}
+
+=== Ticket Info ===
+
+This data is validated on the reciever.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Ticket issued time. A ticket remains valid for exactly 2 minutes
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || The PID of the '''source user'''
+|-
+| Bytes || The session key
+|}
+
+NEX 4 tickets were updated at some point to include additional data in tickets obtained via [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
+
+=== JSON Attributes ===
+
+When present, the JSON attributes field contains a null-terminated string of the following form:
+
+<pre>
+{
+  "v": 1,
+  "att": 2,
+  "pid": 11607394848327368017,
+  "mi": {
+    "ms": -1,
+    "mp": 1,
+    "cpa": true
+  }
+}
+</pre>
+
+The fields have the following meanings:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>v</code> || Version (always <code>1</code>)
+|-
+| <code>att</code> || Auth token type (see [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]])
+|-
+| <code>pid</code> || User ID
+|-
+| <code>exp</code> || Expiration timestamp in seconds, set to 5 minutes after ticket issuance. Not always present; may depend on server version.
+|-
+| <code>mi</code> || [[#Membership Info|Membership info]]
+|}
+
+==== Membership Info ====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>ms</code> || [[#Membership Status|Membership status]]
+|-
+| <code>mp</code> || [[#Membership Policy|Membership policy]]
+|-
+| <code>cpa</code> || Can play all
+|}
+
+==== Membership Status ====
+
+This field indicates whether the user holds an active [[Online/Nintendo_Switch_Online|Nintendo Switch Online]] membership.
+
+{| class="wikitable"
+! Value !! Description
+|-
+| <code>-1</code> || No information available
+|-
+| <code>0</code> || Not a member
+|-
+| <code>1</code> || Is a member
+|}
+
+==== Membership Policy ====
+
+This field indicates whether a [[Online/Nintendo_Switch_Online|Nintendo Switch Online]] membership is required to access the game server.
+
+{| class="wikitable"
+! Value !! Description
+|-
+| <code>0</code> || No membership required
+|-
+| <code>1</code> || Membership required for all features
+|-
+| <code>2</code> || Membership required for some features
+|}
