@@ -1,7 +1,6 @@
 == Overview ==
 
-All HPP servers use a customized RMC response structure. The structure is nearly identical, the only difference being that the response omits the protocol ID field. The request format is identical to standard [[Online/Nintendo_Network/NEX/RMC|RMC]] requests.
-
+All HPP servers use a customized RMC response structure. The structure is nearly identical to standard [[Online/Nintendo_Network/NEX/RMC|RMC]] responses, the only difference being that the response omits the protocol ID field. The request format is identical to standard [[Online/Nintendo_Network/NEX/RMC|RMC]] requests.
 
 == Response Format ==
 
