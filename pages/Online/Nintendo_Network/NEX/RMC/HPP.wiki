@@ -1,0 +1,36 @@
+== Overview ==
+
+All HPP servers use a customized RMC response structure. The structure is nearly identical, the only difference being that the response omits the protocol ID field. The request format is identical to standard [[Online/Nintendo_Network/NEX/RMC|RMC]] requests.
+
+
+== Response Format ==
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Size, excluding this field
+|-
+| Bool || Success flag
+|}
+
+'''On success:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Call ID of the request
+|-
+| UInt32 || Method ID, ORed with <code>0x8000</code>
+|-
+| || Response data
+|}
+
+'''On error:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Error code. See [[Online/Nintendo_Network/NEX/Result_Codes|Result Codes]]
+|-
+| UInt32 || Call ID of the request
+|}

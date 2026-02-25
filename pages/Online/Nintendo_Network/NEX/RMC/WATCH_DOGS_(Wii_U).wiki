@@ -1,6 +1,6 @@
 == Overview ==
 
-WATCH_DOGS (Wii U) uses a customized RMC payload class. Rather than identifying protocols and methods by integer IDs, this variant uses strings in their place. While this is more verbose, it does mean we have access to the real names of all protocols/methods/classes.
+WATCH_DOGS (Wii U) uses a customized RMC payload structure. Rather than identifying protocols and methods by integer IDs, this variant uses strings in their place. While this is more verbose, it does mean we have access to the real names of all protocols/methods/classes.
 
 == Request Format ==
 
@@ -17,7 +17,7 @@ WATCH_DOGS (Wii U) uses a customized RMC payload class. Rather than identifying 
 |-
 | [[Online/Nintendo_Network/NEX/Types#String|String]] || Protocol method name, prefixed with the [[Online/Nintendo_Network/NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2</code>
 |-
-| [[#ClassVersionContainer|ClassVersionContainer]] || Version information for any [[Online/Nintendo_Network/NEX/Types#class|classs]] referenced in the request
+| [[#ClassVersionContainer|ClassVersionContainer]] || Version information for any [[Online/Nintendo_Network/NEX/Types#Classes|classes]] referenced in the request
 |-
 | || Method parameters
 |}

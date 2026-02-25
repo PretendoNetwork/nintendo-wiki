@@ -12,6 +12,7 @@ The variation in use is known to both the client and server ahead of time. Some 
 
 This page only documents the standard RMC message structure used by NEX games. The following games are known to customize their RMC message structure:
 
+* [[Online/Nintendo_Network/NEX/RMC/HPP|All HPP servers]]
 * [[Online/Nintendo_Network/NEX/RMC/WATCH_DOGS (Wii U)|WATCH_DOGS (Wii U)]]
 
 == Request Format ==
