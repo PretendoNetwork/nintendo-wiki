@@ -43,5 +43,7 @@ Most game servers cannot be accessed via the HPP server. The following servers a
 |-
 | <code>10110e00</code> || Unknown || Super Smash Bros. 4 (Wii U)
 |-
-| <code>0012ec01</code> || <code>NEX_2_4_1_S25</code> || New Art Academy
+| <code>0012ec01</code> || <code>NEX_2_4_1_S25</code> || Unknown
+|-
+| <code>00095700</code> || <code>NEX_2_4_1_S25</code> || Unknown
 |}
