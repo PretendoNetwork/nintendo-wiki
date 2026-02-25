@@ -11,9 +11,9 @@ In NEX 2 and NEX 4 onwards, the extra data field is enforced and must be valid. 
 {| class="wikitable"
 ! Method ID !! Name (Up to NEX 3) !! Name (NEX 4+)
 |-
-| 1 || [[#Login]] || [[#Login]]
+| 1 || [[#Login]] || [[#ValidateAndRequestTicket]]
 |-
-| 2 || [[#LoginEx]] || [[#LoginEx]]
+| 2 || [[#LoginEx]] || [[#ValidateAndRequestTicketWithCustomData]]
 |-
 | 3 || [[#RequestTicket]] || [[#RequestTicket]]
 |-
@@ -67,6 +67,10 @@ The server build name identifies the build of the game server. While most Ninten
 |-
 | [[Online/Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
 |}
+
+=== ValidateAndRequestTicket ===
+
+This method is the same as [[#Login]]. It shares the same method ID and parameters. It was simply renamed in NEX 4.
 
 === LoginEx ===
 
@@ -137,6 +141,10 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		|}
 	</tab>
 </tabs>
+
+=== ValidateAndRequestTicketWithCustomData ===
+
+This method is the same as [[#LoginEx]]. It shares the same method ID and parameters. It was simply renamed in NEX 4.
 
 === RequestTicket ===
 
