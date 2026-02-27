@@ -26,4 +26,8 @@ Nintendo Network is made up of many different services, all providing specific f
 | [[Online/Nintendo_Network/IDBE|IDBE]] || Icon graphics
 |-
 | [[Online/Nintendo_Network/VC_Manuals|VC Manuals]] || Game manuals for Virtual Console titles
+|-
+| [[Online/Nintendo_Network/Miiverse|Miiverse]] || Miiverse
+|-
+| [[Online/Nintendo_Network/TVii|TVii]] || TVii
 |}
