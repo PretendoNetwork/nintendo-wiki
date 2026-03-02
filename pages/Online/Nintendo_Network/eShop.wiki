@@ -9,9 +9,11 @@ The eShop is made up of several distinct services, each responsible for a specif
 |-
 | [[Online/Nintendo_Network/eShop/Tagaya|Tagaya]] || Title version list
 |-
+| [[Online/Nintendo_Network/eShop/Geisha|Geisha]] || Wii U eShop interface
+|-
 | [[Online/Nintendo_Network/eShop/Ninja|Ninja]] || eShop metadata API
 |-
-| [[Online/Nintendo_Network/eShop/Geisha|Geisha]] || eShop interface
+| [[Online/Nintendo_Network/eShop/Samurai|Samurai]] || eShop metadata API
 |-
 | [[Online/Nintendo_Network/SOAP|SOAP]] || Title installation/management
 |}

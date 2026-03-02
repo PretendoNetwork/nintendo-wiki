@@ -1,0 +1,2303 @@
+== Overview ==
+
+Geisha is the service which provides the user interface for the Wii U eShop. The eShop application is actually a custom web browser which loads https://ninja.wup.shop.nintendo.net/ninja/wood_index.html, which redirects to https://geisha-wup.cdn.nintendo.net/geisha/index.html. The interface is built using standard HTML, CSS, and JavaScript. The browser also exposes several custom JavaScript APIs in order for the application to perform system/eShop related actions, such as getting user details from the console or starting a title download.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''The 3DS does not load a web page from the internet for it's user interface. This page is only relevant for the Wii U.''</div>
+</div>
+
+== Limitations ==
+
+The eShop browser is based on [https://github.com/WebKit/WebKit/tree/safari-536.28-branch WebKit 536.28], which was released in 2013. Nintendo also made several modifications to it's fork of WebKit, which can be found here https://support.nintendo.com/jp/oss/index.html. Because of the browsers age and custom changes by Nintendo, it should '''''NOT''''' be assumed that any modern frameworks, tools, etc. will work on it. Careful consideration needs to be made when writing client-side code for this browser to ensure that a given feature is implemented, and implemented well (even if a feature is technicaly available in normal releases of [https://github.com/WebKit/WebKit/tree/safari-536.28-branch WebKit 536.28], Nintendo may have removed them or changed how they behave).
+
+Useful resources:
+
+* Work towards a dedicated browser all that uses these custom/older versions of WebKit for debugging off-device: https://github.com/PretendoNetwork/org-issues/issues/5
+* Work towards a custom framework for making modern feeling web apps for Nintendo's browser apps: https://github.com/PretendoNetwork/Yeah/pull/1
+
+== Whitelist ==
+
+The eShop browser utilizes a whitelist which dictates the browser is allowed to load assets from. If the browser tries to load assets from a server/path not in this whitelist, or not from the current domain, the request will fail. This whitelist is sent to the console in the <code>X-Nintendo-Whitelist</code> response header when loading the page UI. The whitelist has the following structure. The parser for this header is located at <code>0x02102660</code> in the eShop (USA v131) <code>wave.rpx</code>. The latest official whitelist is:
+
+<pre>
+1|https,wiiu-ssl-static.ubi.com,,6|https,nintendojp.d1.sc.omtrdc.net,,2|https,nintendojp.tt.omtrdc.net,,2|https,admin8.testandtarget.omniture.com,,2|https,www.googletagmanager.com,,2|https,www.google-analytics.com,,2|https,kanzashi-wup.cdn.nintendo.net,,2|https,kanzashi-movie-wup.cdn.nintendo.net,,2|https,kanzashi-qa.wup.shop.nintendo.net,,2|https,kanzashi-movie-qa.wup.shop.nintendo.net,,2
+</pre>
+
+=== Whitelist ===
+
+{| class="wikitable"
+! Field !! Description
+|-
+| Version number? || Always <code>1</code>. Parser bails if this value is not <code>1</code>
+|-
+| Entries || List of [[#Whitelist Entry]] configurations. Any number of configurations can be set
+|}
+
+=== Whitelist Entry ===
+
+Entries defined later in the list take priority over earlier entires. This can be useful if, for example, a developer wanted to be able to loosely use any subdomain via an earlier defined wild card that can serve on any path, but then restrict a specific subdomain to a specific path.
+
+{| class="wikitable"
+! Field !! Description
+|-
+| Scheme || The protocol scheme the client will use when connecting to the server (<code>https</code>, <code>http</code>, etc.)
+|-
+| Host || The domain name being whitelisted. Max length of 128 bytes. 3 "modes" are available. Modes cannot be mixed together, each entry can only use one mode, though a domain can have multiple entries. Modes are checked for in this order: Mode 1 = "any subdomain", enabled by a leading period. This works for any depth. For example <code>.example.com</code> will allow both <code>subdomain.example.com</code> and <code>deeply.nested.subdomain.example.com</code>, but not <code>example.com</code> itself (this requires an additional mode 3 entry). Mode 2 = "any TLD", enabled by a trailing period. For example <code>example.</code> will allow both <code>example.com</code> and <code>example.org</code>. Mode 3 = "exact match", enabled by having no trailing/leading periods. For example, the following entries allows both the main YouTube domain and all subdomains <code>https,youtube.com,,2&#124;https,.youtube.com,,2</code>
+|-
+| Path || The path (including the leading slash) content can be served by for this domain. Max length of 128 bytes. If left empty, any path is accepted
+|-
+| Flags || Set as a hex string. Only flags <code>(flags >> 1) & 1</code> and <code>(flags >> 2) & 1</code> are extracted by the parser, purpose unknown. The first flag seems to always be set in official whitelists?
+|}
+
+== Localizations ==
+
+The eShop supports localizing the interface by loading various localization files. These are XML documents containing translation keys to replace in the interface.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Since only the Wii U uses Geisha, and it can be an entirely custom web application, it is not required that any custom implementations implement localizations this way. This is documented for historical and convention purposes.''</div>
+</div>
+
+The following localization files exist on the official Geisha server:
+
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-en.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-de.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-es.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-fr.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-it.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-ja.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-ko.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-nl.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-pt.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-ru.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-en_US.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-en_AU.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-en_HK.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-es_US.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-fr_US.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-pt_US.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-zh_CN.xml
+* https://geisha-wup.cdn.nintendo.net/geisha/message/messages-zh_TW.xml
+
+Every file is an XML document in the following format:
+
+<pre>
+<properties>
+  <entry key="localization_key1">Localized String 1</entry>
+  <entry key="localization_key2">Localized String 2</entry>
+  ...
+</properties>
+</pre>
+
+The following keys are used by the official interface:
+
+<div style="overflow: auto; max-height: 400px;">
+<pre>
+common01_01_001
+common01_01_001_02
+common01_01_002
+common01_01_003
+common01_01_004
+common01_01_005
+common01_01_006
+common01_01_006_02
+common01_01_007
+common01_01_007_02
+common01_01_008
+common01_01_009
+common01_01_009_02
+common01_01_010
+common01_01_011
+common01_01_011_02
+common01_01_011_03
+common01_01_011_04
+common01_01_011_05
+common01_01_012
+common01_01_014
+common01_01_014_02
+common01_01_015
+common01_01_015_02
+common01_01_015_03
+common01_01_016
+common01_01_016_02
+common01_01_016_03
+common01_01_017
+common01_01_058
+common01_01_018
+common01_01_019
+common01_01_020
+common01_01_022
+common01_01_023
+common01_01_024
+common01_01_024_02
+common01_01_025
+common01_01_025_02
+common01_01_026
+common01_01_027
+common01_01_028
+common01_01_030
+common01_01_031
+common01_01_032
+common01_01_033
+common01_01_034
+common01_01_035
+common01_01_038
+common01_01_039
+common01_01_039_02
+common01_01_040
+common01_01_041
+common01_01_042
+common01_01_043
+common01_01_045
+common01_01_046
+common01_01_047
+common01_01_056
+common01_01_059
+common01_01_060
+common01_01_061
+common01_01_062
+common01_01_063
+common01_01_064
+common01_01_065
+common01_01_066
+common01_01_067
+common01_01_068
+common01_01_069
+common01_01_070
+common01_01_071
+common01_01_072
+common01_01_073
+common01_01_074
+common01_01_075
+common01_01_076
+common01_01_077
+common01_01_078
+common01_01_079
+common01_01_080
+common01_01_081
+common01_01_082
+common01_01_083
+common01_01_084
+common01_01_084_01
+common01_01_085
+common01_01_086
+boot01_01_001
+boot01_01_002
+boot01_01_005
+boot01_02_001
+boot01_03_001
+boot01_04_001
+boot01_04_002
+boot01_05_002
+boot01_06_001
+boot01_07_001_02
+boot01_07_002
+boot01_08_001
+boot01_09_003
+always01_01_003
+always01_01_004
+always01_01_005
+always01_01_005_02
+always01_01_006
+always01_01_007
+always01_01_008
+always01_01_009
+always02_01_003
+always02_01_006
+always02_01_007
+always02_01_008
+always02_01_009
+always02_01_027
+always02_01_028
+always02_01_029
+always02_01_010
+always02_01_011
+always02_01_012
+always02_01_013
+always02_01_014
+always02_01_015
+always02_01_016
+always02_01_016_02
+always02_01_017
+always02_01_018
+always02_01_019
+always02_01_020
+always02_01_021
+always02_01_023
+always02_01_024
+always02_01_025
+always02_01_026
+always02_01_030
+always02_01_031
+always02_01_032
+top01_01_001
+top01_01_002
+top01_01_003
+top01_01_004
+top01_01_005
+top02_01_002
+top03_01_001
+top03_01_002
+top03_01_003
+top03_01_005
+top03_01_008
+top03_01_006
+top03_01_009
+top03_03_001
+top03_01_007
+shelf01_01_001
+shelf01_01_002
+shelf01_01_004
+shelf01_01_005
+shelf01_01_006
+shelf02_01_001
+shelf02_01_006
+shelf02_01_007
+shelf02_01_011
+shelf02_01_012
+shelf02_01_013
+shelf02_01_014
+shelf02_01_015
+shelf02_01_018
+data01_01_002
+data01_01_004
+data01_01_005
+data01_01_006
+data01_01_008
+data01_01_009
+data01_01_010
+data01_01_011
+data01_01_012
+data01_01_013
+data01_01_013_02
+data01_01_047
+data01_01_047_02
+data01_01_047_03
+data01_01_047_04
+data01_01_014
+data01_01_015
+data01_01_016
+data01_01_017
+data01_01_018
+data01_01_019
+data01_01_020
+data01_01_021
+data01_01_022
+data01_01_023
+data01_01_024
+data01_01_025
+data01_01_025_02
+data01_01_026
+data01_01_026_02
+data01_01_045
+data01_01_027
+data01_01_028
+data01_01_029
+data01_01_030
+data01_01_031
+data01_01_032
+data01_01_033
+data01_01_034
+data01_01_036
+data01_01_037
+data01_01_038
+data01_01_039
+data01_01_040
+data01_01_041
+data01_01_046
+data01_01_042
+data01_01_043
+data01_01_048
+data01_01_049
+data01_01_050
+data01_01_051
+data01_01_052
+data01_01_053
+data01_01_054
+data01_01_055
+data01_01_056
+data01_01_057
+data01_01_058
+data01_01_059
+data01_01_060
+data01_01_061
+data01_01_063
+data01_01_064
+data01_01_065
+data01_01_066
+data01_01_067
+data01_01_068
+data02_01_004
+data02_01_004_01
+data02_01_005
+data02_01_006
+data02_01_008
+data02_01_009
+data02_01_010
+data02_01_011
+data03_01_001
+data03_01_002
+data03_01_003
+data03_01_007
+data03_01_008
+data03_01_009
+data03_01_010
+data03_01_011
+data03_01_013
+data03_01_015
+data03_01_016
+data03_01_017
+data03_01_018
+data03_01_019
+data03_01_020
+data03_01_021
+data03_01_022
+data03_01_023
+data03_01_024
+data03_03_001
+data03_03_001_03
+data03_03_001_02
+data03_03_002
+data03_03_002_02
+data03_03_003
+data03_04_002
+data03_05_001
+data03_05_003
+data04_01_003
+data04_01_004
+data04_01_005
+data04_01_005_02
+data04_01_006
+data04_01_006_02
+data04_01_007
+data04_01_007_02
+data04_01_008
+data04_01_008_02
+data04_01_009
+data04_01_009_02
+data04_01_010
+data04_02_001
+data04_03_001
+data04_03_001_02
+buy01_01_001
+buy01_01_002
+buy01_01_003
+buy01_01_004
+buy01_01_006
+buy01_01_007
+buy01_01_008
+buy01_01_009
+buy01_02_001
+buy01_02_002
+buy01_02_002_02
+buy01_02_003
+buy01_02_004
+buy01_02_005
+buy01_03_001
+buy01_03_002
+buy01_03_003
+buy01_03_004
+buy01_05_001
+buy01_06_001
+buy01_06_002
+buy01_06_003
+buy01_07_001
+buy01_07_002
+buy01_07_003
+buy02_01_001
+buy02_01_002
+buy02_01_002_02
+buy02_01_002_03
+buy02_01_004
+buy02_01_004_02
+buy02_01_006
+buy02_01_007
+buy02_01_008
+buy02_01_009
+buy02_01_010
+buy02_01_011
+buy02_01_012
+buy02_01_013
+buy02_01_014
+buy02_01_015
+buy02_01_016
+buy02_01_017
+buy02_01_018
+buy02_01_018_001
+buy02_01_019
+buy02_01_021
+buy02_01_022
+buy02_01_023
+buy02_01_024
+buy02_01_025
+buy02_02_001
+buy02_02_001_02
+buy02_02_002
+buy02_03_001
+buy02_03_002
+buy02_03_003
+buy02_03_003_01
+buy02_03_002_02
+buy02_03_002_03
+buy02_03_002_04
+buy02_03_006
+buy02_03_007
+buy02_03_008
+buy02_03_009
+buy02_03_009_01
+buy02_03_010
+coupon01_01_000
+coupon01_01_001
+coupon01_01_002
+coupon01_01_003
+coupon01_01_004
+coupon01_01_005
+coupon01_01_006
+coupon01_01_006_02
+coupon01_01_006_03
+coupon01_01_007
+coupon02_01_001
+coupon02_01_002
+coupon03_01_001
+coupon03_01_002
+coupon03_01_003
+coupon03_01_004
+coupon03_01_005
+coupon03_01_007
+coupon03_01_008
+coupon03_01_009
+coupon03_01_010
+coupon03_01_011
+reco01_01_001
+reco01_01_002
+reco01_01_003
+reco01_02_001
+reco01_02_002
+reco01_02_003
+reco01_02_004
+reco01_02_005
+reco01_02_006
+reco01_02_007
+reco01_02_008
+reco01_03_001
+reco01_04_001
+reco01_05_001
+wish01_01_001
+wish01_01_003
+wish01_01_003_02
+wish01_01_004
+wish01_01_006
+wish01_01_007
+wish01_01_008
+wish01_01_009
+wish01_01_011
+money01_01_001
+money01_01_001_02
+money01_01_002
+money01_01_003
+money01_01_004
+money01_01_005
+money01_01_006
+money01_01_007
+money01_01_009
+money01_01_009_02
+money02_01_001
+money02_01_002
+money02_01_003
+money02_01_005
+money02_01_006
+money02_02_001
+money02_02_001_02
+money02_02_002
+money02_02_004
+money02_02_004_02
+money02_04_001
+money02_04_003
+money02_05_001
+money02_05_002
+money02_05_003
+money02_05_004
+money02_06_001
+money02_06_002
+money02_06_003
+money02_06_004
+money02_07_001
+money02_07_002
+money02_07_003
+money02_07_004
+money02_08_001
+money02_08_002
+money02_08_003
+money02_08_004
+money02_08_005
+money02_08_005_02
+money02_08_006
+money02_08_007
+money02_08_008
+money02_08_009
+money02_08_010
+money02_09_001
+money03_01_001
+money03_01_002
+money03_01_002_02
+money03_01_005
+money03_02_001
+money03_02_002
+money03_02_003
+money03_02_004
+money03_02_005
+money03_02_006
+money03_02_007
+money03_02_008
+money03_02_009
+money03_02_010
+money03_03_001
+money03_03_002
+money03_03_004
+money03_03_005
+money03_04_001
+money03_04_002
+money03_04_003
+money03_04_005
+money03_04_006
+money03_05_001
+money03_05_002
+money04_01_001
+money04_01_002
+money04_01_003
+money04_01_004
+money04_01_005
+money04_02_001
+money04_02_002
+money04_02_003
+money04_02_004
+money04_02_005
+money04_02_006
+money04_02_007
+money04_02_009
+money04_03_001
+money04_04_001
+money04_04_002
+money04_05_001
+money04_05_002
+money04_05_003
+money04_05_005
+money04_06_001
+money04_06_002
+money04_06_004
+money04_06_005
+money04_06_006
+money04_06_007
+money05_01_001
+money05_01_002
+money05_01_003
+money05_01_004
+money05_01_005
+history01_01_001
+history01_01_002
+history01_01_003
+history01_01_004
+history01_01_005
+history03_01_001
+history03_01_002
+history03_01_003
+history03_02_001
+history03_02_002
+history03_02_003
+history03_02_004
+history03_03_001
+history03_03_002
+history03_03_003
+history03_04_001
+history03_05_001
+history04_01_001
+history04_01_009
+history05_01_001
+history06_01_001
+history06_01_002
+history06_01_003
+history06_01_004
+history06_01_005
+history06_01_006
+set01_01_001
+set01_01_002
+set01_01_003
+set01_01_005
+set01_01_006
+set01_01_007
+set01_01_008
+set01_01_009
+set01_01_010
+set01_01_011
+set01_01_012
+set01_01_013
+set02_01_001
+set02_01_002
+set02_01_002_02
+set02_01_003
+set03_01_001
+set03_01_002
+set03_01_003
+set03_01_004
+set03_01_005
+set03_01_006
+set04_01_001
+set04_01_003
+set04_01_004
+set04_01_005
+set04_01_006
+set04_01_007
+set04_01_008
+set04_01_009
+set04_01_011
+set04_02_001
+set04_03_001
+set05_01_001
+set05_01_002
+set05_01_003
+set06_01_001
+set06_01_002
+set06_01_003
+set06_01_004
+set06_01_005
+set06_01_006
+set06_01_007
+set07_01_001
+set07_01_002
+set07_01_002_02
+set07_01_003
+set07_01_004
+set07_01_005
+set07_01_005_02
+set07_01_006
+set07_02_001
+set07_02_002
+set07_03_001
+set07_03_002
+legal01_01_001
+legal01_01_002
+legal01_01_003
+legal01_01_004
+legal01_01_005
+legal02_01_001
+legal03_01_001
+legal04_01_001
+legal05_01_001
+legal06_01_001
+legal06_01_002
+legal06_01_005
+legal06_01_006
+legal06_01_007
+legal06_01_008
+legal07_01_001
+legal07_01_002
+legal07_01_003
+legal07_01_003_02
+legal07_01_004
+legal07_01_005
+legal07_01_006
+legal07_01_007
+legal07_01_008
+legal07_01_009
+legal07_01_010
+legal07_02_001
+legal07_02_002
+legal07_03_001
+legal07_04_001
+legal07_05_001
+legal07_05_002
+legal07_06_001
+legal07_07_001
+legal09_01_001
+legal10_01_001
+legal10_01_002
+legal10_01_003
+error01_01
+</pre>
+</div>
+
+== JavaScript APIs ==
+
+Since the interface is entirely customized by whatever Geisha provides, this page will mainly focus document the custom JavaScript APIs used by the eShop. Each API provides a specialized set of functions the client can invoke to handle tasks such as interacting with the system, querying for account details, etc. Many of these APIs can be found in other browser-based applications on Nintendo Network, such as [[Online/Nintendo_Network/Miiverse|Miiverse]] and [[Online/Nintendo_Network/TVii|TVii]], however this page will only cover what is available to the Wii U eShop.
+
+Since the Wii U eShop is a web application, TypeScript types for these APIs, and the APIs found in other browser-based applications, can be found at https://github.com/PretendoNetwork/applet-types.
+
+See https://hackmd.io/@quarky/Bkbr1cJ2P for how the APIs are registered. '''''Note:''''' ''This page is not specific to the eShop, and thus may have information that does not apply to it.''
+
+== wiiuEC ==
+
+Handles e-commerce related tasks.
+
+=== <code>wiiuEC.needsSystemUpdate()</code> ===
+
+Checks if the console needs a system update.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ update: boolean; }</code> || Whether a system update is required
+|}
+
+=== <code>wiiuEC.needsSystemUpdateUsingCache()</code> ===
+
+Checks if the console needs a system update using cached data.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ update: boolean; }</code> || Whether a system update is required
+|}
+
+=== <code>wiiuEC.getECommerceInfraStatus()</code> ===
+
+Checks if the infrastructure to install titles is available. Triggers [[Online/Nintendo_Network/SOAP/ecs#GetStandbyMode|ecs:GetStandbyMode]].
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isStandby: boolean; } &#124; { error: { code: number; }; }</code> || An object containing the result <code>ServiceStandbyMode</code> on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getDeviceCountry()</code> ===
+
+Gets the devices registered country.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ country: string; } &#124; { error: { code: number; }; }</code> || An object containing the the devices ISO 2 country code on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.setDeviceCountry()</code> ===
+
+Sets the devices registered country. Triggers these operations, in order:
+
+* [[Online/Nintendo_Network/SOAP/ias#SetCountry|ias:SetCountry]]
+* [[Online/Nintendo_Network/SOAP/ecs#GetAccountStatus|ecs:GetAccountStatus]]
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>country</code> || <code>string</code> || ISO 2 country code
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.startTicketSync()</code> ===
+
+Redownloads the digital purchase tickets the console can access. Triggers these operations, in order:
+
+* [[Online/Nintendo_Network/SOAP/ecs#AccountListETicketIds|ecs:AccountListETicketIds]]
+* [[Online/Nintendo_Network/SOAP/ecs#AccountGetETicketDetails|ecs:AccountGetETicketDetails]] (if new tickets are seen)
+* [[Online/Nintendo_Network/SOAP/ecs#AccountGetETickets|ecs:AccountGetETickets]] (if new tickets are seen)
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.startTicketDownload()</code> ===
+
+Downloads a titles installation ticket asynchronously (function returns before the request finishes). Triggers [[Online/Nintendo_Network/SOAP/ecs#AccountGetETickets|ecs:AccountGetETickets]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>ticketID</code> || <code>string</code> || Title installation ticket ID, also seen as "TIV"
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>undefined &#124; { error: { code: number; }; }</code> || <code>undefined</code> on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getTicketRequestState()</code> ===
+
+Gets the download status of a the last ticket download request from either [[#wiiuEC.startTicketDownload()]] or [[#wiiuEC.ticketDownloadSync()]].
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ finished: boolean; } &#124; { error: { code: number; }; }</code> || An object containing the status of a ticket download on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.cancelAll()</code> ===
+
+Unknown. Presumably would cancel download tasks, but in practice seems to do nothing?
+
+=== <code>wiiuEC.ticketDownloadSync()</code> ===
+
+Downloads a titles installation ticket synchronously (function returns after the request finishes). Triggers [[Online/Nintendo_Network/SOAP/ecs#AccountGetETickets|ecs:AccountGetETickets]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>ticketID</code> || <code>string</code> || Title installation ticket ID, also seen as "TIV"
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>undefined &#124; { error: { code: number; }; }</code> || <code>undefined</code> on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getTitleInstallInfo()</code> ===
+
+[[Online/Nintendo_Network/SOAP/ccs|Downloads the titles TMD]] and then checks the consoles storage device. Used to check if the console has enough room for the download.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|-
+| <code>version</code> || <code>string</code> || The version of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ downloadMedia: 'NAND' &#124; 'USB'; installSize: string; storageSize: string; } &#124; { error: { code: number; }; }</code> || An object containing the target installation media type, the size of installation (bytes, as a string), and the space left on the installation target (bytes, as a string) on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.registerTitleDownloadTask()</code> ===
+
+Starts downloading a base title. See [[Online/Nintendo_Network/SOAP/ccs]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|-
+| <code>version</code> || <code>string</code> || The version of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.registerPatchTitleDownloadTask()</code> ===
+
+Starts downloading an update title. See [[Online/Nintendo_Network/SOAP/ccs]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getAocInstallInfo()</code> ===
+
+[[Online/Nintendo_Network/SOAP/ccs|Downloads the DLC titles TMD]] and then checks the consoles storage device. Used to check if the console has enough room for the download.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the DLC title
+|-
+| <code>version</code> || <code>string</code> || The version of the DLC title
+|-
+| <code>indexes</code> || <code>string</code> || AoC indexes. JSON string in the format <code>'{"indexes":[1,2,3,4,5]}'</code>
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ downloadMedia: 'NAND' &#124; 'USB'; installSize: string; storageSize: string; } &#124; { error: { code: number; }; }</code> || An object containing the target installation media type, the size of installation (bytes, as a string), and the space left on the installation target (bytes, as a string) on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.registerAocDownloadTask()</code> ===
+
+Starts downloading a DLC title. See [[Online/Nintendo_Network/SOAP/ccs]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|-
+| <code>version</code> || <code>string</code> || The version of the title
+|-
+| <code>indexes</code> || <code>string</code> || AoC indexes. JSON string in the format <code>'{"indexes":[1,2,3,4,5]}'</code>
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getDownloadTaskState()</code> ===
+
+Checks the download task state of the given title.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ registered: boolean; titleVersion: number; }</code> || Download task state
+|}
+
+=== <code>wiiuEC.getDownloadTaskListState()</code> ===
+
+Checks the number of active download tasks. A total of 64 download tasks may be registered at the same time.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ registeredTaskNum: number; maxTaskNum: number; remainingTaskNum: number; }</code> || Download task state
+|}
+
+=== <code>wiiuEC.cancelDownloadTaskForDebug()</code> ===
+
+Unknown.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown
+|}
+
+=== <code>wiiuEC.installTitlesForDebug()</code> ===
+
+Unknown.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown
+|}
+
+=== <code>wiiuEC.getDownloadTaskStateForDebug()</code> ===
+
+Unknown.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown
+|}
+
+=== <code>wiiuEC.sendIvsAsync()</code> ===
+
+Triggers [[Online/Nintendo_Network/SOAP/ias#SetIVSData|ias:SetIVSData]].
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>undefined &#124; { error: { code: number; }; }</code> || <code>undefined</code> on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.getSendIvsState()</code> ===
+
+Checks the state of [[#wiiuEC.sendIvsAsync()]]. Always initially <code>"sending"</code> until [[#wiiuEC.sendIvsAsync()]] is called.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ status: 'sending' &#124; 'success'; } &#124; { error: { code: number; }; }</code> || An object containing the status on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuEC.registerAutoUpdateList()</code> ===
+
+Unknown. The official <code>buy.js</code> script from Nintendo only uses this function in one context:
+
+<pre>
+// 予約販売なら自動更新リストにタイトルを追加する SEE #17913
+if ($.sessionStorage().getItem('title_pre_order_flg')==='true') {
+  var res_update_task = wiiuEC.registerAutoUpdateList(title_id);
+  processJsxError(res_update_task);
+}
+</pre>
+
+Which roughly translates to "Add titles to the auto-update list if they are pre-ordered". However in practice this seems to do nothing?
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>undefined &#124; { error: { code: number; }; }</code> || <code>undefined</code> on success, or an object containing an error code on failure
+|}
+
+== wiiuCurtain ==
+
+Manages showing/hiding the eShop UI.
+
+=== <code>wiiuCurtain.open()</code> ===
+
+Shows the "curtain" in the browser. does nothing in the eShop.
+
+=== <code>wiiuCurtain.close()</code> ===
+
+Closes the "curtain" in the browser. does nothing in the eShop.
+
+== wiiuSystemSetting ==
+
+Handles getting/setting various system settings.
+
+=== <code>wiiuSystemSetting.getParentalControlForEShop()</code> ===
+
+Checks the parental control settings for the eShop.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isLocked: boolean; } &#124; { error: { code: number; }; }</code> || Whether the eShop is locked by parental controls on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getParentalControlForGamePlay()</code> ===
+
+Checks the parental control settings for games.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isLocked: boolean; age: string; } &#124; { error: { code: number; }; }</code> || Whether game play is locked by parental controls, and the age restriction (as a string) set on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getParentalControlForBrowser()</code> ===
+
+Checks the parental control settings for the browser.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isLocked: boolean; } &#124; { error: { code: number; }; }</code> || Whether the browser is locked by parental controls on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getParentalControlForMiiverse()</code> ===
+
+Checks the parental control settings for Miiverse.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ restrictionLevel: string; } &#124; { error: { code: number; }; }</code> || The Miiverse parental control restriction level (as a string) on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.checkParentalPinCode()</code> ===
+
+Checks if the given PIN matches the parental control PIN.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>pin</code> || <code>string</code> || The parental control PIN to check
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ result: boolean; } &#124; { error: { code: number; }; }</code> || Whether the PIN is correct on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getSpotPassUploadConsoleInfoState()</code> ===
+
+Checks if the console is allowed to upload state data via SpotPass ([[Online/Nintendo_Network/BOSS|BOSS]]).
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ enable: boolean; } &#124; { error: { code: number; }; }</code> || Whether SpotPass console info upload is enabled on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getRegion()</code> ===
+
+Gets the console's region code.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ code: string; } &#124; { error: { code: number; }; }</code> || The console's ISO 3 country (region) code on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getCountry()</code> ===
+
+Gets the console's country code.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ code: string; } &#124; { error: { code: number; }; }</code> || The console's ISO 2 country code on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getLanguage()</code> ===
+
+Gets the console's language code.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ code: string; } &#124; { error: { code: number; }; }</code> || The console's language code on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getUTC()</code> ===
+
+Gets the console's current UTC time as a Unix epoch.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ epochMilliSeconds: number; } &#124; { error: { code: number; }; }</code> || The console's current UTC time in milliseconds on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getCaffeineFlag()</code> ===
+
+Unknown. Possibly related to analytics? The official JavaScript captures usage analytics with references to <code>caffine_killer</code>?
+
+<pre>
+_addAppJumpEvent: function() {
+  var a = this.sessionStorage.getItem("analytics_appjump");
+  if (!a)
+    return this;
+  this.sessionStorage.removeItem("analytics_appjump");
+  a = JSON.parse(a);
+  "caffeine_killer" === a.launcherType && this._addEvent("kntf", {
+    launcher_type: "caffeine_killer",
+    src_title_id: a.srcTitleId
+  });
+  return this
+}
+</pre>
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ enable: boolean; } &#124; { error: { code: number; }; }</code> || Whether the flag is enabled on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.setCaffeineFlag()</code> ===
+
+Unknown. Possibly related to analytics? The official JavaScript captures usage analytics with references to <code>caffine_killer</code>?
+
+<pre>
+_addAppJumpEvent: function() {
+  var a = this.sessionStorage.getItem("analytics_appjump");
+  if (!a)
+    return this;
+  this.sessionStorage.removeItem("analytics_appjump");
+  a = JSON.parse(a);
+  "caffeine_killer" === a.launcherType && this._addEvent("kntf", {
+    launcher_type: "caffeine_killer",
+    src_title_id: a.srcTitleId
+  });
+  return this
+}
+</pre>
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || Enabled/disabled
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.getEShopInitialized()</code> ===
+
+Checks if the eShop has been initialized and is ready for user use.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ initialized: boolean; } &#124; { error: { code: number; }; }</code> || Whether the eShop has been initialized on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuSystemSetting.setEShopInitialized()</code> ===
+
+Sets the eShop initialization flag.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || Whether the eShop has been initialized
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+== wiiuDialog ==
+
+Handles displaying Wii U style dialog popups.
+
+=== <code>wiiuDialog.alert()</code> ===
+
+Shows an alert dialog.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>messageText</code> || <code>string</code> || Text shown on the dialog
+|-
+| <code>buttonText</code> || <code>string</code> || Text shown on the button
+|}
+
+=== <code>wiiuDialog.confirm()</code> ===
+
+Shows a confirmation dialog.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>messageText</code> || <code>string</code> || Text shown on the dialog
+|-
+| <code>rightButtonText</code> || <code>string</code> || Text shown on the right (deny) button
+|-
+| <code>leftButtonText</code> || <code>string</code> || Text shown on the left (confirm) button
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether the user selected the left (confirm) button
+|}
+
+=== <code>wiiuDialog.showLoading()</code> ===
+
+Shows the loading spinner.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>messageText</code> || <code>string</code> || Text shown on the dialog
+|}
+
+=== <code>wiiuDialog.hideLoading()</code> ===
+
+Hides the loading spinner.
+
+== wiiuSessionStorage ==
+
+Abstraction over the browsers [https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage session storage].
+
+=== <code>wiiuSessionStorage.length()</code> ===
+
+Gets the number of items in session storage.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>number</code> || The number of items in session storage
+|}
+
+=== <code>wiiuSessionStorage.setItem()</code> ===
+
+Sets an item in session storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item
+|-
+| <code>value</code> || <code>string</code> || The value of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Unknown. Possibly <code>true</code> on success
+|}
+
+=== <code>wiiuSessionStorage.key()</code> ===
+
+Gets the key at the given index. For example, if <code>"key1"</code> was the first item set in session storage then <code>wiiuSessionStorage.key(0)</code> will return <code>"key1"</code>.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>index</code> || <code>number</code> || The index of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>string &#124; null</code> || The key at the given index, or <code>null</code> if no item exists at that index
+|}
+
+=== <code>wiiuSessionStorage.getItem()</code> ===
+
+Gets an item from session storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>string &#124; null</code> || The value of the item, or <code>null</code> if the item does not exist
+|}
+
+=== <code>wiiuSessionStorage.removeItem()</code> ===
+
+Removes an item from session storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item to remove
+|}
+
+=== <code>wiiuSessionStorage.clear()</code> ===
+
+Clears all items from session storage.
+
+== wiiuLocalStorage ==
+
+Abstraction over the browsers [https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage local storage]. Updates may not be flushed to disk right away, see [[#wiiuLocalStorage.write()]].
+
+=== <code>wiiuLocalStorage.length()</code> ===
+
+Gets the number of items in local storage.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>number</code> || The number of items in local storage
+|}
+
+=== <code>wiiuLocalStorage.setItem()</code> ===
+
+Sets an item in local storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item
+|-
+| <code>value</code> || <code>string</code> || The value of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Unknown. Possibly <code>true</code> on success
+|}
+
+=== <code>wiiuLocalStorage.key()</code> ===
+
+Gets the key at the given index. For example, if <code>"key1"</code> was the first item set in local storage then <code>wiiuLocalStorage.key(0)</code> will return <code>"key1"</code>.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>index</code> || <code>number</code> || The index of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>string &#124; null</code> || The key at the given index, or <code>null</code> if no item exists at that index
+|}
+
+=== <code>wiiuLocalStorage.getItem()</code> ===
+
+Gets an item from local storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>string &#124; null</code> || The value of the item, or <code>null</code> if the item does not exist
+|}
+
+=== <code>wiiuLocalStorage.removeItem()</code> ===
+
+Removes an item from local storage.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>key</code> || <code>string</code> || The key of the item to remove
+|}
+
+=== <code>wiiuLocalStorage.clear()</code> ===
+
+Clears all items from local storage.
+
+=== <code>wiiuLocalStorage.write()</code> ===
+
+Flushes any cached updates to disk. In official JavaScript this is always seen immediately after removing critical items like wishlists from the local storage.
+
+== wiiuErrorViewer ==
+
+Helpers to display error codes/messages, including custom ones.
+
+=== <code>wiiuErrorViewer.openByCode()</code> ===
+
+Display the provided error code. For example, the error code <code>155927</code> will display as <code>015-5927</code>.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>errorCode</code> || <code>number</code> || Numerical error code
+|}
+
+=== <code>wiiuErrorViewer.openByCodeAndMessage()</code> ===
+
+Display the provided error code and message.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>errorCode</code> || <code>number</code> || Numerical error code
+|-
+| <code>errorMessage</code> || <code>string</code> || Error message
+|}
+
+== wiiuNNA ==
+
+Used to manage data about the currently logged in Nintendo Network ID ('''N'''intendo '''N'''etwork '''A'''ccount).
+
+=== <code>wiiuNNA.principalId</code> ===
+
+Read-only property. The current user's Nintendo Network ID PID.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| <code>string</code> || The user's NNID PID
+|}
+
+=== <code>wiiuNNA.principalIdHashKey</code> ===
+
+Read-only property. Salt used when hashing the current user's PID. Official implementation:
+
+<pre>
+getHashedPID: function() {
+  if (!b)
+    return d.getItem("pid") || "00000000000000000000000000000000";
+  var a = parseInt(wiiuNNA.principalId, 10);
+  a = isNaN(a) ? "0" : a.toString(16);
+  a = ["00000000", a].join("");
+  a = a.substr(a.length - 8);
+  a = [wiiuNNA.principalIdHashKey, a].join("");
+  return jQuery().crypt({
+    method: "md5",
+    source: a
+  })
+}
+</pre>
+
+{| class="wikitable"
+! Type !! Description
+|-
+| <code>string</code> || <code>GvXfcxbp8lvp0zwbKvqZtitwqckFyuqB</code>
+|}
+
+=== <code>wiiuNNA.gender</code> ===
+
+Read-only property. The gender associated with the user's Nintendo Network ID.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| <code>"MALE" &#124; "FEMALE"</code> || The user's NNID gender
+|}
+
+=== <code>wiiuNNA.birthday</code> ===
+
+Read-only property. The birthday associated with the user's Nintendo Network ID, in <code>YYYY/MM/DD</code> format.
+
+{| class="wikitable"
+! Type !! Description
+|-
+| <code>string</code> || The user's NNID birthday
+|}
+
+=== <code>wiiuNNA.existVirtualAccount()</code> ===
+
+Purpose is unknown. Returns the result of <code>HasEciVirtualAccount__Q2_2nn3actFv</code>.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether the virtual account exists
+|}
+
+=== <code>wiiuNNA.refreshVirtualAccount()</code> ===
+
+Purpose is unknown. Calls <code>SyncAccountInfo__Q2_2nn3actFv</code>. Official eShop JavaScript only calls this if <code>shop_account_initialized</code> from [[Online/Nintendo_Network/eShop/Ninja|Ninja]] is <code>true</code> after loging in.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuNNA.getServiceToken()</code> ===
+
+Returns the last stored service token without making a network request.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ ServiceToken: string; } &#124; { error: { code: number; }; }</code> || An object containing the current service token on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuNNA.refreshServiceToken()</code> ===
+
+Calls [[Online/Nintendo_Network/NNAS#GET_/v1/api/provider/service_token/@me]] with the client ID <code>71a6f5d6430ea0183e3917787d717c46</code> and stores the newly retrieved service token.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ ServiceToken: string; } &#124; { error: { code: number; }; }</code> || An object containing the refreshed service token on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuNNA.isMailAddressValidated()</code> ===
+
+Checks whether the user's email address has been validated.
+
+Returns <code>true</code> if the <code><email><validated></validated></email></code> field in the user's NNID response is set to <code>Y</code>.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether the user's email address has been validated
+|}
+
+=== <code>wiiuNNA.validateMailAddress()</code> ===
+
+Calls [[Online/Nintendo_Network/NNAS#PUT_/v1/api/support/email_confirmation/%s/%s]].
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>confirmationCode</code> || <code>number</code> || The email confirmation code
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuNNA.sendConfirmationMail()</code> ===
+
+Calls [[Online/Nintendo_Network/NNAS#GET_/v1/api/support/resend_confirmation]].
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+== wiiuKeyboard ==
+
+=== <code>wiiuKeyboard.openInPasswordMode()</code> ===
+
+Shows a keyboard in password mode.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>minLength</code> || <code>number</code> || Minimum length the text can be before submission
+|-
+| <code>maxLength</code> || <code>number</code> || Maximum length the text can be
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>string</code> || The text entered by the user
+|}
+
+=== <code>wiiuKeyboard.setLanguage()</code> ===
+
+Sets the keyboard language.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''An an invalid <code>language</code> value will crash the console.''</div>
+</div>
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>language</code> || <code>string</code> || The keyboard language. Allowed values are unknown
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether the language was set successfully
+|}
+
+=== <code>wiiuKeyboard.setUserDictionary()</code> ===
+
+Sets the user dictionary for the keyboard. Dictionary data is fetched from the [[Online/Nintendo_Network/eShop/Samurai|Samurai]] API.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>dictionary</code> || <code>string</code> || A JSON string with the structure <code>{"items":[{"reading":"...","candidate":"..."}]}</code>. Each entry has a maximum length of 128 bytes for both <code>reading</code> and <code>candidate</code>
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; } }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+== wiiuNfc ==
+
+Manages the GamePad NFC reader, for (Japanese only?) card payments on the GamePad.
+
+=== <code>NFCMessageType</code> ===
+
+<pre>
+enum NFCMessageType {
+  NONE = 0,
+  CANCEL_PROHIBIT = 1,
+  NETWORK_ERROR = 2,
+  UNDER_MAINTENANCE_ERROR = 3,
+  DEVICE_POLLING_START = 10,
+  DEVICE_DETECT_CARD = 11,
+  DEVICE_TOUCH_AGAIN = 12,
+  DEVICE_TOUCH_DIFF_CARD = 13,
+  PAYMENT_RESPONSE = 20,
+  BALANCE_INQUIRY_RESPONSE = 21,
+  RESULT_CHECK_RESPONSE = 22,
+  HISTORY_INQUIRY_RESPONSE = 23
+}
+</pre>
+
+=== <code>wiiuNfc.startPolling()</code> ===
+
+Starts NFC polling. Will continue to poll for messages (checkable with [[#wiiuNfc.getMessage()]]) until [[#wiiuNfc.cancel()]] is called.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>type</code> || <code>number</code> || The NFC operation type. Known values: 1 (payment), 3 (balance inquiry), 5 (history inquiry), 9 (result check)
+|-
+| <code>unknown</code> || <code>string</code> || Unknown
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuNfc.cancel()</code> ===
+
+Ends NFC polling.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Unknown
+|}
+
+=== <code>wiiuNfc.getMessage()</code> ===
+
+Gets the latest message type.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>NFCMessageType</code> || Message type
+|}
+
+=== <code>wiiuNfc.getResponse()</code> ===
+
+Gets the response from the NFC reader. Only usable when [[#wiiuNfc.getMessage()]] is one of <code>PAYMENT_RESPONSE</code>, <code>BALANCE_INQUIRY_RESPONSE</code>, <code>RESULT_CHECK_RESPONSE</code> or <code>HISTORY_INQUIRY_RESPONSE</code>.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>messageType</code> || <code>NFCMessageType</code> || Message type
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isSuccess: boolean; message: string; result_code: number; }</code> || NFC response data
+|}
+
+== wiiuBOSS ==
+
+Manages the <code>wood1</code> [[Online/Nintendo_Network/BOSS|BOSS]] task.
+
+=== <code>wiiuBOSS.isRegisteredBossTask()</code> ===
+
+Checks if the <code>wood1</code> [[Online/Nintendo_Network/BOSS|BOSS]] task is registered.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ isRegistered: boolean; } &#124; { error: { code: number; }; }</code> || Whether the [[Online/Nintendo_Network/BOSS|BOSS]] task is registered on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuBOSS.registerBossTask()</code> ===
+
+Registers the <code>wood1</code> [[Online/Nintendo_Network/BOSS|BOSS]] task.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>language</code> || <code>string</code> || 2 character language code from <code>languages.txt</code> in title 0005001B-1005C000
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuBOSS.unregisterBossTask()</code> ===
+
+Unregisters the <code>wood1</code> [[Online/Nintendo_Network/BOSS|BOSS]] task.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ error?: { code: number; }; }</code> || An empty object on success, or an object containing an error code on failure
+|}
+
+== wiiuSound ==
+
+Manages playing/stopping various sounds.
+
+=== Sounds ===
+
+All sounds are given a label. The official JavaScript client from Nintendo seems to reference labels which do not exist in the binary. Both will be documented.
+
+{| class="wikitable"
+! Label !! Kind !! In Binary !! In Official JavaScript
+|-
+| <code>BGM_WAVE_BOOT_0</code> || Background Music || No || Yes
+|-
+| <code>BGM_WAVE_MAIN</code> || Background Music || No || Yes
+|-
+| <code>BGM_WAVE_SETTING</code> || Background Music || No || Yes
+|-
+| <code>BGM_WOOD_MAIN</code> || Background Music || Yes || No
+|-
+| <code>SE_APPLICATION</code> || Sound Effect || No || Yes
+|-
+| <code>SE_BAR_BTN</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_BTN_CHECK</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_BTN_CHECK_TOUCH_OFF</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_BTN_TOUCH_OFF</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_CANCEL</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_CANCEL_TOUCH_OFF</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_DECIDE</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_DECIDE_TOUCH_OFF</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_ERROR_APPEAR</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SCROLL</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SCROLLBAR_SELECT</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SCROLL_END</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SCROLL_MSG</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SUB_DECIDE</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_SUB_DECIDE_TOUCH_OFF</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_BAR_WAITING</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_CMN_CURSOR_SELECT</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_CMN_TOUCH_CANCEL</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_CMN_TOUCH_ON</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_COUPON</code> || Sound Effect || No || Yes
+|-
+| <code>SE_NFC_ERROR</code> || Sound Effect || Yes || No
+|-
+| <code>SE_NFC_FINISH</code> || Sound Effect || Yes || No
+|-
+| <code>SE_NFC_GUIDE</code> || Sound Effect || Yes || No
+|-
+| <code>SE_NFC_UNFINISH</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_CANCEL_TOUCHOFF</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_COPY_TOUCHOFF</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_LAST5MIN</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_TOUCH_ON</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_TOUCHCANCEL</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_VW_TVNOMI</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_VW_TVNOMI2</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_ZOOM_DOWN</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_ZOOM_DOWN_LIMIT</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_ZOOM_UP</code> || Sound Effect || Yes || No
+|-
+| <code>SE_SF_ZOOM_UP_LIMIT</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WAVE_BACK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_CANCEL</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_CHECKBOX_CHECK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_CHECKBOX_UNCHECK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_CHECKBUTTON_CHECK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_DRC_TOUCH_TRG</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_EXIT</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_HWKEY_MENU_TRG</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_NAVI_DRC_TRG</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_WAVE_NAVI_WPAD_TRG</code> || Sound Effect || Yes || Yes
+|-
+| <code>SE_WAVE_OK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_OK_SUB</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_RADIOBUTTON_CHECK</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WAVE_RESET</code> || Sound Effect || No || Yes
+|-
+| <code>SE_WOOD_BOOT_BUTTON_START</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_BUTTON_STOP</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_1</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_2</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_3</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_STOP_1</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_STOP_2</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SCROLL_STOP_3</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_BOOT_SUCCESS</code> || Sound Effect || Yes || No
+|-
+| <code>SE_WOOD_INVALID</code> || Sound Effect || Yes || No
+|}
+
+=== <code>SoundDevice</code> ===
+
+Determines where to play the sound.
+
+<pre>
+enum SoundDevice {
+  DRC = 1,
+  TV = 2,
+  Both = 3
+}
+</pre>
+
+=== <code>wiiuSound.playSound()</code> ===
+
+Unknown. Plays a sound by a numeric ID?
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>unknown</code> || <code>number</code> || Unknown
+|-
+| <code>device</code> || <code>SoundDevice</code> || Where to play the sound
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown. Always an empty object?
+|}
+
+=== <code>wiiuSound.playSoundByName()</code> ===
+
+Plays a sound by label.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>label</code> || <code>string</code> || [[#Sounds|Sound label]]
+|-
+| <code>device</code> || <code>SoundDevice</code> || Where to play the sound
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown. Always an empty object?
+|}
+
+=== <code>wiiuSound.stopNfcSound()</code> ===
+
+Unknown.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>unknown</code> || <code>number</code> || Unknown. Only known value is <code>2</code>
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>object</code> || Unknown. Always an empty object?
+|}
+
+== wiiuDevice ==
+
+Used to data about the console and it's installed titles.
+
+=== <code>wiiuDevice.isDrc()</code> ===
+
+Checks if there is a Wii U GamePad (DRC) connected.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether a GamePad is connected
+|}
+
+=== <code>wiiuDevice.getSKU()</code> ===
+
+Gets the amount of storage left on the console? Seems to return <code>[https://github.com/devkitPro/wut/blob/2016e429c16dab366d902455b43f21ccb520e23d/include/coreinit/filesystem.h#L336 FSStat.quotaSize]</code> of <code>"/vol/storage_mlc01"</code>?
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ ammount: number; } &#124; { error: { code: number; }; }</code> || <code>[https://github.com/devkitPro/wut/blob/2016e429c16dab366d902455b43f21ccb520e23d/include/coreinit/filesystem.h#L336 FSStat.quotaSize]</code> of <code>"/vol/storage_mlc01"</code> (?) on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuDevice.getTitleInstallState()</code> ===
+
+Gets the installation state of a title.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ installed: boolean; version: number; requiredVersion: number; } &#124; { error: { code: number; }; }</code> || The installation state of the title on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuDevice.getTicketInfo()</code> ===
+
+Gets ticket information for a title.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ hasCommonTicket: boolean; hasPersonalTicket: boolean; } &#124; { error: { code: number; }; }</code> || Whether the title has a common and/or personal ticket on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuDevice.getAocContentIndexList()</code> ===
+
+Gets the DLC ('''A'''dd-'''O'''n '''C'''ontent) content index list for a title.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ indexes: string[]; } &#124; { error: { code: number; }; }</code> || An array of DLC content indexes on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuDevice.getAllTitleList()</code> ===
+
+Gets all installed titles on the console, including DLC and updates.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ IDs: string[]; } &#124; { error: { code: number; }; }</code> || An array of title IDs for every installed title on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuDevice.existsTitle()</code> ===
+
+Checks if a title is installed on the console.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID of the title
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || Whether the given title is currently installed
+|}
+
+=== <code>wiiuDevice.suspendDaemons()</code> ===
+
+Unknown.
+
+=== <code>wiiuDevice.resumeDaemons()</code> ===
+
+Unknown.
+
+== wiiuPDM ==
+
+Used to get playtime statistics ('''P'''lay '''D'''ata '''M'''anagement).
+
+=== <code>wiiuPDM.getTitlesFilteredByPlayTime()</code> ===
+
+Gets a list of titles player for at least the given number of minutes.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>minutes</code> || <code>number</code> || The minimum number of minutes a title needs to have been played
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ IDs: string[]; } &#124; { error: { code: number; }; }</code> || A list of title IDs that meet the playtime requirements on success, or an object containing an error code on failure
+|}
+
+=== <code>wiiuPDM.getTotalPlayTime()</code> ===
+
+Checks the amount of time, in minutes, the user has played the given title.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || The title ID to check the playtime of
+|}
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>{ minutes: number; } &#124; { error: { code: number; }; }</code> || The playtime, in munutes, of the given title ID on success, or an object containing an error code on failure
+|}
+
+== wiiuBrowser ==
+
+=== <code>wiiuBrowser.closeApplication()</code> ===
+
+Closes the title.
+
+=== <code>wiiuBrowser.jumpToHomeButtonMenu()</code> ===
+
+Opens the home menu UI.
+
+=== <code>wiiuBrowser.jumpToBrowser()</code> ===
+
+Opens the browser to the given URL.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>url</code> || <code>string</code> || The URL to navigate to
+|}
+
+=== <code>wiiuBrowser.jumpToMiiverse()</code> ===
+
+Opens Miiverse.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>titleID</code> || <code>string</code> || Hex encoded title ID for the title. Opens the page <code>/communities/4294967295?title_id=<TITLE_ID_AS_DECIMAL>&src=lib</code> if <code>titleID</code> is a hex encoded UInt32 value. Otherwise <code>/communities/4294967295?src=lib</code> is loaded. The community ID is always hard coded to <code>4294967295</code> (<code>0xFFFFFFFF</code>)
+|}
+
+=== <code>wiiuBrowser.jumpToUpdate()</code> ===
+
+Opens the system update screen.
+
+=== <code>wiiuBrowser.jumpToDataManage()</code> ===
+
+Opens the data management screen.
+
+=== <code>wiiuBrowser.returnToCaller()</code> ===
+
+Returns to the application which launched the title.
+
+=== <code>wiiuBrowser.endStartUp()</code> ===
+
+Signals that the loading screen (spinning game icon slot machine) at boot can be dismissed.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to end startup
+|}
+
+=== <code>wiiuBrowser.showLoadingIcon()</code> ===
+
+Shows or hides the loading spinner.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to show, <code>false</code> to hide
+|}
+
+=== <code>wiiuBrowser.isLoadingIconProhibited()</code> ===
+
+Checks if the loading spinner is currently disallowed.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || <code>true</code> if the loading spinner is disallowed, <code>false</code> otherwise
+|}
+
+=== <code>wiiuBrowser.prohibitLoadingIcon()</code> ===
+
+Controls whether the loading spinner is allowed to be shown.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to disallow, <code>false</code> to allow
+|}
+
+=== <code>wiiuBrowser.isUserOperationLocked()</code> ===
+
+Checks if user interaction with the page is currently disallowed.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || <code>true</code> if user interaction is disallowed, <code>false</code> otherwise
+|}
+
+=== <code>wiiuBrowser.lockUserOperation()</code> ===
+
+Locks or unlocks user interaction with the page.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to disallow interaction, <code>false</code> to allow
+|}
+
+=== <code>wiiuBrowser.isHomeButtonMenuLocked()</code> ===
+
+Checks if the GamePad home button is currently locked.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || <code>true</code> if the GamePad home button is locked, <code>false</code> otherwise
+|}
+
+=== <code>wiiuBrowser.lockHomeButtonMenu()</code> ===
+
+Locks or unlocks the GamePad home button.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to lock, <code>false</code> to unlock
+|}
+
+=== <code>wiiuBrowser.isPowerButtonLocked()</code> ===
+
+Checks if the console power button is currently locked.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || <code>true</code> if the power button is locked, <code>false</code> otherwise
+|}
+
+=== <code>wiiuBrowser.lockPowerButton()</code> ===
+
+Locks or unlocks the console power button.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>flag</code> || <code>boolean</code> || <code>true</code> to lock, <code>false</code> to unlock
+|}
+
+=== <code>wiiuBrowser.setMessageLanguage()</code> ===
+
+Sets the language for system messages.
+
+{| class="wikitable"
+! Parameter !! Type !! Description
+|-
+| <code>language</code> || <code>string</code> || Language code. Allowed values are unknown
+|}
+
+=== <code>wiiuBrowser.canHistoryBack()</code> ===
+
+Checks if there is a previous entry in the navigation history.
+
+{| class="wikitable"
+! Return Type !! Description
+|-
+| <code>boolean</code> || <code>true</code> if navigation back is possible, <code>false</code> otherwise
+|}
