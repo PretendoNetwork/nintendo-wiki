@@ -345,11 +345,11 @@ Nintendo never used the "special" server.
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[#StationURL]] || m_urlRegularProtocols || Address of the games main secure server
+		| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlRegularProtocols || Address of the games main secure server
 		|-
-		| [[#List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
 		|-
-		| [[#StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
+		| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
 		|}
 	</tab>
 
@@ -357,13 +357,13 @@ Nintendo never used the "special" server.
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[#StationURL]] || m_urlRegularProtocols || Address of the games main secure server
+		| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlRegularProtocols || Address of the games main secure server
 		|-
-		| [[#List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
 		|-
-		| [[#StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
+		| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
 		|-
-		| [[#DateTime]] || m_currentUTCTime || Current server time
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || m_currentUTCTime || Current server time
 		|}
 	</tab>
 </tabs>
