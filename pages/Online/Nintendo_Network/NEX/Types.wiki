@@ -496,7 +496,7 @@ Prior to NEX 3.5.0, classes had no header, and the data of the class was encoded
 |-
 | UInt8 || Class revision
 |-
-| UInt32 || Class data
+| UInt32 || Class data length
 |}
 
 Class data is encoded immediately after the header.
