@@ -28,7 +28,7 @@ In NEX 2 and NEX 4 onwards, the extra data field is enforced and must be valid. 
 
 Grants a connection ticket using only the connecting clients username. Usernames are not case sensitive. If the username does not exist, the <code>%retval%</code> field is set to <code>RendezVous::InvalidUsername</code> and the other fields are left with empty values.
 
-While this may seem insecure, clients which use this method must use the <code>SecureConnection::RegisterEx</code> method when connecting to the secure server, which requires additional authentication information which is validated against the ticket granted by this method.
+While this may seem insecure, clients which use this method must use the [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] method when connecting to the secure server, which requires additional authentication information which is validated against the ticket granted by this method.
 
 In NEX 2 and 4+ this method is disabled. If used <code>%retval%</code> is set to <code>Authentication::ValidationFailed</code> and the remaining fields are set to empty values. In NEX 1 and 3, this method is available.
 
@@ -76,7 +76,7 @@ This method is the same as [[#Login]]. It shares the same method ID and paramete
 
 Grants a connection ticket using the connecting clients username and authentication information. Usernames are not case sensitive. If the username does not exist, the <code>%retval%</code> field is set to <code>RendezVous::InvalidUsername</code> and the other fields are left with empty values.
 
-When this method is used, the connecting client may freely use either the <code>SecureConnection::RegisterEx</code> or <code>SecureConnection::Register</code> methods when connecting to the secure server, as the user will have passed both authentication checks in this method.
+When this method is used, the connecting client may freely use either the [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] or [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]] methods when connecting to the secure server, as the user will have passed both authentication checks in this method.
 
 If authentication information is invalid, <code>%retval%</code> is set to <code>Authentication::ValidationFailed</code> and the remaining fields are set to empty values.
 
@@ -148,7 +148,7 @@ This method is the same as [[#LoginEx]]. It shares the same method ID and parame
 
 === RequestTicket ===
 
-Grants a connection ticket for the source user to the target user. This can effectively be identical to <code>TicketGranting::Login</code>, only with explicit source and target PIDs. This can be used for getting the correct ticket if the target user PID returned by either <code>TicketGranting::Login</code> or <code>TicketGranting::LoginEx</code> does not match the expected PID of the secure server.
+Grants a connection ticket for the source user to the target user. This can effectively be identical to [[#Login]], only with explicit source and target PIDs. This can be used for getting the correct ticket if the target user PID returned by either [[#Login]] or [[#LoginEx]] does not match the expected PID of the secure server.
 
 If either PID invalid, the <code>%retval%</code> field is set to <code>Core::AccessDenied</code> and the ticket is empty.
 
@@ -232,7 +232,7 @@ Returns the username of the game server account based on the accounts PID. In NE
 
 === LoginWithContext ===
 
-Grants a connection ticket using only authentication information. This is similar to <code>TicketGranting::LoginEx</code>, minus the username field and adding some additional context.
+Grants a connection ticket using only authentication information. This is similar to [[#LoginEx]], minus the username field and adding some additional context.
 
 ==== Request ====
 
@@ -258,7 +258,7 @@ Grants a connection ticket using only authentication information. This is simila
 
 === ValidateAndRequestTicketWithParam ===
 
-Grants a connection ticket using the connecting clients username and authentication information. Usernames are not case sensitive. This is effectively an upgraded version of <code>TicketGranting::LoginEx</code> which uses a single parameter in both the input and output. Both classes also now contain more data about the connection than previous login methods.
+Grants a connection ticket using the connecting clients username and authentication information. Usernames are not case sensitive. This is effectively an upgraded version of [[#LoginEx]] which uses a single parameter in both the input and output. Both classes also now contain more data about the connection than previous login methods.
 
 ==== Request ====
 
