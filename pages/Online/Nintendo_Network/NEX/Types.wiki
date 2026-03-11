@@ -93,47 +93,17 @@ In the original Rendez-Vous library these values are represented with a UInt32. 
 
 Internally most games treat a PID exactly the same as its underlying type, with no indication it's really a PID.
 
-<tabs items="NEX 3 and below,NEX 4.0+" storagekey="pid">
-	<tab name="NEX 3 and below">
-		{| class="wikitable"
-		! Type !! Description
-		|-
-		| UInt32 || Value
-		|}
-	</tab>
-
-	<tab name="NEX 4.0+">
-		{| class="wikitable"
-		! Type !! Description
-		|-
-		| UInt64 || Value
-		|}
-	</tab>
-</tabs>
-
 === Result ===
 
-Represents the result of an operation, similar to an [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status HTTP status code]. In NEX, if an [[Online/Nintendo_Network/NEX/RMC|RMC]] fails, the server sends the client back an error result code. Some methods may also return various result codes as part of otherwise successful responses.
+A UInt32 that specifically represents the result of an operation, similar to an [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status HTTP status code]. In NEX, if an [[Online/Nintendo_Network/NEX/RMC|RMC]] fails, the server sends the client back an error result code. Some methods may also return various result codes as part of otherwise successful responses.
 
 If the MSB is set, the result code triggers error handling.
 
 For a full list of result codes, see [[Online/Nintendo_Network/NEX/Result_Codes|Result Codes]].
 
-{| class="wikitable"
-! Type !! Description
-|-
-| UInt32 || Result code
-|}
-
 === DateTime ===
 
-Represents a date/time as a timestamp. This is not a standard timestamp, instead it is a bit field encoding the date/time.
-
-{| class="wikitable"
-! Type !! Description
-|-
-| UInt64 || Timestamp
-|}
+A UInt64 that specifically represents a date/time as a timestamp. This is not a standard timestamp, instead it is a bit field encoding the date/time.
 
 {| class="wikitable"
 |-
@@ -154,13 +124,7 @@ Represents a date/time as a timestamp. This is not a standard timestamp, instead
 
 === StationURL ===
 
-Represents a connectable target. Used in instances like connecting to game servers, establishing p2p connections with other players, connecting to relays, etc.
-
-{| class="wikitable"
-! Type !! Description
-|-
-| [[#String]] || URL
-|}
+A [[#String]] that specifically represents a connectable target. Used in instances like connecting to game servers, establishing p2p connections with other players, connecting to relays, etc.
 
 ==== Structure ====
 
