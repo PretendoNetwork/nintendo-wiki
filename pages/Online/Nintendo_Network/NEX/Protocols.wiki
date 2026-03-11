@@ -132,9 +132,9 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in other Quazal 
 |-
 | 100 || [[Online/Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]]
 |-
-| 101 || [[Online/Nintendo_Network/NEX/Protocols/Friends3DS|Friends (3DS)]]
+| 101 || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]]
 |-
-| 102 || [[Online/Nintendo_Network/NEX/Protocols/FriendsWiiU|Friends (Wii U)]]
+| 102 || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]]
 |-
 | 109 || [[Online/Nintendo_Network/NEX/Protocols/MatchmakeExtensionProtocol|MatchmakeExtensionProtocol]]
 |-
