@@ -488,13 +488,13 @@ Prior to NEX 3.5.0, classes had no header, and the data of the class was encoded
 
 <div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
 <div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Changes to classes could still happen prior to NEX 3.5.0. In these cases, the structure of a class is often tied to the NEX version. Though some games may make changes to classes without changing NEX versions. It is also common for games to make changes to classes without changing the class version number even after NEX 3.5.0, and when upgrading to new major versions, like NEX 4.0.0, the class version numbers are often reset back to 0.''</div>
+<div style="padding: 5px;">''Changes to classes could still happen prior to NEX 3.5.0. In these cases, the structure of a class is often tied to the NEX version. Though some games may make changes to classes without changing NEX versions. It is also common for games to make changes to classes without changing the class revision number even after NEX 3.5.0, and when upgrading to new major versions, like NEX 4.0.0, the class revision numbers are often reset back to 0.''</div>
 </div>
 
 {| class="wikitable"
 ! Type !! Description
 |-
-| UInt8 || Class version
+| UInt8 || Class revision
 |-
 | UInt32 || Class data
 |}
