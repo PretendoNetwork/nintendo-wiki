@@ -383,7 +383,7 @@ This class is effectively an upgraded version of [[#AuthenticationInfo]], which 
 		|-
 		| [[Online/Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[Online/Nintendo_Network/NEX/Types#NullData|NullData]] if no data is being sent
 		|-
-		| Bool || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
+		| Boolean || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
 		|-
 		| UInt32 || apiVersionGeneral || NEX version (e.g. 40601)
 		|-
@@ -401,7 +401,7 @@ This class is effectively an upgraded version of [[#AuthenticationInfo]], which 
 		|-
 		| [[Online/Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[Online/Nintendo_Network/NEX/Types#NullData|NullData]] if no data is being sent
 		|-
-		| Bool || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
+		| Boolean || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
 		|-
 		| UInt32 || apiVersionGeneral || NEX version (e.g. 40601)
 		|-
