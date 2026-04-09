@@ -1,0 +1,1693 @@
+== Overview ==
+
+The Miiverse API is used by applications outside of the main Miiverse browser app to interact with Miiverse data. This includes making posts/comments, "Yeahing" (liking) posts/comments, downloading WaraWara Plaza, etc.
+
+The API is available on both the Wii U and 3DS, however this page currently only documents data found within the Wii U <code>nn_olv.rpl</code> system library in the latest version of OSv10. Information specific to the 3DS, or found in titles which implement their own <code>nn_olv2.rpl</code> is not currently documented by this page.
+
+The information on this page will also deviate from the data seen in official API dumps. This is due to the fact that Nintendo would often send response fields back to the client which the client completely ignores, and due to the fact that the XML parser implemented by the library seems to largely ignore the actual structure of most of the responses, opting to instead only check tag names to know what data to populate (regardless of where those tags appear in the XML tree). This makes it impossible to exactly match the structure the official API would send by looking at the parser alone, however the data is valid nonetheless.
+
+Due to the way the XML parser operates, many fields in a response may be listed as "optional". This is due to the fact that the XML parser simply converts the response into a node tree and loops over all node names, ending when it reaches the last node, and only setting certain values on output structs when it sees specific tag names. It does not actually validate the structure of the XML or if many tags even exist. Therefore, most response fields will be labaled as "optional", as the parser does not explictly check for them and respond to when they are missing. This does not, however, mean "optional" tags are truly optional. Missing data may still result in unexpected behavior from consuming clients.
+
+Additionally, the Miiverse API is unique in that the endpoints it uses do not always have names that map 1:1 with what the usage a function name implies, and an endpoint may return different data based on the context of what application is calling it. Because of this, unlike other pages on this wiki, this page will not simply list the endpoints. Instead, this page will list the exported functions and what their functionality is, which should provide better context in how the server should operate.
+
+== Headers ==
+
+The following headers are always present in all API requests.
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>User-Agent</code> || [[#User Agent]]
+|-
+| <code>Host</code> || Either the [[#Discovery]] host, or the selected API host
+|-
+| <code>Accept</code> || Always <code>*/*</code>. Responses are always XML, however
+|-
+| <code>X-Nintendo-ServiceToken</code> || [[Online/Nintendo_Network/NNAS|NNAS]] [[Online/Nintendo_Network/NNAS#GET_/v1/api/provider/service_token/@me|service token]]. Client ID is <code>87cd32617f1985439ea608c2746e4610</code>
+|-
+| <code>X-Nintendo-ParamPack</code> || [[#ParamPack]]
+|}
+
+The following additional headers are always present on <code>POST</code> requests.
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Content-Length</code> || Length of the request body in bytes
+|-
+| <code>Content-Type</code> || https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Type. Only present when <code>Content-Length</code> is not 0. Always multipart form data
+|}
+
+The following headers are always present in all API responses.
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Server</code> || Always <code>nginx</code>
+|-
+| <code>Date</code> || The current GMT date. For example, <code>Sun, 03 Sep 2017 17:01:27 GMT</code>
+|-
+| <code>Content-Type</code> || Always <code>application/xml; charset=UTF-8</code>
+|-
+| <code>Content-Length</code> || Length of the response body in bytes
+|-
+| <code>X-Content-Type-Options</code> || Always <code>nosniff</code>
+|-
+| <code>X-Dispatch</code> || The [[#API Operations|API operation]] that was dispatched. Only present if the API did not return an error
+|-
+| <code>X-Frame-Options</code> || Always <code>DENY</code>
+|-
+| <code>Connection</code> || Always <code>Keep-alive</code>
+|}
+
+The following additional headers are always present on non-discovery responses.
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>Set-Cookie</code> || Always <code>ga-visitor-key=randomuuiv4here; path=/</code>. Purpose unknown, this cookie is never read by the library or seen in requests, nor is it used by the Miiverse browser application
+|-
+| <code>X-Nintendo-Error</code> || The error code. Always matches the <code>error_code</code> response field. Only present if the API returned an error
+|}
+
+== User-Agent ==
+
+The <code>User-Agent</code> header is <code>WiiU/%s-%s/%d</code>, where the first <code>%s</code> is either <code>POLV</code> or <code>DOLV</code> depending on if the console is a retail unit or dev kit, the second <code>%s</code> is the library version semver (always <code>5.0.3</code> as of latest), and <code>%d</code> is the decimal value of the 6th and 7th bytes of the title ID (for example 0x0005001010040200->0x0402->1026).
+
+== ParamPack ==
+
+The <code>X-Nintendo-ParamPack</code> header is a configuration that tells the API metadata about the caller (both the user and the title). It is a base64 encoded list of key-value pairs. The string always begins and ends with a <code>\</code> character, and uses <code>\</code> to separate keys and values. For example:
+
+<pre>
+\key1\value1\key2\value2\
+</pre>
+
+The following fields are used:
+
+{| class="wikitable"
+! Name !! Description
+|-
+| <code>title_id</code> || The decimal title ID of the title making the request
+|-
+| <code>access_key</code> || The unique access key given to each title registered to use Miiverse. This is the <code>olv_accesskey</code> element in the titles <code>meta/meta.xml</code> file
+|-
+| <code>platform_id</code> || 0 = 3DS, 1 = Wii U
+|-
+| <code>region_id</code> || The clients general region. 1 = JPN, 2 = USA, 4 = EUR, 8 = AUS, 16 = CHN, 32 = KOR, 64 = TWN
+|-
+| <code>language_id</code> || Requesters language. 0 = Japanese, 1 = English, 2 = French, 3 = German, 4 = Italian, 5 = Spanish, 6 = Simplified Chinese, 7 = Korean, 8 = Dutch, 9 = Portuguese, 10 = Russian, 11 = Traditional Chinese
+|-
+| <code>country_id</code> || The clients specific country ID. For example 49 = United States. See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: migrate this page)
+|-
+| <code>area_id</code> || The clients specific area ID from within their country. For example 11 = Florida (if <code>country_id</code> = 49). See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: migrate this page)
+|-
+| <code>network_restriction</code> || Parental controls online restriction level
+|-
+| <code>friend_restriction</code> || Whether or not parental controls has disabled friend registration for the account. 0/1
+|-
+| <code>rating_restriction</code> || Parental controls game restriction level. For example, 17 means "Rated M" games when <code>rating_organization</code> is set to 1 (ESRB)
+|-
+| <code>rating_organization</code> || The organization <code>rating_restriction</code> refers to. Known values are 1 = ESRB, 4 = PEGI
+|-
+| <code>transferable_id</code> || Profiles transferable ID. Result of <code>GetTransferableIdEx__Q2_2nn3actFPULUiUc</code>
+|-
+| <code>tz_name</code> || Timezone name
+|-
+| <code>utc_offset</code> || UTC offset for the <code>tz_name</code> timezone, in seconds
+|}
+
+== Base64 Encoded Data ==
+
+Miiverse makes use of several types of binary data. When uploading this data to the server, it is encoded with base64. Nintendo follows [https://www.rfc-editor.org/rfc/rfc2045.html RFC 2045] for encoding base64 data, which means every 76 characters a newline is inserted. Additionally, the function Nintendo uses to encode the data adds a null terminator to the encoded string which is not stripped away by the client before sending it. Both of these factors make this data appear to be "invalid" base64 to several parsers/validators, so additional care should be taken when validating this data.
+
+When the data is processed by the server, the newlines and null terminator are removed and do not appear in responses.
+
+== Communities ==
+
+As the name implies, a community is a place for users to gather around a specific topic. Usually communities take the form of a game community, dedicated to a specific game. Communities can be both official and user-generated, such as player tournaments in Mario Kart 8. Communities can also house other communities, called a subcommunity. All user-generated communities are subcommunities for the game community they belong to. A game community may also have it's own official subcommunities. Each subcommunity is treated the same as a normal community internally, just tied to a parent.
+
+=== Community ID ===
+
+Every community is assigned a community ID. Community IDs are uint32 values capped at 0xFFFFFFFE. 0xFFFFFFFF is reserved as "invalid", and 0xFE is reserved as "empty", by the library. They are referenced as their uint32 decimal value.
+
+If a request does not directly use a community ID, or a community ID of 0 is used, the server is expected to use other information (such as the title ID/olive access key from the [[#ParamPack]]) to know how to process the request.
+
+=== Olive Community ID ===
+
+Alongside the community ID, each community was officially assigned a "olive community ID". In official API responses, this value is exposed to the client. However, it is never read by the response parser. Instead, the value is only ever used by the browser apps to reference the community (such as https://portal-us.olv.nintendo.net/titles/14866558073268532636/6437256809360319491, where <code>14866558073268532636</code> is referred to as the "title ID" internally and <code>6437256809360319491</code> is the "olive community ID" for the user-generated community 1453855). Therefore, it is actually an implementation detail and not required to be implemented. The "olive community ID" value seems to have no direct relation to the original community ID.
+
+=== Community Code ===
+
+A community code is a 12 character numeric string, based off the community ID with a checksum for validation. The following algorithm is used to generate a community code:
+
+<pre>
+std::string community_id_to_code(uint32_t community_id) {
+  // First, the community ID bits are spread by shifting the bits to the left 18, 24, and 30 bits, XORing each time
+  uint32_t community_code = community_id ^ (community_id << 0x12) ^ (community_id << 0x18) ^ (community_id << 0x1e);
+
+  // The result of the first step then has the lower 4 bits of each byte left shifted by 4 and XORed back into itself
+  community_code = community_code ^ ((community_code & 0x0f0f0f0f) << 4);
+
+  // The result of the second step then has the same operations as the first step applied to itself, but shifting right by 17, 23, and 29 bits and XORed with a different constant
+  // (0x20121002, seemingly a date relating the Miiverse? 2012-10-02, Miiverse launched in November 2012?)
+  community_code = community_code ^ (community_code >> 0x11) ^ (community_code >> 0x17) ^ (community_code >> 0x1d) ^ 0x20121002;
+
+  // A checksum byte is then created from the result of the third step by splitting it into its 4 individual bytes, XORing them all together, then inverting the result with 0xFF
+  uint8_t checksum = (uint8_t)((community_code >> 24) ^ (community_code >> 16) ^ (community_code >> 8) ^ community_code ^ 0xFF);
+
+  // The checksum byte is then concatenated to the front of the XORed community ID
+  uint64_t result = ((uint64_t)checksum << 32) | community_code;
+
+  // If the result meets these conditions, set an optional mask
+  if ((0xe7 < checksum) && ((0xe8 < checksum) || (0xd4a50fff < community_code))) {
+    result &= 0x7fffffffffULL;
+  }
+
+  char buf[13];
+  std::snprintf(buf, sizeof(buf), "%012llu", (unsigned long long)result);
+  return std::string(buf);
+}
+</pre>
+
+=== Icons ===
+
+Every community has an icon. Icons MUST follow this specification to be considered valid by the library:
+
+* Must be a [https://en.wikipedia.org/wiki/Truevision_TGA#Technical_details TGA] image
+* Width MUST be 128
+* Height MUST be 128
+* Pixel depth MUST be 32bpp
+* When being uploaded to the server, the following conditions MUST be met:
+** The uncompressed TGA buffer MUST be between 0x10012 (128w * 128h * 4rgba = 0x10000, plus 18 byte header) and 0x1002C bytes (likely just some extra padding in case of a footer or something?)
+** The TGA buffer MUST be ZLIB compressed. The official library uses ZLIB 1.2.5 with the level set to Z_DEFAULT_COMPRESSION
+* When being sent to the client, the compressed buffer must be no larger than 0x1002C bytes
+
+== Posts ==
+
+Almost everything in Miiverse, which is not a community, is a "post" internally. Top-level posts in communities, comments, and DMs are all "posts". As such, they all share the same general data and restrictions, though response structures may differ.
+
+=== Post ID ===
+
+Every post is assigned a 22 character ASCII string ID. This is used to reference the post internally. How the ID is used in context depends on the kind of post being used (for example, a comment post will call this the "comment ID", however the client may send this "comment ID" to the same endpoint(s) that normal/DM post IDs are also sent to). The meanings are purely semantics to use in specific contexts to provide a better developer experience.
+
+=== Post Types ===
+
+Every post can be one of 2 types, "text" or "memo" (painting). A post can NOT have both text and a painting (though both can have screenshots, URLs, etc.).
+
+==== Text Posts ====
+
+Posts with text must be between 1-255 code points. Sent over the network as UTF-8, but the library uses UTF-16 internally.
+
+==== Paintings ====
+
+Posts with paintings MUST follow this specification for the painting to be considered valid by the library:
+
+* Must be a [https://en.wikipedia.org/wiki/Truevision_TGA#Technical_details TGA] image
+* ID length MUST be 0
+* Must NOT have a color map
+* Image type MUST be "uncompressed true-color"
+* Color map specification MUST be all null for all subfields
+* X-origin MUST be 0,0
+* Y-origin MUST be 0,0
+* Width MUST be 320
+* Height MUST be 120
+* Pixel depth MUST be 32bpp
+* Image descriptor MUST be 0x08:
+** No interleaving
+** Bottom-to-top
+** Left-to-right
+** 8 bit alpha channel
+* When being uploaded to the server, the following conditions MUST be met:
+** The uncompressed TGA buffer MUST be between 0x25812 (320w * 120h * 4rgba = 0x25800, plus 18 byte header) and 0x2582C bytes (likely just some extra padding in case of a footer or something?)
+** The TGA buffer MUST be ZLIB compressed, with a maximum compressed size of 0xA000 bytes. The official library uses ZLIB 1.2.5 with the level set to Z_DEFAULT_COMPRESSION
+* When being sent to the client, the compressed buffer must be no larger than 0xA000 bytes and the decompressed size must be no larger than 0x2582C
+
+When uploaded to the server,the painting buffer is [[#Base64 Encoded Data|base64 encoded]]. When sent to clients, the paintings content is sent directly in the response data. Official API responses also include a URL to the painting image, but this is never read by the client.
+
+=== Screenshots ===
+
+Posts may have an optional screenshot (referred to as "external image" internally). The size of the screenshot buffer cannot exceed 0x80000 bytes. When uploading a screenshot, an optional thumbnail (referred to as "external thumbnial image" internally) can also be uploaded. A thumbnail cannot be set without an associated screenshot. The size of the thumbnail buffer cannot exceed 0x20000 bytes. The combined total size of both buffers cannot exceeded 0x80000 bytes. When uploaded to the server, both buffers are [[#Base64 Encoded Data|base64 encoded]].
+
+Unlike paintings, these images are never sent to clients in their original form. Instead, the images are uploaded to a CDN and the URL for the image is sent to clients. The URL length cannot exceed 254 ASCII characters. Both images appear to always be JPEG images, though the specific specifications are not known.
+
+=== Binary Data ===
+
+Posts may contain seemingly arbitrary binary data (referred to as "external binary data" internally). The size of the buffer cannot exceed 0x100000 bytes. When uploaded to the server, the buffer is [[#Base64 Encoded Data|base64 encoded]]. This is likely used in cases where [[#App Data]] is not enough for a task the client needs?
+
+
+The binary data is never sent to clients in their original form. Instead, the data is uploaded to a CDN and the URL for the data is sent to clients. The URL length cannot exceed 254 ASCII characters.
+
+=== Feeling IDs ===
+
+Posts are each assigned a "feeling ID". These dictate the expression the Mii image has in the post. The renders are the same ones used by [[Online/Nintendo_Network/NNAS#GET_/v1/api/miis|NNAS#GET_/v1/api/miis]].
+
+{| class="wikitable"
+! Value !! Name
+|-
+| 0 || <code>normal_face</code>
+|-
+| 1 || <code>happy_face</code>
+|-
+| 2 || <code>like_face</code>
+|-
+| 3 || <code>surprised_face</code>
+|-
+| 4 || <code>frustrated_face</code>
+|-
+| 5 || <code>puzzled_face</code>
+|}
+
+=== Language IDs ===
+
+Posts are each assigned a "language ID". This value typically comes from the system language, but may be overridden with any other valid value. Presumably this is used to filter posts by language.
+
+{| class="wikitable"
+! Value !! Description
+|-
+| 0 || Japanese
+|-
+| 1 || English
+|-
+| 2 || French
+|-
+| 3 || German
+|-
+| 4 || Italian
+|-
+| 5 || Spanish
+|-
+| 6 || Simplified Chinese
+|-
+| 7 || Korean
+|-
+| 8 || Dutch
+|-
+| 9 || Portuguese
+|-
+| 10 || Russian
+|-
+| 11 || Traditional Chinese
+|-
+| 254 || Any language? Seems to only be used when downloading post lists, not when uploading. Presumably used to allow any language
+|-
+| 255 || Invalid. The client throws an error if this is used
+|}
+
+=== Topic Tag ===
+
+Posts may optionally be assigned a "topic tag". This tag can be used to filter by posts with the same tag, and is displayed directly in the user interface. Each post may only have a single topic tag. The contents of the tag can be anything, but usually games will use this tag to mark posts as being from a specific area/event (such as setting the current level name). If used, the tag must be between 1-50 code points. Sent over the network as UTF-8, but the library uses UTF-16 internally.
+
+=== URL ===
+
+Posts may have an optional URL (referred to as "external url" internally) attached to them. The URL length cannot exceed 254 ASCII characters. When a post has a a URL attached, additional post content may be injected into the post. The only known use case of this is YouTube integration, where a user may sign into YouTube in a game and give the game permission to upload gameplay videos on the users behalf. These videos are typically attached to Miiverse posts, creating a video embed when rendered.
+
+=== Post Flags ===
+
+Posts have 3 true/false flags that may be set to further define how the post can be interacted with. If used, each flag must be either 0 (false) or 1 (true).
+
+{| class="wikitable"
+! Value !! Description
+|-
+| <code>is_app_jumpable</code> || The post can jump a user to another application
+|-
+| <code>is_autopost</code> || The post was made through an automated system on behalf of the user (such as the posts which get made in Super Mario Maker when uploading a course)
+|-
+| <code>is_spoiler</code> || The post needs a spoiler warning. Posts marked as spoilers are not returned by the API by default, and must be opted in to
+|}
+
+== App Data ==
+
+Both communities and posts can be assigned "app data". This is context-specific data for a given community/post, not just to a given game. For example, this is how Mario vs. Donkey Kong: Tipping Stars structures it's various app data https://gist.github.com/jonbarrow/d448bf0f2cb6bf500091dfaf606d9fbf. The data is [[#Base64 Encoded Data|base64 encoded]]. The decoded buffer cannot exceeded 0x400 bytes.
+
+== Search Keys ==
+
+Both communities and posts can be assigned up to 5 "search keys". These are similar to a post [[#Topic Tag]], but are not visible to the user. They are used internally for more fine-grained filtering. The contents of each key can be anything. If used, each key must be between 1-50 code points. Sent over the network as UTF-8, but the library uses UTF-16 internally.
+
+== API Operations ==
+
+Each request to the API dispatches an "API operation". These values are never checked by the client, but are useful for adding context to requests. The names of these operations are exposed through the <code>X-Dispatch</code> [[#Headers|response header]]. Known values are:
+
+TODO: Move the "Portal" operations to [[Online/Nintendo_Network/Miiverse/Portal|Portal]]?
+
+{| class="wikitable"
+! Operation !! Description
+|-
+| <code>Olive::Web::Discovery::V1::Endpoint-index</code> || Issued when calling the [[#Discovery]] endpoint
+|-
+| <code>Olive::Web::API::V1::Topic-redirect_search</code> || Issued when <code>/v1/topics</code> redirects the topic list (WaraWara Plaza) with HTTP statsstatus code 302
+|-
+| <code>Olive::Web::API::V1::Person-search</code> || Issued when searching for a list of user posts with <code>/v1/people</code>
+|-
+| <code>Olive::Web::API::V1::Person-search_following_infos</code> || Issued when getting a users following list with <code>/v1/people/{pid}/following</code>
+|-
+| <code>Olive::Web::API::V1::Community-search</code> || Issued when searching for communities with <code>/v1/communities</code>
+|-
+| <code>Olive::Web::API::V1::Community-create</code> || Issued when creating a new community with <code>/v1/communities</code>
+|-
+| <code>Olive::Web::API::V1::Community-favorite</code> || Issued when favoriting community with <code>/v1/communities/{community_id}.favorite</code>
+|-
+| <code>Olive::Web::API::V1::Post-search_by_topic</code> || Issued when searching for a list of posts in a specific community with <code>/v1/communities/{community_id}/posts</code>
+|-
+| <code>Olive::Web::API::V1::Post-search_replies</code> || Issued when getting a list of post replies <code>/v1/posts/{post_id}/replies</code>
+|-
+| <code>Olive::Web::API::V1::Post-create</code> || Issued when creating a new post. Seen on <code>/v1/posts</code> and <code>/v1/posts/{post_id}/replies</code>
+|-
+| <code>Olive::Web::API::V1::Empathy-create</code> || Issued when liking a post with <code>/v1/posts/{post_id}/empathies</code>
+|-
+| <code>Olive::Web::Portal::Title-redirect_to_community_top</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app 302 redirects to a communities top posts. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::Community-retrieve</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] requests a communities posts. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::News-check_update</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/check_update.json</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::User-update_struct_played_title_ids</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/settings/played_title_ids</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::Message-search_pen_friend</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/friend_messages</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::Community-search</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/communities</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::Root-index_frame</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::User-latest_following_related_profile_posts</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/my/latest_following_related_profile_posts</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::Community-search_category</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/communities/categories/wiiu_all</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|-
+| <code>Olive::Web::Portal::User-retrieve</code> || Issued when the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] calls <code>/users/{nnid_username}</code>. This is specific to the [[Online/Nintendo_Network/Miiverse/Portal|Portal]] app and does not make any requests to this API
+|}
+
+== Common Response Fields ==
+
+Every official API response is always wrapped in an outer-most <code>result</code> tag. The parser, however, does not validate this. This outermost tag will not always be referenced on this page, it should simply be assumed that it exists at the top level of all responses.
+
+The fields mentioned in this section will be omitted from the rest of this pages documentation, to simplify the documentation.
+
+Every response handler ALWAYS checks for the following fields.
+
+{| class="wikitable"
+! Name !! Description
+|-
+| <code>has_error</code> || Must be either <code>0</code> or <code>1</code>
+|-
+| <code>version</code> || Must always be <code>1</code>. Parser exits with result code 0xa113e880 if not
+|}
+
+If <code>has_error</code> is <code>1</code>, the following fields are checked and the parser exits.
+
+{| class="wikitable"
+! Name !! Description
+|-
+| <code>code</code> || HTTP status code. If this tag exists but has no value, or value is 0, the parser exits with result code 0xa113e98. If value is less than 400, the parser exits with result code 0x1100080. Otherwise the parser exits with result code <code>value * 0x80 + 0xa117d000U & 0xfffff &#124; 0xa1100000</code>
+|-
+| <code>error_code</code> || Result code. If this tag exists, the parser exits with result code <code>value * 0x80 + 0xa119c400U & 0xfffff &#124; 0xa1100000</code>
+|}
+
+If <code>has_error</code> is <code>0</code>, the following fields are checked.
+
+{| class="wikitable"
+! Name !! Description
+|-
+| <code>expire</code> || Response expiration time in "YYYY-MM-DD HH:MM:SS" format. If this tag exists, the parser exits with result code 0xa113e900 if <code>value < ACPGetNetworkTime()</code>
+|-
+| <code>request_language_id</code> || If this tag exists, the parser exits with result code 0xa113ec80 if <code>(value & 0xff) != SCIGetLanguage()</code>
+|}
+
+== Discovery ==
+
+Before the client can perform any API requests, it must first locate the API. To do this, the system requests the addresses of the other Miiverse services from a "discovery" service. The client is hard-coded to request this from https://discovery.olv.nintendo.net/v1/endpoint. This endpoint returns the following fields:
+
+{| class="wikitable"
+! Name !! Description
+|-
+| <code>host</code> || Ignored by the most recent client. Seems to be a legacy tag for older clients which was replaced with <code>api_host</code>
+|-
+| <code>api_host</code> || The host of the API
+|-
+| <code>portal_host</code> || The host of the Wii U browser app
+|-
+| <code>n3ds_host</code> || The host of the 3DS browser app
+|}
+
+Official response:
+
+<pre>
+<result>
+  <has_error>0</has_error>
+  <version>1</version>
+  <endpoint>
+    <host>api-us.olv.nintendo.net</host>
+    <api_host>api-us.olv.nintendo.net</api_host>
+    <portal_host>portal-us.olv.nintendo.net</portal_host>
+    <n3ds_host>3ds-us.olv.nintendo.net</n3ds_host>
+  </endpoint>
+</result>
+</pre>
+
+== DownloadCommentDataList__Q2_2nn3olvFPQ3_2nn3olv21DownloadedCommentDataPUiUiPCQ3_2nn3olv28DownloadCommentDataListParam ==
+
+Calls [[#GetRawDataUrl__Q3_2nn3olv28DownloadCommentDataListParamCFPcUi]] to format the request URL.
+
+=== Response ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be "replies". Parse result set to 0xa113ea00 if not --></request_name>
+  <posts> <!-- * Post list -->
+    <post>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== DownloadCommunityDataList__Q2_2nn3olvFPQ3_2nn3olv23DownloadedCommunityDataPUiUiPCQ3_2nn3olv30DownloadCommunityDataListParam ==
+
+Calls [[#GetRawDataUrl__Q3_2nn3olv30DownloadCommunityDataListParamCFPcUi]] to format the request URL.
+
+=== Response ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "communities" or "specified_communities". Parse result set to 0xa113ea00 if not --></request_name>
+  <communities> <!-- * Community list -->
+    <community>
+      <app_data><!-- * Base64 encoded community specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the community --></app_data>
+      <community_id><!-- * Community ID. Optional --></community_id>
+      <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+      <description><!-- * UTF-8 community description. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x100 bytes. If present and valid, flag `0x2` is set on the community --></description>
+      <pid><!-- * Owner PID. Optional --></pid>
+      <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+      <mii><!-- * Base64 encoded owner Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the community --></mii>
+      <screen_name><!-- * UTF-8 owner Mii nickname at the time of creation. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+    </community>
+  </communities>
+</result>
+</pre>
+
+== DownloadDirectMessageDataList__Q2_2nn3olvFPQ3_2nn3olv27DownloadedDirectMessageDataPUiUiPCQ3_2nn3olv34DownloadDirectMessageDataListParam ==
+
+Calls [[#GetRawDataUrl__Q3_2nn3olv34DownloadDirectMessageDataListParamCFPcUi]] to format the request URL.
+
+=== Response ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "friend_messages" or "specified_posts". Parse result set to 0xa113ea00 if not --></request_name>
+  <posts> <!-- * Post list -->
+    <post>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== DownloadPostDataList__Q2_2nn3olvFPQ3_2nn3olv19DownloadedTopicDataPQ3_2nn3olv18DownloadedPostDataPUiUiPCQ3_2nn3olv25DownloadPostDataListParam ==
+
+Calls [[#GetRawDataUrl__Q3_2nn3olv25DownloadPostDataListParamCFPcUi]] to format the request URL.
+
+=== Response ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "posts" or "specified_posts". Parse result set to 0xa113ea00 if not --></request_name>
+  <topic> <!-- * Optional, must always come before `posts` if set -->
+    <community_id><!-- * Community ID the post list belongs to --></community_id>
+  </topic>
+  <posts> <!-- * Post list -->
+    <post>
+      <community_id><!-- * Community ID the post belongs to, should match the topic. Optional --></community_id>
+      <empathy_count><!-- * Number of "Yeahs". Optional --></empathy_count>
+      <reply_count><!-- * Number of replies. Optional --></reply_count>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== DownloadPostDataListEx__Q3_2nn3olv6hiddenFPQ3_2nn3olv19DownloadedTopicDataPQ3_2nn3olv18DownloadedPostDataPUiUiPCQ4_2nn3olv6hidden27DownloadPostDataListExParam ==
+
+Calls [[#GetRawDataUrl__Q4_2nn3olv6hidden27DownloadPostDataListExParamCFPcUi]] to format the request URL.
+
+Response is the same as [[#DownloadPostDataList__Q2_2nn3olvFPQ3_2nn3olv19DownloadedTopicDataPQ3_2nn3olv18DownloadedPostDataPUiUiPCQ3_2nn3olv25DownloadPostDataListParam]].
+
+== DownloadRawData__Q2_2nn3olvFPUcPUiUiPCc ==
+
+Takes in a pointer to an output buffer, a pointer to the response body size, the output buffer size, and a url. Makes a request to the provided URL with no modifications and writes the response body and size into the output buffer/size. Only performs the <code>has_error</code> checks.
+
+== DownloadSystemRawData__Q3_2nn3olv6hiddenFPUcPUiUiPCc ==
+
+Unknown purpose. Identical in every way to [[#DownloadRawData__Q2_2nn3olvFPUcPUiUiPCc]], including using the same paramaters and parsing functions.
+
+== DownloadUserDataList__Q2_2nn3olvFPQ3_2nn3olv18DownloadedUserDataPUiUiPCQ3_2nn3olv25DownloadUserDataListParam ==
+
+Calls [[#GetRawDataUrl__Q3_2nn3olv25DownloadUserDataListParamCFPcUi]] to format the request URL.
+
+=== Response ===
+
+This method processes 2 distinct types of responses which are mutually exclusive. A response can only contain either a person or empathies list, with the person list taking priority if both are set. Each will be listed as it's own structure, but the parser handles them both in the same function.
+
+<pre>
+<result>
+  <request_name><!-- * Must be "user_infos". Parse result set to 0xa113ea00 if not --></request_name>
+  <people> <!-- * User info list -->
+    <person>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x1` is set on the user data --></mii>
+    </person>
+  </people>
+</result>
+</pre>
+
+<pre>
+<result>
+  <request_name><!-- * Must be "empathies". Parse result set to 0xa113ea00 if not --></request_name>
+  <empathies> <!-- * User info list -->
+    <empathy>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x1` is set on the user data --></mii>
+    </empathy>
+  </empathies>
+</result>
+</pre>
+
+== GetDirectMessageDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv27DownloadedDirectMessageDataPUiUiPCUcT3 / GetDirectMessageDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv27DownloadedDirectMessageDataPUiUiT3PCUcT3 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "friend_messages" or "specified_posts". Parse result set to 0xa113ea00 if not --></request_name>
+  <posts> <!-- * Post list -->
+    <post>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== GetNotificationsUrl__Q2_2nn3olvFPcUiPCQ3_2nn3olv24GetNotificationsUrlParam ==
+
+=== Paths ===
+
+==== <code>v1/users/{pid}/notifications</code> ====
+
+<code>pid</code> is hard-coded to always be the result of <code>GetPrincipalId__Q2_2nn3actFv</code>.
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>type</code> || Optional || Filter by notification type. Always <code>friend_message</code> when set
+|-
+| <code>title_id</code> || Required || The decimal title ID
+|}
+
+== GetPortalAppNotificationsUrl__Q3_2nn3olv6hiddenFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/users/{pid}/notifications</code> ====
+
+<code>pid</code> is hard-coded to always be the result of <code>GetPrincipalId__Q2_2nn3actFv</code>.
+
+===== Query params =====
+
+None
+
+== GetPostDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv19DownloadedTopicDataPQ3_2nn3olv18DownloadedPostDataPUiUiPCUcT4 / GetPostDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv19DownloadedTopicDataPQ3_2nn3olv18DownloadedPostDataPUiUiT4PCUcT4 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "posts" or "specified_posts". Parse result set to 0xa113ea00 if not --></request_name>
+  <topic> <!-- * Optional, must always come before `posts` if set -->
+    <community_id><!-- * Community ID the post list belongs to --></community_id>
+  </topic>
+  <posts> <!-- * Post list -->
+    <post>
+      <community_id><!-- * Community ID the post belongs to, should match the topic. Optional --></community_id>
+      <empathy_count><!-- * Number of "Yeahs". Optional --></empathy_count>
+      <reply_count><!-- * Number of replies. Optional --></reply_count>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== GetRawDataUrl__Q3_2nn3olv25DownloadPostDataListParamCFPcUi ==
+
+This function behaves differently based on whether or not the currently active title is the Wii U menu
+
+=== Paths ===
+
+==== <code>v1/posts.search</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>post_id</code> || Required || A post ID to query. This parameter can be set up to 20 times to query for multiple posts
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_empathy_added</code> || Optional || Filters by whether or not the user has liked a post? Always <code>1</code> when set
+|-
+| <code>max_body_length</code> || Optional || The max length a <code>text</code> post can be. Can be used on memo posts, but is useless. Must be between 1 and 255 when set
+|}
+
+==== <code>v1/communities/{community_id}/posts</code> ====
+
+There are 2 available modes, one for when the paramater does not have a title ID configured (and is not the Wii U home menu) and one for when the paramater has a title ID configured (and is not the Wii U home menu).
+
+===== Query params =====
+
+Does not have a title ID configured:
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>language_id</code> || Required || The requester's language ID. Defaults to the system language (via <code>SCIGetLanguage()</code>), unless <code>SetLanguageId</code> is used to set a custom language
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>type</code> || Optional || The type of posts to return. Must be either <code>text</code> or <code>memo</code> (painting) when set
+|-
+| <code>search_key</code> || Optional || Post search keys to filter by. This parameter can be set up to 5 times
+|-
+| <code>pid</code> || Optional || A specific user to query posts for. This parameter can be set up to 12 times to query for multiple users
+|-
+| <code>distinct_pid</code> || Optional || Only allow one post per user. Always <code>1</code> when set
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_empathy_added</code> || Optional || Filters by whether or not the user has liked a post? Always <code>1</code> when set
+|-
+| <code>allow_spoiler</code> || Optional || Allow spoiler posts. Always <code>1</code> when set
+|-
+| <code>by</code> || Optional || Filter posts by relationship. Valid values are <code>friends</code>, <code>followings</code>, and <code>self</code>. This parameter can be set multiple times to query for multiple types of posts
+|-
+| <code>base_time</code> || Optional || Filter out posts before this time. <code>YYYY-MM-DD HH:MM:SS</code> format when set
+|-
+| <code>max_body_length</code> || Optional || The max length a <code>text</code> post can be. Can be used on <code>type=memo</code> queries, but is useless. Must be between 1 and 255 when set
+|-
+| <code>is_delay</code> || Optional || Unknown. Always <code>0</code> when set
+|-
+| <code>is_hot</code> || Optional || Only return the most popular posts that meet the other criteria? Always <code>1</code> when set
+|}
+
+Has a title ID configured:
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>language_id</code> || Required || The requester's language ID. Defaults to the system language (via <code>SCIGetLanguage()</code>), unless <code>SetLanguageId</code> is used to set a custom language
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>type</code> || Optional || The type of posts to return. Must be either <code>text</code> or <code>memo</code> (painting) when set
+|-
+| <code>search_key</code> || Optional || Post search keys to filter by. This parameter can be set up to 5 times
+|-
+| <code>pid</code> || Optional || A specific user to query posts for. This parameter can be set up to 12 times to query for multiple users
+|-
+| <code>distinct_pid</code> || Optional || Only allow one post per user. Always <code>1</code> when set
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_empathy_added</code> || Optional || Filters by whether or not the user has liked a post? Always <code>1</code> when set
+|-
+| <code>allow_spoiler</code> || Optional || Allow spoiler posts. Always <code>1</code> when set
+|-
+| <code>title_id</code> || Required || The decimal title ID
+|-
+| <code>by</code> || Optional || Filter posts by relationship. Valid values are <code>friends</code>, <code>followings</code>, and <code>self</code>. This parameter can be set multiple times to query for multiple types of posts
+|}
+
+==== <code>v1/people</code> ====
+
+This path is only created if the currently configured title is the Wii U home menu (00050010-10040000, 00050010-10040100 or 00050010-10040200), or if the title ID is set to 0xFFFFFFFF-0xFFFFFFFE
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>language_id</code> || Required || The requester's language ID. Defaults to the system language (via <code>SCIGetLanguage()</code>), unless <code>SetLanguageId</code> is used to set a custom language
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>type</code> || Optional || The type of posts to return. Must be either <code>text</code> or <code>memo</code> (painting) when set
+|-
+| <code>search_key</code> || Optional || Post search keys to filter by. This parameter can be set up to 5 times
+|-
+| <code>pid</code> || Required if <code>relation</code> is not set, cannot be used if <code>relation</code> is set || A specific user to query posts for. This parameter can be set up to 12 times to query for multiple users
+|-
+| <code>distinct_pid</code> || Optional || Only allow one post per user. Always <code>1</code> when set
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_empathy_added</code> || Optional || Filters by whether or not the user has liked a post? Always <code>1</code> when set
+|-
+| <code>relation</code> || Required if <code>pid</code> is not set, cannot be used if <code>pid</code> is set || Filter by relationship. Must be either <code>friend</code> or <code>following</code> when set
+|}
+
+== GetRawDataUrl__Q3_2nn3olv25DownloadUserDataListParamCFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/communities/{community_id}/favorited</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|}
+
+==== <code>v1/posts/{post_id}/empathies</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|}
+
+==== <code>v1/people/{pid}/following</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|}
+
+==== <code>v1/people/{pid}/friends</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|}
+
+== GetRawDataUrl__Q3_2nn3olv28DownloadCommentDataListParamCFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/posts/{post_id}/replies</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>reply_id</code> || Optional || Post ID of the specific comment to get data for, only returns data for this comment. If this parameter is set, the only other parameters allowed are <code>with_mii</code> or <code>max_body_length</code>. "Required" parameters are NOT required when using this parameter
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>language_id</code> || Required || The requester's language ID. Defaults to the system language (via <code>SCIGetLanguage()</code>), unless <code>SetLanguageId</code> is used to set a custom language
+|-
+| <code>type</code> || Required || The type of posts to return. Must be either <code>text</code> or <code>memo</code> (painting)
+|-
+| <code>by</code> || Optional || Filter posts by relationship. Valid values are <code>friends</code>, <code>followings</code>, and <code>self</code>. This parameter can be set multiple times to query for multiple types of posts
+|-
+| <code>distinct_pid</code> || Optional || Only allow one post per user. Always <code>1</code> when set
+|-
+| <code>allow_spoiler</code> || Optional || Allow spoiler posts. Always <code>1</code> when set
+|-
+| <code>base_time</code> || Optional || Filter out posts before this time. <code>YYYY-MM-DD HH:MM:SS</code> format when set
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>max_body_length</code> || Optional || The max length a <code>text</code> post can be. Can be used on <code>type=memo</code> queries, but is useless. Must be between 1 and 255 when set
+|}
+
+== GetRawDataUrl__Q3_2nn3olv30DownloadCommunityDataListParamCFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/communities</code> ====
+
+There are 2 available modes, one for finding unknown communities and one for querying data about a specific community.
+
+===== Query params =====
+
+Finding unknown communities:
+
+Uses the title data from the ParamPack to know which title to find communities for
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return. Not allowed when <code>community_id</code> is present
+|-
+| <code>type</code> || Required || The type of community to search for. Must be one of <code>my</code>, <code>official</code>, or <code>favorite</code>
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_icon</code> || Optional || Return the community icon TGA in the community data. Always <code>1</code> when set
+|}
+
+Querying data about a specific community:
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>community_id</code> || Required || A community ID to query. Only returns data for this single community
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_icon</code> || Optional || Return the community icon TGA in the community data. Always <code>1</code> when set
+|}
+
+==== <code>v1/communities.search</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>community_id</code> || Required || A community ID to query. This parameter can be set up to 20 times to query for multiple communities
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>with_icon</code> || Optional || Return the community icon TGA in the community data. Always <code>1</code> when set
+|}
+
+== GetRawDataUrl__Q3_2nn3olv34DownloadDirectMessageDataListParamCFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/friend_messages</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>type</code> || Required || The type of messages to return. Must be either <code>text</code> or <code>memo</code> (painting)
+|-
+| <code>search_key</code> || Optional || Post search keys to filter by. This parameter can be set up to 5 times
+|-
+| <code>by</code> || Optional || Filter messages by relationship. Always <code>friends</code> when set. Unsure why this is optional; can non-friends send DMs, and if so why is the endpoint named <code>friend_messages</code>?
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>pid</code> || Optional || Return messages from only this user
+|-
+| <code>base_time</code> || Optional || Filter out messages before this time. <code>YYYY-MM-DD HH:MM:SS</code> format when set
+|-
+| <code>max_body_length</code> || Optional || The max length a <code>text</code> post can be. Can be used on <code>type=memo</code> queries, but is useless. Must be between 1 and 255 when set
+|}
+
+==== <code>v1/posts/{dm_post_id}</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>with_mii</code> || Optional || Return Mii data in the results. Always <code>1</code> when set
+|-
+| <code>max_body_length</code> || Optional || The max length a <code>text</code> post can be. Must be between 1 and 255 when set
+|}
+
+== GetRawDataUrl__Q4_2nn3olv6hidden27DownloadPostDataListExParamCFPcUi ==
+
+Extended version of [[#GetRawDataUrl__Q3_2nn3olv25DownloadPostDataListParamCFPcUi]]. Calls [[#GetRawDataUrl__Q3_2nn3olv25DownloadPostDataListParamCFPcUi]] internally and then forces additional query paramaters based on additional flags, regardless of what path is used.
+
+=== Additional query params ===
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>is_delay</code> || Optional || Not added if <code>post_id</code> is set. Unknown. Always <code>0</code> when set
+|-
+| <code>is_hot</code> || Optional || Not added if <code>post_id</code> is set. Only return the most popular posts that meet the other criteria? Always <code>1</code> when set
+|}
+
+== GetRawDataUrl__Q4_2nn3olv6hidden28DownloadSystemTopicDataParamCFPcUi ==
+
+=== Paths ===
+
+==== <code>v1/communities/{community_id}</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>limit</code> || Required || The max number of results to return
+|-
+| <code>title_id</code> || Required || The decimal title ID
+|}
+
+== GetRawDataUrl__Q4_2nn3olv6hidden31DownloadSystemPostDataListParamCFPcUi ==
+
+Returns the result of [[#GetRawDataUrl__Q3_2nn3olv25DownloadPostDataListParamCFPcUi]] with no modifications.
+
+== GetRawDataUrl__Q4_2nn3olv6hidden32DownloadSystemTopicDataListParamCFPcUi ==
+
+Downloads Wara Wara Plaza
+
+=== Paths ===
+
+==== <code>v1/topics</code> ====
+
+===== Query params =====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>people</code> || Required || The max number of results to return
+|-
+| <code>region_id</code> || Required || System region ID
+|-
+| <code>language_id</code> || Required || System language ID
+|}
+
+== GetSystemPostDataListFromRawData__Q3_2nn3olv6hiddenFPQ4_2nn3olv6hidden24DownloadedSystemPostDataPUiUiPCUcT3 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be either "posts" or "people". Parse result set to 0xa113ea00 if not --></request_name>
+  <posts> <!-- * Post list -->
+    <post>
+      <title_id><!-- * Decimal title ID the post/community belongs to. Optional --></title_id>
+      <community_id><!-- * Community ID the post belongs to. Optional --></community_id>
+      <empathy_count><!-- * Number of "Yeahs". Optional --></empathy_count>
+      <reply_count><!-- * Number of replies. Optional --></reply_count>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== GetSystemTopicDataFromRawData__Q3_2nn3olv6hiddenFPQ4_2nn3olv6hidden25DownloadedSystemTopicDataPQ4_2nn3olv6hidden24DownloadedSystemPostDataPUiUiPCUcT4 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be "single_topic". Parse result set to 0xa113ea00 if not --></request_name>
+  <topic> <!-- * Topic/community data. Required, must always come before `posts` -->
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <is_recommended><!-- * Whether or not this is a recommended community. Optional. Must be either 0/1 when set --></is_recommended>
+    <title_id><!-- * Decimal title ID the community belongs to. Optional. Additional title IDs can be set in <title_ids> --></title_id>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <title_ids><!-- * List of additional <title_id> tags. Optional --></title_ids>
+  </topic>
+  <posts> <!-- * Post list -->
+    <post>
+      <title_id><!-- * Decimal title ID the post/community belongs to. Optional --></title_id>
+      <community_id><!-- * Community ID the post belongs to. Optional --></community_id>
+      <empathy_count><!-- * Number of "Yeahs". Optional --></empathy_count>
+      <reply_count><!-- * Number of replies. Optional --></reply_count>
+      <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+      <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+      <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+      <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+        <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+      </data>
+      <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+        <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+        <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+      </screenshot>
+      <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+      <painting>
+        <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+        <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+      </painting>
+      <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+      <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+      <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+      <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+      <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <topic_tag>
+        <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+      </topic_tag>
+      <region_id><!-- * Region ID. Optional --></region_id>
+      <platform_id><!-- * Platform ID. Optional --></platform_id>
+      <language_id><!-- * Language ID. Optional --></language_id>
+      <country_id><!-- * Country ID. Optional --></country_id>
+    </post>
+  </posts>
+</result>
+</pre>
+
+== GetSystemTopicDataListFromRawData__Q3_2nn3olv6hiddenFPQ4_2nn3olv6hidden29DownloadedSystemTopicDataListPQ4_2nn3olv6hidden24DownloadedSystemPostDataPUiUiPCUcT4 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+<pre>
+<result>
+  <request_name><!-- * Must be "topics". Parse result set to 0xa113ea00 if not --></request_name>
+  <topic> <!-- * Topic/community data. Required. This tag can be set up to 10 times -->
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <is_recommended><!-- * Whether or not this is a recommended community. Optional. Must be either 0/1 when set --></is_recommended>
+    <title_id><!-- * Decimal title ID the community belongs to. Optional. Additional title IDs can be set in <title_ids> --></title_id>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <title_ids><!-- * List of additional <title_id> tags. Optional --></title_ids>
+    <people> <!-- * List of users and their posts. Required -->
+      <posts> <!-- * Post list. The name `people` implies that this tag should likely be scoped to a `<person>` tag, but the parser does not check for this and flattens all post lists into one -->
+        <post>
+          <title_id><!-- * Decimal title ID the post/community belongs to. Optional --></title_id>
+          <community_id><!-- * Community ID the post belongs to. Optional --></community_id>
+          <empathy_count><!-- * Number of "Yeahs". Optional --></empathy_count>
+          <reply_count><!-- * Number of replies. Optional --></reply_count>
+          <app_data><!-- * Base64 encoded game/post specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x40` is set on the post --></app_data>
+          <body><!-- * UTF-8 post text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the post --></body>
+          <created_at><!-- * Post creation time in "YYYY-MM-DD HH:MM:SS" format. Optional --></created_at>
+          <data> <!-- * Unknown use. Internally called "external binary". Optional -->
+            <url><!-- * URL to the data. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x8` is set on the post --></url>
+            <size><!-- * Size of the data the URL points to. Value must be between 0-0x100000, otherwise parser result is set to 0xa113eb80 --></size>
+          </data>
+          <screenshot> <!-- * Information about an in-game screenshot. Optional -->
+            <url><!-- * URL to the image. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x4` is set on the post --></url>
+            <size><!-- * Size of the data the URL points to. Value must be between 0-0x80000, otherwise parser result is set to 0xa113eb80 --></size>
+          </screenshot>
+          <url><!-- * External URL associated with the post. Most commonly seen with YouTube uploads. Optional. Must start with http/https, otherwise parser result is set to 0xa113eb80. If URL is longer than 0xff bytes, parser result is set to 0xa113ec00. If present and valid, flag `0x20` is set on the post --></url>
+          <painting>
+            <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+            <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the post --></content>
+          </painting>
+          <feeling_id><!-- * Post feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+          <id><!-- * Post ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+          <is_autopost><!-- * Identifies whether the post was automated or from a user. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x100` is set on the post. If 0, flag `0x400` is set on the post --></is_autopost>
+          <empathy_added><!-- * Identifies whether or not the current user has liked the post. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x80` is set on the post --></empathy_added>
+          <is_spoiler><!-- * Identifies whether or not the post should have a spoiler warning. Optional. Must be either 0/1, otherwise parser result is set to 0xa113eb80. If 1, flag `0x200` is set on the post --></is_spoiler>
+          <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x10` is set on the post --></mii>
+          <pid><!-- * Posters PID. Optional --></pid>
+          <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+          <topic_tag>
+            <name><!-- * UTF-8 post topic tag. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x98 bytes --></name>
+          </topic_tag>
+          <region_id><!-- * Region ID. Optional --></region_id>
+          <platform_id><!-- * Platform ID. Optional --></platform_id>
+          <language_id><!-- * Language ID. Optional --></language_id>
+          <country_id><!-- * Country ID. Optional --></country_id>
+        </post>
+      </posts>
+    </people>
+  </topic>
+</result>
+</pre>
+
+== GetUserDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv18DownloadedUserDataPUiUiPCUcT3 / GetUserDataListFromRawData__Q2_2nn3olvFPQ3_2nn3olv18DownloadedUserDataPUiUiT3PCUcT3 ==
+
+Parses raw XML data manually without a network request.
+
+=== Expected Structure ===
+
+This method processes 2 distinct types of data which are mutually exclusive. Data can only contain either a person or empathies list, with the person list taking priority if both are set. Each will be listed as it's own structure, but the parser handles them both in the same function.
+
+<pre>
+<result>
+  <request_name><!-- * Must be "user_infos". Parse result set to 0xa113ea00 if not --></request_name>
+  <people> <!-- * User info list -->
+    <person>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x1` is set on the user data --></mii>
+    </person>
+  </people>
+</result>
+</pre>
+
+<pre>
+<result>
+  <request_name><!-- * Must be "empathies". Parse result set to 0xa113ea00 if not --></request_name>
+  <empathies> <!-- * User info list -->
+    <empathy>
+      <pid><!-- * Posters PID. Optional --></pid>
+      <screen_name><!-- * UTF-8 posters Mii nickname at the time of posting. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x20 bytes --></screen_name>
+      <mii><!-- * Base64 encoded Mii data. Optional. Max size of 0x60 bytes when decoded. If present and valid, flag `0x1` is set on the user data --></mii>
+    </empathy>
+  </empathies>
+</result>
+</pre>
+
+== UploadCommentData__Q2_2nn3olvFPCQ3_2nn3olv22UploadCommentDataParam / UploadCommentData__Q2_2nn3olvFPQ3_2nn3olv19UploadedCommentDataPCQ3_2nn3olv22UploadCommentDataParam ==
+
+=== v1/posts/{post_id}/replies ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>body</code> || Required if <code>painting</code> is not used. Both cannot be set at the same time || [[#Text Posts]]
+|-
+| <code>painting</code> || Required if <code>body</code> is not used. Both cannot be set at the same time || [[#Paintings]]
+|-
+| <code>app_data</code> || Optional || [[#App Data]]
+|-
+| <code>screenshot</code> || Optional || [[#Screenshots]]
+|-
+| <code>data</code> || Optional || [[#Binary Data]]
+|-
+| <code>thumbnail</code> || Optional || [[#Screenshots]]
+|-
+| <code>feeling_id</code> || Required || [[#Feeling IDs]]
+|-
+| <code>is_autopost</code> || Required || [[#Post Flags]]
+|-
+| <code>is_spoiler</code> || Required || [[#Post Flags]]
+|-
+| <code>language_id</code> || Required || Result of <code>SCIGetLanguage()</code>
+|}
+
+==== Response ====
+
+<pre>
+<result>
+  <post>
+    <app_data><!-- * Base64 encoded comment specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the comment --></app_data>
+    <body><!-- * UTF-8 comment text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the comment --></body>
+    <painting>
+      <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+      <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the comment --></content>
+    </painting>
+    <id><!-- * Comment ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+    <feeling_id><!-- * Comment feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+    <is_spoiler><!-- * Identifies whether or not the comment should have a spoiler warning. Optional. If 1, flag `0x8` is set on the comment --></is_spoiler>
+  </post>
+</result>
+</pre>
+
+=== v1/posts/{comment_id}.delete ===
+
+==== POST form fields ====
+
+None
+
+== UploadCommunityData__Q2_2nn3olvFPCQ3_2nn3olv24UploadCommunityDataParam / UploadCommunityData__Q2_2nn3olvFPQ3_2nn3olv21UploadedCommunityDataPCQ3_2nn3olv24UploadCommunityDataParam ==
+
+=== v1/communities/{community_id}.delete ===
+
+==== POST form fields ====
+
+None
+
+=== v1/communities ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>icon</code> || Optional || [[#Icons]]
+|-
+| <code>name</code> || Optional || Community name. If set, can be no longer than 127 code points. Sent as UTF-8, but uses UTF-16 internally
+|-
+| <code>description</code> || Optional || Community description. If set, can be no longer than 255 code points. Sent as UTF-8, but uses UTF-16 internally
+|-
+| <code>search_key</code> || Optional || [[#Search Keys]]. This field can be set up to 5 times
+|-
+| <code>app_data</code> || Optional || [[#App Data]]
+|}
+
+==== Response ====
+
+<pre>
+<result>
+  <community>
+    <app_data><!-- * Base64 encoded community specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the community --></app_data>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <description><!-- * UTF-8 community description. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x100 bytes. If present and valid, flag `0x2` is set on the community --></description>
+    <pid><!-- * Owner PID. Optional --></pid>
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+  </community>
+</result>
+</pre>
+
+=== v1/communities/{community_id} ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>icon</code> || Optional || [[#Icons]]
+|-
+| <code>name</code> || Optional || Community name. If set, can be no longer than 127 code points. Sent as UTF-8, but uses UTF-16 internally
+|-
+| <code>description</code> || Optional || Community description. If set, can be no longer than 255 code points. Sent as UTF-8, but uses UTF-16 internally
+|-
+| <code>search_key</code> || Optional || [[#Search Keys]]. This field can be set up to 5 times
+|-
+| <code>app_data</code> || Optional || [[#App Data]]
+|}
+
+==== Response ====
+
+<pre>
+<result>
+  <community>
+    <app_data><!-- * Base64 encoded community specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the community --></app_data>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <description><!-- * UTF-8 community description. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x100 bytes. If present and valid, flag `0x2` is set on the community --></description>
+    <pid><!-- * Owner PID. Optional --></pid>
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+  </community>
+</result>
+</pre>
+
+== UploadDirectMessageData__Q2_2nn3olvFPCQ3_2nn3olv28UploadDirectMessageDataParam / UploadDirectMessageData__Q2_2nn3olvFPQ3_2nn3olv25UploadedDirectMessageDataPCQ3_2nn3olv28UploadDirectMessageDataParam ==
+
+=== v1/friend_messages ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>body</code> || Required if <code>painting</code> is not used. Both cannot be set at the same time || [[#Text Posts]]
+|-
+| <code>painting</code> || Required if <code>body</code> is not used. Both cannot be set at the same time || [[#Paintings]]
+|-
+| <code>topic_tag</code> || Optional || [[#Topic Tag]]
+|-
+| <code>search_key</code> || Optional || [[#Search Keys]]. This field can be set up to 5 times
+|-
+| <code>app_data</code> || Optional || [[#App Data]]
+|-
+| <code>screenshot</code> || Optional || [[#Screenshots]]
+|-
+| <code>data</code> || Optional || [[#Binary Data]]
+|-
+| <code>thumbnail</code> || Optional || [[#Screenshots]]
+|-
+| <code>url</code> || Optional || [[#URL]]
+|-
+| <code>feeling_id</code> || Required || [[#Feeling IDs]]
+|-
+| <code>is_autopost</code> || Required || [[#Post Flags]]
+|-
+| <code>number</code> || Required || Unknown. Always <code>0</code>?
+|-
+| <code>message_to_pid</code> || Optional || Target user PID. Unsure why this is optional?
+|}
+
+==== Response ====
+
+<pre>
+<result>
+  <post>
+    <app_data><!-- * Base64 encoded comment specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the comment --></app_data>
+    <body><!-- * UTF-8 comment text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the comment --></body>
+    <painting>
+      <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+      <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the comment --></content>
+    </painting>
+    <id><!-- * Comment ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+    <feeling_id><!-- * Comment feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+    <is_spoiler><!-- * Identifies whether or not the comment should have a spoiler warning. Optional. If 1, flag `0x8` is set on the comment --></is_spoiler>
+  </post>
+</result>
+</pre>
+
+=== v1/posts/{direct_message_id}.delete ===
+
+==== POST form fields ====
+
+None
+
+== UploadEmpathyToPostData__Q2_2nn3olvFPCQ3_2nn3olv28UploadEmpathyToPostDataParam ==
+
+=== v1/posts/{post_id}/empathies ===
+
+==== POST form fields ====
+
+None
+
+==== Response ====
+
+Only checks [[#Common Response Fields]]
+
+=== v1/posts/{post_id}/empathies.delete ===
+
+==== POST form fields ====
+
+None
+
+==== Response ====
+
+Only checks [[#Common Response Fields]]
+
+== UploadFavoriteToCommunityData__Q2_2nn3olvFPCQ3_2nn3olv34UploadFavoriteToCommunityDataParam / UploadFavoriteToCommunityData__Q2_2nn3olvFPQ3_2nn3olv31UploadedFavoriteToCommunityDataPCQ3_2nn3olv34UploadFavoriteToCommunityDataParam ==
+
+=== v1/communities/{community_id}.favorite ===
+
+==== POST form fields ====
+
+None
+
+==== Response ====
+
+<pre>
+<result>
+  <community>
+    <app_data><!-- * Base64 encoded community specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the community --></app_data>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <description><!-- * UTF-8 community description. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x100 bytes. If present and valid, flag `0x2` is set on the community --></description>
+    <pid><!-- * Owner PID. Optional --></pid>
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+  </community>
+</result>
+</pre>
+
+=== v1/communities/{community_id}.unfavorite ===
+
+==== POST form fields ====
+
+None
+
+==== Response ====
+
+<pre>
+<result>
+  <community>
+    <app_data><!-- * Base64 encoded community specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the community --></app_data>
+    <community_id><!-- * Community ID. Optional --></community_id>
+    <name><!-- * UTF-8 community name. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x80 bytes. If present and valid, flag `0x1` is set on the community --></name>
+    <description><!-- * UTF-8 community description. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x100 bytes. If present and valid, flag `0x2` is set on the community --></description>
+    <pid><!-- * Owner PID. Optional --></pid>
+    <icon><!-- * Base64 encoded community icon TGA. Optional. Max size of 0x1002c bytes when decoded. If present and valid, flag `0x8` is set on the community --></icon>
+  </community>
+</result>
+</pre>
+
+== UploadFollowToUserData__Q2_2nn3olvFPCQ3_2nn3olv27UploadFollowToUserDataParam ==
+
+=== v1/following ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>target_pid</code> || Required || PID of the user to follow
+|}
+
+==== Response ====
+
+Only checks [[#Common Response Fields]]
+
+=== v1/following.delete ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>target_pid</code> || Required || PID of the user to unfollow
+|}
+
+==== Response ====
+
+Only checks [[#Common Response Fields]]
+
+== UploadPostData__Q2_2nn3olvFPCQ3_2nn3olv19UploadPostDataParam / UploadPostData__Q2_2nn3olvFPQ3_2nn3olv16UploadedPostDataPCQ3_2nn3olv19UploadPostDataParam ==
+
+=== v1/posts ===
+
+==== POST form fields ====
+
+{| class="wikitable"
+! Name !! Required !! Description
+|-
+| <code>body</code> || Required if <code>painting</code> is not used. Both cannot be set at the same time || [[#Text Posts]]
+|-
+| <code>painting</code> || Required if <code>body</code> is not used. Both cannot be set at the same time || [[#Paintings]]
+|-
+| <code>topic_tag</code> || Optional || [[#Topic Tag]]
+|-
+| <code>search_key</code> || Optional || [[#Search Keys]]. This field can be set up to 5 times
+|-
+| <code>app_data</code> || Optional || [[#App Data]]
+|-
+| <code>screenshot</code> || Optional || [[#Screenshots]]
+|-
+| <code>data</code> || Optional || [[#Binary Data]]
+|-
+| <code>thumbnail</code> || Optional || [[#Screenshots]]
+|-
+| <code>url</code> || Optional || [[#URL]]
+|-
+| <code>community_id</code> || Required || Community ID to upload the post to
+|-
+| <code>feeling_id</code> || Required || [[#Feeling IDs]]
+|-
+| <code>is_autopost</code> || Required || [[#Post Flags]]
+|-
+| <code>is_spoiler</code> || Required || [[#Post Flags]]
+|-
+| <code>language_id</code> || Required || Result of <code>SCIGetLanguage()</code>
+|-
+| <code>is_app_jumpable</code> || Required || [[#Post Flags]]
+|}
+
+==== Response ====
+
+<pre>
+<result>
+  <post>
+    <app_data><!-- * Base64 encoded comment specific data. Optional. Max size of 0x400 bytes when decoded. If present and valid, flag `0x4` is set on the comment --></app_data>
+    <body><!-- * UTF-8 comment text. Optional. Converted to UTF-16 during parsing, UTF-16 buffer can only be up to 0x200 bytes. If present and valid, flag `0x1` is set on the comment --></body>
+    <painting>
+      <size><!-- * Size of the painting TGA. Value must be between 0-0x2582c, otherwise parser result is set to 0xa113eb80 --></size>
+      <content><!-- * Base64 encoded painting TGA. Optional. Max size of 0xa000 bytes when decoded. This tag can appear outside of the `painting` tag. If present and valid, flag `0x2` is set on the comment --></content>
+    </painting>
+    <id><!-- * Comment ID string. Optional. Parser result is set to 0xa113ec00 if value is larger than 0x16 bytes/characters --></id>
+    <feeling_id><!-- * Comment feeling ID. Optional. Value must be between 0-5, otherwise parser result is set to 0xa113eb80 --></feeling_id>
+    <is_spoiler><!-- * Identifies whether or not the comment should have a spoiler warning. Optional. If 1, flag `0x8` is set on the comment --></is_spoiler>
+  </post>
+</result>
+</pre>
+
+=== v1/posts/{post_id}.delete ===
+
+==== POST form fields ====
+
+None
