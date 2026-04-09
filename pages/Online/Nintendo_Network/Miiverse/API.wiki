@@ -883,7 +883,7 @@ Has a title ID configured:
 
 ==== <code>v1/people</code> ====
 
-This path is only created if the currently configured title is the Wii U home menu (00050010-10040000, 00050010-10040100 or 00050010-10040200), or if the title ID is set to 0xFFFFFFFF-0xFFFFFFFE
+This path is only created if the currently configured title is the Wii U home menu (00050010-10040000, 00050010-10040100 or 00050010-10040200), or if the title ID is set to 0xFFFFFFFF-0xFFFFFFFE. This seems to be a special path, where the response is consumed manually through [[#GetSystemPostDataListFromRawData__Q3_2nn3olv6hiddenFPQ4_2nn3olv6hidden24DownloadedSystemPostDataPUiUiPCUcT3]] in the calling application.
 
 ===== Query params =====
 
