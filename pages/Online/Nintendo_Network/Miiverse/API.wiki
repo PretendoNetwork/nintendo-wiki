@@ -65,7 +65,7 @@ The following additional headers are always present on non-discovery responses.
 {| class="wikitable"
 ! Header !! Description
 |-
-| <code>Set-Cookie</code> || Always <code>ga-visitor-key=randomuuiv4here; path=/</code>. Purpose unknown, this cookie is never read by the library or seen in requests, nor is it used by the Miiverse browser application
+| <code>Set-Cookie</code> || Always <code>ga-visitor-key=randomuuidv4here; path=/</code>. Purpose unknown, this cookie is never read by the library or seen in requests, nor is it used by the Miiverse browser application
 |-
 | <code>X-Nintendo-Error</code> || The error code. Always matches the <code>error_code</code> response field. Only present if the API returned an error
 |}
