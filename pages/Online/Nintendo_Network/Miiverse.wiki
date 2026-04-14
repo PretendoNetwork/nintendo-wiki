@@ -1,0 +1,13 @@
+== Overview ==
+
+Miiverse was a social network integrated into the Wii U and 3DS, allowing players to share posts, drawings, and screenshots tied to specific games and communities. Each game had its own dedicated community where users could post text, handwritten messages, and in-game screenshots. Posts could be given "Yeahs" (the platform's equivalent of a like) and replied to by other users, and games could make use of a provided API to create deep integrations such as in-game post feeds and the ability to post without leaving gameplay.
+
+{| class="wikitable"
+! Service !! Description
+|-
+| [[Online/Nintendo_Network/Miiverse/API|API]] || Game API
+|-
+| [[Online/Nintendo_Network/Miiverse/Portal|Portal]] || Wii U client
+|-
+| [[Online/Nintendo_Network/Miiverse/CTR|CTR]] || 3DS client
+|}
