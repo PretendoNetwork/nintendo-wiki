@@ -145,9 +145,9 @@ Notification types are a combined value made up of a [[#Notification Categories|
 |-
 | 112 || <code>SubscriptionEvent</code> || Events related to the [[Online/Nintendo_Network/NEX/Protocols/SubscriptionProtocol|SubscriptionProtocol]]
 |-
-| 113 || <code>GameServerMaintenance</code> || Related to server maintenance. Presumably when it starts?
+| 113 || <code>GameServerMaintenance</code> || Indicates that the game server is undergoing maintenance and is not accessible
 |-
-| 114 || <code>MaintenanceAnnouncement</code> || Related to server maintenance. Presumably announcing future maintenance?
+| 114 || <code>MaintenanceAnnouncement</code> || Alerts the recipient of upcoming game server maintenance. The time maintenance begins is also sent
 |-
 | 115 || || [[Online/Nintendo_Network/NEX/Protocols/ServiceItemProtocol|ServiceItemProtocol]] request completed
 |-
@@ -308,6 +308,32 @@ Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakin
 ! Field !! Value
 |-
 | m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|}
+
+=== 113000 ===
+
+Sent to all connected clients of a game server to alert users that game server maintenance has started.
+
+Not all NEX clients handle this notification, and thus may not exit the server when this event is received.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || Unknown. Likely <code>2</code>, the game server user?
+|}
+
+=== 114000 ===
+
+Sent to all connected clients of a game server to alert users of upcoming game server maintenance.
+
+Not all NEX clients handle this notification, and thus may not do anything when this event is received.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || Unknown. Likely <code>2</code>, the game server user?
+|-
+| m_uiParam1 || UNIX timestamp (not a [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]) for when the maintenance period begins
 |}
 
 === 115000 ===
