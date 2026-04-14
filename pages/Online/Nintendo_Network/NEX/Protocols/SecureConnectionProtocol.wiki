@@ -2,6 +2,10 @@
 
 '''SecureConnectionProtocol''' is used by clients when joining a the games secure server to create the secure connection and register themselves with the game server. This protocol also contains some miscellaneous helper methods for matchmaking.
 
+The following titles have custom extensions/modifications of this protocol:
+
+* [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol/Nintendo_Badge_Arcade|Nintendo Badge Arcade]]
+
 == Methods ==
 
 {| class="wikitable"

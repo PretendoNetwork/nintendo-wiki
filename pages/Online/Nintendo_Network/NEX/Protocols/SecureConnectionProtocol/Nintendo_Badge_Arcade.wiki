@@ -1,0 +1,31 @@
+== Overview ==
+
+This page describes the custom extensions/modifications made to [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol|SecureConnectionProtocol]] by Nintendo Badge Arcade.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 9 || [[#GetMaintenanceStatus]]
+|}
+
+=== GetMaintenanceStatus ===
+
+Checks the server maintenance status of the game server. This data is handled identically to how the game server maintenance notifications are handled in [[Online/Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]].
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt16 || maintenanceStatus || Maintenance notification category ID. Either <code>GameServerMaintenance</code> or <code>MaintenanceAnnouncement</code>, or if there is no maintenance <code>0xFFFF</code>
+|-
+| UInt32 || maintenanceTime || UNIX timestamp (not a [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]) for when the maintenance period begins, if the status is <code>MaintenanceAnnouncement</code>
+|-
+| Boolean || isSuccess || Unknown
+|}
