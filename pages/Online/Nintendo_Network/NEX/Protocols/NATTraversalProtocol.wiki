@@ -139,7 +139,7 @@ This method does not take any parameters.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| Int32 || relayMode || Unknown
+| SInt32 || relayMode || Unknown
 |-
 | [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || currentUTCTime || The server's current UTC time
 |-
@@ -147,7 +147,7 @@ This method does not take any parameters.
 |-
 | UInt16 || port || The port of the relay server
 |-
-| Int32 || relayAddressType || Unknown
+| SInt32 || relayAddressType || Unknown
 |-
 | UInt32 || gameServerID || The title's unique game server ID
 |}
@@ -165,7 +165,7 @@ Sent by the client to the server to report the result of the NAT traversal attem
 |-
 | Boolean || result || The result of the NAT traversal
 |-
-| Int32 || detail || Unknown
+| SInt32 || detail || Unknown
 |-
 | UInt32 || rtt || The connections round-trip-time
 |}
