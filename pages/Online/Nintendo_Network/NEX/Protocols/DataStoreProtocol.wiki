@@ -1,0 +1,2888 @@
+== Overview ==
+
+'''DataStoreProtocol''' provides a means for clients to upload, download, and interact with S3 objects (though S3 is not required to be used). Objects may be stored either on an external object storage server (such as AWS S3), or directly on the game server if the object data is small enough. The protocol a robust set methods that cover a wide range of UGC needs, including object management/search, a permissions model to set who can access/modify certain objects, notifications for object uploads/updates, user ratings, and optional persistent object storage.
+
+== External File Server ==
+
+Objects may exist either on an external file server, or directly on the game server. Objects which only exist on the game server have [[#DataFlag]] <code>DATA_FLAG_NOT_USE_FILESERVER</code> set on them by the server, and MUST be at most <code>MAX_METABIN_SIZE</code> in size as the object content is stored in the [[#Object MetaBinary]].
+
+Officially, Nintendo uses [https://aws.amazon.com/s3 AWS S3] for their external file server, using [https://aws.amazon.com/cloudfront AWS CloudFront] for delivering uploaded contents to clients. However any server (including non-S3 based servers) can be used, as the game server provides details required to perform an upload (including the upload URL, headers, and root certificate), so long as the server meets the consoles strict requirements. The Wii U and 3DS only support TLS versions 1.0/1.1, and require an RSA certificate, which means the external file server must also support these. Additionally, the Wii U and 3DS will ALWAYS perform uploads via <code>POST</code> requests (using presigned URLs provided by the server, officially) and always with <code>multipart/form-data</code> with the objects contents in the <code>file</code> form field (the client does NOT populate <code>filename</code>, as the "file name" is the S3 key in the bucket, which is provided by the game server).
+
+In the past Nintendo would upload to AWS directly, however they have since [https://aws.amazon.com/blogs/security/tls-1-2-required-for-aws-endpoints dropped support for TLS versions below 1.2], making direct uploads no longer viable. Either a TLS proxy or an alternative S3 provider is required now (or using some other non-S3-based solution). Most providers, however, only support one or the other of the requirements (either supporting the TLS versions/ciphers but not <code>POST</code>, or supporting <code>POST</code> but not the TLS versions/ciphers), which leaves very few options. To circumvent the TLS deprecation on AWS, Nintendo created a TLS proxy (<code>{bucket_name_here}.p.n.srv.nintendo.net</code>). However this introduces extra processing load compared to uploading directly to the file server, and may not be viable for all developers due to this extra load. The only S3 providers which are known to be compatible are:
+
+* [https://github.com/deuxfleurs-org/garage Garage] - Recommended. Entirely self-hosted and is free/open source. Meets the <code>POST</code> request requirement, but you must bring your own TLS. Currently in use by https://pretendo.network
+* [https://github.com/minio/minio MinIO] - Not recommended. Meets the <code>POST</code> request requirement, but has decided to effectively abandon their open source/community version in favor of their paid hosting and AI pivot, and is required to be self-hosted/TLS proxy due to not meeting TLS requirements on their paid hosting
+* [https://aws.amazon.com/s3/ AWS] - Not recommended. Meets the <code>POST</code> request requirement, but is very expensive at scale and requires a TLS proxy due to not meeting TLS requirements
+
+Additionally, not many tools/providers support the required TLS/certificate requirements. Many tools, including modern versions of OpenSSL (which is what is shipped by default on most modern systems), have dropped support for TLS 1.0/1.1 entirely, making self-hosted TLS proxies difficult without modifications/building from source or older (and potentially insecure) software versions. Cloudflare is the current easiest/safest way to set up a TLS proxy that works on the Wii U and 3DS (as well as providing overall protection), as Cloudflare Edge Certificates can be [https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls configured to support as low as TLS 1.0]. However only [https://developers.cloudflare.com/ssl/faq/#does-cloudflare-issue-both-rsa-and-ecdsa-certificates-for-universal-certificates Cloudflare Pro and above has access to the RSA certificates] needed. Normally the Pro plan costs [https://www.cloudflare.com/plans/pro $25/m], which would need to be taken into consideration, however open-source projects/teams can apply for a free upgrade to the Pro plan upgrade via the [https://blog.cloudflare.com/cloudflare-new-oss-sponsorships-program/#sponsorship-benefits Cloudflare OSS Sponsorship Program] and is very easy to obtain.
+
+== Object Notifications ==
+
+When an object has [[#DataFlag]] <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and/or <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> set, the recipients of the object will get given a "notification" when the object has finished uploading/updating. These are not live notifications like as seen in [[Online/Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]] or [[Online/Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]], nor are they instant messages like as seen in [[Online/Nintendo_Network/NEX/Protocols/MessagingProtocol|MessagingProtocol]] or [[Online/Nintendo_Network/NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]. Instead, these notifications simply point the receiver to the object which created the notification.
+
+Each notification is given a unique ID called the "notification ID". Each notification is tied to an [[#Object Data ID]]. Only one notification per object per user may exist, with older ones for the same object for the same user being deleted when a new notification for the object is created for that user (for example, if both <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> are set and the owner updates the object before the recipient has checked their notifications, they will only see the notification for the update not the creation). This ID is an incrementing value with the first notification having the ID 1. The creation and deletion of notifications will create gaps in the notification IDs returned by the game server, this is normal and expected.
+
+Additionally, each call to [[#GetNotificationUrl]] creates a new notification using <code>INVALID_DATAID</code> for the user. The purpose of this notification is unknown, as it is not possible to download the notification data for these notifications.
+
+In order for a client to check it's notifications, it must locate them from the game server. There are 2 ways for a client do this:
+
+# [[#GetNotificationUrl]]
+# [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]
+
+After the client has retrieved its notification IDs, it will store the ID of the most recent notification to use in future requests to [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]. The client can then use the the [[#Object Data ID]]s to download the object data the notification is for.
+
+== Object Updates ==
+
+Objects can have both their metadata and underying object data updated. Changing an objects metadata, by itself, does not update the objects modified time. An objects modified time is only updated in these instances:
+
+* Whenever the underlying object data is updated
+* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
+
+Each update to the objects underlying object data increments the object version number by 1 (all objects start at version 1 initially). Only the latest version of an object is available by normal clients, though the official servers store each version as it's own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
+
+== Object Data ID ==
+
+Every uploaded object, whether it uses the [[#External File Server]] or not, is assigned a unique ID known as the "DataID". This ID, along with the object version, is what makes up the S3 key for the object in the [[#External File Server]]. The value is an incrementing ID, and deleted/expired objects do not free their IDs for reuse. In older versions of the protocol the DataID was limited to UInt32, but was changed to UInt64 in NEX 3.5. There are 2 ranges a DataID can be in:
+
+{| class="wikitable"
+! Range !! Description
+|-
+| 900,000-999,999 || Objects in this range are always owned by the server, and cannot be deleted/updated by any normal clients regardless of what the objects permission settings are, nor do they ever expire. Normal users are unable to upload objects in this range, as user uploads always fall into the 2nd range. The methods [[#PostMetaBinaryWithDataId]] and [[#PostMetaBinariesWithDataId]] seem to be only available to server operators, to upload objects in this range
+|-
+| 1,000,000+ || Regular use. All user uploads always start at 1,000,000 and increment up
+|}
+
+=== Data Code ===
+
+Some games allow users to enter a special string to access objects, such as course IDs in Super Mario Maker and Dream Addresses in Animal Crossing: New Leaf. These are called "data codes", and are string representations of the DataID. How a game formats the data code is game-specific, but usually the DataID is transformed from a number into a string (such as converting to hex) and then a checksum is created and inserted somewhere in the data code. The game can then display the data code to users, who can share it with others to input into their own games. When a data code is used, the game first verifies the checksum before trying to perform any NEX methods using the resulting DataID. The server typically does not need knowledge of how these codes are created, as the game client handles the formatting.
+
+== Object MetaBinary ==
+
+Every object may optionally have an associated blob of data, known as the "MetaBinary", stored on the game server. This blob can be up to <code>MAX_METABIN_SIZE</code> in size. The contents of this blob are arbitrary and the meanings are context-specific, as they change between games, between different [[#Object Data Type]]s, etc. Objects which do not use the [[#External File Server]] will have their contents stored in this blob instead, meaning they cannot have an additional associated blob of data.
+
+== Object Data Type ==
+
+Every object is assigned a "data type". Think of this as a categorization system, where a data type represents a category/group that an object belongs to. The list of valid values are arbitrary and the meanings are context-specific, as they change between games. For example, a game may upload user profile information under data type 0, but put each users uploads under data type 100. In another game, data type 100 may be used for user profiles.
+
+== Object Persistence ==
+
+By default all objects, whether it uses the [[#External File Server]] or not, will expire. See [[#Validity Period]] for details. However a user can choose to mark a object they own (and ONLY objects they own) as "persistent". A persistent object will not expire so long as it remains in a slot. Each user has <code>NUM_PERSISTENCE_SLOT</code> number of persistent object slots to store an object in. Each slot may only contain one object. When a user tries to persist an object into a slot that already contains an object, they can choose to delete the existing object or not. If yes, the existing object is immediately deleted. If no, the existing object has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used as the slot ID, object persistence is not being used.
+
+== Object Ratings ==
+
+Every object, whether it uses the [[#External File Server]] or not, can be "rated". Each object has <code>NUM_RATING_SLOT</code> number of "rating slots" (IDs 0-15), which are each configured independently and track their own separate rating values/counts. The meaning behind these ratings is game/context-specific. For details on these configurations, see [[#DataStoreRatingInitParam]].
+
+Each user rating for an object slot is tracked as a separate entry, rather than accumulating on a single value. If <code>RATING_FLAG_MODIFIABLE</code> is used, then each user can only have a single rating entry for each of an objects slots, and subsequent ratings simply update that existing entry. Otherwise subsequent ratings create additional entries. The rating slots count is the total number of rating entries for the slot, and the total value is the combined total of all the entries starting from the slots initial value defined in [[#DataStoreRatingInitParam]]. Negative rating values are allowed.
+
+=== Rating Locks ===
+
+Each rating slot may be configured to use a "rating lock". When used, these locks prevent a user from rating that objects slot again for an amount of time. The amount of time is determined by the locks configuration.
+
+When <code>RATING_LOCK_INTERVAL</code> is used, <code>periodDuration</code> is used as the number of seconds (positive) until the lock is lifted.
+
+When <code>RATING_LOCK_PERIOD</code> is used, the lock is set to be lifted at a specific date and time. The date and time is determined based on <code>periodHour</code> and <code>periodDuration</code>. <code>periodHour</code> is the hour of the day the lock will be lifted. The range of hours is between negative and positive 23, with negative values going into the previous day and 0 being midnight. <code>periodDuration</code> determines which specific day the lock is lifted, and must be a valid [[#RatingLockPeriod]]. For example, if a rating slot is configured to use <code>RATING_LOCK_PERIOD_TUE</code> and <code>periodHour</code> is set to 0, and a user rates the slot on March 7th 2024, the lock expiration time is set to 12-3-2024 0:00:00 (the following Tuesday at midnight). Additionally, using <code>RATING_LOCK_PERIOD_DAY1</code> with a negative <code>periodHour</code> will target the last day of the current month.
+
+=== Rating Logs ===
+
+When <code>RATING_FLAG_MODIFIABLE</code> is used, and/or any lock type besides <code>RATING_LOCK_NONE</code> is used, a "rating log" is created when a user rates an objects slot. Trying to query for logs for a slot which do not use these settings will result in <code>DataStore::OperationNotAllowed</code>. The rating log tracks whether or not the caller has rated the slot already, when the lock expires if using a lock, and what the most recent rating value from the caller is.
+
+== Object Referencing ==
+
+Certain operations on an object count as "referencing" said object. The game server keeps track of the number of times an object has been referenced, incrementing the value by 1 each time, and referencing an object can be used to extend it's [[#Validity Period]]. These operations include:
+
+* Whenever the object is downloaded via the various "*GetObject*" methods
+* Whenever [[#TouchObject]] is called on the object
+
+== Object Passwords ==
+
+When an object is uploaded, the server assigns it a randomly generated set of passwords known as the "access password" and "update password". The object owner can get their objects passwords via [[#GetPasswordInfo]] and [[#GetPasswordInfos]]. The "access password" is used in read-only contexts (viewing metadata, downloading an object, etc.). The "update password" is used in write-contexts (updating metadata, updating the object data, deleting an object, etc.). The "update password" can be changed in the metadata, but the "access password" cannot.
+
+The owner of an object can share these passwords with other users. All permission checks are bypassed if the password matches the given context. Using a password, effectively, treats the request as if it was coming from the object owner.
+
+If a password is used (meaning, it's value is not <code>INVALID_PASSWORD</code>) and does not match the given context, <code>DataStore::InvalidPassword</code> is thrown.
+
+== Object Lock ID ==
+
+When <code>DATA_FLAG_USE_READ_LOCK</code> is set, the first time the object is downloaded a "lock ID" can be set by the caller. The server saves this value, and all subsequent downloads MUST use this same lock ID, otherwise <code>DataStore::AlreadyLocked</code>. This seems to have been an older version of the [[#Object Passwords]] system, but lock IDs can be used in conjunction with access passwords (for example, setting a common access password on all a users objects to allow metadata to be seen only by select players through [[#GetMetas]], but setting a unique lock ID on each object to still only allow a specific user to download the object contents).
+
+== Object Tags ==
+
+Every object may have <code>NUM_TAG_SLOT</code> number of tags. Tags are used to add extra metadata about an object that can be used later for searching/filtering purposes. If more than <code>NUM_TAG_SLOT</code> tags are uploaded, <code>DataStore::InvalidArgument</code> is thrown. Each tag can be up to <code>MAX_TAG_LENGTH</code> characters long. If any tag has more than code>MAX_TAG_LENGTH</code> characters, <code>DataStore::InvalidArgument</code> is thrown. When uploaded, tags are reordered in alphabetical order, and they are not trimmed of any leading/trailing white space. If the tag list contains a duplicate string, <code>DataStore::InvalidArgument</code> is thrown.
+
+== Object Extra Data ==
+
+Starting in NEX 3.5, each object may have a list of associated "extra data". This seems to be internal data, as it is not exposed back to any clients after creation. The official servers seemed to have no limits/checks for this data, allowing for any arbitrary input. This data is likely used for internal tracking systems.
+
+Despite the server allowing any arbitrary input, Animal Crossing: New Leaf (3DS), Xenoblade (Wii U) and Super Mario Maker (3DS and Wii U) all use the same structure for their "extra data" list. Thus, this should (until proven otherwise) be considered the canonical structure of the list:
+
+* Always 6 strings long
+* Every string has a max length of 8 characters
+* <code>extraData[0]</code> - Platform (<code>CTR</code> for the 3DS (all models), <code>WUP</code> for the Wii U)
+* <code>extraData[1]</code> - Region number. <code>CFG_Region</code> on the 3DS, <code>MCPRegion</code> on Wii U
+* <code>extraData[2]</code> - Region name. For example, <code>3</code> on 3DS  would use <code>AUS</code> here. An invalid region number will result in <code>Invalid</code> being used here
+* <code>extraData[3]</code> - Country number. Comes from <code>SCIGetCafeCountry</code> on the Wii U. See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: Migrate page here)
+* <code>extraData[4]</code> - ISO A2 country code. Comes from <code>SCIGetCountryCodeA2(cafe_country)</code> on the Wii U. For example country code 110 (UK) would would be <code>GB</code> here
+* <code>extraData[5]</code> - Always empty. Possibly reserved?
+
+For example, this "extra data" sample comes from Animal Crossing: New Leaf:
+
+* <code>extraData[0] = "CTR"</code>
+* <code>extraData[1] = "2"</code>
+* <code>extraData[2] = "EUR"</code>
+* <code>extraData[3] = "110"</code>
+* <code>extraData[4] = "GB"</code>
+* <code>extraData[5] = ""</code>
+
+== Validity Period ==
+
+Each object is assigned a <code>period</code> value, which is the number of days after upload that the object will remain valid for before becoming expired. An objects validity period must be between 0 and <code>MAX_PERIOD</code>, inclusive. See [[#Object Persistence]] for how to prevent an object from expiring. Expired objects are no longer accessible even by the original uploader, and are presumed deleted. An object can have it's validity period extended by its <code>period</code> value under the following circumstances:
+
+* Whenever the object is downloaded via the various "*GetObject*" methods and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
+* Whenever [[#TouchObject]] is called on the object and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
+* Whenever the underlying object data is updated
+* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
+* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_PERIOD</code> set
+
+For example, if an object is uploaded on January 1st with a <code>period</code> of 90 days (the default), the object will expire on April 1st (or March 31st on a leap year). If on February 15th (45 days after upload) the object has it's validity period extended, it will now be set to expire <code>period</code> days after February 15th, which is May 16th (or May 15th on a leap year).
+
+== Common Errors ==
+
+{| class="wikitable"
+! Error !! Description
+|-
+| <code>DataStore::InvalidArgument</code> || The RMC arguments were not valid for the call
+|-
+| <code>DataStore::NotFound</code> || The object being targeted either does not exist or is not available
+|-
+| <code>DataStore::OperationNotAllowed</code> || The caller is not to perform the operation, but is not a permissions issue. Such as trying to rate an object the caller owns which has self ratings disabled
+|-
+| <code>DataStore::PermissionDenied</code> || The caller did not have permission to perform the operation. Such as trying to delete an object the caller does not have permission to manage
+|-
+| <code>DataStore::UnderReviewing</code> || The object is still under review
+|-
+| <code>DataStore::InvalidPassword</code> || The password used was either not valid or not for the context it was used in
+|-
+| <code>DataStore::AlreadyLocked</code> || The object is in read-locked mode and the provided [[#Object Lock ID]] is not valid
+|-
+| <code>DataStore::OverCapacity</code> || A batch operation had too many inputs
+|}
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#PrepareGetObjectV1]]
+|-
+| 2 || [[#PreparePostObjectV1]]
+|-
+| 3 || [[#CompletePostObjectV1]]
+|-
+| 4 || [[#DeleteObject]]
+|-
+| 5 || [[#DeleteObjects]]
+|-
+| 6 || [[#ChangeMetaV1]]
+|-
+| 7 || [[#ChangeMetasV1]]
+|-
+| 8 || [[#GetMeta]]
+|-
+| 9 || [[#GetMetas]]
+|-
+| 10 || [[#PrepareUpdateObject]]
+|-
+| 11 || [[#CompleteUpdateObject]]
+|-
+| 12 || [[#SearchObject]]
+|-
+| 13 || [[#GetNotificationUrl]]
+|-
+| 14 || [[#GetNewArrivedNotificationsV1]]
+|-
+| 15 || [[#RateObject]]
+|-
+| 16 || [[#GetRating]]
+|-
+| 17 || [[#GetRatings]]
+|-
+| 18 || [[#ResetRating]]
+|-
+| 19 || [[#ResetRatings]]
+|-
+| 20 || [[#GetSpecificMetaV1]]
+|-
+| 21 || [[#PostMetaBinary]]
+|-
+| 22 || [[#TouchObject]]
+|-
+| 23 || [[#GetRatingWithLog]]
+|-
+| 24 || [[#PreparePostObject]]
+|-
+| 25 || [[#PrepareGetObject]]
+|-
+| 26 || [[#CompletePostObject]]
+|-
+| 27 || [[#GetNewArrivedNotifications]]
+|-
+| 28 || [[#GetSpecificMeta]]
+|-
+| 29 || [[#GetPersistenceInfo]]
+|-
+| 30 || [[#GetPersistenceInfos]]
+|-
+| 31 || [[#PerpetuateObject]]
+|-
+| 32 || [[#UnperpetuateObject]]
+|-
+| 33 || [[#PrepareGetObjectOrMetaBinary]]
+|-
+| 34 || [[#GetPasswordInfo]]
+|-
+| 35 || [[#GetPasswordInfos]]
+|-
+| 36 || [[#GetMetasMultipleParam]]
+|-
+| 37 || [[#CompletePostObjects]]
+|-
+| 38 || [[#ChangeMeta]]
+|-
+| 39 || [[#ChangeMetas]]
+|-
+| 40 || [[#RateObjects]]
+|-
+| 41 || [[#PostMetaBinaryWithDataId]]
+|-
+| 42 || [[#PostMetaBinariesWithDataId]]
+|-
+| 43 || [[#RateObjectWithPosting]]
+|-
+| 44 || [[#RateObjectsWithPosting]]
+|-
+| 45 || [[#GetObjectInfos]]
+|-
+| 46 || [[#SearchObjectLight]]
+|}
+
+=== PrepareGetObjectV1 ===
+
+Requests the information needed to download an object from the [[#External File Server]]. Only users with access permissions can perform this operation. This was replaced by [[#PrepareGetObject]] in later versions.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePrepareGetParamV1]] || param || Details on the object the client wants to download
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqGetInfoV1]] || pReqGetInfo || Details on how to download the object
+|}
+
+=== PreparePostObjectV1 ===
+
+Begins an object upload to the [[#External File Server]]. This was replaced by [[#PreparePostObject]] in later versions.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePreparePostParamV1]] || param || Details on the object the client wants to upload
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqPostInfoV1]] || pReqPostInfo || Details on how to upload the object
+|}
+
+=== CompletePostObjectV1 ===
+
+Tells the game server the [[#External File Server]] upload request has finished. Only the object owner can perform this operation. This was replaced by [[#CompletePostObject]] in later versions.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreCompletePostParamV1]] || param || Details on the status of the upload
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== DeleteObject ===
+
+Deletes an object. Only users with update permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreDeleteParam]] || param || Details on the object to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== DeleteObjects ===
+
+Deletes multiple objects. Only users with update permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreDeleteParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> deletion targets
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== ChangeMetaV1 ===
+
+Updates an objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. This was replaced by [[#ChangeMeta]] in later versions.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreChangeMetaParamV1]] || param || Details on the object to update the metadata for
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ChangeMetasV1 ===
+
+Updates multiple objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. This was replaced by [[#ChangeMetas]] in later versions.
+
+If <code>dataIds</code> is populated, <code>params</code> must contain only a single entry which is applied to all targets in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. If <code>dataIds</code> is empty, the targets are defined in <code>params</code>. If <code>dataIds</code> is populated and <code>params</code> has more than a single entry, <code>DataStore::InvalidArgument</code> is thrown regardless of <code>transactional</code>. Duplicate targets are not filtered out or ignored.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParamV1]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== GetMeta ===
+
+Requests an objects metadata. Only users with access permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetMetaParam]] || param || Details on which object is being requested and what data to return
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreMetaInfo]] || pMetaInfo || Object metadata
+|}
+
+=== GetMetas ===
+
+Requests metadata for multiple objects. Only users with access permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+|-
+| [[#DataStoreGetMetaParam]] || param || Details on what data to return
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each <code>dataIds</code>, in the order they were requested
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
+|}
+
+=== PrepareUpdateObject ===
+
+Requests information needed to update an objects data on the [[#External File Server]]. Only users with update permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePrepareUpdateParam]] || param || Details on the object the client wants to update and the new size of the object
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqUpdateInfo]] || pReqUpdateInfo || Details on how to update the object
+|}
+
+=== CompleteUpdateObject ===
+
+Tells the game server the [[#External File Server]] update request has finished. Only users with update permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreCompleteUpdateParam]] || param || Details on the status of the upload
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== SearchObject ===
+
+Performs a complex, fine-grained, search for objects.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreSearchParam]] || param || Details on how to search and filter objects
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreSearchResult]] || pSearchResult || Search results
+|}
+
+=== GetNotificationUrl ===
+
+Requests the users [[#Object Notifications]] URL. This differs from [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]] in that this is a URL that points to an object in the [[#External File Server]], but under a different namespace than UGC objects, and that it will continue to return data even after the notification has been "read". Each user has a unique "notification file" associated with their [[Online/Nintendo_Network/NEX/Types#PID|PID]]. The key for this file is always <code>{number}.{platform}_{game_code}_datastore/ds/1/notify/{pid}</code>, for example <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> is used by Pokemon Bank for the user with [[Online/Nintendo_Network/NEX/Types#PID|PID]] 1880099407, though this is just convention. The game server provides this location, and the game client simply stores it for later use.
+
+Once stored, the game client may not always request a new URL, and will instead reuse the one it already has.
+
+Whenever a user receives a new notification, that notification is stored in the game server and the file this URL points to is updated to contain only the latest notification information. For getting more than just the latest notification, see [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]. The file is a plain text file and contains the notification ID, recipient [[Online/Nintendo_Network/NEX/Types#PID|PID]] and game-specific unix timestamp, comma-delimited. The unix timestamp seems to correlate to around when the game was released, and is always the same for all users in the same game (but differs between games). For example, from Swapdoodle:
+
+<pre>
+84935077,1870537598,1479103557
+</pre>
+
+Additionally, each call to this method creates a notification for the user using [[#Object Data ID]] <code>INVALID_DATAID</code>.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetNotificationUrlParam]] || param || Details on how to request the location of the notification file
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqGetNotificationUrlInfo]] || info || Location of the notification file
+|}
+
+=== GetNewArrivedNotificationsV1 ===
+
+Requests the users unread [[#Object Notifications]]. This was replaced by [[#GetNewArrivedNotifications]] in later versions. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetNewArrivedNotificationsParam]] || param || Details on which notifications to return and how many
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreNotificationV1]]&gt; || pResult || Unread notifications
+|-
+| Boolean || pHasNext || If true, there are more unread notifications past what was returned
+|}
+
+=== RateObject ===
+
+Creates or modifies an object rating entry. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingTarget]] || target || The target object and rating slot to apply the rating to
+|-
+| [[#DataStoreRateObjectParam]] || param || The rating to apply to the object slot
+|-
+| Boolean || fetchRatings || If true, populate <code>pRating</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingInfo]] || pRating || Slots rating information after the rating was applied. Only populated if <code>fetchRatings</code> is true
+|}
+
+=== GetRating ===
+
+Requests the current rating information for a given objects slot. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingTarget]] || target || The target object and rating slot being requested
+|-
+| UInt64 || accessPassword || [[#Object Passwords]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingInfo]] || pRating || Slots current rating information
+|}
+
+=== GetRatings ===
+
+Requests the current rating information for all slots of multiple objects. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+|-
+| UInt64 || accessPassword || [[#Object Passwords]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt;&gt; || pRatings || All slot ratings. One for each <code>dataIds</code>, in the order they were requested
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>pRatings</code> in the same order as in the request
+|}
+
+=== ResetRating ===
+
+Removes all rating entries and logs for the target rating slot. Only users with update permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingTarget]] || target || The target object and rating slot being reset
+|-
+| UInt64 || updatePassword || [[#Object Passwords]]
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ResetRatings ===
+
+Removes all rating entries and logs for for all slots of the targets. Only users with update permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== GetSpecificMetaV1 ===
+
+Requests minimal metadata about an object. Only users with access permissions can perform this operation. This was replaced by [[#GetSpecificMeta]] in later versions.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetSpecificMetaParamV1]] || param || Details on which objects to request minimal metadata for
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfoV1]]&gt; || pMetaInfos || Minimal object metadatas. One per target in <code>dataIds</code> in the same order as in the request
+|}
+
+=== PostMetaBinary ===
+
+Creates an object that is not stored in the [[#External File Server]]. These objects only exist on the game server, their contents are stored in the [[#Object MetaBinary]] and they cannot be retrieved/managed through methods which interact with the [[#External File Server]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePreparePostParam]] || param || Details on the object the client wants to upload
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || [[#Object Data ID]]
+|}
+
+=== TouchObject ===
+
+References an object without returning any metadata or download information, to update it's reference count/[[#Validity Period]]. Only users with access permissions can perform this operation. See [[#Object Referencing]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreTouchObjectParam]] || param || The target object to touch
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== GetRatingWithLog ===
+
+Requests the current rating information for a given objects slot, and returns the latest rating log for the caller if applicable. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingTarget]] || target || The target object and rating slot being requested
+|-
+| UInt64 || accessPassword || [[#Object Passwords]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingInfo]] || pRating || Slots current rating information
+|-
+| [[#DataStoreRatingLog]] || pRatingLog || Latest rating log for the caller for the slot
+|}
+
+=== PreparePostObject ===
+
+Begins an object upload to the [[#External File Server]]. Newer version of [[#PreparePostObjectV1]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePreparePostParam]] || param || Details on the object the client wants to upload
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqPostInfo]] || pReqPostInfo || Details on how to upload the object
+|}
+
+=== PrepareGetObject ===
+
+Requests the information needed to download an object from the [[#External File Server]]. Only users with access permissions can perform this operation. Newer version of [[#PrepareGetObjectV1]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePrepareGetParam]] || param || Details on the object the client wants to download
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqGetInfo]] || pReqGetInfo || Details on how to download the object
+|}
+
+=== CompletePostObject ===
+
+Tells the game server the [[#External File Server]] upload request has finished. Only the object owner can perform this operation. Newer version of [[#CompletePostObjectV1]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreCompletePostParam]] || param || Details on the status of the upload
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== GetNewArrivedNotifications ===
+
+Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewArrivedNotificationsV1]]. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetNewArrivedNotificationsParam]] || param || Details on which notifications to return and how many
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreNotification]]&gt; || pResult || Unread notifications
+|-
+| Boolean || pHasNext || If true, there are more unread notifications past what was returned
+|}
+
+=== GetSpecificMeta ===
+
+Requests minimal metadata about an object. Only users with access permissions can perform this operation. Newer version of [[#GetSpecificMetaV1]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreGetSpecificMetaParam]] || param || Details on which objects to request minimal metadata for
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfo]]&gt; || pMetaInfos || Minimal object metadatas. One per target in <code>dataIds</code> in the same order as in the request
+|}
+
+=== GetPersistenceInfo ===
+
+Requests information on which object is stored in a specific persistence slot on a specific user. Only users with access permissions can perform this operation. See [[#Object Persistence]].
+
+If the target user has no object in the slot, <code>DataStore::NotFound</code> is thrown.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user
+|-
+| UInt16 || persistenceSlotId || Target persistence slot
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePersistenceInfo]] || pPersistenceInfo || Information about the object stored in the target slot
+|}
+
+=== GetPersistenceInfos ===
+
+Requests information on which object is stored in multiple persistence slots on a specific user. Only users with access permissions can perform this operation. See [[#Object Persistence]].
+
+If the target user has no object in the slot, <code>DataStore::NotFound</code> is used as the result for that object.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || persistenceSlotIds || Target persistence slots
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePersistenceInfo]] || pPersistenceInfo || Information about the object stored in the target slot
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>persistenceSlotIds</code> in the same order as in the request
+|}
+
+=== PerpetuateObject ===
+
+Adds an object to the callers [[#Object Persistence]] slots. Only the object owner can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt16 || persistenceSlotId || Target [[#Object Persistence]] storage slot ID
+|-
+| UInt64 || dataId || [[#Object Data ID]] to be stored in <code>persistenceSlotId</code>
+|-
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== UnperpetuateObject ===
+
+Removes an object from the callers [[#Object Persistence]] slots.
+
+If the target slot is already empty, <code>DataStore::NotFound</code> is thrown.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt16 || persistenceSlotId || Target [[#Object Persistence]] storage slot ID to clear
+|-
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== PrepareGetObjectOrMetaBinary ===
+
+Downloads an object either from the [[#External File Server]] or the game server if the object does not use the [[#External File Server]]. Only users with access permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePrepareGetParam]] || param || Details on the object the client wants to download
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreReqGetInfo]] || pReqGetInfo || Details on how to download the object. Not populated if the object does not use the [[#External File Server]]
+|-
+| [[#DataStoreReqGetAdditionalMeta]] || pReqGetAdditionalMeta || Additional metadata about the object. The <code>dataType</code> and <code>metaBinary</code> fields are only populated if the object does not use the [[#External File Server]]
+|}
+
+=== GetPasswordInfo ===
+
+Requests a specific objects [[#Object Passwords]]. Only the object owner can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || Target [[#Object Data ID]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStorePasswordInfo]] || pPasswordInfo || [[#Object Passwords]]
+|}
+
+=== GetPasswordInfos ===
+
+Requests a multiple objects [[#Object Passwords]]. Only the object owner can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePasswordInfo]]&gt; || pPasswordInfos || [[#Object Passwords]]. One per target in <code>dataIds</code> in the same order as in the request
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
+|}
+
+=== GetMetasMultipleParam ===
+
+Requests metadata for multiple objects using different paramaters for each object. Only users with access permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreGetMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each <code>dataIds</code>, in the order they were requested
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
+|}
+
+=== CompletePostObjects ===
+
+Tells the game server multiple [[#External File Server]] upload requests have finished. Only the object owner can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ChangeMeta ===
+
+Updates an objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. Newer version of [[#ChangeMetaV1]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreChangeMetaParam]] || param || Details on the object to update the metadata for
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ChangeMetas ===
+
+Updates multiple objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. Newer version of [[#ChangeMetasV1]].
+
+If <code>dataIds</code> is populated, <code>params</code> must contain only a single entry which is applied to all targets in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. If <code>dataIds</code> is empty, the targets are defined in <code>params</code>. If <code>dataIds</code> is populated and <code>params</code> has more than a single entry, <code>DataStore::InvalidArgument</code> is thrown regardless of <code>transactional</code>. Duplicate targets are not filtered out or ignored.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== RateObjects ===
+
+Rates multiple object rating slots. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|-
+| Boolean || fetchRatings || If true, populate <code>pRatings</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== PostMetaBinaryWithDataId ===
+
+Presumably creates an object that does not use the [[#External File Server]] using a set [[#Object Data ID]] instead of letting the server generate one. This method seems to be unavailable on production servers, and is likely only usable by developers to upload specific data to the "system use" range of IDs.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The predefined [[#Object Data ID]] to use for the object
+|-
+| [[#DataStorePreparePostParam]] || param || Details on the object the client wants to upload
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== PostMetaBinariesWithDataId ===
+
+Presumably creates multiple objects that do not use the [[#External File Server]] using a set [[#Object Data ID]] instead of letting the server generate one. This method seems to be unavailable on production servers, and is likely only usable by developers to upload specific data to the "system use" range of IDs.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> predefined [[#Object Data ID]]s
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || params || Details on the objects the client wants to upload. Presumably must be the same length as <code>dataIds</code>, in the same order
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== RateObjectWithPosting ===
+
+Creates or modifies an object rating entry. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+If the target rating slot has not been initialized, this method will initialize it before rating.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingTarget]] || target || The target object and rating slot to apply the rating to
+|-
+| [[#DataStoreRateObjectParam]] || rateParam || The rating to apply to the object slot
+|-
+| [[#DataStorePreparePostParam]] || postParam || Initial rating values to set if <code>target</code> has not been initialized
+|-
+| Boolean || fetchRatings || If true, populate <code>pRating</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreRatingInfo]] || pRating || Slots rating information after the rating was applied. Only populated if <code>fetchRatings</code> is true
+|}
+
+=== RateObjectsWithPosting ===
+
+Rates multiple object rating slots. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+
+If a target rating slot has not been initialized, this method will initialize it before rating.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization paramaters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
+|-
+| Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
+|-
+| Boolean || fetchRatings || If true, populate <code>pRatings</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+|}
+
+=== GetObjectInfos ===
+
+Requests the download information for multiple objects. Only users with access permissions can perform this operation.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> download targets
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreReqGetInfo]]&gt; || pInfos || Download information. One per target in <code>dataIds</code> in the same order as in the request
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
+|}
+
+=== SearchObjectLight ===
+
+Performs a complex, fine-grained, search for objects. It is not known how this differs from [[#SearchObject]], however based on the name it can be assumed that this is intended to be a light-weight alternative, likely restricting the kinds of data that can be used for querying to only allow less complex queries.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreSearchParam]] || param || Details on how to search and filter objects
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#DataStoreSearchResult]] || pSearchResult || Search results
+|}
+
+== Classes ==
+
+=== DataStorePrepareGetParamV1 ===
+
+Used to request download information for objects stored in the [[#External File Server]]. This was replaced by [[#DataStorePrepareGetParam]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || dataId || The target [[#Object Data ID]] to download
+|-
+| UInt32 || lockId || [[#Object Lock ID]]
+|}
+
+=== DataStorePrepareGetParam ===
+
+Used to request download information for objects stored in the [[#External File Server]]. Newer version of [[#DataStorePrepareGetParamV1]].
+
+<tabs items="Original,NEX 3.5+" storagekey="DataStorePrepareGetParam">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		|-
+		| UInt32 || lockId || [[#Object Lock ID]]
+		|-
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		|-
+		| UInt64 || accessPassword || [[#Object Passwords]]
+		|}
+	</tab>
+	<tab name="NEX 3.5+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		|-
+		| UInt32 || lockId || [[#Object Lock ID]]
+		|-
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		|-
+		| UInt64 || accessPassword || [[#Object Passwords]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreReqGetInfoV1 ===
+
+Tells the client where and how to download an objects data from the [[#External File Server]]. This was replaced by [[#DataStoreReqGetInfo]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+|-
+| UInt32 || size || The size of the object file
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+|}
+
+=== DataStoreReqGetInfo ===
+
+Tells the client where and how to download an objects data from the [[#External File Server]]. Newer version of [[#DataStoreReqGetInfoV1]].
+
+<tabs items="Original,NEX 3.5+" storagekey="DataStoreReqGetInfo">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		|-
+		| UInt32 || size || The size of the object file
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		|}
+	</tab>
+	<tab name="NEX 3.5+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		|-
+		| UInt32 || size || The size of the object file
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		|-
+		| UInt64 || dataId || [[#Object Data ID]] for the object being downloaded
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreReqGetAdditionalMeta ===
+
+Used exclusively by [[#PrepareGetObjectOrMetaBinary]] to populate data for objects not in the [[#External File Server]]
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+|-
+| UInt16 || dataType || [[#Object Data Type]]
+|-
+| UInt16 || version || Object version. [[#Object Updates]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+|}
+
+=== DataStorePreparePostParamV1 ===
+
+Holds details for an object the client would like to upload. This was replaced by [[#DataStorePreparePostParam]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || size || The size of the object being uploaded. Empty files are allowed
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+|-
+| UInt16 || dataType || [[#Object Data Type]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+|-
+| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
+|-
+| [[#DataStorePermission]] || delPermission || Permission level settings for updating the object
+|-
+| [[#DataFlag]] || flag || Object flags
+|-
+| UInt16 || period || [[#Validity Period]]
+|-
+| UInt32 || referDataId || The [[#Object Data ID]] of a related object
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+|}
+
+=== DataStorePreparePostParam ===
+
+Holds details for an object the client would like to upload. Newer version of [[#DataStorePreparePostParamV1]].
+
+<tabs items="Original,NEX 3.5+" storagekey="DataStorePreparePostParam">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || size || The size of the object being uploaded. Empty files are allowed
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+		|-
+		| UInt16 || dataType || [[#Object Data Type]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+		|-
+		| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
+		|-
+		| [[#DataStorePermission]] || delPermission || Permission level settings for updating the object
+		|-
+		| [[#DataFlag]] || flag || Object flags
+		|-
+		| UInt16 || period || [[#Validity Period]]
+		|-
+		| UInt32 || referDataId || The [[#Object Data ID]] of a related object
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+		|-
+		| [[#DataStorePersistenceInitParam]] || persistenceInitParam || [[#Object Persistence]] settings
+		|}
+	</tab>
+	<tab name="NEX 3.5+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || size || The size of the object being uploaded. Empty files are allowed
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+		|-
+		| UInt16 || dataType || [[#Object Data Type]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+		|-
+		| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
+		|-
+		| [[#DataStorePermission]] || delPermission || Permission level settings for updating the object
+		|-
+		| [[#DataFlag]] || flag || Object flags
+		|-
+		| UInt16 || period || [[#Validity Period]]
+		|-
+		| UInt32 || referDataId || The [[#Object Data ID]] of a related object
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+		|-
+		| [[#DataStorePersistenceInitParam]] || persistenceInitParam || [[#Object Persistence]] settings
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreReqPostInfoV1 ===
+
+Tells the client where and how to upload an objects data from the [[#External File Server]]. This was replaced by [[#DataStoreReqPostInfo]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || dataId || The newly created [[#Object Data ID]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+|}
+
+=== DataStoreReqPostInfo ===
+
+Tells the client where and how to upload an objects data from the [[#External File Server]]. Newer version of [[#DataStoreReqPostInfoV1]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The newly created [[#Object Data ID]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+|}
+
+=== DataStoreCompletePostParamV1 ===
+
+Tells the game server that the upload request to the [[#External File Server]] has completed. This was replaced by [[#DataStoreCompletePostParam]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || dataId || The [[#Object Data ID]] that is being uploaded
+|-
+| Boolean || isSuccess || Whether or not the upload completed successfully
+|}
+
+=== DataStoreCompletePostParam ===
+
+Tells the game server that the upload request to the [[#External File Server]] has completed. Newer version of [[#DataStoreCompletePostParamV1]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The [[#Object Data ID]] that is being uploaded
+|-
+| Boolean || isSuccess || Whether or not the upload completed successfully
+|}
+
+=== DataStoreDeleteParam ===
+
+Holds the information for an object the client wishes to delete.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The [[#Object Data ID]] that should be deleted
+|-
+| UInt64 || updatePassword || [[#Object Passwords]]
+|}
+
+=== DataStoreChangeMetaParamV1 ===
+
+Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, it's value is in a "zeroed" state. This was replaced by [[#DataStoreChangeMetaParam]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || dataId || The [[#Object Data ID]] being updated
+|-
+| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || New object name
+|-
+| [[#DataStorePermission]] || permission || New permission level settings for accessing the object
+|-
+| [[#DataStorePermission]] || delPermission || New permission level settings for updating the object
+|-
+| UInt16 || period || New [[#Validity Period]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+|-
+| UInt64 || updatePassword || [[#Object Passwords]]
+|}
+
+=== DataStoreChangeMetaParam ===
+
+Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, it's value is in a "zeroed" state. Newer version of [[#DataStoreChangeMetaParamV1]].
+
+<tabs items="Original,Revision 1" storagekey="DataStoreChangeMetaParam">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The [[#Object Data ID]] being updated
+		|-
+		| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || New object name
+		|-
+		| [[#DataStorePermission]] || permission || New permission level settings for accessing the object
+		|-
+		| [[#DataStorePermission]] || delPermission || New permission level settings for updating the object
+		|-
+		| UInt16 || period || New [[#Validity Period]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+		|-
+		| UInt64 || updatePassword || [[#Object Passwords]]
+		|-
+		| UInt32 || referredCnt || New reference count value. [[#Object Referencing]]
+		|-
+		| UInt16 || dataType || New [[#Object Data Type]]
+		|-
+		| [[#DataStatus]] || status || New availablity status
+		|-
+		| [[#DataStoreChangeMetaCompareParam]] || compareParam || Data on which existing fields to compare to before updating the object
+		|}
+	</tab>
+	<tab name="Revision 1">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The [[#Object Data ID]] being updated. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		|-
+		| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || New object name
+		|-
+		| [[#DataStorePermission]] || permission || New permission level settings for accessing the object
+		|-
+		| [[#DataStorePermission]] || delPermission || New permission level settings for updating the object
+		|-
+		| UInt16 || period || New [[#Validity Period]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+		|-
+		| UInt64 || updatePassword || [[#Object Passwords]]
+		|-
+		| UInt32 || referredCnt || New reference count value. [[#Object Referencing]]
+		|-
+		| UInt16 || dataType || New [[#Object Data Type]]
+		|-
+		| [[#DataStatus]] || status || New availablity status
+		|-
+		| [[#DataStoreChangeMetaCompareParam]] || compareParam || Data on which existing fields to compare to before updating the object
+		|-
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot, updating the metadata of the object in that slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreGetMetaParam ===
+
+Holds details for an object the client would like to request metadata for.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The target [[#Object Data ID]]. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+|-
+| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+|-
+| [[#ResultFlag]] || resultOption || What fields the response should populate
+|-
+| UInt64 || accessPassword || [[#Object Passwords]]
+|}
+
+=== DataStoreRatingInfo ===
+
+Holds details for [[#Object Ratings]] in a given slot.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| SInt64 || totalValue || The current total value of all ratings combined
+|-
+| UInt64 || count || The total number of ratings
+|-
+| SInt64 || initialValue || The slots initial rating value when the object was created
+|}
+
+=== DataStoreRatingInfoWithSlot ===
+
+Holds details for [[#Object Ratings]] in a given slot, along with that slots number.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| SInt8 || slot || The [[#Object Ratings]] slot the rating belongs to
+|-
+| [[#DataStoreRatingInfo]] || rating || Slot rating details
+|}
+
+=== DataStoreMetaInfo ===
+
+An objects metadata. Not all data will be populated depending on what the client requests to be populated.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || [[#Object Data ID]]
+|-
+| [[#PID]] || ownerId || Object owner
+|-
+| UInt32 || size || Size of the objects data
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || Object name
+|-
+| UInt16 || dataType || [[#Object Data Type]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+|-
+| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
+|-
+| [[#DataStorePermission]] || delPermission || Permission level settings for updating the object
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdTime || The time the object was created
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedTime || The time the object was last updated. See [[#Object Updates]]
+|-
+| UInt16 || period || [[#Validity Period]]
+|-
+| [[#DataStatus]] || status || Availablity status
+|-
+| UInt32 || referredCnt || The number of times the object has been referenced. See [[#Object Referencing]]
+|-
+| UInt32 || referDataId || [[#Object Data ID]] of an object that was associated with this object at creation. If <code>INVALID_DATAID</code> no object is associated
+|-
+| [[#DataFlag]] || flag || Object flags
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || referredTime || The most recent time the object was referenced. See [[#Object Referencing]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || expireTime || The object expiration time. See [[#Validity Period]]. If <code>PERMANENT_DATE_TIME</code> is used, the object is persistent. See [[#Object Persistence]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Object tags
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt; || ratings || Slot rating details
+|}
+
+=== DataStorePrepareUpdateParam ===
+
+Tells the server that the client would like to update the underlying object file contents on the [[#External File Server]]. See also [[#Object Updates]].
+
+<tabs items="NEX 2 and below,NEX 3.0-3.4,NEX 3.5+" storagekey="DataStorePrepareUpdateParam">
+	<tab name="NEX 2 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || dataId || The [[#Object Data ID]] being updated
+		|-
+		| UInt32 || size || New file size
+		|}
+	</tab>
+	<tab name="NEX 3.0-3.4">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The [[#Object Data ID]] being updated
+		|-
+		| UInt32 || size || New file size
+		|-
+		| UInt64 || updatePassword || [[#Object Passwords]]
+		|}
+	</tab>
+	<tab name="NEX 3.5+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The [[#Object Data ID]] being updated
+		|-
+		| UInt32 || size || New file size
+		|-
+		| UInt64 || updatePassword || [[#Object Passwords]]
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreReqUpdateInfo ===
+
+Tells the client where and how to update an object on the [[#External File Server]]. See also [[#Object Updates]].
+
+<tabs items="NEX 2 and below,NEX 3+" storagekey="DataStoreReqUpdateInfo">
+	<tab name="NEX 2 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt16 || version || The new object version number
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		|}
+	</tab>
+	<tab name="NEX 3+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || version || The new object version number
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreCompleteUpdateParam ===
+
+Tells the game server that the update upload request to the [[#External File Server]] has completed. See also [[#Object Updates]].
+
+<tabs items="NEX 2 and below,NEX 3+" storagekey="DataStoreCompleteUpdateParam">
+	<tab name="NEX 2 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || dataId || The [[#Object Data ID]] that is being updated
+		|-
+		| UInt16 || version || The new object version number as sent by the server. If this does not match the current latest version, <code>DataStore::NotFound</code> is thrown
+		|-
+		| Boolean || isSuccess || Whether or not the upload completed successfully
+		|}
+	</tab>
+	<tab name="NEX 3+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt64 || dataId || The [[#Object Data ID]] that is being updated
+		|-
+		| UInt32 || version || The new object version number as sent by the server. If this does not match the current latest version, <code>DataStore::NotFound</code> is thrown
+		|-
+		| Boolean || isSuccess || Whether or not the upload completed successfully
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreSearchParam ===
+
+Holds information on how the client would like to search for objects.
+
+<tabs items="Original,Revision 1,Revision 2,Revision 3,NEX 4+" storagekey="DataStoreSearchParam">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		|-
+		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		|-
+		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		|-
+		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
+		|-
+		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		|-
+		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
+		|-
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		|}
+	</tab>
+	<tab name="Revision 1">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		|-
+		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		|-
+		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		|-
+		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
+		|-
+		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		|-
+		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
+		|-
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		|-
+		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
+		|}
+	</tab>
+	<tab name="Revision 2">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		|-
+		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		|-
+		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		|-
+		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
+		|-
+		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		|-
+		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
+		|-
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		|-
+		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		|}
+	</tab>
+	<tab name="Revision 3">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		|-
+		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		|-
+		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		|-
+		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
+		|-
+		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		|-
+		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
+		|-
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		|-
+		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
+		|-
+		| Boolean || totalCountEnabled || If true, return the total count and total count type fields. Otherwise disable the total count
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		|}
+	</tab>
+	<tab name="NEX 4+">
+		In NEX 4 the revision number was set back to 0 with no changes to the structure
+
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		|-
+		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		|-
+		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		|-
+		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		|-
+		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
+		|-
+		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		|-
+		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
+		|-
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		|-
+		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
+		|-
+		| Boolean || totalCountEnabled || If true, return the total count and total count type fields. Otherwise disable the total count
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		|}
+	</tab>
+</tabs>
+
+=== DataStoreSearchResult ===
+
+Holds the results of a search operation.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || totalCount || The search result count. See <code>totalCountType</code> for how to interpret this value. Always 0 if the total count is disabled
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || result || Search results
+|-
+| [[#SearchResultTotalCountType]] || totalCountType || How to interpret <code>totalCount</code>
+|}
+
+=== DataStoreGetNotificationUrlParam ===
+
+Used by [[#GetNotificationUrl]] to request the URL where the users latest [[#Object Notifications]] notification information is located from the [[#External File Server]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before
+|}
+
+=== DataStoreReqGetNotificationUrlInfo ===
+
+URL data for where the users latest [[#Object Notifications]] notification information is located in the [[#External File Server]]. To construct the final URL, combine <code>url</code>, <code>key</code> and <code>query</code> back-to-back.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || url || Base URL. For example, <code>https://ctr-jtta-live.p.n.srv.nintendo.net/</code>
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || key || The [[#External File Server]] key. This uses a different namespace than regular objects, and is treated as the request path. For example, <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> where <code>01880099407</code> is the decimal PID of the user, padded
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || query || Query paramaters for the request. For example, <code>?AWSAccessKeyId=AKIAIZIRU4FPYFNKPX3A&Expires=2092069557&Signature=5Y0vXYtxyXQXB%2Fu2Sowv%2Fm1AC8E%3D</code>
+|-
+| [[Online/Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+|}
+
+=== DataStoreGetNewArrivedNotificationsParam ===
+
+Used by [[#GetNewArrivedNotificationsV1]] and [[#GetNewArrivedNotifications]] to request a list of unread [[#Object Notifications]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || lastNotificationId || The last notification ID the client got from the server, or 0 if they have never seen any notifications. The game server only returns notifications for the user sent after this ID. The game server considers all notifications for the user prior to this ID as "read" and will no longer return them in future requests, even if future requests use a lower notification ID again
+|-
+| UInt16 || limit || The maximum number of notifications to return. Can be any value. 0 means no limit
+|}
+
+=== DataStoreNotificationV1 ===
+
+Information about a [[#Object Notifications]] notification. This was replaced by [[#DataStoreNotification]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || notificationId || The notification ID
+|-
+| UInt32 || dataId || The [[#Object Data ID]] of the object the notification is for
+|}
+
+=== DataStoreNotification ===
+
+Information about a [[#Object Notifications]] notification. Newer version of [[#DataStoreNotificationV1]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || notificationId || The notification ID
+|-
+| UInt64 || dataId || The [[#Object Data ID]] of the object the notification is for
+|}
+
+=== DataStoreRateObjectParam ===
+
+Data for how to create a new rating, or update an existing one. See [[#Object Ratings]] for details.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| SInt64 || ratingValue || The rating value. Can be negative
+|-
+| UInt64 || accessPassword || [[#Object Passwords]]
+|}
+
+=== DataStoreRatingTarget ===
+
+Information for the target of a rating.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || The target [[#Object Data ID]]
+|-
+| SInt8 || slot || The target objects target [[#Object Ratings]] slot
+|}
+
+=== DataStoreGetSpecificMetaParamV1 ===
+
+Holds a list of [[#Object Data ID]]s to download minimal metadata for. This was replaced by [[#DataStoreGetSpecificMetaParam]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt32&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+|}
+
+=== DataStoreGetSpecificMetaParam ===
+
+Holds a list of [[#Object Data ID]]s to download minimal metadata for. Newer version of [[#DataStoreGetSpecificMetaParamV1]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+|}
+
+=== DataStoreSpecificMetaInfoV1 ===
+
+Minimal object metadata. This was replaced by [[#DataStoreSpecificMetaInfo]] in later versions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || dataId || [[#Object Data ID]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+|-
+| UInt32 || size || Object size
+|-
+| UInt16 || dataType || [[#Object Data Type]]
+|-
+| UInt16 || version || Latest object version. See [[#Object Updates]]
+|}
+
+=== DataStoreSpecificMetaInfo ===
+
+Minimal object metadata. Newer version of [[#DataStoreSpecificMetaInfoV1]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || [[#Object Data ID]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+|-
+| UInt32 || size || Object size
+|-
+| UInt16 || dataType || [[#Object Data Type]]
+|-
+| UInt32 || version || Latest object version. See [[#Object Updates]]
+|}
+
+=== DataStoreTouchObjectParam ===
+
+Used to reference an object in a context where the objects data is not needed, such as simply refreshing the objects [[#Validity Period]]. See also [[#Object Referencing]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || Target [[#Object Data ID]]
+|-
+| UInt32 || lockId || [[#Object Lock ID]]
+|-
+| UInt32 || accessPassword || [[#Object Passwords]]
+|}
+
+=== DataStoreRatingLog ===
+
+Information about the status of a users rating of a given slot. [[#Rating Logs]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || isRated || Whether or not the user has rated the slot. True if <code>RATING_FLAG_MODIFIABLE</code> is used and the user has rated the slot in the past, or if a rating lock is used and the users lock is still in place
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || pid || The user the log is for
+|-
+| SInt32 || ratingValue || The users most recent rating value they applied to the slot
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the rating lock expires, if a rating lock is in place. <code>Never</code> otherwise
+|}
+
+=== DataStorePersistenceInfo ===
+
+Information about which objects are in which [[#Object Persistence]] slots for a user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || The object owner
+|-
+| UInt16 || persistenceSlotId || [[#Object Persistence]] storage slot ID
+|-
+| UInt64 || dataId || [[#Object Data ID]] stored in <code>persistenceSlotId</code>
+|}
+
+=== DataStorePasswordInfo ===
+
+[[#Object Passwords]] for a specific object.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || dataId || [[#Object Data ID]]
+|-
+| UInt64 || accessPassword || [[#Object Passwords]] access password
+|-
+| UInt64 || updatePassword || [[#Object Passwords]] update password
+|}
+
+=== DataStorePersistenceTarget ===
+
+Targets an object in a specific users specific [[#Object Persistence]] slot.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || ownerId || The owner shose slot is being targeted
+|-
+| UInt16 || persistenceSlotId || [[#Object Persistence]] storage slot ID to target
+|}
+
+=== DataStoreKeyValue ===
+
+A key-value pair. Used in [[Online/Nintendo_Network/NEX/Types#List|List]] types to effectively create a [[Online/Nintendo_Network/NEX/Types#Map|Map]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]], [[Online/Nintendo_Network/NEX/Types#String|String]]&gt;.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || key || Pair key
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || value || Pair value
+|}
+
+=== DataStorePermission ===
+
+A single object permission setting. Each object has a permission setting for accessing the object, and a setting for updating the object. Using an [[#Object Passwords]] will bypass these permissions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#Permission]] || permission || The permission level
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || recipientIds || Specific users who are given permission to perform operations. Only usable when using either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>, otherwise <code>DataStore::InvalidArgument</code> is thrown
+|}
+
+=== DataStoreRatingInitParamWithSlot ===
+
+Initializes a specific [[#Object Ratings]] rating slot with the given settings.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| SInt8 || slot || The slot to initialize
+|-
+| [[#DataStoreRatingInitParam]] || param || Slot settings
+|}
+
+=== DataStorePersistenceInitParam ===
+
+Used to insert an object being created into a users [[#Object Persistence]] storage during upload.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt16 || persistenceSlotId || Target [[#Object Persistence]] storage slot ID
+|-
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+|}
+
+=== DataStoreChangeMetaCompareParam ===
+
+Data on which existing object metadata is compared to before updating the objects metadata. If any fields on this class do not match the corresponding metadata for the object prior to update, <code>DataStore::ValueNotEqual</code> is thrown.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#ComparisonFlag]] || comparisonFlag || Determines which fields to compare
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || name || Name to compare, or empty if not comparing
+|-
+| [[#DataStorePermission]] || permission || Access permission level settings to compare, or empty if not comparing
+|-
+| [[#DataStorePermission]] || delPermission || Update permission level settings to compare, or empty if not comparing
+|-
+| UInt16 || period || Period to compare, or empty if not comparing
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]] to compare, or empty if not comparing
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]] to compare, or empty if not comparing
+|-
+| UInt32 || referredCnt || Reference count to compare, or empty if not comparing
+|-
+| UInt16 || dataType || [[#Object Data Type]] to compare, or empty if not comparing
+|-
+| [[#DataStatus]] || status || Status to compare, or empty if not comparing
+|}
+
+=== DataStoreRatingInitParam ===
+
+[[#Object Ratings]] rating slot settings.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#RatingFlag]] || flag || Determines how to handle the way user ratings are applied to the slot
+|-
+| [[#RatingInternalFlag]] || internalFlag || Determines whether <code>rangeMin</code> and <code>rangeMax</code> should be respected
+|-
+| [[#RatingLockType]] || lockType || The type of rating lock applied to a user when they rate the slot
+|-
+| SInt64 || initialValue || The initial value the slots total rating starts at
+|-
+| SInt32 || rangeMin || The minimum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MIN</code> is set. If an incoming rating is below this value, <code>DataStore::InvalidArgument</code> is thrown
+|-
+| SInt32 || rangeMax || The maximum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MAX</code> is set. If an incoming rating is above this value, <code>DataStore::InvalidArgument</code> is thrown
+|-
+| UInt8 || periodHour || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
+|-
+| SInt16 || periodDuration || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
+|}
+
+== Constants ==
+
+{| class="wikitable"
+! Name !! Type !! Value !! Description
+|-
+| <code>Never</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 0 || A true 0-value [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]
+|-
+| <code>INVALID_DATE_TIME</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 31-12-9999 23:59:59 || Invalid [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]. This is used when either in "zeroed" data or when a value is not needed
+|-
+| <code>PERMANENT_DATE_TIME</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 31-12-9999 0:00:00 || Indicates that the object will never expire
+|-
+| <code>MAX_PERIOD</code> || UInt16 || 365 || The max value an object [[#Validity Period]] can be, in days
+|-
+| <code>MAX_METABIN_SIZE</code> || UInt32 || 1024 || The max length an [[#Object MetaBinary]] can be
+|-
+| <code>DATASTOREPERMISSION_RECIPIENTIDS_MAX</code> || UInt32 || 100 || The max number of recipients that can be assigned in a [[#DataStorePermission]]
+|-
+| <code>INVALID_DATAID</code> || UInt64 || 0 || Invalid object [[#Object Data ID|DataID]]. This is used when either in "zeroed" data or when a value is not needed
+|-
+| <code>INVALID_DATA_TYPE</code> || UInt16 || 65535 || Invalid [[#Object Data Type]]. This is used when either in "zeroed" data or when a value is not needed
+|-
+| <code>INVALID_PASSWORD</code> || UInt64 || 0 || Invalid object password. This is used when either in "zeroed" data or when a value is not needed
+|-
+| <code>MAX_NAME_LENGTH</code> || UInt32 || 64 || The max length an object name can be
+|-
+| <code>MAX_SEARCH_RESULT_SIZE</code> || UInt32 || 100 || The max number of search results that can be returned when not using <code>RESULTRANGE_ANY_OFFSET</code>
+|-
+| <code>MAX_SEARCH_ANY_RESULT_SIZE</code> || UInt32 || 20 || The max number of search results that can be returned when using <code>RESULTRANGE_ANY_OFFSET</code>
+|-
+| <code>MAX_SEARCH_DATA_TYPE_SIZE</code> || UInt32 || 10 || The max number of [[#Object Data Type]]s that can be set in [[#DataStoreSearchParam]]
+|-
+| <code>NUM_TAG_SLOT</code> || UInt32 || 16 || The max number of tags an object may have
+|-
+| <code>RATING_SLOT_MAX</code> || UInt32 || 15 || The max [[#Object Ratings|rating]] slot index (0-based)
+|-
+| <code>NUM_RATING_SLOT</code> || UInt32 || 16 || The max number of [[#Object Ratings|rating]] slots an object may have
+|-
+| <code>MAX_TAG_LENGTH</code> || UInt32 || 24 || The max length an [object tag] can be
+|-
+| <code>DEFAULT_PERIOD</code> || UInt16 || 90 || The default object [[#Validity Period]], in days
+|-
+| <code>DEFAULT_HTTP_THREAD_PRIORITY</code> || UInt32 || 16 || Unknown
+|-
+| <code>DEFAULT_RELAY_BUFFER_SIZE</code> || UInt32 || 16384 || Unknown
+|-
+| <code>DEFAULT_HTTP_BUFFER_SIZE</code> || UInt32 || 32768 || Unknown
+|-
+| <code>DEFAULT_DATA_TRANSFER_TIMEOUT_BYTES_PER_SECOND</code> || UInt32 || 167 || Unknown
+|-
+| <code>DEFAULT_DATA_TRANSFER_MINIMUM_TIMEOUT</code> || Int32 || 60000 || Unknown
+|-
+| <code>DEFAULT_HTTP_SEND_SOCKET_BUFFER_SIZE</code> || UInt32 || 65536 || Unknown
+|-
+| <code>DEFAULT_HTTP_RECV_SOCKET_BUFFER_SIZE</code> || UInt32 || 65536 || Unknown
+|-
+| <code>INVALID_PERSISTENCE_SLOT_ID</code> || UInt16 || 65535 || Invalid [[#Object Persistence]] storage slot ID. This is used when either in "zeroed" data or when a value is not needed
+|-
+| <code>NUM_PERSISTENCE_SLOT</code> || UInt16 || 16 || The max number of objects each user can have in [[#Object Persistence]] storage
+|-
+| <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> || UInt32 || 16 || The max number of objects allowed in "posting batch" methods (such as [[#RateObjectsWithPosting]]) in a single RMC
+|-
+| <code>BATCH_PROCESSING_CAPACITY</code> || UInt32 || 100 || The max number of objects allowed in non-posting "batch" methods (such as [[#GetMetas]]) in a single RMC
+|-
+| <code>RESULTRANGE_ANY_OFFSET</code> || UInt64 || 4294967295 || If used on a [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]], the server picks a random offset
+|-
+| <code>RESULTRANGE_DEFAULT_SIZE</code> || UInt32 || 20 || The default number of entries a [[Online/Nintendo_Network/NEX/Types#ResultRange|ResultRange]] can return
+|}
+
+== Enums ==
+
+=== Permission ===
+
+Determines the permission level of an object in [[#DataStorePermission]].
+
+<pre>
+enum Permission : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>PERMISSION_PUBLIC</code> || 0 || Anyone can perform the operation
+|-
+| <code>PERMISSION_FRIEND</code> || 1 || Only the object owner and their friends can perform the operation
+|-
+| <code>PERMISSION_SPECIFIED</code> || 2 || Only the object owner and the specified users can perform the operation
+|-
+| <code>PERMISSION_PRIVATE</code> || 3 || Only the object owner can perform the operation
+|-
+| <code>PERMISSION_SPECIFIED_FRIEND</code> || 4 || Only the object owner and the specified friends can perform the operation. If a friend is specified and then removed as a friend, that user loses permission
+|}
+
+=== DataStatus ===
+
+Determines the availablity status of an object.
+
+<pre>
+enum DataStatus : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>DATA_STATUS_NONE</code> || 0 || The object has been successfully uploaded and is available to anyone with access permissions. See [[#DataStorePermission]]
+|-
+| <code>DATA_STATUS_PENDING</code> || 2 || The object is uploaded but pending review. This state is automatically set when an object is uploaded with <code>DATA_FLAG_NEED_REVIEW</code> set. The object can only be seen by the owner until review is finished. Anyone besides the owner who tries to query for objects under review will result in <code>DataStore::UnderReviewing</code>
+|-
+| <code>DATA_STATUS_REJECTED</code> || 5 || The object has failed review and has been rejected. The object is not available to anyone, including the owner, and behaves as if the object does not exist (<code>DataStore::NotFound</code>). The only exception to this is if the owner uses [[#SearchObject]] or [[#SearchObjectLight]] with either <code>SEARCH_TYPE_OWN_REJECTED</code> or <code>SEARCH_TYPE_OWN_ALL</code>
+|}
+
+=== SearchType ===
+
+Determines the type of objects allowed to be returned when using [[#DataStoreSearchParam]].
+
+<pre>
+enum SearchType : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>SEARCH_TYPE_PUBLIC</code> || 1 || Objects who have their access [[#Permission]] set to <code>PERMISSION_PUBLIC</code>
+|-
+| <code>SEARCH_TYPE_SEND_FRIEND</code> || 2 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>
+|-
+| <code>SEARCH_TYPE_SEND_SPECIFIED</code> || 3 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_SPECIFIED</code>
+|-
+| <code>SEARCH_TYPE_SEND_SPECIFIED_FRIEND</code> || 4 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_SPECIFIED_FRIEND</code>
+|-
+| <code>SEARCH_TYPE_SEND</code> || 5 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>, <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>
+|-
+| <code>SEARCH_TYPE_FRIEND</code> || 6 || Objects owned by the friends of the current user which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>
+|-
+| <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> || 7 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient
+|-
+| <code>SEARCH_TYPE_RECEIVED</code> || 8 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient, or objects owned by the friends of the current user which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>
+|-
+| <code>SEARCH_TYPE_PRIVATE</code> || 9 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_PRIVATE</code>
+|-
+| <code>SEARCH_TYPE_OWN</code> || 10 || Objects owned by the current user and which have their [[#DataStatus]] set to <code>DATA_STATUS_NONE</code>
+|-
+| Unknown || 11 || Objects who have their access [[#Permission]] set to <code>PERMISSION_PUBLIC</code>, excluding those uploaded by the current user and their friends
+|-
+| <code>SEARCH_TYPE_OWN_PENDING</code> || 12 || Objects owned by the current user and which have their [[#DataStatus]] set to <code>DATA_STATUS_PENDING</code>
+|-
+| <code>SEARCH_TYPE_OWN_REJECTED</code> || 13 || Objects owned by the current user and which have their [[#DataStatus]] set to <code>DATA_STATUS_REJECTED</code>
+|-
+| <code>SEARCH_TYPE_OWN_ALL</code> || 14 || Objects owned by the current user and which have their [[#DataStatus]] set to <code>DATA_STATUS_NONE</code>, <code>DATA_STATUS_PENDING</code> or <code>DATA_STATUS_REJECTED</code>
+|}
+
+=== SearchTarget ===
+
+Determines the target object owner type when using [[#DataStoreSearchParam]].
+
+<pre>
+enum SearchTarget : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>SEARCH_TARGET_ANYBODY</code> || 0 || Objects owned by anyone
+|-
+| <code>SEARCH_TARGET_FRIEND</code> || 1 || Objects owned by the friends of the current user
+|-
+| Unknown || 2 || Exclude objects owned by the users specified in the search paramaters
+|}
+
+=== SearchSortColumn ===
+
+Determines the database column to sort search results by.
+
+<pre>
+enum SearchSortColumn : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>SEARCH_SORT_COLUMN_DATAID</code> || 0 || Sort by [[#Object Data ID]]
+|-
+| Unknown || 1 || Sort by object size
+|-
+| Unknown || 2 || Sort by object name, alphabetical
+|-
+| Unknown || 3 || Sort by [[#Object Data Type]]
+|-
+| Unknown || 4 || Sort by object [[#Object Referencing|refernece count]]
+|-
+| <code>SEARCH_SORT_COLUMN_CREATED_TIME</code> || 5 || Sort by object creation time
+|-
+| <code>SEARCH_SORT_COLUMN_UPDATED_TIME</code> || 6 || Sort by object [[#Object Updates|modified time]]
+|-
+| <code>SEARCH_SORT_COLUMN_RATING0</code> || 64 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 0
+|-
+| <code>SEARCH_SORT_COLUMN_RATING1</code> || 65 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 1
+|-
+| <code>SEARCH_SORT_COLUMN_RATING2</code> || 66 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 2
+|-
+| <code>SEARCH_SORT_COLUMN_RATING3</code> || 67 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 3
+|-
+| <code>SEARCH_SORT_COLUMN_RATING4</code> || 68 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 4
+|-
+| <code>SEARCH_SORT_COLUMN_RATING5</code> || 69 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 5
+|-
+| <code>SEARCH_SORT_COLUMN_RATING6</code> || 70 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 6
+|-
+| <code>SEARCH_SORT_COLUMN_RATING7</code> || 71 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 7
+|-
+| <code>SEARCH_SORT_COLUMN_RATING8</code> || 72 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 8
+|-
+| <code>SEARCH_SORT_COLUMN_RATING9</code> || 73 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 9
+|-
+| <code>SEARCH_SORT_COLUMN_RATING10</code> || 74 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 10
+|-
+| <code>SEARCH_SORT_COLUMN_RATING11</code> || 75 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 11
+|-
+| <code>SEARCH_SORT_COLUMN_RATING12</code> || 76 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 12
+|-
+| <code>SEARCH_SORT_COLUMN_RATING13</code> || 77 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 13
+|-
+| <code>SEARCH_SORT_COLUMN_RATING14</code> || 78 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 14
+|-
+| <code>SEARCH_SORT_COLUMN_RATING15</code> || 79 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 15
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE0</code> || 96 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 0
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE1</code> || 97 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 1
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE2</code> || 98 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 2
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE3</code> || 99 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 3
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE4</code> || 100 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 4
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE5</code> || 101 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 5
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE6</code> || 102 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 6
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE7</code> || 103 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 7
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE8</code> || 104 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 8
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE9</code> || 105 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 9
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE10</code> || 106 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 10
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE11</code> || 107 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 11
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE12</code> || 108 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 12
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE13</code> || 109 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 13
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE14</code> || 110 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 14
+|-
+| <code>SEARCH_SORT_COLUMN_RATING_AVERAGE15</code> || 111 || Sort by the average of all ratings in [[#Object Ratings|rating slot]] 15
+|}
+
+=== SearchSortOrder ===
+
+Determines the direction to order search results.
+
+<pre>
+enum SearchSortOrder : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>SEARCH_SORT_ORDER_ASC</code> || 0 || Ascending order
+|-
+| <code>SEARCH_SORT_ORDER_DESC</code> || 1 || Descending order
+|}
+
+=== RatingLockType ===
+
+Determines how to lock the current user out of future ratings on the slot.
+
+<pre>
+enum RatingLockType : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>RATING_LOCK_NONE</code> || 0 || No locking used. The user is allowed to freely rate the slot as much as they want
+|-
+| <code>RATING_LOCK_INTERVAL</code> || 1 || The user cannot rate the same slot again for a specified amount of time. See [[#Rating Locks]] for details
+|-
+| <code>RATING_LOCK_PERIOD</code> || 2 || The user cannot rate the same slot again until a specific date/time. See [[#Rating Locks]] for details
+|-
+| <code>RATING_LOCK_PERMANENT</code> || 3 || The user can never rate the slot again
+|}
+
+=== RatingLockPeriod ===
+
+Determines the specific day a [[#Rating Locks|rating lock]] is removed when using <code>RATING_LOCK_PERIOD</code>.
+
+<pre>
+enum RatingLockPeriod : int16_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! SInt16
+|-
+! Name !! Value !! Description
+|-
+| <code>RATING_LOCK_PERIOD_DAY1</code> || -17 || Unlocks on the first day of the following month
+|-
+| <code>RATING_LOCK_PERIOD_SUN</code> || -7 || Unlocks on the Sunday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_SAT</code> || -6 || Unlocks on the Saturday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_FRI</code> || -5 || Unlocks on the Friday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_THU</code> || -4 || Unlocks on the Thursday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_WED</code> || -3 || Unlocks on the Wednesday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_TUE</code> || -2 || Unlocks on the Tuesday of the following week
+|-
+| <code>RATING_LOCK_PERIOD_MON</code> || -1 || Unlocks on the Monday of the following week
+|}
+
+=== SearchResultTotalCountType ===
+
+Tells the client how to interpret the result count on [[#DataStoreSearchResult]].
+
+<pre>
+enum SearchResultTotalCountType : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>SEARCH_RESULT_TOTAL_EXACT</code> || 0 || The search result count is the exact number of objects matching the criteria
+|-
+| <code>SEARCH_RESULT_TOTAL_MINIMUM</code> || 1 || The search result count is the minimum number of objects matching the criteria. There are more matches beyond the returned results
+|-
+| <code>SEARCH_RESULT_TOTAL_ESTIMATE</code> || 2 || The search result count is an estimate of the number of objects matching the criteria
+|-
+| <code>SEARCH_RESULT_TOTAL_DISABLED</code> || 3 || The search result count is not populated
+|}
+
+== Flags ==
+
+=== DataFlag ===
+
+General object flags.
+
+<pre>
+enum DataFlag : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>DATA_FLAG_NONE</code> || 0x00 || No flags set
+|-
+| <code>DATA_FLAG_NEED_REVIEW</code> || 0x01 || The object needs to be reviewed before it becomes available. See [[#DataStatus]]
+|-
+| <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> || 0x02 || The object can have it's [[#Validity Period]] extended when referenced
+|-
+| <code>DATA_FLAG_USE_READ_LOCK</code> || 0x04 || Enables object read locking. See [[#Object Lock ID]]
+|-
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> || 0x08 || Creates a [[#Object Notifications]] for the object recipients when the object has finished uploading. This cannot be used with objects that do not use the [[#External File Server]]
+|-
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> || 0x10 || Creates a [[#Object Notifications]] for the object recipients when the object has finished updating. This cannot be used with objects that do not use the [[#External File Server]]
+|-
+| <code>DATA_FLAG_NOT_USE_FILESERVER</code> || 0x20 || The object does not use the [[#External File Server]] and only exists as [[#Object MetaBinary]] on the game server. This flag can NOT be set by the caller, it is automatically assigned to objects by the server. Attempting to set this flag manually will result in <code>DataStore::InvalidArgument</code>
+|-
+| <code>DATA_FLAG_NEED_COMPLETION</code> || 0x40 || The object must have "completion" called when uploading/updating. Objects with this flag set will return <code>DataStore::NotFound</code> when queried for until upload/update is completed. Objects which have not been marked as "completed" will be deleted a few hours after upload, and the owner will no longer be able to mark them as "completed". This flag seems to always be set no matter what?
+|}
+
+=== ModificationFlag ===
+
+Used to indicate what properties of an object have been modified.
+
+<pre>
+enum ModificationFlag : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>MODIFICATION_FLAG_NONE</code> || 0x000 || No changes
+|-
+| <code>MODIFICATION_FLAG_NAME</code> || 0x001 || The object name has been updated
+|-
+| <code>MODIFICATION_FLAG_ACCESS_PERMISSION</code> || 0x002 || The object access permission has been updated
+|-
+| <code>MODIFICATION_FLAG_UPDATE_PERMISSION</code> || 0x004 || The object update permission (also seen as "delete permission") has been updated
+|-
+| <code>MODIFICATION_FLAG_PERIOD</code> || 0x008 || The object access permission has been updated
+|-
+| <code>MODIFICATION_FLAG_METABINARY</code> || 0x010 || The object access permission has been updated
+|-
+| <code>MODIFICATION_FLAG_TAGS</code> || 0x020 || The object access permission has been updated
+|-
+| <code>MODIFICATION_FLAG_UPDATED_TIME</code> || 0x040 || The object access permission has been updated
+|-
+| <code>MODIFICATION_FLAG_DATA_TYPE</code> || 0x080 || The object access permission has been updated
+|-
+| Unknown || 0x100 || The object reference count has been updated
+|-
+| <code>MODIFICATION_FLAG_STATUS</code> || 0x200 || The object access permission has been updated
+|}
+
+=== ComparisonFlag ===
+
+Before the objects data is updated, the current object data is checked against the data in [[#DataStoreChangeMetaCompareParam]]. These flags tell the server which data to compare. If any of the compared fields do not match, the object data is not updated and <code>DataStore::ValueNotEqual</code> is thrown.
+
+<pre>
+enum ComparisonFlag : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>COMPARISON_FLAG_NONE</code> || 0x000 || No comparison
+|-
+| <code>COMPARISON_FLAG_NAME</code> || 0x001 || Compare names
+|-
+| <code>COMPARISON_FLAG_ACCESS_PERMISSION</code> || 0x002 || Compare access permissions
+|-
+| <code>COMPARISON_FLAG_UPDATE_PERMISSION</code> || 0x004 || Compare update permissions
+|-
+| <code>COMPARISON_FLAG_PERIOD</code> || 0x008 || Compare periods
+|-
+| <code>COMPARISON_FLAG_METABINARY</code> || 0x010 || Compare MetaBinaries
+|-
+| <code>COMPARISON_FLAG_TAGS</code> || 0x020 || Compare tags
+|-
+| <code>COMPARISON_FLAG_DATA_TYPE</code> || 0x040 || Compare data types
+|-
+| Unknown || 0x080 || Compare reference counts
+|-
+| <code>COMPARISON_FLAG_STATUS</code> || 0x100 || Compare statuses
+|-
+| <code>COMPARISON_FLAG_ALL</code> || 0x200 || Compare everything
+|}
+
+=== ResultFlag ===
+
+Determines what fields should be populated in object metadata. Fields not mentioned here are always populated.
+
+<pre>
+enum ResultFlag : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>RESULT_FLAG_TAGS</code> || 0x1 || Return [[#Object Tags]]
+|-
+| <code>RESULT_FLAG_RATINGS</code> || 0x2 || Return [[#Object Ratings]]
+|-
+| <code>RESULT_FLAG_METABINARY</code> || 0x4 || Return [[#Object MetaBinary]]
+|-
+| <code>RESULT_FLAG_PERMITTED_IDS</code> || 0x8 || Return the recipient ID lists from both permissions
+|}
+
+=== RatingFlag ===
+
+Determines how to handle how user ratings are applied to objects.
+
+<pre>
+enum RatingFlag : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>RATING_FLAG_MODIFIABLE</code> || 0x04 || When set, each user can only have one rating per slot. If the user has already rated the slot, update the existing rating rather than creating another rating entry
+|-
+| <code>RATING_FLAG_ROUND_MINUS</code> || 0x08 || When set, ratings less than 0 are rounded to 0
+|-
+| <code>RATING_FLAG_DISABLE_SELF_RATING</code> || 0x10 || When set, disables the ability for the object owner to rate the object. If the owner tries to rate the object, <code>ataStore::OperationNotAllowed</code> is thrown
+|}
+
+=== RatingInternalFlag ===
+
+Determines how a rating slot should handle an incoming rating value.
+
+<pre>
+enum RatingInternalFlag : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>RATING_INTERNAL_FLAG_USE_RANGE_MIN</code> || 0x2 || When set, the incoming rating is checked against the minimum configured value. If below the minimum, <code>DataStore::InvalidArgument</code> is thrown. If not set, do not check for a minimum value
+|-
+| <code>RATING_INTERNAL_FLAG_USE_RANGE_MAX</code> || 0x4 || When set, the incoming rating is checked against the maximum configured value. If above the maximum, <code>DataStore::InvalidArgument</code> is thrown. If not set, do not check for a maximum value
+|}
