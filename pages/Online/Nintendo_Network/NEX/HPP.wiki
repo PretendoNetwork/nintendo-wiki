@@ -48,4 +48,6 @@ Most game servers cannot be accessed via the HPP server. The following servers a
 | <code>00095700</code> || <code>NEX_2_4_1_S25</code> || Unknown
 |-
 | <code>00086201</code> || <code>NEX_2_4_1_S25</code> || Unknown
+|-
+| <code>001a2c00</code> || <code>NEX_2_4_1_S25</code> || Swapdoodle
 |}
