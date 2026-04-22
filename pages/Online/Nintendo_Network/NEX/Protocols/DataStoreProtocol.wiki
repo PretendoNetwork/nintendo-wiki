@@ -309,6 +309,8 @@ Begins an object upload to the [[#External File Server]]. This was replaced by [
 
 Tells the game server the [[#External File Server]] upload request has finished. Only the object owner can perform this operation. This was replaced by [[#CompletePostObject]] in later versions.
 
+Calling this method for an object that has already been marked as completed will result in <code>DataStore::Unknown</code> being thrown.
+
 ==== Request ====
 
 {| class="wikitable"
@@ -468,6 +470,8 @@ Requests information needed to update an objects data on the [[#External File Se
 === CompleteUpdateObject ===
 
 Tells the game server the [[#External File Server]] update request has finished. Only users with update permissions can perform this operation.
+
+Calling this method for an object that has already been marked as completed will result in <code>DataStore::Unknown</code> being thrown.
 
 ==== Request ====
 
@@ -787,6 +791,8 @@ Requests the information needed to download an object from the [[#External File 
 
 Tells the game server the [[#External File Server]] upload request has finished. Only the object owner can perform this operation. Newer version of [[#CompletePostObjectV1]].
 
+Calling this method for an object that has already been marked as completed will result in <code>DataStore::Unknown</code> being thrown.
+
 ==== Request ====
 
 {| class="wikitable"
@@ -1020,6 +1026,8 @@ Requests metadata for multiple objects using different paramaters for each objec
 === CompletePostObjects ===
 
 Tells the game server multiple [[#External File Server]] upload requests have finished. Only the object owner can perform this operation.
+
+Calling this method for an object that has already been marked as completed will result in <code>DataStore::OperationNotAllowed</code> being thrown.
 
 ==== Request ====
 
@@ -2752,7 +2760,7 @@ enum DataFlag : uint32_t {
 |-
 | <code>DATA_FLAG_NOT_USE_FILESERVER</code> || 0x20 || The object does not use the [[#External File Server]] and only exists as [[#Object MetaBinary]] on the game server. This flag can NOT be set by the caller, it is automatically assigned to objects by the server. Attempting to set this flag manually will result in <code>DataStore::InvalidArgument</code>
 |-
-| <code>DATA_FLAG_NEED_COMPLETION</code> || 0x40 || The object must have "completion" called when uploading/updating. Objects with this flag set will return <code>DataStore::NotFound</code> when queried for until upload/update is completed. Objects which have not been marked as "completed" will be deleted a few hours after upload, and the owner will no longer be able to mark them as "completed". This flag seems to always be set no matter what?
+| <code>DATA_FLAG_NEED_COMPLETION</code> || 0x40 || The object must have "completion" called when uploading/updating. Objects with this flag set will return <code>DataStore::NotFound</code> when queried for until upload/update is completed. Objects which have not been marked as "completed" will be deleted a few hours after upload, and the owner will no longer be able to mark them as "completed". In practice this flag seems to be ignored, and ALL objects (regardless of this flag) require "completion" to be called?
 |}
 
 === ModificationFlag ===
