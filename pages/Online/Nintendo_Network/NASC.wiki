@@ -371,7 +371,43 @@ The purpose and structure of this action is unknown, but it's possibly related t
 
 ==== <code>parse</code> Action ====
 
-The purpose and structure of this action is unknown.
+Used as part of connecting to a wifi network with a captive portal. Triggered when the [[Online/Nintendo_Network/Connection_Test|Connection Test]] returns a HTTP 302 and an unknown internal flag is <code>true</code>. The console uploads the captive portal page contents to the server, and gets back challenge data.
+
+===== Request =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>HTML</code> || Page data from the 302 redirect
+|}
+
+===== Response =====
+
+On success, the server sends the following response:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || Either <code>034</code> or <code>004</code>
+|-
+| <code>interval</code> || Unknown
+|-
+| <code>url</code> || Challenge URL
+|-
+| <code>data</code> || Optional. Challenge data
+|}
+
+If <code>returncd</code> is <code>034</code>, the client immediately exits the function and retries the [[Online/Nintendo_Network/Connection_Test|Connection Test]] with the unknown internal flag set to <code>false</code>
+
+If <code>returncd</code> is <code>004</code>, the client performs the following steps:
+
+# If <code>interval</code> is not 0, it is set to some global state
+# The challenge is performed. If <code>data</code> is set, this is a <code>POST</code> request to <code>url</code> with <code>data</code> as the body. If <code>data</code> is not set, this is a <code>GET</code> request to <code>url</code>
+# If the challenge succeeds, the client exits the function and retries the [[Online/Nintendo_Network/Connection_Test|Connection Test]] with the unknown internal flag set to <code>false</code>
 
 ==== <code>message</code> Action ====
 
