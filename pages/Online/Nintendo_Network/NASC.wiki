@@ -384,8 +384,6 @@ Used as part of connecting to a wifi network with a captive portal. Triggered wh
 
 ===== Response =====
 
-On success, the server sends the following response:
-
 {| class="wikitable"
 |-
 ! Field !! Description
@@ -411,7 +409,22 @@ If <code>returncd</code> is <code>004</code>, the client performs the following 
 
 ==== <code>message</code> Action ====
 
-The purpose and structure of this action is unknown.
+Used as part of connecting to a wifi network with a captive portal. Triggered when the [[Online/Nintendo_Network/Connection_Test|Connection Test]] returns a HTTP 302 and an unknown internal flag is <code>false</code>. This seems to be a remote message logger.
+
+===== Request =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>direction</code> || Always <code>set</code>
+|-
+| <code>HotSpotResponse</code> || Page data from the 302 redirect
+|}
+
+===== Response =====
+
+The client seems to entirely ignore the response body.
 
 === <code>/pr</code> ===
 
