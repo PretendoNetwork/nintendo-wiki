@@ -367,7 +367,32 @@ When requesting a service token, the client sends a "host type" value in the <co
 
 ==== <code>nzchk</code> Action ====
 
-The purpose and structure of this action is unknown, but it's possibly related to Nintendo Zone?
+"Nintendo Zone Check". Checks if the access point being connected to is a [[Online/Nintendo_Network/Nintendo Zone|Nintendo Zone]]. Returns challenge data similar to [[#parse Action]].
+
+===== Request =====
+
+Does not use any extra fields.
+
+===== Response =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || One of <code>009</code>, <code>117</code> or <code>118</code>. The official servers always seem to send <code>009</code>
+|-
+| <code>url</code> || Challenge URL. The official servers never seem to send this anymore
+|-
+| <code>data</code> || Challenge data. The official servers never seem to send this anymore
+|}
+
+If <code>returncd</code> is none of <code>009</code>, <code>117</code> or <code>118</code>, the client immediately errors and exits.
+
+The most recent version of the client does not handle any data from the response body besides <code>returncd</code>, however it does still parse out <code>url</code> and <code>data</code>, it just does nothing with them. Given that [[Online/Nintendo_Network/Nintendo Zone|Nintendo Zone]] was discontinued, it is likely that this functionality was removed in a later firmware update.
+
+However given the similar response structure to [[#parse Action]], it can be assumed that the same actions were at one point used here.
 
 ==== <code>parse</code> Action ====
 
