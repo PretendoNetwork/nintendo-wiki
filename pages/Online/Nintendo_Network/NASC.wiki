@@ -379,7 +379,7 @@ The purpose and structure of this action is unknown.
 
 === <code>/pr</code> ===
 
-Profanity API. This endpoint is used to detect the presence of profanity in text. The exact filters/checks used by Nintendo are not known, but they are likely based on the profanity regexes found in many Nintendo consoles.
+Profanity API. This endpoint is used to detect the presence of profanity in text. The exact filters/checks used by Nintendo are not known, but they are likely based on the profanity regexes found in many Nintendo consoles ("NgWord").
 
 ==== Request ====
 
@@ -392,7 +392,7 @@ Profanity API. This endpoint is used to detect the presence of profanity in text
 |-
 | <code>wtype</code> || '''Optional'''. <code>words</code> type? Unknown use, when used in [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]] this seems to always be an empty string
 |-
-| <code>wregion</code> || '''Optional'''. <code>words</code> region? Only known value is <code>A</code>. Seems to enable additional information about the profanity check when set
+| <code>wregion</code> || '''Optional'''. <code>words</code> region. This determines which set of profanity filters to check <code>words</code> against. Only one region value can be set. If not set, or if the value is not valid, every set of filters is used, but the additional response fields are not sent<br>Valid values are <code>J</code> = Japanese, <code>E</code> = American English, Canadian French, Latin American Spanish and Brazilian Portuguese, <code>P</code> = British English, French, German, Italian, Spanish, Dutch, Portuguese and Russian, <code>K</code> = Korean, <code>C</code> = Simplified Chinese, <code>A</code> = All
 |}
 
 ==== Response ====
@@ -400,27 +400,27 @@ Profanity API. This endpoint is used to detect the presence of profanity in text
 {| class="wikitable"
 ! Field !! Description
 |-
-| <code>prwords</code> || Profane word flags. A string of 1s and 0s, one flag for each word in <code>words</code>. If the word was profane, it's flag 1, otherwise 0
+| <code>prwords</code> || Profane word flags, based on the selected profanity filter(s). A string of 1s and 0s, one flag for each word in <code>words</code>. If the word was profane, it's flag 1, otherwise 0
 |-
 | <code>returncd</code> || Return code. If <code>words</code> is either missing, or no words are profane, this is set to <code>000</code>. If any word in the list is profane, this is set to <code>100</code>
 |-
 | <code>datetime</code> || Current server time (<code>%Y%m%d%H%M%S</code>)
 |}
 
-When <code>wregion</code> is set to a valid value, all the following data is also included immediately after <code>prwords</code>:
+When <code>wregion</code> is set to <code>A</code>, every profanity list is used and the following data is included immediately after <code>prwords</code>:
 
 {| class="wikitable"
 ! Field !! Description
 |-
-| <code>prwordsA</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsA</code> || Profane word flags as by every regions filters. This should always match <code>prwords</code>
 |-
-| <code>prwordsC</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsC</code> || Profane word flags as seen by the Simplified Chinese filters
 |-
-| <code>prwordsE</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsE</code> || Profane word flags as seen by the American English, Canadian French, Latin American Spanish and Brazilian Portuguese filters
 |-
-| <code>prwordsJ</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsJ</code> || Profane word flags as seen by the Japanese filters
 |-
-| <code>prwordsK</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsK</code> || Profane word flags as seen by the Korean filters
 |-
-| <code>prwordsP</code> || A list of flags like <code>prwords</code>, presumably for a specific region? This flag list can differ from what is seen in other flag lists, likely indicating a different set of checks was used for this region?
+| <code>prwordsP</code> || Profane word flags as seen by the British English, French, German, Italian, Spanish, Dutch, Portuguese and Russian filters
 |}
