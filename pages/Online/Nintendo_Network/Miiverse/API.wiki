@@ -97,9 +97,9 @@ The following fields are used:
 |-
 | <code>language_id</code> || Requesters language. 0 = Japanese, 1 = English, 2 = French, 3 = German, 4 = Italian, 5 = Spanish, 6 = Simplified Chinese, 7 = Korean, 8 = Dutch, 9 = Portuguese, 10 = Russian, 11 = Traditional Chinese
 |-
-| <code>country_id</code> || The clients specific country ID. For example 49 = United States. See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: migrate this page)
+| <code>country_id</code> || The clients specific country ID. For example 49 = United States. See [[Online/Nintendo_Network/Region IDs|Region IDs]]
 |-
-| <code>area_id</code> || The clients specific area ID from within their country. For example 11 = Florida (if <code>country_id</code> = 49). See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: migrate this page)
+| <code>area_id</code> || The clients specific area ID from within their country. For example 11 = Florida (if <code>country_id</code> = 49). See [[Online/Nintendo_Network/Region IDs|Region IDs]]
 |-
 | <code>network_restriction</code> || Parental controls online restriction level
 |-

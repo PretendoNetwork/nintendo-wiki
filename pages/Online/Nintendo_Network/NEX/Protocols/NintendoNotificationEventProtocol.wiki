@@ -79,9 +79,9 @@ This class holds data about a users profile.
 |-
 | UInt8 || m_region || Users region ID. Likely <code>CFG_Region</code> on the 3DS, <code>MCPRegion</code> on Wii U
 |-
-| UInt8 || m_country || Users country ID. Unknown on the 3DS, likely <code>SCIGetCafeCountry</code> on the Wii U. See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: Migrate page here)
+| UInt8 || m_country || Users country ID. Unknown on the 3DS, likely <code>SCIGetCafeCountry</code> on the Wii U. See [[Online/Nintendo_Network/Region IDs|Region IDs]]
 |-
-| UInt8 || m_area || Users area ID. Likely https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: Migrate page here)
+| UInt8 || m_area || Users area ID. Likely [[Online/Nintendo_Network/Region IDs|Region IDs]]
 |-
 | UInt8 || m_language || Users language ID. Likely the standard set of language IDs Nintendo uses. See [[Online/Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-

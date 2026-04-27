@@ -120,7 +120,7 @@ Despite the server allowing any arbitrary input, Animal Crossing: New Leaf (3DS)
 * <code>extraData[0]</code> - Platform (<code>CTR</code> for the 3DS (all models), <code>WUP</code> for the Wii U)
 * <code>extraData[1]</code> - Region number. <code>CFG_Region</code> on the 3DS, <code>MCPRegion</code> on Wii U
 * <code>extraData[2]</code> - Region name. For example, <code>3</code> on 3DS  would use <code>AUS</code> here. An invalid region number will result in <code>Invalid</code> being used here
-* <code>extraData[3]</code> - Country number. Comes from <code>SCIGetCafeCountry</code> on the Wii U. See https://nintendo-wiki.pretendo.network/docs/misc/region-ids (TODO: Migrate page here)
+* <code>extraData[3]</code> - Country number. Comes from <code>SCIGetCafeCountry</code> on the Wii U. See [[Online/Nintendo_Network/Region IDs|Region IDs]]
 * <code>extraData[4]</code> - ISO A2 country code. Comes from <code>SCIGetCountryCodeA2(cafe_country)</code> on the Wii U. For example country code 110 (UK) would would be <code>GB</code> here
 * <code>extraData[5]</code> - Always empty. Possibly reserved?
 
