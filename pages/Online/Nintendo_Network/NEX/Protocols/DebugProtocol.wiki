@@ -105,7 +105,7 @@ Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disa
 |-
 | [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created before this time. Seconds value is ignored. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
 |-
-| Booleam || Unknown || If true only return summaries for methods that the target user has gone over the max call count for, otherwise also return summaries of methods below the max call count
+| Boolean || Unknown || If true only return summaries for methods that the target user has gone over the max call count for, otherwise also return summaries of methods below the max call count
 |}
 
 ==== Response ====
