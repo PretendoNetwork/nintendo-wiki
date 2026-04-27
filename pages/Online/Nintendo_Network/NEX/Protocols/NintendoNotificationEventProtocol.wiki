@@ -1,0 +1,147 @@
+== Overview ==
+
+'''NintendoNotificationEventProtocol''' is used by the Wii U and 3DS friend servers to send clients notifications about friends.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#ProcessNintendoNotificationEvent]]
+|-
+| 2 || [[#ProcessNintendoNotificationEvent]]
+|}
+
+=== ProcessNintendoNotificationEvent ===
+
+Used by the server to send a client a notification. There is no known difference between the two methods, except that the server sends some events through method 1 and others through method 2. The client treats them exactly the same.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NintendoNotificationEvent]] || Unknown || Notification data
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+== Classes ==
+
+=== NintendoNotificationEvent ===
+
+This class holds the data about a given notification. The contents of <code>m_dataholder</code> and how it is interpreted depend on <code>m_uiType</code>.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || m_uiType || [[#Notification Types]]
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || m_pidSender || The [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the user who triggered the action which caused the event
+|-
+| [[Online/Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || m_dataholder || Actual event data. Contents depend on <code>m_uiType</code>
+|}
+
+=== NintendoNotificationEventGeneral ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
+<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
+</div>
+
+This class holds generic data about a given notification. The meaning of the fields changes based on the context the notification is sent in, the notification type, etc.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || m_u32Param || Notification UInt32 paramater
+|-
+| UInt64 || m_u64Param1 || Notification UInt64 paramater 1
+|-
+| UInt64 || m_u64Param2 || Notification UInt64 paramater 2
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || m_strParam || Notification string parameter
+|}
+
+=== NintendoNotificationEventProfile ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
+<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
+</div>
+
+This class holds data about a users profile.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt8 || m_region || Users region ID. Likely <code>CFG_Region</code> on the 3DS, <code>MCPRegion</code> on Wii U
+|-
+| UInt8 || m_country || Users country ID. Unknown on the 3DS, likely <code>SCIGetCafeCountry</code> on the Wii U. See [[Online/Nintendo_Network/Region IDs|Region IDs]]
+|-
+| UInt8 || m_area || Users area ID. Likely [[Online/Nintendo_Network/Region IDs|Region IDs]]
+|-
+| UInt8 || m_language || Users language ID. Likely the standard set of language IDs Nintendo uses. See [[Online/Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| UInt8 || m_platform || Users platform ID. Likely 0 = 3DS, 1 = Wii U (values from [[Online/Nintendo_Network/NNAS|NNAS]])
+|}
+
+== Notification Types ==
+
+{| class="wikitable"
+! Type !! Method !! Platform !! Data Type !! Description
+|-
+| 1 || 1 || 3DS || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol#NintendoPresence|NintendoPresence]] || A friend updated their presence
+|-
+| 2 || 1 || 3DS || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol#GameKey|GameKey]] || A friend changed their favorite game
+|-
+| 3 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A friend changed their comment. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] the comment was updated, and <code>m_strParam</code> contains the new comment
+|-
+| 5 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A friends Mii has been modified. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] the Mii was updated
+|-
+| 6 || 1 || 3DS || [[#NintendoNotificationEventProfile]] || A friend updated their profile
+|-
+| 7 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A provisional friend has added your card back. <code>m_u64Param2</code> contains the LocalFriendCode of the user who added you back
+|-
+| 8 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A friend deleted your friend card. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] that the user was last online
+|-
+| 9 || 1 || 3DS || || A friend sent you an invitation. The client does not check the contents of <code>m_dataholder</code>
+|-
+| 10 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A friend went offline. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] that the user went offline
+|-
+| 10 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend went offline. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] that the user went offline
+|-
+| 21 || 2 || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#NNAInfo|NNAInfo]] || A friends Mii has been modified
+|-
+| 22 || || Wii U || || Unknown. Mii related?
+|-
+| 23 || || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || A friend updated their preferences
+|-
+| 24 || 2 || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#NintendoPresenceV2|NintendoPresenceV2]] || A friend updated their presence
+|-
+| 25 || || Wii U || || Unknown. Friend request related?
+|-
+| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || An incoming friend request has been canceled. <code>m_u32Param</code> contains the [[Online/Nintendo_Network/NEX/Types#PID|PID]] the friend request was going to (the recipient of the notification), <code>m_u64Param1</code> contains the the friend request ID that was canceled and <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] the friend request was canceled
+|-
+| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend has removed you from their friends list. <code>m_u32Param</code> contains the [[Online/Nintendo_Network/NEX/Types#PID|PID]] the user being removed (the recipient of the notification) and <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] when the friend removed you
+|-
+| 27 || 2 || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] || New incoming friend request
+|-
+| 28 || || Wii U || || Unknown. Friend request related?
+|-
+| 29 || || Wii U || || Unknown. Blacklist related?
+|-
+| 30 || 1 || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendInfo|FriendInfo]] || Your outgoing friend request has been accepted
+|-
+| 31 || || Wii U || || Unknown. Blacklist related?
+|-
+| 32 || || Wii U || || Unknown. Blacklist related?
+|-
+| 33 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend changed their comment. <code>m_u64Param2</code> contains the [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] the comment was updated, and <code>m_strParam</code> contains the new comment
+|-
+| 35 || || Wii U || || Unknown. Related to friend relationships?
+|-
+| 36 || || Wii U || [[Online/Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol#PersistentNotificationList|PersistentNotificationList]] || Unknown. This seems to delete persistent notifications?
+|}

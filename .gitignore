@@ -1,0 +1,10 @@
+# composer
+vendor
+composer
+composer.phar
+
+# custom
+.env
+.DS_Store
+LocalSettings.php
+compose.yaml

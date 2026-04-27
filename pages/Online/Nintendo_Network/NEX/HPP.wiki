@@ -1,0 +1,53 @@
+== Overview ==
+
+As an alternative to [[Online/Nintendo_Network/NEX/PRUDP|PRUDP]], Nintendo provides an HTTP server that can be used to invoke [[Online/Nintendo_Network/NEX|NEX]] methods. Most games have this disabled. If enabled, the server is located at:
+
+<code><nowiki>https://hpp-</nowiki><game server ID>-<environment>.n.app.nintendo.net/hpp/</code>
+
+See [[Online/Nintendo_Network/NASC#Environments|NASC#Environments]] for information on the environment label.
+
+== Requests ==
+
+The following headers are included in all requests:
+
+{| class="wikitable"
+! Header !! Description
+|-
+| <code>pid</code> || User ID
+|-
+| <code>version</code> || NEX version string
+|-
+| <code>token</code> || Always <code>normaltoken</code>
+|-
+| <code>signature1</code> || HMAC-MD5 over the request body. The key for this signature is the game server access key (decoded as hex), zero-padded to 8 bytes
+|-
+| <code>signature2</code> || HMAC-MD5 over the request body. The key for this signature is derived from the users game server account password using [[Online/Nintendo_Network/NEX/Kerberos#Key_Derivation|Kerberos key derivation]]
+|-
+| <code>Priority-Type</code> || Unknown. Always <code>2</code>
+|}
+
+The request is a single file <code>multipart/form-data</code> <code>POST</code> request, where the <code>file</code> is a standard [[Online/Nintendo_Network/NEX/RMC|RMC]] request.
+
+== Responses ==
+
+The response is a <code>application/octet-stream</code> sending back an [[Online/Nintendo_Network/NEX/RMC/HPP|HPP RMC]] response.
+
+== Known Servers ==
+
+Most game servers cannot be accessed via the HPP server. The following servers are known to support HPP:
+
+{| class="wikitable"
+! Game Server ID !! NEX Version !! Game
+|-
+| <code>0008c500</code> || <code>NEX_2_4_1_S25</code> || Tomodachi Collection: Shin Seikatsu
+|-
+| <code>10110e00</code> || Unknown || Super Smash Bros. 4 (Wii U)
+|-
+| <code>0012ec01</code> || <code>NEX_2_4_1_S25</code> || Unknown
+|-
+| <code>00095700</code> || <code>NEX_2_4_1_S25</code> || Unknown
+|-
+| <code>00086201</code> || <code>NEX_2_4_1_S25</code> || Unknown
+|-
+| <code>001a2c00</code> || <code>NEX_2_4_1_S25</code> || Swapdoodle
+|}

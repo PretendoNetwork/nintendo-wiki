@@ -1,0 +1,425 @@
+== Overview ==
+
+'''NotificationProtocol''' is a simple protocol that provides developers a way to send clients notifications.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#ProcessNotificationEvent]]
+|}
+
+=== ProcessNotificationEvent ===
+
+Used by the server to send a client a notification.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NotificationEvent]] || oEvent || Notification data
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+== Classes ==
+
+=== NotificationEvent ===
+
+This class holds the data about a given notification. The meaning of the fields changes based on the context the notification is sent in, the notification type, etc.
+
+<tabs items="Original,NEX 3.4+,NEX 4,NEX 4 revision 1" storagekey="NotificationEvent">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || m_pidSource || The "source" [[Online/Nintendo_Network/NEX/Types#PID|PID]]. This is often the [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the user who triggered the action which caused the event
+		|-
+		| UInt32 || m_uiType || [[#Notification Types]]
+		|-
+		| UInt32 || m_uiParam1 || Notification number parameter 1
+		|-
+		| UInt32 || m_uiParam2 || Notification number parameter 2
+		|-
+		|  [[Online/Nintendo_Network/NEX/Types#String|String]] || m_strParam || Notification string parameter
+		|}
+	</tab>
+
+	<tab name="NEX 3.4+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || m_pidSource || The "source" [[Online/Nintendo_Network/NEX/Types#PID|PID]]. This is often the [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the user who triggered the action which caused the event
+		|-
+		| UInt32 || m_uiType || [[#Notification Types]]
+		|-
+		| UInt32 || m_uiParam1 || Notification number parameter 1
+		|-
+		| UInt32 || m_uiParam2 || Notification number parameter 2
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || m_strParam || Notification string parameter
+		|-
+		| UInt32 || m_uiParam3 || Notification number parameter 3
+		|}
+	</tab>
+
+	<tab name="NEX 4">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || m_pidSource || The "source" [[Online/Nintendo_Network/NEX/Types#PID|PID]]. This is often the [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the user who triggered the action which caused the event
+		|-
+		| UInt32 || m_uiType || [[#Notification Types]]
+		|-
+		| UInt64 || m_uiParam1 || Notification number parameter 1
+		|-
+		| UInt64 || m_uiParam2 || Notification number parameter 2
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || m_strParam || Notification string parameter
+		|-
+		| UInt64 || m_uiParam3 || Notification number parameter 3
+		|}
+	</tab>
+
+	<tab name="NEX 4 revision 1">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || m_pidSource || The "source" [[Online/Nintendo_Network/NEX/Types#PID|PID]]. This is often the [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the user who triggered the action which caused the event
+		|-
+		| UInt32 || m_uiType || [[#Notification Types]]
+		|-
+		| UInt64 || m_uiParam1 || Notification number parameter 1
+		|-
+		| UInt64 || m_uiParam2 || Notification number parameter 2
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#String|String]] || m_strParam || Notification string parameter
+		|-
+		| UInt64 || m_uiParam3 || Notification number parameter 3
+		|-
+		| [[Online/Nintendo_Network/NEX/Types#Map|Map]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]], [[Online/Nintendo_Network/NEX/Types#Variant|Variant]]&gt; || m_mapParam || Additional notification parameters. This was likely added as a way to avoid adding more and more fields in future updates
+		|}
+	</tab>
+</tabs>
+
+== Notification Types ==
+
+Notification types are a combined value made up of a [[#Notification Categories|category]] and a [[#Notification Subtypes|subtype]]. The final type sent in notifications is calculated using <code>(category * 1000) + subtype</code>. Most categories do not have subtypes, and only have one function.
+
+== Notification Categories ==
+
+{| class="wikitable"
+! Category ID !! Name !! Description
+|-
+| 2 || || Quazal notification triggered with <code>MatchMaking::LaunchSession</code>
+|-
+| 3 || <code>ParticipationEvent</code> || Events related to the user participation in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]
+|-
+| 4 || <code>OwnershipChangeEvent</code> || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ownership has changed
+|-
+| 101 || || Reserved for game-specific use
+|-
+| 102 || || Reserved for game-specific use
+|-
+| 103 || || Reserved for game-specific use
+|-
+| 104 || || Reserved for game-specific use
+|-
+| 105 || || Reserved for game-specific use
+|-
+| 106 || || Reserved for game-specific use
+|-
+| 107 || || Reserved for game-specific use
+|-
+| 108 || || Reserved for game-specific use
+|-
+| 109 || <code>GatheringUnregistered</code> || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] deleted
+|-
+| 110 || <code>HostChangeEvent</code> || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] host changed
+|-
+| 111 || <code>GameNotificationLogout</code> || Logout
+|-
+| 112 || <code>SubscriptionEvent</code> || Events related to the [[Online/Nintendo_Network/NEX/Protocols/SubscriptionProtocol|SubscriptionProtocol]]
+|-
+| 113 || <code>GameServerMaintenance</code> || Indicates that the game server is undergoing maintenance and is not accessible
+|-
+| 114 || <code>MaintenanceAnnouncement</code> || Alerts the recipient of upcoming game server maintenance. The time maintenance begins is also sent
+|-
+| 115 || || [[Online/Nintendo_Network/NEX/Protocols/ServiceItemProtocol|ServiceItemProtocol]] request completed
+|-
+| 116 || <code>RoundStarted</code> || Matchmake referee round started
+|-
+| 117 || <code>FirstRoundReportReceived</code> || Matchmake referee first round report received
+|-
+| 118 || <code>RoundSummarized</code> || Matchmake referee round summarized
+|-
+| 119 || <code>MatchmakeSystemConfigurationNotification</code> || Matchmake system configuration notification
+|-
+| 120 || <code>MatchmakeSessionSystemPasswordSet</code> || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] system password changed
+|-
+| 121 || <code>MatchmakeSessionSystemPasswordClear</code> || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] system password cleared
+|-
+| 122 || <code>AddedToGathering</code> || The reciever was added to a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]
+|-
+| 128 || <code>UserStatusUpdatedEvent</code> || User status updated
+|}
+
+== Notification Subtypes ==
+
+{| class="wikitable"
+! Category ID !! Subtype ID !! Name !! Description
+|-
+| 3 || 1 || <code>Participate</code> || New participant
+|-
+| 3 || 2 || || Participation cancelled
+|-
+| 3 || 7 || <code>Disconnect</code> || Participant disconnected
+|-
+| 3 || 8 || <code>EndParticipation</code> || Participation ended
+|-
+| 112 || 0 || || Unknown
+|-
+| 112 || 1 || || Unknown
+|-
+| 112 || 2 || || Unknown
+|}
+
+== Notifications ==
+
+=== 2000 ===
+
+Sent to all participants of the [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] who are ''not'' the owner when a session is launched.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user launched the session
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_strParam || Session URL from the call
+|}
+
+=== 3001 ===
+
+Sent to the owner of a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when a new participant joins.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource ||The user triggered the join. Usually the new participant
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the new participant
+|-
+| m_strParam || Message the joiner sent when joining
+|-
+| m_uiParam3 || Number of participants
+|}
+
+=== 3002 ===
+
+Sent to the owner of a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when a participant calls [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol#CancelParticipation|MatchMakingProtocol#CancelParticipation]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The caller
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the caller
+|-
+| m_strParam || Message the caller sent when cancelling
+|}
+
+=== 3007 ===
+
+Sent to the owner of a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when a participant disconnects without first leaving the [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The disconnected user
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the disconnected user
+|-
+| m_strParam || Message
+|}
+
+=== 3008 ===
+
+Sent to the owner of a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when a participant intentionally ends their participation in the [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The leaving user
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the leaving user
+|-
+| m_strParam || Message
+|}
+
+=== 4000 ===
+
+Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when the owner changes.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The previous owner
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the new owner
+|-
+| m_strParam || Timestamp in microseconds
+|-
+| m_uiParam2 || Unknown. In Splatoon this is sometimes 0, sometimes 1
+|}
+
+=== 109000 ===
+
+Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when the [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] is deleted.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] owner
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|}
+
+=== 110000 ===
+
+Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] when the host changes.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|}
+
+=== 113000 ===
+
+Sent to all connected clients of a game server to alert users that game server maintenance has started.
+
+Not all NEX clients handle this notification, and thus may not exit the server when this event is received.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || Unknown. Likely <code>2</code>, the game server user?
+|}
+
+=== 114000 ===
+
+Sent to all connected clients of a game server to alert users of upcoming game server maintenance.
+
+Not all NEX clients handle this notification, and thus may not do anything when this event is received.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || Unknown. Likely <code>2</code>, the game server user?
+|-
+| m_uiParam1 || UNIX timestamp (not a [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]) for when the maintenance period begins
+|}
+
+=== 115000 ===
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user that made the service item request
+|-
+| m_uiParam1 || Request ID
+|-
+| m_uiParam2 || Unknown
+|}
+
+=== 116000 ===
+
+Sent to all participants in a round when the round begins.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user who started the round
+|-
+| m_uiParam1 || Round ID
+|}
+
+=== 117000 ===
+
+Sent to all participants in a round when the first round report is recieved.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user who started the round
+|-
+| m_uiParam1 || Round ID
+|}
+
+=== 118000 ===
+
+Sent to all participants in a round has been summarized.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_uiParam1 || Round ID
+|}
+
+=== 120000 ===
+
+Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] when the system password has been set.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user who set the password
+|-
+| m_strParam || Password
+|}
+
+=== 121000 ===
+
+Sent to all participants in a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] when the system password has been cleared.
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user who cleared the password
+|}
+
+=== 122000 ===
+
+Sent to the target user who is being added to a [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || The user who added the target
+|-
+| m_uiParam1 || [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID
+|-
+| m_uiParam2 || [[Online/Nintendo_Network/NEX/Types#PID|PID]] of the target
+|-
+| m_strParam || Join message
+|}
+
+=== 128000 ===
+
+Triggered by [[Online/Nintendo_Network/NEX/Protocols/SubscriberProtocol|SubscriberProtocol#UpdateUserStatus]]?

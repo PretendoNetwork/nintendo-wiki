@@ -1,0 +1,79 @@
+== Overview ==
+
+WATCH_DOGS (Wii U) uses a customized RMC payload structure. Rather than identifying protocols and methods by integer IDs, this variant uses strings in their place. While this is more verbose, it does mean we have access to the real names of all protocols/methods/classes.
+
+== Request Format ==
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Size, excluding this field
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || [[Online/Nintendo_Network/NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
+|-
+| Bool || Is request (always <code>true</code>)
+|-
+| UInt32 || Call ID. An incrementing value used to match responses to their corresponding requests
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || Protocol method name, prefixed with the [[Online/Nintendo_Network/NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2</code>
+|-
+| [[#ClassVersionContainer|ClassVersionContainer]] || Version information for any [[Online/Nintendo_Network/NEX/Types#Classes|classes]] referenced in the request
+|-
+| || Method parameters
+|}
+
+== Response Format ==
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Size, excluding this field
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || [[Online/Nintendo_Network/NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
+|-
+| Bool || Is request (always <code>false</code>)
+|-
+| Bool || Success flag
+|}
+
+'''On success:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Call ID of the request
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || Protocol method name, prefixed with the [[Online/Nintendo_Network/NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2*</code>
+|-
+| || Response data
+|}
+
+In all known cases, the method name string in responses is suffixed with <code>*</code>. Based on response handler code observed in the game, this appears to be related to a return value pointer, though the exact semantics are not fully understood at this time.
+
+'''On error:'''
+
+{| class="wikitable"
+! Type !! Description
+|-
+| UInt32 || Error code. See [[Online/Nintendo_Network/NEX/Result_Codes|Result Codes]]
+|-
+| UInt32 || Call ID of the request
+|}
+
+== Classes ==
+
+Unlike standard NEX [[Online/Nintendo_Network/NEX/Types#Classes|Classes]], WATCH_DOGS (Wii U) does not use a class header in any cases. Instead, the class version information is encoded directly into the RMC message via the [[ClassVersionContainer]]. Presumably this was done to save bandwidth when sending many of the same class, as the game only needs to encode the version information a single time per RMC.
+
+=== ClassVersionContainer ===
+
+The <code>ClassVersionContainer</code> is a [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#ClassVersion|ClassVersion]]&gt;. Unlike the standard RMC format, where version information is optionally encoded as a header on each class, this variant declares version information once, prior to parsing the remainder of the message. Every request includes a <code>ClassVersionContainer</code>, even when it contains zero entries. Responses do not include a <code>ClassVersionContainer</code>, nor do they encode class headers.
+
+=== ClassVersion ===
+
+{| class="wikitable"
+! Type !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || Class name
+|-
+| UInt16 || Class version
+|}

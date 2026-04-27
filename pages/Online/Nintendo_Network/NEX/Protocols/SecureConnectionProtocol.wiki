@@ -1,0 +1,247 @@
+== Overview ==
+
+'''SecureConnectionProtocol''' is used by clients when joining a the games secure server to create the secure connection and register themselves with the game server. This protocol also contains some miscellaneous helper methods for matchmaking.
+
+The following titles have custom extensions/modifications of this protocol:
+
+* [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol/Nintendo_Badge_Arcade|Nintendo Badge Arcade]]
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#Register]]
+|-
+| 2 || [[#RequestConnectionData]]
+|-
+| 3 || [[#RequestUrls]]
+|-
+| 4 || [[#RegisterEx]]
+|-
+| 5 || [[#TestConnectivity]]
+|-
+| 6 || [[#UpdateURLs]]
+|-
+| 7 || [[#ReplaceURL]]
+|-
+| 8 || [[#SendReport]]
+|}
+
+=== Register ===
+
+Registers the client with the game server insecurely. Clients should never use this method unless [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
+
+The client sends the server it's current list of stations (should usually only contain the clients local station), and the server returns the clients public station.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+|-
+| UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+|}
+
+=== RequestConnectionData ===
+
+Requests connection data for a specific user. Seems to be only usable if already in a session with the target.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || cidTarget || The target's connection ID
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || pidTarget || The target's [[Online/Nintendo_Network/NEX/Types#PID|PID]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Result of the request
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#ConnectionData]]&gt; || pvecConnectionsData || List of the target's stations. Empty if <code>%retval%</code> is false
+|}
+
+=== RequestUrls ===
+
+Requests a specific user's station list. Seems to be only usable if already in a session with the target.
+
+Replaced with [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol|MatchMakingProtocol#GetSessionURLs]] after NEX 1.
+
+Unclear how this effectively differs from [[#RequestConnectionData]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || cidTarget || The target's connection ID
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || pidTarget || The target's [[Online/Nintendo_Network/NEX/Types#PID|PID]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Result of the request
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || plstURLs || List of the target's stations. Empty if <code>%retval%</code> is false
+|}
+
+=== RegisterEx ===
+
+Registers the client with the game server securely. Clients may use this method whether or not [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
+
+The client sends the server it's current list of stations (should usually only contain the clients local station), and the server returns the clients public station.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+|-
+| [[Online/Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || hCustomData || Login data. In NEX this is either [[#NintendoLoginData]] or [[#AccountExtraInfo]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+|-
+| UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+|}
+
+=== TestConnectivity ===
+
+Checks if the client can reach to the game server.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+This method does not return anything.
+
+=== UpdateURLs ===
+
+Updates the clients station list to the provided list.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || New station list
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ReplaceURL ===
+
+Replaces only a specific station in the clients list with another. Only check the address/port to determine a match.
+
+If the new station is missing <code>RVCID</code> or <code>PID</code>, it is added in this method.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || target || The station to replace
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || url || New station
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== SendReport ===
+
+Sends an arbitrary "report" to the server. Report data can be anything.
+
+Notably, games which use [[Online/Nintendo_Network/NEX/PIA|PIA]] use this method to send [[Online/Nintendo_Network/NEX/PIA/Protocols/MonitoringData|MonitoringData]] reports after matches.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || reportId || Report "ID". This does not appear to be unique per report, so it is likely something such as a "report category"?
+|-
+| [[Online/Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || reportData || Report data
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+== Classes ==
+
+=== ConnectionData ===
+
+This class holds information on a users station.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || m_StationUrl || One of the users stations
+|-
+| UInt32 || m_ConnectionID || Users connection ID
+|}
+
+=== NintendoLoginData ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
+<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
+</div>
+
+This class holds the users login. It is identical to [[#AccountExtraInfo]], just renamed.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || token || Login token from the account server
+|}
+
+=== AccountExtraInfo ===
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
+<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
+</div>
+
+This class holds the users login. It is identical to [[#NintendoLoginData]], just renamed.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || token || Login token from the account server
+|}

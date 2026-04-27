@@ -1,0 +1,19 @@
+== Overview ==
+
+The Nintendo Network eShop services handle title purchasing, metadata, and content management for digitally purchased titles.
+
+The eShop is made up of several distinct services, each responsible for a specific aspect of its functionality:
+
+{| class="wikitable"
+! Service !! Description
+|-
+| [[Online/Nintendo_Network/eShop/Tagaya|Tagaya]] || Title version list
+|-
+| [[Online/Nintendo_Network/eShop/Geisha|Geisha]] || Wii U eShop interface
+|-
+| [[Online/Nintendo_Network/eShop/Ninja|Ninja]] || eShop metadata API
+|-
+| [[Online/Nintendo_Network/eShop/Samurai|Samurai]] || eShop metadata API
+|-
+| [[Online/Nintendo_Network/SOAP|SOAP]] || Title installation/management
+|}

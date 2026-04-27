@@ -1,0 +1,33 @@
+== Overview ==
+
+Nintendo Network was Nintendo's second attempt at online services. It was available starting on the 3DS, later being added to the Wii U, and was a substantial upgrade from their previous attempt, Nintendo Wi-Fi Connection, both in terms of features and complexity. Early portions of the network reused several concepts from Nintendo Wi-Fi Connection, iterating on earlier ideas to make improvements. Though later additions, such as the introduction of Nintendo Network IDs, were wholely unique to the platform.
+
+Nintendo Network is made up of many different services, all providing specific functionality for the console/accounts:
+
+{| class="wikitable"
+! Service !! Description
+|-
+| [[Online/Nintendo_Network/Connection_Test|Connection Test]] || Connection test
+|-
+| [[Online/Nintendo_Network/NEX|NEX]] || Online games using Nintendo's multiplayer framework
+|-
+| [[Online/Nintendo_Network/NNCS|NNCS]] || NAT check
+|-
+| [[Online/Nintendo_Network/NASC|NASC]] || 3DS account services
+|-
+| [[Online/Nintendo_Network/NNAS|NNAS]] || Nintendo Network account services
+|-
+| [[Online/Nintendo_Network/eShop|eShop]] || Title purchases/management
+|-
+| [[Online/Nintendo_Network/SOAP|SOAP]] || Title installation/management
+|-
+| [[Online/Nintendo_Network/BOSS|BOSS]] || Background tasks such as SpotPass
+|-
+| [[Online/Nintendo_Network/IDBE|IDBE]] || Icon graphics
+|-
+| [[Online/Nintendo_Network/VC_Manuals|VC Manuals]] || Game manuals for Virtual Console titles
+|-
+| [[Online/Nintendo_Network/Miiverse|Miiverse]] || Miiverse
+|-
+| [[Online/Nintendo_Network/TVii|TVii]] || TVii
+|}

@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Short URLs
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+RewriteRule ^(.*)$ index.php [L]

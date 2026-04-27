@@ -1,0 +1,175 @@
+== Overview ==
+
+'''NATTraversalProtocol''' is used by clients when joining a multiplayer session. It provides a means for clients to establish peer-to-peer connections across NAT boundaries by initiating hole-punching attempts and reporting of NAT properties.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#RequestProbeInitiation]]
+|-
+| 2 || [[#InitiateProbe]]
+|-
+| 3 || [[#RequestProbeInitiationExt]]
+|-
+| 4 || [[#ReportNATTraversalResult]]
+|-
+| 5 || [[#ReportNATProperties]]
+|-
+| 6 || [[#GetRelaySignatureKey]]
+|-
+| 7 || [[#ReportNATTraversalResultDetail]]
+|}
+
+=== RequestProbeInitiation ===
+
+Sent by the client to the server to begin NAT probing the local client at it's registered public address (see [[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]]/[[Online/Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]]).
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== InitiateProbe ===
+
+Sent by the server to a client that is being requested for probing by another client.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address of the station that would like the receiver to probe it
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== RequestProbeInitiationExt ===
+
+Sent by the client to the server to begin NAT probing the local client at the specified address.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
+|-
+| [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address the local client would like receivers to probe
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ReportNATTraversalResult ===
+
+Sent by the client to the server to report the result of the NAT traversal attempt.
+
+==== Request ====
+
+<tabs items="NEX 2 and below,NEX 3.0+" storagekey="ReportNATTraversalResult">
+	<tab name="NEX 2 and below">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || cid || The <code>RVCID</code> of the station the local client probed
+		|-
+		| Boolean || result || The result of the NAT traversal
+		|}
+	</tab>
+
+	<tab name="NEX 3.0+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || cid || The <code>RVCID</code> of the station the local client probed
+		|-
+		| Boolean || result || The result of the NAT traversal
+		|-
+		| UInt32 || rtt || The connections round-trip-time
+		|}
+	</tab>
+</tabs>
+
+==== Response ====
+
+This method does not return anything.
+
+=== ReportNATProperties ===
+
+Sent by the client to the server to report the client's NAT properties.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || natmapping || Client's [[Online/Nintendo_Network/NEX/Types#NAT_Mapping|NAT mapping mode]]
+|-
+| UInt32 || natfiltering || Client's [[Online/Nintendo_Network/NEX/Types#NAT_Filtering|NAT filtering mode]]
+|-
+| UInt32 || rtt || The connections round-trip-time
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== GetRelaySignatureKey ===
+
+Sent by the client to the server to request relay server information. Likely [https://en.wikipedia.org/wiki/Traversal_Using_Relays_around_NAT TURN], or equivalent.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| SInt32 || relayMode || Unknown
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || currentUTCTime || The server's current UTC time
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || address || The address of the relay server
+|-
+| UInt16 || port || The port of the relay server
+|-
+| SInt32 || relayAddressType || Unknown
+|-
+| UInt32 || gameServerID || The title's unique game server ID
+|}
+
+=== ReportNATTraversalResultDetail ===
+
+Sent by the client to the server to report the result of the NAT traversal attempt with an extra detail field.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || cid || The <code>RVCID</code> of the station the local client probed
+|-
+| Boolean || result || The result of the NAT traversal
+|-
+| SInt32 || detail || Unknown
+|-
+| UInt32 || rtt || The connections round-trip-time
+|}
+
+==== Response ====
+
+This method does not return anything.

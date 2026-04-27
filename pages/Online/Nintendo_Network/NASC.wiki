@@ -1,0 +1,500 @@
+== Overview ==
+
+NASC ('''N'''intendo '''A'''uthentication '''S'''erver '''C'''TR) is an evolution of the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], but for the 3DS family of consoles. It is more-or-less the same server as the original, but slightly modified to fit some of specific needs of the 3DS, such as the newly introduced [[Online/Nintendo_Network/NEX|NEX]] system for multiplayer. The server still includes the same endpoints and methods as the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], though they may not always work the same way the original did. This page should '''NOT''' be used as a reference for the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]].
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''This page only refers to the server used by 3DS titles which do not use NNIDs. See [[Online/Nintendo_Network/NNAS|NNAS]] for titles which use NNIDs.''</div>
+</div>
+
+== Environments ==
+
+Several environments exist which a client may be assigned to. The capabilities and available servers/services of each environment may differ from each other. A retail unit will always be in the production environment by default, though all environments are available on retail units and any environment may be selected when the system creates a local account (see <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>).
+
+Unless otherwise specified, all information on this page refers to the production environment.
+
+Each environment is assigned a label. This label is made up of 2 parts; the environment ID (denoting the environment itself) and a number 1-9. For example, the default environment label for retail units is <code>L1</code>.
+
+{| class="wikitable"
+! Environment ID !! Notes
+|-
+| <code>L</code> || Used by the production (live) environment
+|-
+| <code>C</code> || Unknown environment
+|-
+| <code>S</code> || Used by the staging environment?
+|-
+| <code>D</code> || Used by the dev environment?
+|-
+| <code>I</code> || Unknown environment
+|-
+| <code>T</code> || Used by the testing environment?
+|-
+| <code>U</code> || Fallback to <code>L</code> according to https://3dbrew.org/wiki/Friend_Services#Server_Types?
+|-
+| <code>J</code> || Unknown environment
+|-
+| <code>X</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>A</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>B</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>E</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>F</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>G</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>H</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>K</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>M</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>N</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>O</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>P</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|-
+| <code>Q</code> || Unknown environment. Unusable by official servers, though is assignable by <code>[https://3dbrew.org/wiki/FRDA:CreateLocalAccount FRDA:CreateLocalAccount]</code>
+|}
+
+Each environment also has it's own set of domains it uses when online:
+
+{| class="wikitable"
+! Domain !! Notes
+|-
+| <code>nasc.nintendowifi.net</code> || Used by the <code>Lx</code> (production) environment
+|-
+| <code>nasc.test.nintendowifi.net</code> || Used by the testing environment
+|-
+| <code>nasc.dev.nintendowifi.net</code> || Used by the dev environment
+|}
+
+== Base64 ==
+
+All base64 encoded strings use a custom alphabet. This alphabet is the same as the standard, with only the following changes:
+
+{| class="wikitable"
+! Old Character !! New Character
+|-
+| <code>+</code> || <code>.</code>
+|-
+| <code>/</code> || <code>-</code>
+|-
+| <code>=</code> || <code>*</code>
+|}
+
+== Request Structure ==
+
+All requests must be made using the common client certificate <code>ctr-common-1</code>, otherwise the server will reject the TLS handshake. All requests are <code>POST</code> requests with the body formatted using [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST#url-encoded_form_submission URL-encoded forms]. All form values are [[#Base64]] encoded.
+
+The following headers are always present in all requests:
+
+{| class="wikitable"
+! Header !! Value
+|-
+| <code>Host</code> || See [[#Environments]]
+|-
+| <code>X-GameId</code> || Game ID in the form <code>%08X</code>. Typically this is the last half the games Japanese title ID
+|-
+| <code>User-Agent</code> || <code>CTR FPD/%04X</code>. See [[#FPD Version]]
+|-
+| <code>Content-Type</code> || <code>application/x-www-form-urlencoded</code>. This header is always set twice
+|-
+| <code>Content-Type</code> || <code>application/x-www-form-urlencoded</code>. This header is always set twice
+|-
+| <code>Content-Length</code> || Length of the request body in bytes
+|}
+
+== Response Structure ==
+
+All responses have their body formatted using [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/POST#url-encoded_form_submission URL-encoded forms]. All form values are [[#Base64]] encoded.
+
+The following headers are always present in all responses:
+
+{| class="wikitable"
+! Header !! Value
+|-
+| <code>Date</code> || The current GMT date. For example, <code>Thu, 06 Mar 2025 00:01:04 GMT</code>
+|-
+| <code>Content-Type</code> || <code>text/plain;charset=ISO-8859-1</code>
+|-
+| <code>Content-Length</code> || Length of the response body in bytes
+|-
+| <code>Connection</code> || <code>close</code>
+|-
+| <code>NODE</code> || The name/ID server node which handled the request. This has no standard form
+|-
+| <code>Server</code> || <code>Nintendo</code>
+|}
+
+== FPD Version ==
+
+The FPD ('''F'''riends '''P'''resence '''D'''ata?) version seems to always be the minor version of the latest system version. For example:
+
+{| class="wikitable"
+! System Version !! FPD Version
+|-
+| 11.15.0 || 15
+|-
+| 11.16.0 || 16
+|}
+
+== Errors ==
+
+On error, the server sends the following response:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>retry</code> || Either 0 or 1
+|-
+| <code>returncd</code> || Error code
+|-
+| <code>datetime</code> || Current server time (<code>%Y%m%d%H%M%S</code>)
+|}
+
+=== Error Codes ===
+
+{| class="wikitable"
+! Code !! Description
+|-
+| <code>null</code> || Unknown
+|-
+| <code>001</code> || Success
+|-
+| <code>101</code> || Game server is under maintenance
+|-
+| <code>102</code> || Device (account?) is banned. During normal usage, only a single local account exists per 3DS system, so it is unclear if this ban is scoped to the device or the local user. Seems to apply to both temporary and permanent bans
+|-
+| <code>107</code> || Product code is invalid
+|-
+| <code>109</code> || Missing or malformed parameter in request
+|-
+| <code>110</code> || Game server is no longer available
+|-
+| <code>112</code> || The <code>svc</code> value in a [[#SVCLOC Action]] request is invalid
+|-
+| <code>119</code> || [[#FPD Version]] is invalid
+|-
+| <code>120</code> || Title version is invalid
+|-
+| <code>121</code> || [https://3dbrew.org/wiki/Nandrw/sys/LocalFriendCodeSeed_B LocalFriendCodeSeed_B] is invalid
+|-
+| <code>122</code> || PID HMAC is invalid
+|-
+| <code>123</code> || Rom ID is banned
+|-
+| <code>125</code> || Game ID is invalid
+|-
+| <code>127</code> || Key hash is invalid
+|}
+
+== Paths ==
+
+=== <code>/ac</code> ===
+
+Actions API. This endpoint executes a specific action based on the type of the request. The following actions are known to exist:
+
+* [[#LOGIN Action]]
+* [[#SVCLOC Action]]
+* [[#nzchk Action]]
+* [[#parse Action]]
+* [[#message Action]]
+
+==== Action Request Base ====
+
+The following fields are present on all requests to the <code>/ac</code> endpoint. Additional fields are added in their respective actions:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>gameid</code> || Game server ID (<code>%08X</code>). This is the same as the <code>X-GameId</code> header
+|-
+| <code>sdkver</code> || Major and minor SDK version (<code>%03d%03d</code>). Always <code>000000</code>
+|-
+| <code>titleid</code> || Title ID (<code>%016X</code>)
+|-
+| <code>gamecd</code> || Product code. See https://3dsdb.com/
+|-
+| <code>gamever</code> || Title version (<code>%04X</code>)
+|-
+| <code>mediatype</code> || Title type. 0 = System, 1 = Digital, 2 = Cartridge
+|-
+| <code>romid</code> || '''Optional'''. Unique ROM (game) ID. Only present if the media type is 2 (cartridge)
+|-
+| <code>makercd</code> || Product maker (company code)
+|-
+| <code>unitcd</code> || Unit code. 0 = NDS, 1 = Wii, 2 = 3DS. Always 2
+|-
+| <code>macadr</code> || Device MAC address
+|-
+| <code>bssid</code> || BSSID of active wifi network
+|-
+| <code>apinfo</code> || Information about the used Wi-Fi access point in the format <code>AA:BBBBBBBBBB</code>. Example <code>01:0000000000</code>. <code>AA</code> is the AP slot. <code>BBBBBBBBBB</code> comes from either <code>[https://3dbrew.org/wiki/ACU:GetNZoneApNumService ACU:GetNZoneApNumService]</code> or <code>[https://3dbrew.org/wiki/AC_Services ACU:GetConnectingHotspotSubset]</code> based on the result from <code>[https://3dbrew.org/wiki/ACU:GetWifiStatus ACU:GetWifiStatus]</code>
+|-
+| <code>fcdcert</code> || [https://3dbrew.org/wiki/Nandrw/sys/LocalFriendCodeSeed_B LocalFriendCodeSeed_B]
+|-
+| <code>devname</code> || Device name (UTF-16-LE). Usually your current Mii name
+|-
+| <code>servertype</code> || Environment label. See [[#Environments]]
+|-
+| <code>fpdver</code> || [[#FPD Version]] (<code>%04X</code>)
+|-
+| <code>devtime</code> || Current device time (<code>%y%m%d%H%M%S</code>)
+|-
+| <code>lang</code> || Language code (<code>%02X</code>)
+|-
+| <code>region</code> || Region code (<code>%02X</code>)
+|-
+| <code>csnum</code> || Serial number
+|-
+| <code>action</code> || The name of the action the console wishes to perform. Case insensitive
+|}
+
+==== <code>LOGIN</code> Action ====
+
+This action serves 2 purposes, registering new game server accounts and loging into game servers. In the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], these functions were split into 2 distinct actions, however Nintendo combined them into one for NASC. To know which function is being used, the request body must be inspected.
+
+<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
+<div style="padding: 5px;">''Not all 3DS games use Nintendo's game servers, but all 3DS games which go online must use NASC to authenticate. This effectively turns the <code>LOGIN</code> action into a ban check for games which use their own servers.''</div>
+</div>
+
+===== Request =====
+
+Before making the request, the console first checks if there is a local user created with save data from the [[Online/Nintendo_Network/NEX|NEX]] friends server. If not (such as after a factory reset), the console silently creates a new [[Online/Nintendo_Network/NEX|NEX]] user account in the background:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>passwd</code> || Password for the new [[Online/Nintendo_Network/NEX|NEX]] account. Always 16 characters, using any character between <code>\x21-\x5B</code> and <code>\x5D-\x7D</code>
+|-
+| <code>ingamesn</code> || Nickname provided by the current title. Remnant of the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]]. Does not seem to affect how any online titles operate. Almost always an empty string, though this option ''is'' exposed to titles should they want to use it
+|}
+
+After this, if the request was successful then the console logs into the friends server using the <code>guest</code> account to complete registration, then logs out of the <code>guest</code> account and into the newly created user account as normal. This is also why it appears as if the 3DS does not require an account to play online, as the console manages these accounts in the background.
+
+If a local user does exist with save data from the friends server, or if a console has finished registration using the <code>guest</code> account, then the console logs into the game server like normal:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>uidhmac</code> || Hash of <code>userid</code> as provided by the friends server during account creation. The exact hashing algorithm is only known by the server. Always 8 UTF-16 characters, truncated if the friends server sends more. Officially Nintendo only used lowercase hex characters, however any character works
+|-
+| <code>userid</code> || Username of the [[Online/Nintendo_Network/NEX|NEX]] account. Always the account PID
+|-
+| <code>ingamesn</code> || Nickname provided by the current title. Remnant of the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]]. Does not seem to affect how any online titles operate. Almost always an empty string, though this option ''is'' exposed to titles should they want to use it
+|}
+
+===== Response =====
+
+On success, the server sends the following response:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>locator</code> || Address of the game server (<code>host:port</code>). If the game does not use Nintendo's game servers and instead uses their own, this is set to <code>0.0.0.0:0</code>
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || Always <code>001</code> (success)
+|-
+| <code>token</code> || Token for logging in on game server. This token is encrypted with a key only known by the intended server, and thus the exact contents are not known
+|-
+| <code>datetime</code> || Current server time (<code>%Y%m%d%H%M%S</code>)
+|}
+
+==== <code>SVCLOC</code> Action ====
+
+This action requests a service token for an independent service. An independent service is a server which a title connects to that is not managed by Nintendo, such as a developers own game servers or supplementary servers used by games which do use Nintendo's game servers (such as the Pokemon legality check server). Service tokens provide developers a way to securely request information about a user from Nintendo for their own purposes (linking Nintendo-managed accounts to a developers own account system, identifying users in supplementary servers, simple ban checks, etc.)
+
+===== Request =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>uidhmac</code> || Hash of <code>userid</code> as provided by the friends server during account creation. The exact hashing algorithm is only known by the server. Always 8 UTF-16 characters, truncated if the friends server sends more. Officially Nintendo only used lowercase hex characters, however any character works
+|-
+| <code>userid</code> || Username of the [[Online/Nintendo_Network/NEX|NEX]] account. Always the account PID
+|-
+| <code>keyhash</code> || Unique ID assigned to the title(s). This differs from the title ID as a game can have multiple title IDs (at least 1 per region), whereas this does not change per region. This is the precursor to the <code>client_id</code> used by [[Online/Nintendo_Network/NNAS|NNAS]] for it's service token endpoint
+|-
+| <code>svc</code> || [[#Service Host]] type
+|}
+
+===== Response =====
+
+On success, the server sends the following response:
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || Always <code>007</code>?
+|-
+| <code>servicetoken</code> || Service token. This token is encrypted with a key only known by the intended server, and thus the exact contents are not known
+|-
+| <code>svchost</code> || [[#Service Host]]
+|-
+| <code>datetime</code> || Current server time (<code>%Y%m%d%H%M%S</code>)
+|}
+
+===== Service Host =====
+
+In most cases, a service token is used by a server not managed by Nintendo. However Nintendo does provide some servers which use service tokens. No 3DS games are known to use these servers, as they have been replaced by other services, however this functionality does still technically exist within NASC.
+
+When requesting a service token, the client sends a "host type" value in the <code>svc</code> field. Depending on this type, the <code>svchost</code> field of the response changes. The following types are known:
+
+{| class="wikitable"
+|-
+! <code>svc</code> !! <code>svchost</code>
+|-
+| <code>0000</code> || <code>n/a</code>. This indicates that the title intends to use the token on it's own servers
+|-
+| <code>9001</code> || <code>dls1.nintendowifi.net</code>. '''D'''own'''l'''oad '''S'''tation 1? Seems to be a remnant of the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]]. No titles are known to use this. See https://wiki.tockdom.com/wiki/Network_Protocol/Server#dls1.nintendowifi.net for more information (TODO: document this here too, if it works for 3DS games still?). This server seems to have been largely replaced by the [[Online/Nintendo_Network/BOSS|BOSS]] service
+|}
+
+==== <code>nzchk</code> Action ====
+
+"Nintendo Zone Check". Checks if the access point being connected to is a [[Online/Nintendo_Network/Nintendo Zone|Nintendo Zone]]. Returns challenge data similar to [[#parse Action]].
+
+===== Request =====
+
+Does not use any extra fields.
+
+===== Response =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || One of <code>009</code>, <code>117</code> or <code>118</code>. The official servers always seem to send <code>009</code>
+|-
+| <code>url</code> || Challenge URL. The official servers never seem to send this anymore
+|-
+| <code>data</code> || Challenge data. The official servers never seem to send this anymore
+|}
+
+If <code>returncd</code> is none of <code>009</code>, <code>117</code> or <code>118</code>, the client immediately errors and exits.
+
+The most recent version of the client does not handle any data from the response body besides <code>returncd</code>, however it does still parse out <code>url</code> and <code>data</code>, it just does nothing with them. Given that [[Online/Nintendo_Network/Nintendo Zone|Nintendo Zone]] was discontinued, it is likely that this functionality was removed in a later firmware update.
+
+However given the similar response structure to [[#parse Action]], it can be assumed that the same actions were at one point used here.
+
+==== <code>parse</code> Action ====
+
+Used as part of connecting to a wifi network with a captive portal. Triggered when the [[Online/Nintendo_Network/Connection_Test|Connection Test]] returns a HTTP 302 and an unknown internal flag is <code>true</code>. The console uploads the captive portal page contents to the server, and gets back challenge data.
+
+===== Request =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>HTML</code> || Page data from the 302 redirect
+|}
+
+===== Response =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>retry</code> || Always 0
+|-
+| <code>returncd</code> || Either <code>034</code> or <code>004</code>
+|-
+| <code>interval</code> || Unknown
+|-
+| <code>url</code> || Challenge URL
+|-
+| <code>data</code> || Optional. Challenge data
+|}
+
+If <code>returncd</code> is <code>034</code>, the client immediately exits the function and retries the [[Online/Nintendo_Network/Connection_Test|Connection Test]] with the unknown internal flag set to <code>false</code>
+
+If <code>returncd</code> is <code>004</code>, the client performs the following steps:
+
+# If <code>interval</code> is not 0, it is set to some global state
+# The challenge is performed. If <code>data</code> is set, this is a <code>POST</code> request to <code>url</code> with <code>data</code> as the body. If <code>data</code> is not set, this is a <code>GET</code> request to <code>url</code>
+# If the challenge succeeds, the client exits the function and retries the [[Online/Nintendo_Network/Connection_Test|Connection Test]] with the unknown internal flag set to <code>false</code>
+
+==== <code>message</code> Action ====
+
+Used as part of connecting to a wifi network with a captive portal. Triggered when the [[Online/Nintendo_Network/Connection_Test|Connection Test]] returns a HTTP 302 and an unknown internal flag is <code>false</code>. This seems to be a remote message logger.
+
+===== Request =====
+
+{| class="wikitable"
+|-
+! Field !! Description
+|-
+| <code>direction</code> || Always <code>set</code>
+|-
+| <code>HotSpotResponse</code> || Page data from the 302 redirect
+|}
+
+===== Response =====
+
+The client seems to entirely ignore the response body.
+
+=== <code>/pr</code> ===
+
+Profanity API. This endpoint is used to detect the presence of profanity in text. The exact filters/checks used by Nintendo are not known, but they are likely based on the profanity regexes found in many Nintendo consoles ("NgWord").
+
+==== Request ====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>words</code> || A list of individual words to check. Each word is delimited by a tab character
+|-
+| <code>wenc</code> || '''Optional'''. <code>words</code> encoding. Known values are <code>UTF-16LE</code>, <code>UTF-16BE</code> and <code>UTF-8</code>. Defaults to <code>UTF-16LE</code> if not set or is invalid
+|-
+| <code>wtype</code> || '''Optional'''. <code>words</code> type? Unknown use, when used in [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]] this seems to always be an empty string
+|-
+| <code>wregion</code> || '''Optional'''. <code>words</code> region. This determines which set of profanity filters to check <code>words</code> against. Only one region value can be set. If not set, or if the value is not valid, every set of filters is used, but the additional response fields are not sent<br>Valid values are <code>J</code> = Japanese, <code>E</code> = American English, Canadian French, Latin American Spanish and Brazilian Portuguese, <code>P</code> = British English, French, German, Italian, Spanish, Dutch, Portuguese and Russian, <code>K</code> = Korean, <code>C</code> = Simplified Chinese, <code>A</code> = All
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>prwords</code> || Profane word flags, based on the selected profanity filter(s). A string of 1s and 0s, one flag for each word in <code>words</code>. If the word was profane, it's flag 1, otherwise 0
+|-
+| <code>returncd</code> || Return code. If <code>words</code> is either missing, or no words are profane, this is set to <code>000</code>. If any word in the list is profane, this is set to <code>100</code>
+|-
+| <code>datetime</code> || Current server time (<code>%Y%m%d%H%M%S</code>)
+|}
+
+When <code>wregion</code> is set to <code>A</code>, every profanity list is used and the following data is included immediately after <code>prwords</code>:
+
+{| class="wikitable"
+! Field !! Description
+|-
+| <code>prwordsA</code> || Profane word flags as by every regions filters. This should always match <code>prwords</code>
+|-
+| <code>prwordsC</code> || Profane word flags as seen by the Simplified Chinese filters
+|-
+| <code>prwordsE</code> || Profane word flags as seen by the American English, Canadian French, Latin American Spanish and Brazilian Portuguese filters
+|-
+| <code>prwordsJ</code> || Profane word flags as seen by the Japanese filters
+|-
+| <code>prwordsK</code> || Profane word flags as seen by the Korean filters
+|-
+| <code>prwordsP</code> || Profane word flags as seen by the British English, French, German, Italian, Spanish, Dutch, Portuguese and Russian filters
+|}

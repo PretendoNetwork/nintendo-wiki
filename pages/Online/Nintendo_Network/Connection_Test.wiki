@@ -1,0 +1,36 @@
+== Overview ==
+
+Before using any online features, the console must first verify that it can connect to the internet. To do this, it first contacts a "connection test" server. Both the 3DS and Wii U use the same server. This test usually happens when connecting to the internet in the system settings, but may also be contacted afterwards as well.
+
+The connection test is a simple HTTP request to <code>http://conntest.nintendowifi.net</code>. The server responds back with a simple reply, indicating the test was a success. After completing the HTTP test, the clients then perform a [[Online/Nintendo_Network/NNCS|NAT check]]. The HTTP flow is as follows:
+
+<pre>
+GET / HTTP/1.1
+Host: conntest.nintendowifi.net
+Proxy-Authorization: Basic Og==
+User-Agent: CTR AC/02
+HTTP_X_GAMEID: 00002400
+Content-Type: application/x-www-form-urlencoded
+Connection: Close
+
+</pre>
+
+<pre>
+HTTP/1.0 200 OK
+Content-type: text/html
+X-Organization: Nintendo
+Connection: close
+Content-Length: 352
+
+
+            <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+            <html>
+            <head>
+            <title>HTML Page</title>
+            </head>
+            <body bgcolor="#FFFFFF">
+            This is test.html page
+            </body>
+            </html>
+          
+</pre>

@@ -1,0 +1,27 @@
+== Overview ==
+
+'''RemoteLogDeviceProtocol''' is a simple protocol that provides developers a way to send game logs to a remote server rather than logging them locally.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#Log]]
+|}
+
+=== Log ===
+
+Sends a log line to the remote server.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || strLine || The log line to send to the remote server
+|}
+
+==== Response ====
+
+This method does not return anything.

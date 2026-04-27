@@ -1,0 +1,675 @@
+== Overview ==
+
+Result codes are UInt32 values used throughout [[Online/Nintendo_Network/NEX|NEX]] to indicate the outcome of an operation. They are often represented using the [[Online/Nintendo_Network/NEX/Types#Result|Result]] type. If the MSB is set, the result code indicates a error. Most results are used as errors. Some result codes are only triggered by the client, and are not sent from a server.
+
+Result codes are structured as follows:
+
+{| class="wikitable"
+! Bits !! Description
+|-
+| 31 || Error flag. If set, the result indicates a error
+|-
+| 30-16 || Category
+|-
+| 15-0 || Code within the category
+|}
+
+== Known Result Codes ==
+
+=== Core ===
+
+These result codes are usually used only by the client, or are returned by the server to indicate generic errors.
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00010001</code> || <code>Core::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00010002</code> || <code>Core::NotImplemented</code> || The called method does not exist on the receiver
+|-
+| <code>0x00010003</code> || <code>Core::InvalidPointer</code> || The operation specifies or accesses an invalid pointer
+|-
+| <code>0x00010004</code> || <code>Core::OperationAborted</code> || The operation was aborted, either intentionally or due to time out
+|-
+| <code>0x00010005</code> || <code>Core::Exception</code> || A generic exception was raised
+|-
+| <code>0x00010006</code> || <code>Core::AccessDenied</code> || An attempt was made to access data in an incorrect manner. This may be due to inadequate permission or the data, file, etc. not existing
+|-
+| <code>0x00010007</code> || <code>Core::InvalidHandle</code> || The operation specifies or accesses an invalid DOHandle
+|-
+| <code>0x00010008</code> || <code>Core::InvalidIndex</code> || The operation specifies or accesses an invalid index
+|-
+| <code>0x00010009</code> || <code>Core::OutOfMemory</code> || The system could not allocate or access enough memory or disk space to perform the specified operation
+|-
+| <code>0x0001000A</code> || <code>Core::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x0001000B</code> || <code>Core::Timeout</code> || The operation did not complete within the specified timeout for that operation
+|-
+| <code>0x0001000C</code> || <code>Core::InitializationFailure</code> || Initialization of the component failed
+|-
+| <code>0x0001000D</code> || <code>Core::CallInitiationFailure</code> || The call failed to initialize
+|-
+| <code>0x0001000E</code> || <code>Core::RegistrationError</code> || An error occurred during registration
+|-
+| <code>0x0001000F</code> || <code>Core::BufferOverflow</code> || The buffer is too large to be handled
+|-
+| <code>0x00010010</code> || <code>Core::InvalidLockState</code> || Unknown
+|-
+| <code>0x00010011</code> || <code>Core::InvalidSequence</code> || Unknown
+|-
+| <code>0x00010012</code> || <code>Core::SystemError</code> || Unknown
+|-
+| <code>0x00010013</code> || <code>Core::Cancelled</code> || Unknown
+|}
+
+=== DDL ===
+
+These errors are likely only triggered during debugging, when parsing a games [[Online/Nintendo_Network/DDL|DDLs]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00020001</code> || <code>DDL::InvalidSignature</code> || Unknown
+|-
+| <code>0x00020002</code> || <code>DDL::IncorrectVersion</code> || Unknown
+|}
+
+=== RendezVous ===
+
+Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous games acorss multiple protocols. Nintendo replaced many of these result codes with more specific result codes in NEX.
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00030001</code> || <code>RendezVous::ConnectionFailure</code> || Connection was unable to be established, either with the Rendez-Vous backend or a peer
+|-
+| <code>0x00030002</code> || <code>RendezVous::NotAuthenticated</code> || The Principal could not be authenticated by the Authentication Service
+|-
+| <code>0x00030064</code> || <code>RendezVous::InvalidUsername</code> || The Principal tried to log in with an invalid user name, i.e. the user name does not exist in the database
+|-
+| <code>0x00030065</code> || <code>RendezVous::InvalidPassword</code> || The Principal either tried to log in with an invalid password for the provided user name or tried to join a Gathering with an invalid password
+|-
+| <code>0x00030066</code> || <code>RendezVous::UsernameAlreadyExists</code> || The provided user name already exists in the database
+|-
+| <code>0x00030067</code> || <code>RendezVous::AccountDisabled</code> || The Principal's account still exists in the database but the account has been disabled
+|-
+| <code>0x00030068</code> || <code>RendezVous::AccountExpired</code> || The Principal's account still exists in the database but the account has expired
+|-
+| <code>0x00030069</code> || <code>RendezVous::ConcurrentLoginDenied</code> || The Principal does not have the capabilities to perform concurrent logins
+|-
+| <code>0x0003006A</code> || <code>RendezVous::EncryptionFailure</code> || Data encryption failed
+|-
+| <code>0x0003006B</code> || <code>RendezVous::InvalidPID</code> || The operation specifies or accesses an invalid PrincipalID
+|-
+| <code>0x0003006C</code> || <code>RendezVous::MaxConnectionsReached</code> || Maximum concurrent connections reached
+|-
+| <code>0x0003006D</code> || <code>RendezVous::InvalidGID</code> || The operation specifies or accesses an invalid gathering ID
+|-
+| <code>0x0003006E</code> || <code>RendezVous::InvalidControlScriptID</code> || Unknown
+|-
+| <code>0x0003006F</code> || <code>RendezVous::InvalidOperationInLiveEnvironment</code> || The called method does exist on the receiver, but is not enabled in the production environment
+|-
+| <code>0x00030070</code> || <code>RendezVous::DuplicateEntry</code> || Unknown
+|-
+| <code>0x00030071</code> || <code>RendezVous::ControlScriptFailure</code> || Unknown
+|-
+| <code>0x00030072</code> || <code>RendezVous::ClassNotFound</code> || Unknown
+|-
+| <code>0x00030073</code> || <code>RendezVous::SessionVoid</code> || The gathering ID does not exist
+|-
+| <code>0x00030075</code> || <code>RendezVous::DDLMismatch</code> || Unknown
+|-
+| <code>0x00030076</code> || <code>RendezVous::InvalidConfiguration</code> || Unknown
+|-
+| <code>0x000300C8</code> || <code>RendezVous::SessionFull</code> || The user attempted to join a gathering that was already full
+|-
+| <code>0x000300C9</code> || <code>RendezVous::InvalidGatheringPassword</code> || The persistent gathering password was incorrect
+|-
+| <code>0x000300CA</code> || <code>RendezVous::WithoutParticipationPeriod</code> || Unknown. The user tried to join a persistent gathering that had a limited participation window?
+|-
+| <code>0x000300CB</code> || <code>RendezVous::PersistentGatheringCreationMax</code> || The user has created their max number of persistent gatherings
+|-
+| <code>0x000300CC</code> || <code>RendezVous::PersistentGatheringParticipationMax</code> || The user has joined their max number of persistent gatherings
+|-
+| <code>0x000300CD</code> || <code>RendezVous::DeniedByParticipants</code> || The user tried to join a gathering where an existing participant has the user blocked
+|-
+| <code>0x000300CE</code> || <code>RendezVous::ParticipantInBlackList</code> || The user tried to join a gathering where an existing participant is blocked by the user
+|-
+| <code>0x000300CF</code> || <code>RendezVous::GameServerMaintenance</code> || The server is closed for maintenance
+|-
+| <code>0x000300D0</code> || <code>RendezVous::OperationPostpone</code> || Unknown
+|-
+| <code>0x000300D1</code> || <code>RendezVous::OutOfRatingRange</code> || Unknown
+|-
+| <code>0x000300D2</code> || <code>RendezVous::ConnectionDisconnected</code> || Unknown. The user disconnected?
+|-
+| <code>0x000300D3</code> || <code>RendezVous::InvalidOperation</code> || Unknown
+|-
+| <code>0x000300D4</code> || <code>RendezVous::NotParticipatedGathering</code> || The user has not yet joined the specified gathering
+|-
+| <code>0x000300D5</code> || <code>RendezVous::MatchmakeSessionUserPasswordUnmatch</code> || The [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] user password was incorrect
+|-
+| <code>0x000300D6</code> || <code>RendezVous::MatchmakeSessionSystemPasswordUnmatch</code> || The [[Online/Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] system password was incorrect
+|-
+| <code>0x000300D7</code> || <code>RendezVous::UserIsOffline</code> || The user is offline
+|-
+| <code>0x000300D8</code> || <code>RendezVous::AlreadyParticipatedGathering</code> || The user has already joined the specified gathering
+|-
+| <code>0x000300D9</code> || <code>RendezVous::PermissionDenied</code> || The user did not have permission to perform the operation
+|-
+| <code>0x000300DA</code> || <code>RendezVous::NotFriend</code> || The user is not a friend
+|-
+| <code>0x000300DB</code> || <code>RendezVous::SessionClosed</code> || The active session is not currently accepting new participants
+|-
+| <code>0x000300DC</code> || <code>RendezVous::DatabaseTemporarilyUnavailable</code> || The database is temporarily unavailable
+|-
+| <code>0x000300DD</code> || <code>RendezVous::InvalidUniqueId</code> || The unique ID is invalid
+|-
+| <code>0x000300DE</code> || <code>RendezVous::MatchmakingWithdrawn</code> || Matchmaking request has been withdrawn
+|-
+| <code>0x000300DF</code> || <code>RendezVous::LimitExceeded</code> || Unknown
+|-
+| <code>0x000300E0</code> || <code>RendezVous::AccountTemporarilyDisabled</code> || The users account is disabled temporarily
+|-
+| <code>0x000300E1</code> || <code>RendezVous::PartiallyServiceClosed</code> || Unknown
+|-
+| <code>0x000300E2</code> || <code>RendezVous::ConnectionDisconnectedForConcurrentLogin</code> || The current connection has been ended because a new connection for the same user has been established
+|}
+
+=== PythonCore ===
+
+[[Online/Nintendo_Network/NEX|NEX]]/Rendez-Vous were partially written in Python. These errors usually indicate that the recipient was able to parse the incoming data, but something has gone wrong with the type system. These errors are also common in pre-[[Online/Nintendo_Network/NEX|NEX]]v2 titles as they tend to lack input validation.
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00040001</code> || <code>PythonCore::Exception</code> || Unknown
+|-
+| <code>0x00040002</code> || <code>PythonCore::TypeError</code> || Unknown
+|-
+| <code>0x00040003</code> || <code>PythonCore::IndexError</code> || Unknown
+|-
+| <code>0x00040004</code> || <code>PythonCore::InvalidReference</code> || Unknown
+|-
+| <code>0x00040005</code> || <code>PythonCore::CallFailure</code> || Unknown
+|-
+| <code>0x00040006</code> || <code>PythonCore::MemoryError</code> || Unknown
+|-
+| <code>0x00040007</code> || <code>PythonCore::KeyError</code> || Unknown
+|-
+| <code>0x00040008</code> || <code>PythonCore::OperationError</code> || Unknown
+|-
+| <code>0x00040009</code> || <code>PythonCore::ConversionError</code> || Unknown
+|-
+| <code>0x0004000A</code> || <code>PythonCore::ValidationError</code> || Unknown
+|}
+
+=== Transport ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00050001</code> || <code>Transport::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00050002</code> || <code>Transport::ConnectionFailure</code> || Network connection was unable to be established
+|-
+| <code>0x00050003</code> || <code>Transport::InvalidUrl</code> || The URL contained in the [[Online/Nintendo_Network/NEX/Types#StationURL|StationURL]] is invalid. The syntax may be incorrect
+|-
+| <code>0x00050004</code> || <code>Transport::InvalidKey</code> || The key used to authenticate a given station is invalid. The secure transport layer uses secret-key based cryptography to ensure the integrity and confidentiality of data sent across the network
+|-
+| <code>0x00050005</code> || <code>Transport::InvalidURLType</code> || The specified transport type is invalid
+|-
+| <code>0x00050006</code> || <code>Transport::DuplicateEndpoint</code> || The Station is already connected via another EndPoint
+|-
+| <code>0x00050007</code> || <code>Transport::IOError</code> || The data could not be sent across the network. This could be due to an invalid message, packet, or buffer
+|-
+| <code>0x00050008</code> || <code>Transport::Timeout</code> || The operation did not complete within the specified timeout for that operation
+|-
+| <code>0x00050009</code> || <code>Transport::ConnectionReset</code> || The network connection was reset
+|-
+| <code>0x0005000A</code> || <code>Transport::IncorrectRemoteAuthentication</code> || The destination Station did not authenticate itself properly
+|-
+| <code>0x0005000B</code> || <code>Transport::ServerRequestError</code> || 3rd-party server or device answered with an error code according to protocol used e.g. HTTP error code
+|-
+| <code>0x0005000C</code> || <code>Transport::DecompressionFailure</code> || Unknown
+|-
+| <code>0x0005000D</code> || <code>Transport::ReliableSendBufferFullFatal</code> || Unknown
+|-
+| <code>0x0005000E</code> || <code>Transport::UPnPCannotInit</code> || Unknown
+|-
+| <code>0x0005000F</code> || <code>Transport::UPnPCannotAddMapping</code> || Unknown
+|-
+| <code>0x00050010</code> || <code>Transport::NatPMPCannotInit</code> || Unknown
+|-
+| <code>0x00050011</code> || <code>Transport::NatPMPCannotAddMapping</code> || Unknown
+|-
+| <code>0x00050013</code> || <code>Transport::UnsupportedNAT</code> || Unknown
+|-
+| <code>0x00050014</code> || <code>Transport::DnsError</code> || Unknown
+|-
+| <code>0x00050015</code> || <code>Transport::ProxyError</code> || Unknown
+|-
+| <code>0x00050016</code> || <code>Transport::DataRemaining</code> || Unknown
+|-
+| <code>0x00050017</code> || <code>Transport::NoBuffer</code> || Unknown
+|-
+| <code>0x00050018</code> || <code>Transport::NotFound</code> || Unknown
+|-
+| <code>0x00050019</code> || <code>Transport::TemporaryServerError</code> || Unknown
+|-
+| <code>0x0005001A</code> || <code>Transport::PermanentServerError</code> || Unknown
+|-
+| <code>0x0005001B</code> || <code>Transport::ServiceUnavailable</code> || Unknown
+|-
+| <code>0x0005001C</code> || <code>Transport::ReliableSendBufferFull</code> || Unknown
+|-
+| <code>0x0005001D</code> || <code>Transport::InvalidStation</code> || Unknown
+|-
+| <code>0x0005001E</code> || <code>Transport::InvalidSubStreamID</code> || Unknown
+|-
+| <code>0x0005001F</code> || <code>Transport::PacketBufferFull</code> || Unknown
+|-
+| <code>0x00050020</code> || <code>Transport::NatTraversalError</code> || Unknown
+|-
+| <code>0x00050021</code> || <code>Transport::NatCheckError</code> || Unknown
+|}
+
+=== DOCore ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00060001</code> || <code>DOCore::StationNotReached</code> || Unknown
+|-
+| <code>0x00060002</code> || <code>DOCore::TargetStationDisconnect</code> || Unknown
+|-
+| <code>0x00060003</code> || <code>DOCore::LocalStationLeaving</code> || Unknown
+|-
+| <code>0x00060004</code> || <code>DOCore::ObjectNotFound</code> || Unknown
+|-
+| <code>0x00060005</code> || <code>DOCore::InvalidRole</code> || Unknown
+|-
+| <code>0x00060006</code> || <code>DOCore::CallTimeout</code> || Unknown
+|-
+| <code>0x00060007</code> || <code>DOCore::RMCDispatchFailed</code> || Unknown
+|-
+| <code>0x00060008</code> || <code>DOCore::MigrationInProgress</code> || Unknown
+|-
+| <code>0x00060009</code> || <code>DOCore::NoAuthority</code> || Unknown
+|-
+| <code>0x0006000A</code> || <code>DOCore::NoTargetStationSpecified</code> || Unknown
+|-
+| <code>0x0006000B</code> || <code>DOCore::JoinFailed</code> || Unknown
+|-
+| <code>0x0006000C</code> || <code>DOCore::JoinDenied</code> || Unknown
+|-
+| <code>0x0006000D</code> || <code>DOCore::ConnectivityTestFailed</code> || Unknown
+|-
+| <code>0x0006000E</code> || <code>DOCore::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x0006000F</code> || <code>DOCore::UnfreedReferences</code> || Unknown
+|-
+| <code>0x00060010</code> || <code>DOCore::JobTerminationFailed</code> || Unknown
+|-
+| <code>0x00060011</code> || <code>DOCore::InvalidState</code> || Unknown
+|-
+| <code>0x00060012</code> || <code>DOCore::FaultRecoveryFatal</code> || Unknown
+|-
+| <code>0x00060013</code> || <code>DOCore::FaultRecoveryJobProcessFailed</code> || Unknown
+|-
+| <code>0x00060014</code> || <code>DOCore::StationInconsitency</code> || Unknown
+|-
+| <code>0x00060015</code> || <code>DOCore::AbnormalMasterState</code> || Unknown
+|-
+| <code>0x00060016</code> || <code>DOCore::VersionMismatch</code> || Unknown
+|}
+
+=== FPD ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00650000</code> || <code>FPD::NotInitialized</code> || Unknown
+|-
+| <code>0x00650001</code> || <code>FPD::AlreadyInitialized</code> || Unknown
+|-
+| <code>0x00650002</code> || <code>FPD::NotConnected</code> || Unknown
+|-
+| <code>0x00650003</code> || <code>FPD::Connected</code> || Unknown
+|-
+| <code>0x00650004</code> || <code>FPD::InitializationFailure</code> || Unknown
+|-
+| <code>0x00650005</code> || <code>FPD::OutOfMemory</code> || Unknown
+|-
+| <code>0x00650006</code> || <code>FPD::RmcFailed</code> || Unknown
+|-
+| <code>0x00650007</code> || <code>FPD::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00650008</code> || <code>FPD::InvalidLocalAccountID</code> || Unknown
+|-
+| <code>0x00650009</code> || <code>FPD::InvalidPrincipalID</code> || Unknown
+|-
+| <code>0x0065000A</code> || <code>FPD::InvalidLocalFriendCode</code> || Unknown
+|-
+| <code>0x0065000B</code> || <code>FPD::LocalAccountNotExists</code> || Unknown
+|-
+| <code>0x0065000C</code> || <code>FPD::LocalAccountNotLoaded</code> || Unknown
+|-
+| <code>0x0065000D</code> || <code>FPD::LocalAccountAlreadyLoaded</code> || Unknown
+|-
+| <code>0x0065000E</code> || <code>FPD::FriendAlreadyExists</code> || Unknown
+|-
+| <code>0x0065000F</code> || <code>FPD::FriendNotExists</code> || Unknown
+|-
+| <code>0x00650010</code> || <code>FPD::FriendNumMax</code> || Unknown
+|-
+| <code>0x00650011</code> || <code>FPD::NotFriend</code> || Unknown
+|-
+| <code>0x00650012</code> || <code>FPD::FileIO</code> || Unknown
+|-
+| <code>0x00650013</code> || <code>FPD::P2PInternetProhibited</code> || Unknown
+|-
+| <code>0x00650014</code> || <code>FPD::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00650015</code> || <code>FPD::InvalidState</code> || Unknown
+|-
+| <code>0x00650017</code> || <code>FPD::AddFriendProhibited</code> || Unknown
+|-
+| <code>0x00650019</code> || <code>FPD::InvalidAccount</code> || Unknown
+|-
+| <code>0x0065001A</code> || <code>FPD::BlacklistedByMe</code> || Unknown
+|-
+| <code>0x0065001C</code> || <code>FPD::FriendAlreadyAdded</code> || Unknown
+|-
+| <code>0x0065001D</code> || <code>FPD::MyFriendListLimitExceed</code> || Unknown
+|-
+| <code>0x0065001E</code> || <code>FPD::RequestLimitExceed</code> || Unknown
+|-
+| <code>0x0065001F</code> || <code>FPD::InvalidMessageID</code> || Unknown
+|-
+| <code>0x00650020</code> || <code>FPD::MessageIsNotMine</code> || Unknown
+|-
+| <code>0x00650021</code> || <code>FPD::MessageIsNotForMe</code> || Unknown
+|-
+| <code>0x00650022</code> || <code>FPD::FriendRequestBlocked</code> || Unknown
+|-
+| <code>0x00650023</code> || <code>FPD::NotInMyFriendList</code> || Unknown
+|-
+| <code>0x00650024</code> || <code>FPD::FriendListedByMe</code> || Unknown
+|-
+| <code>0x00650025</code> || <code>FPD::NotInMyBlacklist</code> || Unknown
+|-
+| <code>0x00650026</code> || <code>FPD::IncompatibleAccount</code> || Unknown
+|-
+| <code>0x00650027</code> || <code>FPD::BlockSettingChangeNotAllowed</code> || Unknown
+|-
+| <code>0x00650028</code> || <code>FPD::SizeLimitExceeded</code> || Unknown
+|-
+| <code>0x00650029</code> || <code>FPD::OperationNotAllowed</code> || Unknown
+|-
+| <code>0x0065002A</code> || <code>FPD::NotNetworkAccount</code> || Unknown
+|-
+| <code>0x0065002B</code> || <code>FPD::NotificationNotFound</code> || Unknown
+|-
+| <code>0x0065002C</code> || <code>FPD::PreferenceNotInitialized</code> || Unknown
+|-
+| <code>0x0065002D</code> || <code>FPD::FriendRequestNotAllowed</code> || Unknown
+|}
+
+=== Ranking ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00670001</code> || <code>Ranking::NotInitialized</code> || Unknown
+|-
+| <code>0x00670002</code> || <code>Ranking::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00670003</code> || <code>Ranking::RegistrationError</code> || Unknown
+|-
+| <code>0x00670005</code> || <code>Ranking::NotFound</code> || Unknown
+|-
+| <code>0x00670006</code> || <code>Ranking::InvalidScore</code> || Unknown
+|-
+| <code>0x00670007</code> || <code>Ranking::InvalidDataSize</code> || Unknown
+|-
+| <code>0x00670009</code> || <code>Ranking::PermissionDenied</code> || Unknown
+|-
+| <code>0x0067000A</code> || <code>Ranking::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x0067000B</code> || <code>Ranking::NotImplemented</code> || The called method does not exist on the receiver
+|}
+
+=== Authentication ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00680001</code> || <code>Authentication::NASAuthenticateError</code> || Unknown
+|-
+| <code>0x00680002</code> || <code>Authentication::TokenParseError</code> || Unknown
+|-
+| <code>0x00680003</code> || <code>Authentication::HttpConnectionError</code> || Unknown
+|-
+| <code>0x00680004</code> || <code>Authentication::HttpDNSError</code> || Unknown
+|-
+| <code>0x00680005</code> || <code>Authentication::HttpGetProxySetting</code> || Unknown
+|-
+| <code>0x00680006</code> || <code>Authentication::TokenExpired</code> || Unknown
+|-
+| <code>0x00680007</code> || <code>Authentication::ValidationFailed</code> || Unknown
+|-
+| <code>0x00680008</code> || <code>Authentication::InvalidParam</code> || Unknown
+|-
+| <code>0x00680009</code> || <code>Authentication::PrincipalIdUnmatched</code> || Unknown
+|-
+| <code>0x0068000A</code> || <code>Authentication::MoveCountUnmatch</code> || Unknown
+|-
+| <code>0x0068000B</code> || <code>Authentication::UnderMaintenance</code> || Unknown
+|-
+| <code>0x0068000C</code> || <code>Authentication::UnsupportedVersion</code> || Unknown
+|-
+| <code>0x0068000D</code> || <code>Authentication::ServerVersionIsOld</code> || Unknown
+|-
+| <code>0x0068000E</code> || <code>Authentication::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x0068000F</code> || <code>Authentication::ClientVersionIsOld</code> || Unknown
+|-
+| <code>0x00680010</code> || <code>Authentication::AccountLibraryError</code> || Unknown
+|-
+| <code>0x00680011</code> || <code>Authentication::ServiceNoLongerAvailable</code> || Unknown
+|-
+| <code>0x00680012</code> || <code>Authentication::UnknownApplication</code> || Unknown
+|-
+| <code>0x00680013</code> || <code>Authentication::ApplicationVersionIsOld</code> || Unknown
+|-
+| <code>0x00680014</code> || <code>Authentication::OutOfService</code> || Unknown
+|-
+| <code>0x00680015</code> || <code>Authentication::NetworkServiceLicenseRequired</code> || Unknown
+|-
+| <code>0x00680016</code> || <code>Authentication::NetworkServiceLicenseSystemError</code> || Unknown
+|-
+| <code>0x00680017</code> || <code>Authentication::NetworkServiceLicenseError3</code> || Unknown
+|-
+| <code>0x00680018</code> || <code>Authentication::NetworkServiceLicenseError4</code> || Unknown
+|}
+
+=== DataStore ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00690001</code> || <code>DataStore::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00690002</code> || <code>DataStore::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00690003</code> || <code>DataStore::PermissionDenied</code> || The user did not have permission to perform the given operation. For example, trying to delete an object you do not have permission for
+|-
+| <code>0x00690004</code> || <code>DataStore::NotFound</code> || An invalid DataID was used
+|-
+| <code>0x00690005</code> || <code>DataStore::AlreadyLocked</code> || The object is inaccessible due to be locked
+|-
+| <code>0x00690006</code> || <code>DataStore::UnderReviewing</code> || The object is inaccessible due to being under review
+|-
+| <code>0x00690007</code> || <code>DataStore::Expired</code> || The object is inaccessible due to being expired
+|-
+| <code>0x00690008</code> || <code>DataStore::InvalidCheckToken</code> || <code>DataStoreNewArrivalCheckToken</code> is invalid
+|-
+| <code>0x00690009</code> || <code>DataStore::SystemFileError</code> || Unknown
+|-
+| <code>0x0069000A</code> || <code>DataStore::OverCapacity</code> || A batch operation list is over capacity
+|-
+| <code>0x0069000B</code> || <code>DataStore::OperationNotAllowed</code> || The attempted operation is not valid, but is not a permissions issue. For example, trying to self-rate an object that has self rating disabled
+|-
+| <code>0x0069000C</code> || <code>DataStore::InvalidPassword</code> || The provided password was incorrect
+|-
+| <code>0x0069000D</code> || <code>DataStore::ValueNotEqual</code> || The [[Online/Nintendo_Network/NEX/Protocols/DataStoreProtocol#DataStoreChangeMetaCompareParam|DataStoreChangeMetaCompareParam]] check failed
+|}
+
+=== ServiceItem ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x006C0001</code> || <code>ServiceItem::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x006C0002</code> || <code>ServiceItem::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x006C0003</code> || <code>ServiceItem::EShopUnknownHttpError</code> || Unknown
+|-
+| <code>0x006C0004</code> || <code>ServiceItem::EShopResponseParseError</code> || Unknown
+|-
+| <code>0x006C0005</code> || <code>ServiceItem::NotOwned</code> || Unknown
+|-
+| <code>0x006C0006</code> || <code>ServiceItem::InvalidLimitationType</code> || Unknown
+|-
+| <code>0x006C0007</code> || <code>ServiceItem::ConsumptionRightShortage</code> || Unknown
+|}
+
+=== MatchmakeReferee ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x006F0001</code> || <code>MatchmakeReferee::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x006F0002</code> || <code>MatchmakeReferee::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x006F0003</code> || <code>MatchmakeReferee::AlreadyExists</code> || Unknown
+|-
+| <code>0x006F0004</code> || <code>MatchmakeReferee::NotParticipatedGathering</code> || Unknown
+|-
+| <code>0x006F0005</code> || <code>MatchmakeReferee::NotParticipatedRound</code> || Unknown
+|-
+| <code>0x006F0006</code> || <code>MatchmakeReferee::StatsNotFound</code> || Unknown
+|-
+| <code>0x006F0007</code> || <code>MatchmakeReferee::RoundNotFound</code> || Unknown
+|-
+| <code>0x006F0008</code> || <code>MatchmakeReferee::RoundArbitrated</code> || Unknown
+|-
+| <code>0x006F0009</code> || <code>MatchmakeReferee::RoundNotArbitrated</code> || Unknown
+|}
+
+=== Subscriber ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00700001</code> || <code>Subscriber::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00700002</code> || <code>Subscriber::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00700003</code> || <code>Subscriber::OverLimit</code> || Unknown
+|-
+| <code>0x00700004</code> || <code>Subscriber::PermissionDenied</code> || Unknown
+|}
+
+=== Ranking2 ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00710001</code> || <code>Ranking2::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00710002</code> || <code>Ranking2::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00710003</code> || <code>Ranking2::InvalidScore</code> || Unknown
+|}
+
+=== SmartDeviceVoiceChat ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00720001</code> || <code>SmartDeviceVoiceChat::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00720002</code> || <code>SmartDeviceVoiceChat::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00720003</code> || <code>SmartDeviceVoiceChat::InvalidResponse</code> || Unknown
+|-
+| <code>0x00720004</code> || <code>SmartDeviceVoiceChat::InvalidAccessToken</code> || Unknown
+|-
+| <code>0x00720005</code> || <code>SmartDeviceVoiceChat::Unauthorized</code> || Unknown
+|-
+| <code>0x00720006</code> || <code>SmartDeviceVoiceChat::AccessError</code> || Unknown
+|-
+| <code>0x00720007</code> || <code>SmartDeviceVoiceChat::UserNotFound</code> || Unknown
+|-
+| <code>0x00720008</code> || <code>SmartDeviceVoiceChat::RoomNotFound</code> || Unknown
+|-
+| <code>0x00720009</code> || <code>SmartDeviceVoiceChat::RoomNotActivated</code> || Unknown
+|-
+| <code>0x0072000A</code> || <code>SmartDeviceVoiceChat::ApplicationNotSupported</code> || Unknown
+|-
+| <code>0x0072000B</code> || <code>SmartDeviceVoiceChat::InternalServerError</code> || Unknown
+|-
+| <code>0x0072000C</code> || <code>SmartDeviceVoiceChat::ServiceUnavailable</code> || Unknown
+|-
+| <code>0x0072000D</code> || <code>SmartDeviceVoiceChat::UnexpectedError</code> || Unknown
+|-
+| <code>0x0072000E</code> || <code>SmartDeviceVoiceChat::UnderMaintenance</code> || Unknown
+|-
+| <code>0x0072000F</code> || <code>SmartDeviceVoiceChat::ServiceNoLongerAvailable</code> || Unknown
+|-
+| <code>0x00720010</code> || <code>SmartDeviceVoiceChat::AccountTemporarilyDisabled</code> || Unknown
+|-
+| <code>0x00720011</code> || <code>SmartDeviceVoiceChat::PermissionDenied</code> || Unknown
+|-
+| <code>0x00720012</code> || <code>SmartDeviceVoiceChat::NetworkServiceLicenseRequired</code> || Unknown
+|-
+| <code>0x00720013</code> || <code>SmartDeviceVoiceChat::AccountLibraryError</code> || Unknown
+|-
+| <code>0x00720014</code> || <code>SmartDeviceVoiceChat::GameModeNotFound</code> || Unknown
+|}
+
+=== Screening ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00730001</code> || <code>Screening::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00730002</code> || <code>Screening::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00730003</code> || <code>Screening::NotFound</code> || Unknown
+|}
+
+=== Custom ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00740001</code> || <code>Custom::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|}
+
+=== Ess ===
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00750001</code> || <code>Ess::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00750002</code> || <code>Ess::GameSessionError</code> || Unknown
+|-
+| <code>0x00750003</code> || <code>Ess::GameSessionMaintenance</code> || Unknown
+|}
