@@ -122,6 +122,18 @@ A UInt64 that specifically represents a date/time as a timestamp. This is not a 
 | 5 - 0 || Second
 |}
 
+==== DateTime Constants ====
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>Never</code> || 0 || A true 0-value. This is usually indicates that the argument should be ignored
+|-
+| <code>INVALID_DATE_TIME</code> || 31-12-9999 23:59:59 || Invalid. This is used when either in "zeroed" data, and can indicate the argument should be ignored
+|-
+| <code>PERMANENT_DATE_TIME</code> || 31-12-9999 0:00:00 || Indicates a permanent timeframe, for example [[Online/Nintendo_Network/NEX/Protocols/DataStoreProtocol|DataStoreProtocol]] objects which never expire
+|}
+
 === StationURL ===
 
 A [[#String]] that specifically represents a connectable target. Used in instances like connecting to game servers, establishing p2p connections with other players, connecting to relays, etc.

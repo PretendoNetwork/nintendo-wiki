@@ -1,0 +1,155 @@
+== Overview ==
+
+'''DebugProtocol''' provides a way for developers to debug certain behavior on the game server. Most games have this protocol disabled in production.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#EnableApiRecorder]]
+|-
+| 2 || [[#DisableApiRecorder]]
+|-
+| 3 || [[#IsApiRecorderEnabled]]
+|-
+| 4 || [[#GetApiCalls]]
+|-
+| 5 || SetExcludeJoinedMatchmakeSession
+|-
+| 6 || GetExcludeJoinedMatchmakeSession
+|-
+| 7 || [[#GetApiCallSummary]]
+|}
+
+=== EnableApiRecorder ===
+
+Enables the API recorder. When enabled, each request the client makes to the server is logged. The request logs can be retrieved with [[#GetApiCalls]] and [[#GetApiCallSummary]].
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+This method does not return anything.
+
+=== DisableApiRecorder ===
+
+Disables the API recorder. When enabled, each request the client makes to the server is logged. The request logs can be retrieved with [[#GetApiCalls]] and [[#GetApiCallSummary]].
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+This method does not return anything.
+
+=== IsApiRecorderEnabled ===
+
+Checks if the API recorder is enabled for the caller. When enabled, each request the client makes to the server is logged. The request logs can be retrieved with [[#GetApiCalls]] and [[#GetApiCallSummary]].
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || Unknown || If true the API recorder is enabled, otherwise false
+|}
+
+=== GetApiCalls ===
+
+Returns a list of logged API calls for the target users between the given times.
+
+Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disabled for any of the targets.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#PID|PID]]&gt; || Unknown || Target users to request logs for
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created after this time. Seconds value is ignored. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created before this time. Seconds value is ignored. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#ApiCall]]&gt; || Unknown || API logs
+|}
+
+=== GetApiCallSummary ===
+
+Returns a list of API call summaries for a specific user. Whenever a user calls a method, if no summary timer has been started then one is started. Each method can set it's own length for how long this timer should be. While a methods timer is active, each call for the method is recorded and compared against the methods "max call count". If the caller goes above this call count while the timer is active, the user is marked (for that method only) as having violated the max call count. Each method has it's own configuration for the summary timer and max call counts, and there is only one summary per method type per user. This was likely used as a way to quickly check for spam?
+
+Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disabled for the target.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || Unknown || Target user to request summaries for
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created after this time. Seconds value is ignored. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created before this time. Seconds value is ignored. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+|-
+| Booleam || Unknown || If true only return summaries for methods that the target user has gone over the max call count for, otherwise also return summaries of methods below the max call count
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[#ApiCallSummary]]&gt; || Unknown || API call summaries
+|}
+
+== Classes ==
+
+=== ApiCall ===
+
+A log of a single call to a single method made by a specific user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || The time the call was made
+|-
+| [[Online/Nintendo_Network/NEX/Types#PID|PID]] || Unknown || The user who made the call
+|}
+
+=== ApiCallSummary ===
+
+A summary of the stats of all calls to a specific method made by a specific user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Online/Nintendo_Network/NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
+|-
+| UInt32 || Unknown || 0 if the caller is under the max call count for this method in the current timer, 1 if the caller has gone over the max call count
+|-
+| UInt32 || Unknown || How long, in seconds, the summary timer records logs for
+|-
+| UInt32 || Unknown || The max number of calls that can be made to this method. If the caller makes more than this number of requests in a given timer, they are marked. If 0, the caller will always be marked
+|-
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || The time the timer was started
+|-
+| UInt32 || Unknown || Seems to be the number of times the method was called after being marked?
+|-
+| UInt32 || Unknown || Total number of times the method has been called during the timer
+|}

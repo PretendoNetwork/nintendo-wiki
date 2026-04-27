@@ -1718,7 +1718,7 @@ An objects metadata. Not all data will be populated depending on what the client
 |-
 | [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || referredTime || The most recent time the object was referenced. See [[#Object Referencing]]
 |-
-| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || expireTime || The object expiration time. See [[#Validity Period]]. If <code>PERMANENT_DATE_TIME</code> is used, the object is persistent. See [[#Object Persistence]]
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || expireTime || The object expiration time. See [[#Validity Period]]. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code> is used, the object is persistent. See [[#Object Persistence]]
 |-
 | [[Online/Nintendo_Network/NEX/Types#List|List]]&lt;[[Online/Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Object tags
 |-
@@ -1850,13 +1850,13 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
 		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
@@ -1887,13 +1887,13 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
 		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
@@ -1926,13 +1926,13 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
 		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
@@ -1967,13 +1967,13 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
 		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
@@ -2012,13 +2012,13 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
-		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>INVALID_DATE_TIME</code>, don't filter
+		| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
 		|-
 		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
@@ -2226,7 +2226,7 @@ Information about the status of a users rating of a given slot. [[#Rating Logs]]
 |-
 | SInt32 || ratingValue || The users most recent rating value they applied to the slot
 |-
-| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the rating lock expires, if a rating lock is in place. <code>Never</code> otherwise
+| [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the rating lock expires, if a rating lock is in place. <code>[[Online/Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> otherwise
 |}
 
 === DataStorePersistenceInfo ===
@@ -2373,12 +2373,6 @@ Data on which existing object metadata is compared to before updating the object
 
 {| class="wikitable"
 ! Name !! Type !! Value !! Description
-|-
-| <code>Never</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 0 || A true 0-value [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]
-|-
-| <code>INVALID_DATE_TIME</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 31-12-9999 23:59:59 || Invalid [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]]. This is used when either in "zeroed" data or when a value is not needed
-|-
-| <code>PERMANENT_DATE_TIME</code> || [[Online/Nintendo_Network/NEX/Types#DateTime|DateTime]] || 31-12-9999 0:00:00 || Indicates that the object will never expire
 |-
 | <code>MAX_PERIOD</code> || UInt16 || 365 || The max value an object [[#Validity Period]] can be, in days
 |-
