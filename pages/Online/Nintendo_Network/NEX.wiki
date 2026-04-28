@@ -16,10 +16,7 @@ Once a client has established a [[Online/Nintendo_Network/NEX/PRUDP|PRUDP]] conn
 
 There are always at least 2 servers used by NEX, the ''authentication server'' and the ''secure server''. The client first connects to the ''authentication server'' and attempts to login to the clients game server account.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''The users game server account is NOT the same as their network account. See below for details.''</div>
-</div>
+{{Noticebox|''The users game server account is NOT the same as their network account. See below for details.''}}
 
 The ''authentication server'' only implements [[Online/Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. After passing authentication, the ''authentication server'' sends the client the address of the ''secure server'' as well as a connection ticket. The client then disconnects from the ''authentication server'' and connects to the ''secure server'' with the ticket. The ''secure server'' is where the games actual protocols live.
 

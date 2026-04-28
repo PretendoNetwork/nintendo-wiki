@@ -1,9 +1,6 @@
 == Overview ==
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''PRUDP is a very extensible protocol, and some games may have made modifications to the protocol which are not documented here. This page aims to only document the protocol as seen in stock Rendez-Vous titles and the modifications Nintendo made for their NEX library. Other modifications may be added on a case-by-case basis, assuming they do not distract from the main goal of the page and are applicable to a large number of titles.''</div>
-</div>
+{{Noticebox|''PRUDP is a very extensible protocol, and some games may have made modifications to the protocol which are not documented here. This page aims to only document the protocol as seen in stock Rendez-Vous titles and the modifications Nintendo made for their NEX library. Other modifications may be added on a case-by-case basis, assuming they do not distract from the main goal of the page and are applicable to a large number of titles.''}}
 
 PRUDP is a proprietary transport-like protocol developed by Quazal. Originally built on top of UDP, the protocol gives UDP some TCP-like features (persistent connections, reliable packet transfer, etc.) without the overhead of TCP, while also allowing the developer to use unreliable packets where needed, and adding in some extra features like automatic fragmentation/reconstruction, compression/encryption, etc. PRUDP was later also used on top of other protocols like TCP/WebSockets, not just UDP, but the same core concepts apply regardless of the underlying transport protocol.
 
@@ -159,10 +156,7 @@ A PRUDPEndPoint (official name, simply "Endpoint" for short) represents a connec
 
 A "virtual port" is a mechanism that allows a single physical socket to create/accept multiple PRUDP connections by distinguishing connections through metadata in each packet. They can also be seen in systems like p2p connections, however that is not the focus of this document.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way virtual ports are encoded, stream ID/type ranges, etc. can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, the way virtual ports are encoded, stream ID/type ranges, etc. can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''}}
 
 === Connection Multiplexing ===
 
@@ -229,10 +223,7 @@ Each stream type (not individual stream) may have its own configuration, referre
 
 The following aspects of the client are configurable on a per-stream-type basis:
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Setting field names based on https://github.com/PretendoNetwork/nex-go/blob/79f9e2216f9cb52d41c674fffaa8eafa9bc83fc6/stream_settings.go. Default values based on WATCH_DOGS/Xenoblade Chronicles.''</div>
-</div>
+{{Noticebox|''Setting field names based on https://github.com/PretendoNetwork/nex-go/blob/79f9e2216f9cb52d41c674fffaa8eafa9bc83fc6/stream_settings.go. Default values based on WATCH_DOGS/Xenoblade Chronicles.''}}
 
 {| class="wikitable"
 |-
@@ -279,19 +270,13 @@ Client stream IDs are assigned counting down, using the highest unused ID ≤ th
 
 Each packet is marked as a specific type of packet, and has a series of control flags. Each packet type has different semantic meanings, and the packet flags tell the receiver additional metadata about how to process the packet. Each packet's flags and type are encoded together as a single bit field. Rendez-Vous encodes this in a single byte, however NEX expanded this field to 2 bytes in order to support more flags.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet types/flags are handled can be modified/replaced should a developer want to. This means additional/different packet types/flags may be seen, and they may be encoded differently. Additional reverse engineering may be required for some games.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, the way packet types/flags are handled can be modified/replaced should a developer want to. This means additional/different packet types/flags may be seen, and they may be encoded differently. Additional reverse engineering may be required for some games.''}}
 
 === Packet Types ===
 
 Each packet is assigned a specific type that determines its role in the connection lifecycle. Rendez-Vous uses these types to manage connection establishment, data transfer, and teardown in a manner similar to TCP, providing a stateful protocol layer on top of UDP.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''PRUDP packets may also sometimes be seen in cases such as p2p connections, relay servers, etc. Due to this, some packet types/flags may exist which are not relevant to standard client-server communications.''</div>
-</div>
+{{Noticebox|''PRUDP packets may also sometimes be seen in cases such as p2p connections, relay servers, etc. Due to this, some packet types/flags may exist which are not relevant to standard client-server communications.''}}
 
 {| class="wikitable"
 ! ID !! Name !! Description
@@ -341,10 +326,7 @@ Each session is secured with a session key. This is obtained from the [[Online/N
 
 All variations of PRUDP (besides PRUDPLite) make use of a packet signature of some kind, though the way it is encoded/calculated, and the semantics surrounding it, depend both on the PRUDP variation and, at times, the game.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet signatures are handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, the way packet signatures are handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''}}
 
 === Rendez-Vous Packet Signature ===
 
@@ -498,10 +480,7 @@ Rendez-Vous and NEX PRUDPv0 use checksums to verify a packet's integrity. The ch
 
 Checksums have 2 variations, a 1 byte checksum and a 4 byte checksum, which both use slightly different algorithms. By default the 1 byte checksum is used, but a game may optionally configure itself to use the 4 byte variation. The 4 byte variation is called the "enhanced checksum" internally.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, the checksum algorithm can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games. For example, WATCH_DOGS on the Nintendo Wii U calculates the checksum key by passing the [[#Sandbox Access Key]] to the checksum algorithm itself (with a key of 0), and uses an entirely different checksum algorithm altogether.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, the checksum algorithm can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games. For example, WATCH_DOGS on the Nintendo Wii U calculates the checksum key by passing the [[#Sandbox Access Key]] to the checksum algorithm itself (with a key of 0), and uses an entirely different checksum algorithm altogether.''}}
 
 === Default Checksum Algorithm ===
 
@@ -611,10 +590,7 @@ The client validates this check value to ensure the server has correctly interpr
 
 === Data Transfer ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, payload contents and the available encryption/compression algorithms/order may differ between games. Additional reverse engineering may be required for some games.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, payload contents and the available encryption/compression algorithms/order may differ between games. Additional reverse engineering may be required for some games.''}}
 
 Once the PRUDP handshake has been completed, each end of the connection may begin sending <code>DATA</code> packets to each other. These packets carry the actual application data. Payloads contain [[Online/Nintendo_Network/NEX/RMC|RMCs]]. In Rendez-Vous/NEX PRUDPv0 the size of the packet payload is set in the [[#Packet Specific Data]]. If the payload is not explicitly set, it can be inferred based on the amount of remaining data in the packet + the configured checksum size (if applicable), but that is not always reliable as the socket may receive multiple PRUDP packets per network message. NEX PRUDPv1/PRUDPLite always encodes the payload size in the main packet data.
 
@@ -642,10 +618,7 @@ The compression ratio is the size of the uncompressed payload divided by the siz
 
 ==== Payload Encryption ====
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''The following only applies to connections which do NOT use WebSockets. WebSocket connections, like those on the Nintendo Switch, do not encrypt payloads at all, as the entire connection is already encrypted with SSL.''</div>
-</div>
+{{Noticebox|''The following only applies to connections which do NOT use WebSockets. WebSocket connections, like those on the Nintendo Switch, do not encrypt payloads at all, as the entire connection is already encrypted with SSL.''}}
 
 <code>DATA</code> packets can have their payloads optionally encrypted before transfer. Encryption happens AFTER compression. If encryption is enabled, the payload contents become the encrypted payload with no header. If compression is enabled, the encryption algorithm encrypts the entire payload (including the compression ratio).
 
@@ -712,10 +685,7 @@ Once a connection has been established, a heartbeat timer begins. Whenever a pac
 
 Either end of the connection may terminate the connection at any time. This is done by sending the other end a <code>DISCONNECT</code> packet. Once received, the receiver acknowledges the packet 3 times, presumably to ensure the acknowledgment is received, and then the connection is terminated/cleaned up.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Some NEX game clients may ignore <code>DISCONNECT</code> packets sent from the server. Therefore, this may not be a reliable way to kill a connection from the server, such as when you want to kick a client. The only known 100% reliable way to force a client to disconnect is to either stop responding to packets, or to corrupt the RC4 stream such that the client can no longer process packets, forcing the client to kill the connection itself. However this will not act as an immediate kick if the client is already in a multiplayer session, as these take place over p2p, and so is often not viable either.''</div>
-</div>
+{{Noticebox|type=warning|''Some NEX game clients may ignore <code>DISCONNECT</code> packets sent from the server. Therefore, this may not be a reliable way to kill a connection from the server, such as when you want to kick a client. The only known 100% reliable way to force a client to disconnect is to either stop responding to packets, or to corrupt the RC4 stream such that the client can no longer process packets, forcing the client to kill the connection itself. However this will not act as an immediate kick if the client is already in a multiplayer session, as these take place over p2p, and so is often not viable either.''}}
 
 === Reliability ===
 
@@ -779,10 +749,7 @@ The sequence ID of the acknowledgement packet is always 0. The packets payload n
 
 === Fragmentation ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Like everything else in Rendez-Vous, the way packet fragmentation is handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''</div>
-</div>
+{{Noticebox|''Like everything else in Rendez-Vous, the way packet fragmentation is handled can be modified/replaced should a developer want to. This means it may change on a per-game basis. Additional reverse engineering may be required for some games.''}}
 
 When a packet's payload exceeds the maximum transmission unit (MTU), it must be fragmented into multiple PRUDP packets. Each fragment is compressed and encrypted separately. Each fragment is assigned an incrementing fragment ID before it is sent. The receiver uses the fragment IDs to reorder packets before decompressing/decrypting the payloads. Once each fragment payload is decompressed/decrypted, the receiver reconstructs the original, larger, payload from the fragments.
 

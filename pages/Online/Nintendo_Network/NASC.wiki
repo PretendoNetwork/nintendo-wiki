@@ -2,10 +2,7 @@
 
 NASC ('''N'''intendo '''A'''uthentication '''S'''erver '''C'''TR) is an evolution of the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], but for the 3DS family of consoles. It is more-or-less the same server as the original, but slightly modified to fit some of specific needs of the 3DS, such as the newly introduced [[Online/Nintendo_Network/NEX|NEX]] system for multiplayer. The server still includes the same endpoints and methods as the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], though they may not always work the same way the original did. This page should '''NOT''' be used as a reference for the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]].
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This page only refers to the server used by 3DS titles which do not use NNIDs. See [[Online/Nintendo_Network/NNAS|NNAS]] for titles which use NNIDs.''</div>
-</div>
+{{Noticebox|''This page only refers to the server used by 3DS titles which do not use NNIDs. See [[Online/Nintendo_Network/NNAS|NNAS]] for titles which use NNIDs.''}}
 
 == Environments ==
 
@@ -260,10 +257,7 @@ The following fields are present on all requests to the <code>/ac</code> endpoin
 
 This action serves 2 purposes, registering new game server accounts and loging into game servers. In the original [[Online/Nintendo_Wi-Fi_Connection/NAS|NAS]], these functions were split into 2 distinct actions, however Nintendo combined them into one for NASC. To know which function is being used, the request body must be inspected.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Not all 3DS games use Nintendo's game servers, but all 3DS games which go online must use NASC to authenticate. This effectively turns the <code>LOGIN</code> action into a ban check for games which use their own servers.''</div>
-</div>
+{{Noticebox|''Not all 3DS games use Nintendo's game servers, but all 3DS games which go online must use NASC to authenticate. This effectively turns the <code>LOGIN</code> action into a ban check for games which use their own servers.''}}
 
 ===== Request =====
 

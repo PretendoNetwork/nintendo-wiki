@@ -1878,10 +1878,7 @@ Example from the US/en timezones.
 
 === DELETE /v1/api/devices/@current ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This endpoint is only used when a console is in debug mode.''</div>
-</div>
+{{Noticebox|''This endpoint is only used when a console is in debug mode.''}}
 
 Not available in the production environment. Presumably deletes device data from the server, or potentially deletes all associated NNID device association datas?
 
@@ -2042,10 +2039,7 @@ The <code>device</code> object seems to always be empty?
 
 === GET /v1/api/miis ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This endpoint was shut down by Nintendo in May 2024 and is no longer usable.''</div>
-</div>
+{{Noticebox|''This endpoint was shut down by Nintendo in May 2024 and is no longer usable.''}}
 
 Retrieves a list of Miis for the requested NNIDs. Each object contains not only the NNIDs standard Mii, but also several expressions.
 
@@ -2216,10 +2210,7 @@ A list of user Miis. Each NNIDs Miis are defined in a <code>mii</code> object. D
 
 === POST /v1/api/oauth20/access_token/generate ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This endpoint does not support JSON mode on succesful responses. Errors may still support it, however.''</div>
-</div>
+{{Noticebox|''This endpoint does not support JSON mode on succesful responses. Errors may still support it, however.''}}
 
 Generates OAuth tokens for the user. The access token is only usable by NNAS itself, no other services. If another service would like details about the logged in user, it may request either a service or NEX token depending on the kind of service. A client may authenticate with either a username/password or with a refresh token.
 
@@ -3001,10 +2992,7 @@ List of [[#Device Attributes]] objects.
 
 === DELETE /v1/api/people/@me/devices/@current ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This endpoint is only used when a console is in debug mode, though the endpoint is active for retail use as well.''</div>
-</div>
+{{Noticebox|''This endpoint is only used when a console is in debug mode, though the endpoint is active for retail use as well.''}}
 
 Deletes the users device association data for the current device. Normally NNAS will keep track of device association information even after a NNID is unlinked for a device. This is done so that the server knows when to throw error <code>0110</code> (the NNID is not linked to the current device, and the current device is not the most recent device the NNID was linked to) or error <code>0143</code> (the NNID is not linked to the current device, and the current device is the most recent device the NNID was linked to, such as immediately after a factory reset).
 
@@ -3735,10 +3723,7 @@ Independent service token. Service tokens expire after 24 hours.
 
 === POST /v1/api/support/coppa/authorization ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint was disabled following this change, and thus all information was found via reverse engineering the client and may be incomplete.''</div>
-</div>
+{{Noticebox|''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint was disabled following this change, and thus all information was found via reverse engineering the client and may be incomplete.''}}
 
 Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
 
@@ -3841,10 +3826,7 @@ Begins the "forgot password" sequence. The official servers handle this by gener
 
 === POST /v1/api/support/parental_approval ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''</div>
-</div>
+{{Noticebox|''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''}}
 
 Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
 
@@ -3901,10 +3883,7 @@ COPPA code? Seems to be different than the apporval ID? <code>approval_Id</code>
 
 === GET /v1/api/support/parental_approval/send_email/coppa_code ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''</div>
-</div>
+{{Noticebox|''As of Wii U firmware version 5.5.6, Nintendo now requires parents to call Nintendo directly to create a NNID for children under the age of 13. This endpoint is still active, but not fully usable due to the shutdown of [[#POST /v1/api/support/coppa/authorization]]. Thus, all information was found via reverse engineering the client and may be incomplete.''}}
 
 Used as part of the parental checks for US NNIDs under the age of 13. Countries outside of the US do not have COPPA, so this does not apply outside of the US.
 

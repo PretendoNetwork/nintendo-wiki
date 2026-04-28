@@ -2,17 +2,11 @@
 
 The Tagaya service provides the client with metadata about a digital titles updates and versions. The console uses this service to check if any installed eShop titles require updates.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This service only applies the digital titles installed via the eShop. See [[Online/Nintendo_Network/SOAP|SOAP]] for how the console updates system titles and performs firmware updates.''</div>
-</div>
+{{Noticebox|''This service only applies to digital titles installed via the eShop. See [[Online/Nintendo_Network/SOAP|SOAP]] for how the console updates system titles and performs firmware updates.''}}
 
 <br>
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Each platform has it's own subdomains, however all endpoints are available to both platforms.''</div>
-</div>
+{{Noticebox|''Each platform has its own subdomains, however all endpoints are available to both platforms.''}}
 
 == Wii U ==
 

@@ -46,10 +46,7 @@ This class holds the data about a given notification. The contents of <code>m_da
 
 === NintendoNotificationEventGeneral ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
-<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
-</div>
+{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
 
 This class holds generic data about a given notification. The meaning of the fields changes based on the context the notification is sent in, the notification type, etc.
 
@@ -67,10 +64,7 @@ This class holds generic data about a given notification. The meaning of the fie
 
 === NintendoNotificationEventProfile ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
-<div style="padding: 5px;">This class inherits from [[Online/Nintendo_Network/NEX/Types#Data|Data]]</div>
-</div>
+{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
 
 This class holds data about a users profile.
 

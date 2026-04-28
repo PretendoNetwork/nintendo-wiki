@@ -280,10 +280,7 @@ Grants a connection ticket using the connecting clients username and authenticat
 
 === AuthenticationInfo ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
-<div style="padding: 5px;">This class inherits from [[#Data]]</div>
-</div>
+{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
 
 This class represents the authentication information used by NEX when logging in using methods which require more than just the username.
 
@@ -315,10 +312,7 @@ This class represents the authentication information used by NEX when logging in
 
 === LoginData ===
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 30px;">Notice</div>
-<div style="padding: 5px;">This class inherits from [[#Data]]</div>
-</div>
+{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
 
 This class represents a form of authentication data. Only seems to be officially used with [[#LoginWithContext]].
 

@@ -2,10 +2,7 @@
 
 Geisha is the service which provides the user interface for the Wii U eShop. The eShop application is actually a custom web browser which loads https://ninja.wup.shop.nintendo.net/ninja/wood_index.html, which redirects to https://geisha-wup.cdn.nintendo.net/geisha/index.html. The interface is built using standard HTML, CSS, and JavaScript. The browser also exposes several custom JavaScript APIs in order for the application to perform system/eShop related actions, such as getting user details from the console or starting a title download.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''The 3DS does not load a web page from the internet for it's user interface. This page is only relevant for the Wii U.''</div>
-</div>
+{{Noticebox|''The 3DS does not load a web page from the internet for it's user interface. This page is only relevant for the Wii U.''}}
 
 == Limitations ==
 
@@ -54,10 +51,7 @@ Entries defined later in the list take priority over earlier entires. This can b
 
 The eShop supports localizing the interface by loading various localization files. These are XML documents containing translation keys to replace in the interface.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''Since only the Wii U uses Geisha, and it can be an entirely custom web application, it is not required that any custom implementations implement localizations this way. This is documented for historical and convention purposes.''</div>
-</div>
+{{Noticebox|''Since only the Wii U uses Geisha, and it can be an entirely custom web application, it is not required that any custom implementations implement localizations this way. This is documented for historical and convention purposes.''}}
 
 The following localization files exist on the official Geisha server:
 
@@ -1644,10 +1638,7 @@ Shows a keyboard in password mode.
 
 Sets the keyboard language.
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''An an invalid <code>language</code> value will crash the console.''</div>
-</div>
+{{Noticebox|type=danger|''An invalid <code>language</code> value will crash the console.''}}
 
 {| class="wikitable"
 ! Parameter !! Type !! Description

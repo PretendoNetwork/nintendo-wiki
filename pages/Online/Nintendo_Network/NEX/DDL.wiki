@@ -1,9 +1,6 @@
 == Overview ==
 
-<div style="background-color: rgb(234, 243, 255); border-color: rgb(163, 202, 255); border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
-<div style="background-color: rgb(203, 214, 246); font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">Note</div>
-<div style="padding: 5px;">''This page needs better descriptions of each of the data types and what they do.''</div>
-</div>
+{{Noticebox|''This page needs better descriptions of each of the data types and what they do.''}}
 
 When creating Rendez-Vous, Quazal designed a [https://en.wikipedia.org/wiki/Data_definition_language Data Definition Language] (DDL for short) for encoding metadata about the various [Online/Nintendo_Network/NEX/Protocols|protocols] and other services. This metadata includes the real protocol name, real protocol method names, real protocol class names, and the method request, method response and class structures including data types and the real field names, though some data types lose information when encoded (e.g., the [Online/Nintendo_Network/NEX/Types#PID|PID] type is often seen as just either a UInt32/UInt64). What this data does not include is the protocol ID, references to past protocol versions, enums/constants, etc.
 

@@ -5,6 +5,7 @@ WikiMedia source for Nintendo Wiki.
 ## Structure
 - `extensions` - Custom MediaWiki extensions used by the wiki. Some of these could be replaced by MediaWiki templates, but are written as extensions for easier deploying
 - `pages` - MediaWiki page source files. Page names are based on file path. For example `pages/NEX/Protocols/TicketGranting.wiki` is the source for the page `http://example.com/wiki/NEX/Protocols/TicketGranting`
+- `templates` - MediaWiki templates
 - `media` - Media (images, videos, etc.) to be synced to the wiki. Currently not synced
 - `webhook` - Webhook for syncing changes made via GitHub to the MediaWiki instance
 - `htaccess` - The `.htaccess` file to get copied to the Docker container. Used to enable short URLs
@@ -25,6 +26,9 @@ Once the `LocalSettings.php` file has been created, copy it to the same director
 $wgScriptPath = "";
 $wgArticlePath = "/wiki/$1";
 $wgUsePathInfo = true;
+
+// Required for templates
+wfLoadExtension('ParserFunctions');
 
 // Enable custom extensions
 wfLoadExtension('Tabs');
