@@ -115,11 +115,19 @@ Notification types are a combined value made up of a [[#Notification Categories|
 {| class="wikitable"
 ! Category ID !! Name !! Description
 |-
-| 2 || || Quazal notification triggered with <code>MatchMaking::LaunchSession</code>
+| 1 || <code>Friends</code> || Events related to changes in the users relationships in [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProtocol]]
+|-
+| 2 || <code>SessionLaunch</code> || Quazal notification triggered with <code>MatchMaking::LaunchSession</code>
 |-
 | 3 || <code>ParticipationEvent</code> || Events related to the user participation in a [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]
 |-
 | 4 || <code>OwnershipChangeEvent</code> || [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ownership has changed
+|-
+| 5 || <code>FriendStatusChange</code> || A friend of the reciever has changed their online status
+|-
+| 6 || <code>ForceDisconnect</code> || Unknown. Presumed to tell the reciever to disconnect from the game server? NEX clients seem to ignore this when sent from the game server.
+|-
+| 7 || <code>GameSession</code> || Events related to the [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]]
 |-
 | 101 || || Reserved for game-specific use
 |-
@@ -166,6 +174,8 @@ Notification types are a combined value made up of a [[#Notification Categories|
 | 122 || <code>AddedToGathering</code> || The reciever was added to a [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]
 |-
 | 128 || <code>UserStatusUpdatedEvent</code> || User status updated
+|-
+| 1000 || <code>FirstUserNotification</code> || Unknown. Presumably this is where Quazal originally intended developers to start defining their own custom notifications?
 |}
 
 == Notification Subtypes ==
@@ -173,13 +183,27 @@ Notification types are a combined value made up of a [[#Notification Categories|
 {| class="wikitable"
 ! Category ID !! Subtype ID !! Name !! Description
 |-
+| 1 || 1 || || Relationship with another user changed. The change which happened is sent in <code>m_uiParam2</code>
+|-
 | 3 || 1 || <code>Participate</code> || New participant
 |-
 | 3 || 2 || || Participation cancelled
 |-
+| 3 || 3 || || Unknown
+|-
 | 3 || 7 || <code>Disconnect</code> || Participant disconnected
 |-
 | 3 || 8 || <code>EndParticipation</code> || Participation ended
+|-
+| 5 || 1 || || A friends online status has changed
+|-
+| 7 || 5 || <code>InviteReceived</code> || The reciever was invited to a game session
+|-
+| 7 || 7 || <code>InviteDeclined</code> || A game session invitation was declined
+|-
+| 7 || 8 || <code>InviteAccepted</code> || A game session invitation was accepted
+|-
+| 7 || 9 || || Unknown
 |-
 | 112 || 0 || || Unknown
 |-
@@ -189,6 +213,36 @@ Notification types are a combined value made up of a [[#Notification Categories|
 |}
 
 == Notifications ==
+
+=== 1001 ===
+
+Sent to a user when another user changes their relationship with them, such as sending them a friend request. Also sent when the user logs in, once for each friend request they recieved while offline.
+
+Only applies to the [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || [[Nintendo_Network/NEX/Types#PID|PID]] of the user who changed the relationship
+|-
+| m_uiParam1 || [[Nintendo_Network/NEX/Types#PID|PID]] of the user who changed the relationship. The same value as <code>m_pidSource</code>
+|-
+| m_uiParam2 || The change which happened. See [[#Relationship Changes]]
+|-
+| m_strParam || Presumably the message sent with the RMC, however [https://github.com/michal-kapala/acb-rdv/blob/227ca6ac2b1da42c8e9857312f92d2ea5ac0cda5/QuazalWV/RMC/Services/Notifications/NotificationManager.cs#L22 <code>acb-rdv</code> sends the players username?]
+|}
+
+==== Relationship Changes ====
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| 0 || <code>FriendshipDeclined</code> || The friend request was declined, or an existing friendship ended. Also sent when the reciever is blocked by the other user, since being blocked removes the friendship
+|-
+| 1 || <code>FriendshipAccepted</code> || The friend request was accepted
+|-
+| 2 || <code>FriendshipRequested</code> || A friend request was sent to the reciever
+|}
 
 === 2000 ===
 
@@ -286,6 +340,80 @@ Sent to all participants in a [[Nintendo_Network/NEX/Protocols/MatchMakingProtoc
 | m_strParam || Timestamp in microseconds
 |-
 | m_uiParam2 || Unknown. In Splatoon this is sometimes 0, sometimes 1
+|}
+
+=== 5001 ===
+
+Sent to every online friend of a user when that users online status changes, and to a user for each of their friends who is already online when they log in.
+
+Only applies to the [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || [[Nintendo_Network/NEX/Types#PID|PID]] of the friend whose status changed
+|-
+| m_uiParam1 || [[Nintendo_Network/NEX/Types#PID|PID]] of the friend whose status changed. The same value as <code>m_pidSource</code>
+|-
+| m_uiParam2 || <code>1</code> if the friend is now online, <code>0</code> if they are now offline
+|-
+| m_strParam || Username of the friend whose status changed
+|}
+
+=== 7005 ===
+
+Sent to each recipient of a game session invitation. Also sent when a user logs in, once for each invitation they recieved while offline.
+
+Only applies to the [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || [[Nintendo_Network/NEX/Types#PID|PID]] of the inviting user
+|-
+| m_uiParam1 || Unused. Always <code>0</code>
+|-
+| m_uiParam2 || Game session ID
+|-
+| m_strParam || Invitation message
+|-
+| m_uiParam3 || Game session type ID
+|}
+
+=== 7007 ===
+
+Sent to the inviting user when a recipient declines their game session invitation.
+
+Only applies to the [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || [[Nintendo_Network/NEX/Types#PID|PID]] of the user who declined the invitation
+|-
+| m_uiParam1 || Unused. Always <code>0</code>
+|-
+| m_uiParam2 || Game session ID
+|-
+| m_strParam || Unused. Always empty
+|}
+
+=== 7008 ===
+
+Sent to the inviting user when a recipient accepts their game session invitation.
+
+Only applies to the [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
+
+{| class="wikitable"
+! Field !! Value
+|-
+| m_pidSource || [[Nintendo_Network/NEX/Types#PID|PID]] of the user who accepted the invitation
+|-
+| m_uiParam1 || Unused. Always <code>0</code>
+|-
+| m_uiParam2 || Game session ID
+|-
+| m_strParam || Unused. Always empty
 |}
 
 === 109000 ===
