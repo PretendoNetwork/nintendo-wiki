@@ -63,7 +63,7 @@ The server build name identifies the build of the game server. While most Ninten
 |-
 | [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
-| [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 |-
 | [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
 |}
@@ -117,7 +117,7 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		|-
 		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+		| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
 		| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
 		|}
@@ -133,7 +133,7 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		|-
 		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+		| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
 		| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
 		|-
@@ -253,7 +253,7 @@ Grants a connection ticket using only authentication information. This is simila
 |-
 | [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
-| [[#RVConnectionData]] || pConnectionData || Connection info for secure server
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
 |}
 
 === ValidateAndRequestTicketWithParam ===
@@ -327,40 +327,6 @@ This class represents a form of authentication data. Only seems to be officially
 |-
 | UInt32 || m_similarConnection || Unknown
 |}
-
-=== RVConnectionData ===
-
-Tells the client where the game's real secure/special server are. If <code>m_urlSpecialProtocols</code> is a valid, non-empty, station then the game connects to both <code>m_urlRegularProtocols</code> and <code>m_urlSpecialProtocols</code>. The client then checks the protocol ID of a request before issuing it. If the protocol ID is set in <code>m_lstSpecialProtocols</code>, the client sends the message to the "special" server. Otherwise it goes to the main secure server. For example, a game could put matchmaking on the secure server and leaderboards on the "special" server, in order to not split server resources between protocols.
-
-Nintendo never used the "special" server.
-
-<tabs items="Revision 0,Revision 1" storagekey="RVConnectionData">
-	<tab name="Revision 0">
-		{| class="wikitable"
-		! Type !! Name !! Description
-		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlRegularProtocols || Address of the games main secure server
-		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
-		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
-		|}
-	</tab>
-
-	<tab name="Revision 1">
-		{| class="wikitable"
-		! Type !! Name !! Description
-		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlRegularProtocols || Address of the games main secure server
-		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
-		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
-		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || m_currentUTCTime || Current server time
-		|}
-	</tab>
-</tabs>
 
 === ValidateAndRequestTicketParam ===
 

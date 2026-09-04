@@ -1,0 +1,267 @@
+== Overview ==
+
+'''SimpleAuthenticationProtocol''' is very similar to the [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. However unlike [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]], which is used to obtain connection tickets to the games secure server as well as provides some utilities for mapping usernames and PIDs, this protocol seems to be a more simplified authentication system built on top of traditional token-based authentication and does not return any connection tickets. The protocol also seems to provide some of the functionality provided by the [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol|SecureConnectionProtocol]], implying this is a simplified "one stop shop" for those common actions.
+
+This protocol is not available on servers using Nintendo's [[Nintendo_Network/NEX|NEX]] library, but does reference Nintendo conventions, implying that this protocol was intended to be used by 3rd party vendors of Rendez-Vous.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#Authenticate]]
+|-
+| 2 || [[#LoginWithToken]]
+|-
+| 3 || [[#LoginWithTokenEx]]
+|-
+| 4 || [[#Login]]
+|-
+| 5 || [[#LoginWithSubAccount]]
+|-
+| 6 || [[#Register]]
+|-
+| 7 || [[#RegisterEx]]
+|-
+| 8 || [[#LoginWithTokenCafe]]
+|-
+| 9 || [[#LoginWithTokenCafeEx]]
+|}
+
+=== Authenticate ===
+
+Returns the server connection data using only the users username. Effectively just [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#Login|TicketGrantingProtocol#Login]], minus the connection ticket.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strUserName || Game server account username
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== LoginWithToken ===
+
+Returns the server connection data using an authentication token. This token is not provided by this protocol, and must be obtained elsewhere.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strToken || Authentication token
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== LoginWithTokenEx ===
+
+Returns the server connection data using an authentication token and additional info. This token is not provided by this protocol, and must be obtained elsewhere.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strToken || Authentication token
+|-
+| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || oAnyData || Additional info
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== Login ===
+
+Returns the server connection data using traditional username and password authentication.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strUsername || Game server account username
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strPassword || Game server account password
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== LoginWithSubAccount ===
+
+Returns the server connection data using only login data. The meaning of "SubAccount" is unknown.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || loginData || Login data
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== Register ===
+
+Identical to [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+|-
+| UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
+|-
+| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+|}
+
+=== RegisterEx ===
+
+Identical to [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+|-
+| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || hCustomData || Login data. In NEX this is either [[#NintendoLoginData]] or [[#AccountExtraInfo]]
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+|-
+| UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
+|-
+| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+|}
+
+=== LoginWithTokenCafe ===
+
+Returns the server connection data using an authentication token. The mentions of "Cafe" and Nintendo seem to imply this method is exclusive to the Wii U, and the token is provided by a Nintendo service such as a [[Nintendo_Network/NNAS#GET_/v1/api/provider/service_token/@me|NNAS independent service token]]. Given that Rendez-Vous was made to be used on other platforms, however, it may also possible that this method is a "login with vendor token" kind of method, with different vendors having different behaviors here.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strNintendoToken || Authentication token
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}
+
+=== LoginWithTokenCafeEx ===
+
+Returns the server connection data using an authentication token and additional info. The mentions of "Cafe" and Nintendo seem to imply this method is exclusive to the Wii U, and the token is provided by a Nintendo service such as a [[Nintendo_Network/NNAS#GET_/v1/api/provider/service_token/@me|NNAS independent service token]]. Given that Rendez-Vous was made to be used on other platforms, however, it may also possible that this method is a "login with vendor token" kind of method, with different vendors having different behaviors here.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strNintendoToken || Authentication token
+|-
+| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || oAnyData || Additional info
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+|-
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+|-
+| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+|-
+| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Return message from the server
+|}

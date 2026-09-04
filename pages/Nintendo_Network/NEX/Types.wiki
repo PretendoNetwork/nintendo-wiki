@@ -492,6 +492,40 @@ Prior to NEX 3.5.0, classes had no header, and the data of the class was encoded
 
 Class data is encoded immediately after the header.
 
+=== RVConnectionData ===
+
+Tells the client where the game's real secure/special server are. If <code>m_urlSpecialProtocols</code> is a valid, non-empty, station then the game connects to both <code>m_urlRegularProtocols</code> and <code>m_urlSpecialProtocols</code>. The client then checks the protocol ID of a request before issuing it. If the protocol ID is set in <code>m_lstSpecialProtocols</code>, the client sends the message to the "special" server. Otherwise it goes to the main secure server. For example, a game could put matchmaking on the secure server and leaderboards on the "special" server, in order to not split server resources between protocols.
+
+Nintendo never used the "special" server.
+
+<tabs items="Revision 0,Revision 1" storagekey="RVConnectionData">
+	<tab name="Revision 0">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#StationURL]] || m_urlRegularProtocols || Address of the games main secure server
+		|-
+		| [[#List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
+		|-
+		| [[#StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
+		|}
+	</tab>
+
+	<tab name="Revision 1">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#StationURL]] || m_urlRegularProtocols || Address of the games main secure server
+		|-
+		| [[#List]]&lt;UInt8&gt; || m_lstSpecialProtocols || List of protocol IDs belonging to the "special" server
+		|-
+		| [[#StationURL]] || m_urlSpecialProtocols || Address of an optional "special" server
+		|-
+		| [[#DateTime]] || m_currentUTCTime || Current server time
+		|}
+	</tab>
+</tabs>
+
 === Data ===
 
 This class has no fields. It's only purpose seems to be the root class from which other classes can inherit from, in order to allow those classes to be used in [[#DataHolder]].
