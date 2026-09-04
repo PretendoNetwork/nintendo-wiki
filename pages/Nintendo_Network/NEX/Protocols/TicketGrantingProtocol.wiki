@@ -61,7 +61,7 @@ The server build name identifies the build of the game server. While most Ninten
 |-
 | [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Kerberos ticket]]
+| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
 | [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 |-
@@ -115,7 +115,7 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		|-
 		| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
 		| [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
@@ -131,7 +131,7 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		|-
 		| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
 		| [[#RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
@@ -173,7 +173,7 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 		|-
 		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|}
 	</tab>
 
@@ -183,7 +183,7 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 		|-
 		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
 		| [[Nintendo_Network/NEX/Types#String|String]] || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
 		|}
@@ -251,7 +251,7 @@ Grants a connection ticket using only authentication information. This is simila
 |-
 | [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Kerberos ticket]]
+| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
 | [[#RVConnectionData]] || pConnectionData || Connection info for secure server
 |}
@@ -417,7 +417,7 @@ This class is effectively an upgraded version of the login method responses, whi
 		|-
 		| [[Nintendo_Network/NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
 		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
 		|-
@@ -435,7 +435,7 @@ This class is effectively an upgraded version of the login method responses, whi
 		|-
 		| [[Nintendo_Network/NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for. This value may not always match the real PID for the game server account. See <code>platformPid</code> for additional details.
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Kerberos ticket]]
+		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
 		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
 		|-
