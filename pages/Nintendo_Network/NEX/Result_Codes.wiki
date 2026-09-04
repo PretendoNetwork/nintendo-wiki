@@ -324,6 +324,134 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 | <code>0x00060016</code> || <code>DOCore::VersionMismatch</code> || Unknown
 |}
 
+=== UbiAuthentication ===
+
+Ubisoft-specific authentication result codes. Possibly used in [[Nintendo_Network/NEX/Protocols/UbiAccountManagementProtocol|UbiAccountManagementProtocol]]?
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00090001</code> || <code>UbiAuthentication::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00090002</code> || <code>UbiAuthentication::Generic</code> || Unknown
+|-
+| <code>0x00090003</code> || <code>UbiAuthentication::MissingParameter</code> || A required parameter was not provided
+|-
+| <code>0x00090004</code> || <code>UbiAuthentication::UbiAccountNotFound</code> || The specified Ubisoft account does not exist
+|-
+| <code>0x00090006</code> || <code>UbiAuthentication::AccessDenied</code> || An attempt was made to access data in an incorrect manner. This may be due to inadequate permission or the data, file, etc. not existing
+|-
+| <code>0x00090007</code> || <code>UbiAuthentication::ExternalAccountAlreadyLinked</code> || The external account is already linked to a Ubisoft account
+|-
+| <code>0x00090008</code> || <code>UbiAuthentication::InvalidParameter</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|}
+
+=== Privilege ===
+
+Possibly results specific to [[Nintendo_Network/NEX/Protocols/PrivilegesProtocol|PrivilegesProtocol]]?
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x000B0001</code> || <code>Privilege::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x000B0002</code> || <code>Privilege::CommunicationFailure</code> || Unknown
+|-
+| <code>0x000B0003</code> || <code>Privilege::KeyActivationNeeded</code> || Unknown
+|-
+| <code>0x000B0004</code> || <code>Privilege::InvalidKey</code> || The provided key is invalid
+|-
+| <code>0x000B0005</code> || <code>Privilege::KeyAlreadyActivated</code> || The key has already been activated
+|-
+| <code>0x000B0006</code> || <code>Privilege::KeyAlreadyActivatedByAnotherUser</code> || The key has already been activated by a different user
+|-
+| <code>0x000B0007</code> || <code>Privilege::ExpectedPrivilegeConditionsNotMet</code> || Unknown
+|-
+| <code>0x000B03E9</code> || <code>Privilege::PrivilegeNotFound</code> || Unknown
+|-
+| <code>0x000B03EA</code> || <code>Privilege::UserNotFound</code> || The specified user could not be found
+|}
+
+=== Tracking ===
+
+Possibly results specific to [[Nintendo_Network/NEX/Protocols/TrackingProtocol3|TrackingProtocol3]]?
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x000D0001</code> || <code>Tracking::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x000D0002</code> || <code>Tracking::Stop</code> || Unknown
+|}
+
+=== News ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/NewsProtocol|NewsProtocol]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x000F0001</code> || <code>News::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x000F0002</code> || <code>News::ChannelNotAvailable</code> || The requested channel is not available
+|-
+| <code>0x000F0003</code> || <code>News::DuplicatedChannels</code> || Unknown
+|}
+
+=== Friends ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00100001</code> || <code>Friends::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00100002</code> || <code>Friends::MaximumFriendsLimitReached</code> || The caller has reached their maximum number of friends
+|-
+| <code>0x00100003</code> || <code>Friends::RecipientMaximumFriendsLimitReached</code> || The recipient has reached their maximum number of friends
+|-
+| <code>0x00100004</code> || <code>Friends::UserNotFound</code> || The specified user could not be found
+|-
+| <code>0x00100005</code> || <code>Friends::CannotAddBlacklistedPlayer</code> || The user attempted to add a player who is blocked
+|-
+| <code>0x00100006</code> || <code>Friends::CannotAddYourselfAsFriend</code> || The user attempted to add themselves as a friend
+|}
+
+=== GameSession ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00120001</code> || <code>GameSession::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00120002</code> || <code>GameSession::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00120003</code> || <code>GameSession::InvalidSessionKey</code> || The provided session key is invalid
+|-
+| <code>0x00120004</code> || <code>GameSession::InvalidQueryID</code> || The provided query ID is invalid
+|-
+| <code>0x00120005</code> || <code>GameSession::HostPrivilegeRequired</code> || Unknown. The operation may only be performed by the session host?
+|-
+| <code>0x00120006</code> || <code>GameSession::NoPublicSlotLeft</code> || The session has no remaining public slots
+|-
+| <code>0x00120007</code> || <code>GameSession::NoPrivateSlotLeft</code> || The session has no remaining private slots
+|-
+| <code>0x00120008</code> || <code>GameSession::HostOrParticipantRequired</code> || Unknown. The operation may only be performed by the session host or a participant?
+|-
+| <code>0x00120009</code> || <code>GameSession::ParticipantIsNotConnected</code> || The specified participant is not currently connected
+|-
+| <code>0x0012000A</code> || <code>GameSession::PlayerIsNotSessionParticipant</code> || The specified player has not joined the session
+|-
+| <code>0x0012000B</code> || <code>GameSession::PlayerIsAlreadySessionParticipant</code> || The specified player has already joined the session
+|-
+| <code>0x0012000C</code> || <code>GameSession::InvalidPID</code> || The specified PID is invalid
+|-
+| <code>0x0012000D</code> || <code>GameSession::GameSessionGeneratedPyFileNotFound</code> || Unknown. We know Rendez-Vous uses Python, does this imply that it also generates a custom Python script for every game session?
+|}
+
 === FPD ===
 
 Results specific to the [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]]/[[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] protocols.
