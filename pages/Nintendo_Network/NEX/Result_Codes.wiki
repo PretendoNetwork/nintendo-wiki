@@ -326,6 +326,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === FPD ===
 
+Results specific to the [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]]/[[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] protocols.
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -418,6 +420,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === Ranking ===
 
+Results specific to [[Nintendo_Network/NEX/Protocols/RankingProtocol|RankingProtocol]].
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -496,6 +500,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === DataStore ===
 
+Results specific to [[Nintendo_Network/NEX/Protocols/DataStoreProtocol|DataStoreProtocol]].
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -528,6 +534,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === ServiceItem ===
 
+Results specific to [[Nintendo_Network/NEX/Protocols/ServiceItemProtocol|ServiceItemProtocol]].
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -547,6 +555,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 |}
 
 === MatchmakeReferee ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/MatchmakeRefereeProtocol|MatchmakeRefereeProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -572,6 +582,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === Subscriber ===
 
+Results specific to [[Nintendo_Network/NEX/Protocols/SubscriberProtocol|SubscriberProtocol]].
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -586,6 +598,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === Ranking2 ===
 
+Results specific to [[Nintendo_Network/NEX/Protocols/Ranking2Protocol|Ranking2Protocol]].
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -597,6 +611,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 |}
 
 === SmartDeviceVoiceChat ===
+
+Results specific to NSO voice chat (ZNC/Coral). TODO - Move this to the Nintendo Switch Online side of the wiki.
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -643,6 +659,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 |}
 
 === Screening ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/ScreeningProtocol|ScreeningProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
