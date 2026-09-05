@@ -400,6 +400,18 @@ Results specific to [[Nintendo_Network/NEX/Protocols/NewsProtocol|NewsProtocol]]
 | <code>0x000F0002</code> || <code>News::ChannelNotAvailable</code> || The requested channel is not available
 |-
 | <code>0x000F0003</code> || <code>News::DuplicatedChannels</code> || Unknown
+|-
+| <code>0x000F0004</code> || <code>News::InvalidChannelID</code> || The specified channel ID is invalid
+|-
+| <code>0x000F0005</code> || <code>News::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x000F0006</code> || <code>News::ChannelNotSubscribable</code> || The channel does not allow users to subscribe to it
+|-
+| <code>0x000F0007</code> || <code>News::ChannelAlreadySubscribed</code> || The user is already subscribed to the channel
+|-
+| <code>0x000F0008</code> || <code>News::UnableToUnsubscribe</code> || The user could not be unsubscribed from the channel
+|-
+| <code>0x000F0009</code> || <code>News::UnableToCreateChannel</code> || The channel could not be created
 |}
 
 === Friends ===
@@ -420,6 +432,30 @@ Results specific to [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProt
 | <code>0x00100005</code> || <code>Friends::CannotAddBlacklistedPlayer</code> || The user attempted to add a player who is blocked
 |-
 | <code>0x00100006</code> || <code>Friends::CannotAddYourselfAsFriend</code> || The user attempted to add themselves as a friend
+|}
+
+=== SocialNetworks ===
+
+The system which uses these result codes is not known. Ubisoft-specific?
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00110001</code> || <code>SocialNetworks::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00110002</code> || <code>SocialNetworks::MissingParameter</code> || A required parameter was not provided
+|-
+| <code>0x00110003</code> || <code>SocialNetworks::InvalidParameter</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00110004</code> || <code>SocialNetworks::AccessDenied</code> || An attempt was made to access data in an incorrect manner. This may be due to inadequate permission or the data, file, etc. not existing
+|-
+| <code>0x00110005</code> || <code>SocialNetworks::AccountNotRegistered</code> || The user has not registered an account with the social network?
+|-
+| <code>0x00110006</code> || <code>SocialNetworks::LimitReached</code> || Unknown. A limit of some kind was reached?
+|-
+| <code>0x00110007</code> || <code>SocialNetworks::MessagingError</code> || Unknown
+|-
+| <code>0x00110008</code> || <code>SocialNetworks::InvalidResponse</code> || Unknown
 |}
 
 === GameSession ===
@@ -454,6 +490,120 @@ Results specific to [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSes
 | <code>0x0012000C</code> || <code>GameSession::InvalidPID</code> || The specified PID is invalid
 |-
 | <code>0x0012000D</code> || <code>GameSession::GameSessionGeneratedPyFileNotFound</code> || Unknown. We know Rendez-Vous uses Python, does this imply that it also generates a custom Python script for every game session?
+|}
+
+=== SubAccountManagement ===
+
+Possibly results specific to the "sub account management" [[Nintendo_Network/NEX/Protocols|NEX protocol]]?
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00140001</code> || <code>SubAccountManagement::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00140002</code> || <code>SubAccountManagement::MaxSubAccountReached</code> || The user has reached their maximum number of sub accounts
+|}
+
+=== TitleStorage ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/TitleStorageProtocol|TitleStorageProtocol]]/[[Nintendo_Network/NEX/Protocols/TitleStorageAdminProtocol|TitleStorageAdminProtocol]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00150001</code> || <code>TitleStorage::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00150002</code> || <code>TitleStorage::InvalidArgument</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x00150003</code> || <code>TitleStorage::InvalidContentType</code> || The content type is not valid
+|-
+| <code>0x00150004</code> || <code>TitleStorage::InvalidContent</code> || The content itself is not valid
+|-
+| <code>0x00150005</code> || <code>TitleStorage::DownloadFailed</code> || The content could not be downloaded
+|-
+| <code>0x00150006</code> || <code>TitleStorage::DownloadCancelled</code> || The download was cancelled
+|-
+| <code>0x00150007</code> || <code>TitleStorage::GetUrlFailed</code> || The download URL for the content could not be obtained
+|}
+
+=== UbiFriends ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/UbiFriends|Ubi friends]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x00190001</code> || <code>UbiFriends::Unknown</code> || An unknown error has occured. Also indicates a success when the error bit is not set
+|-
+| <code>0x00190002</code> || <code>UbiFriends::MissingParameter</code> || A required parameter was not provided
+|-
+| <code>0x00190003</code> || <code>UbiFriends::InvalidPrincipalId</code> || The specified PID is invalid
+|-
+| <code>0x00190004</code> || <code>UbiFriends::InvalidUbiAccountId</code> || The specified Ubisoft account ID is invalid
+|-
+| <code>0x00190005</code> || <code>UbiFriends::CannotUseYourself</code> || Unknown. The user attempted to perform the operation on themselves?
+|-
+| <code>0x00190006</code> || <code>UbiFriends::InvitationNotFound</code> || Unknown. The specified friend request could not be found?
+|-
+| <code>0x00190007</code> || <code>UbiFriends::MaxBlacklistLimitReached</code> || The user has reached their maximum number of blocked users
+|-
+| <code>0x00190009</code> || <code>UbiFriends::AccountBlacklisted</code> || One of the accounts has blocked the other
+|}
+
+=== UplayWin ===
+
+Results specific to [[Nintendo_Network/NEX/Protocols/UplayWinProtocol|UplayWinProtocol]].
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| <code>0x001C0000</code> || <code>UplayWin::GeneralFault</code> || A generic error occured
+|-
+| <code>0x001C0001</code> || <code>UplayWin::FieldEmptyFault</code> || A required field was left empty
+|-
+| <code>0x001C0002</code> || <code>UplayWin::FieldValueAlreadyExistsFault</code> || The value provided for a field already exists
+|-
+| <code>0x001C0003</code> || <code>UplayWin::FieldValueNotFound</code> || The value provided for a field could not be found
+|-
+| <code>0x001C0004</code> || <code>UplayWin::ForeignKeyFault</code> || Unknown. Likely a database foreign key constraint failure?
+|-
+| <code>0x001C0005</code> || <code>UplayWin::ServiceFault</code> || Unknown
+|-
+| <code>0x001C0006</code> || <code>UplayWin::CollectionEmptyFault</code> || The collection is empty
+|-
+| <code>0x001C0007</code> || <code>UplayWin::RewardAlreadyBoughtFault</code> || The reward has already been purchased by the user
+|-
+| <code>0x001C0008</code> || <code>UplayWin::ActionAlreadyCompletedFault</code> || The action has already been completed by the user
+|-
+| <code>0x001C0009</code> || <code>UplayWin::InsufficientTokensToPurchaseRewardFault</code> || The user does not have enough tokens to purchase the reward
+|-
+| <code>0x001C000A</code> || <code>UplayWin::BrokerPermissionFault</code> || Unknown
+|-
+| <code>0x001C000B</code> || <code>UplayWin::ValueCanNotBeNegativeFault</code> || A negative value was provided where only positive values are allowed
+|-
+| <code>0x001C000D</code> || <code>UplayWin::DateStartCannotBeHigherThanDateEndFault</code> || The provided start date is later than the provided end date
+|-
+| <code>0x001C000E</code> || <code>UplayWin::StructureFault</code> || Unknown. The provided data had an invalid structure?
+|-
+| <code>0x001C000F</code> || <code>UplayWin::FieldValueOverflowFault</code> || The value provided for a field was too large
+|-
+| <code>0x001C0010</code> || <code>UplayWin::InactiveActionFault</code> || The action is not active
+|-
+| <code>0x001C0011</code> || <code>UplayWin::InactiveRewardFault</code> || The reward is not active
+|-
+| <code>0x001C0012</code> || <code>UplayWin::ActionPlatformKeyFault</code> || Unknown
+|-
+| <code>0x001C0013</code> || <code>UplayWin::InvalidParameterFault</code> || The operation parameters were not valid. This can mean parameters were out of range, were an invalid combination, etc.
+|-
+| <code>0x001C0014</code> || <code>UplayWin::InvalidTransactionTypeFault</code> || The type of the transaction is not valid
+|-
+| <code>0x001C0015</code> || <code>UplayWin::InvalidPropertyInTransactionFault</code> || A property of the transaction is not valid
+|-
+| <code>0x001C0016</code> || <code>UplayWin::AccessViolationFault</code> || Unknown. Invalid access permissions?
+|-
+| <code>0x001C0017</code> || <code>UplayWin::DefaultCultureMandatoryFault</code> || Unknown. Likely means a default locale ("culture") must be provided?
+|-
+| <code>0x001C0064</code> || <code>UplayWin::UbiAccountNotLinked</code> || Unknown. The user does not have a linked Ubisoft account?
 |}
 
 === FPD ===
