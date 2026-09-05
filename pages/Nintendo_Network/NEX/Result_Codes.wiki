@@ -206,6 +206,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === Transport ===
 
+General transport/connection related result codes.
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -275,6 +277,8 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 |}
 
 === DOCore ===
+
+Likely related to [[Nintendo_Network/NEX/NetZ|NetZ]] ("DO" = DuplicateObject).
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -574,6 +578,8 @@ Results specific to [[Nintendo_Network/NEX/Protocols/RankingProtocol|RankingProt
 
 === Authentication ===
 
+Likely triggered by [[Nintendo_Network/NASC|NASC]]/[[Nintendo_Network/NNAS|NNAS]]. Could also be NSO related based on the license mentions.
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -802,6 +808,8 @@ Results specific to [[Nintendo_Network/NEX/Protocols/ScreeningProtocol|Screening
 
 === Custom ===
 
+Custom error codes.
+
 {| class="wikitable"
 ! Value !! Name !! Description
 |-
@@ -809,6 +817,8 @@ Results specific to [[Nintendo_Network/NEX/Protocols/ScreeningProtocol|Screening
 |}
 
 === Ess ===
+
+Likely related [[Nintendo_Switch_Online/Eagle|Eagle]], since it's URLs reference "ess" (Example: <code>wss://d7d-arzn.g.lp1.e.srv.nintendo.net:443/EA3nJiq9BKyoxmBjJ2TkfzcRHwQe88FJ/ess-d7d-btb4mnggg9q5k2kdqb8g</code>).
 
 {| class="wikitable"
 ! Value !! Name !! Description
