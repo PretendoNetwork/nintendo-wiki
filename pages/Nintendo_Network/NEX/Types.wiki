@@ -466,7 +466,9 @@ An [[#AnyObjectHolder]] that can hold any class which uses [[#Data]] as its root
 
 === CustomDataHolder ===
 
-Abstraction built on top of [[#DataHolder]] to restrict which classes can be held to a more refined set, disallowing certain classes even if they inherit from [[#Data]].
+A simplified [[#AnyObjectHolder]], built on top of [[#DataHolder]], which takes only a single template parameter: the root class it holds. The identifier type is always set to [[#String]] on the callers behalf, making <code>nn::nex::CustomDataHolder<nn::nex::SomeClassThatInheritsData></code> equivalent to <code>nn::nex::AnyObjectHolder<nn::nex::SomeClassThatInheritsData, nn::nex::String></code>.
+
+Where [[#DataHolder]] accepts any class inheriting from [[#Data]], <code>CustomDataHolder</code> narrows this to a single branch of the class tree. For example, <code>nn::nex::CustomDataHolder<nn::nex::SomeClassThatInheritsData></code> accepts only classes which inherit from <code>nn::nex::SomeClassThatInheritsData</code> somewhere in their class tree, and rejects any other class even if it also inherits from [[#Data]]. See the example under [[#AnyObjectHolder]].
 
 == Classes ==
 
