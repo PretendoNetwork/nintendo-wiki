@@ -239,7 +239,7 @@ Grants a connection ticket using only authentication information. This is simila
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || loginData || Internally the client calls this with a [[Nintendo_Network/NEX/Types#DataHolder|CustomDataHolder]]&lt;[[#LoginData]]&gt;, however technically any [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] can be used in the RMC
+| [[Nintendo_Network/NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#LoginData]]&gt; || loginData || The data used to login
 |}
 
 ==== Response ====
