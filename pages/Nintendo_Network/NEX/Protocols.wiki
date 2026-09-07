@@ -192,7 +192,7 @@ These protocols do not have known protocol IDs, and as such it is not known whet
 
 == Internal protocols ==
 
-These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [[Nintendo_Network/NEX/Protocols/Debug|Debug]] protocol. However some games implement subsets of these protocols.
+These protocols seem to be used internally by the servers. Likely for their inter-server communications. Many of these can only be observed through the [[Nintendo_Network/NEX/Protocols/DebugProtocol|DebugProtocol]]. However some games implement subsets of these protocols.
 
 {| class="wikitable"
 |-
