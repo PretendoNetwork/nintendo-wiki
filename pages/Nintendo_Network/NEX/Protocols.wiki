@@ -198,7 +198,7 @@ These protocols seem to be used internally by the servers. Likely for their inte
 |-
 ! Protocol ID !! Protocol Name
 |-
-| ? || [[Nintendo_Network/NEX/Protocols/Dummy|Dummy]]
+| ? || [[Nintendo_Network/NEX/Protocols/DummyProtocol|DummyProtocol]]
 |-
 | ? || [[Nintendo_Network/NEX/Protocols/SecureConnectionInternalProtocol|SecureConnectionInternalProtocol]]
 |-
