@@ -1644,9 +1644,9 @@ Holds details for an object the client would like to request metadata for.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || dataId || The target [[#Object Data ID]]. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+| UInt64 || dataId || The target [[#Object Data ID]]. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is ignored
 |-
-| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is preferred
 |-
 | [[#ResultFlag]] || resultOption || What fields the response should populate
 |-
