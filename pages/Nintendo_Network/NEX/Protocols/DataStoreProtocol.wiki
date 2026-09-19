@@ -105,6 +105,8 @@ If a password is used (meaning, it's value is not <code>INVALID_PASSWORD</code>)
 
 When <code>DATA_FLAG_USE_READ_LOCK</code> is set, the first time the object is downloaded a "lock ID" can be set by the caller. The server saves this value, and all subsequent downloads MUST use this same lock ID, otherwise <code>DataStore::AlreadyLocked</code>. This seems to have been an older version of the [[#Object Passwords]] system, but lock IDs can be used in conjunction with access passwords (for example, setting a common access password on all a users objects to allow metadata to be seen only by select players through [[#GetMetas]], but setting a unique lock ID on each object to still only allow a specific user to download the object contents).
 
+The lock is cleared only if another call is made to interact with the object using a lock ID of 0. This unlocking call can be made by any user, it does not have to be the current "owner" of the lock.
+
 == Object Tags ==
 
 Every object may have <code>NUM_TAG_SLOT</code> number of tags. Tags are used to add extra metadata about an object that can be used later for searching/filtering purposes. If more than <code>NUM_TAG_SLOT</code> tags are uploaded, <code>DataStore::InvalidArgument</code> is thrown. Each tag can be up to <code>MAX_TAG_LENGTH</code> characters long. If any tag has more than code>MAX_TAG_LENGTH</code> characters, <code>DataStore::InvalidArgument</code> is thrown. When uploaded, tags are reordered in alphabetical order, and they are not trimmed of any leading/trailing white space. If the tag list contains a duplicate string, <code>DataStore::InvalidArgument</code> is thrown.
