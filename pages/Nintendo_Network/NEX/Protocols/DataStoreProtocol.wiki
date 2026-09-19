@@ -2210,7 +2210,7 @@ Used to reference an object in a context where the objects data is not needed, s
 |-
 | UInt32 || lockId || [[#Object Lock ID]]
 |-
-| UInt32 || accessPassword || [[#Object Passwords]]
+| UInt64 || accessPassword || [[#Object Passwords]]
 |}
 
 === DataStoreRatingLog ===
