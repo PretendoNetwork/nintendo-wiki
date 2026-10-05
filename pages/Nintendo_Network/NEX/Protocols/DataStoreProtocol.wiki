@@ -142,7 +142,7 @@ Each object is assigned a <code>period</code> value, which is the number of days
 * Whenever the object is downloaded via the various "*GetObject*" methods and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
 * Whenever [[#TouchObject]] is called on the object and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
 * Whenever the underlying object data is updated
-* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
+* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set. If <code>MODIFICATION_FLAG_PERIOD</code> is used at the same time, use the new period
 * Whenever the objects metadata is update with <code>MODIFICATION_FLAG_PERIOD</code> set
 
 For example, if an object is uploaded on January 1st with a <code>period</code> of 90 days (the default), the object will expire on April 1st (or March 31st on a leap year). If on February 15th (45 days after upload) the object has it's validity period extended, it will now be set to expire <code>period</code> days after February 15th, which is May 16th (or May 15th on a leap year).
