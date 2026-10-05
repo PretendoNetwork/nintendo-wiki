@@ -2828,7 +2828,7 @@ enum ComparisonFlag : uint32_t {
 |-
 | <code>COMPARISON_FLAG_STATUS</code> || 0x100 || Compare statuses
 |-
-| <code>COMPARISON_FLAG_ALL</code> || 0x200 || Compare everything
+| <code>COMPARISON_FLAG_ALL</code> || 0xFFFF || Compare everything
 |}
 
 === ResultFlag ===
