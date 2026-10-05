@@ -2780,19 +2780,19 @@ enum ModificationFlag : uint32_t {
 |-
 | <code>MODIFICATION_FLAG_UPDATE_PERMISSION</code> || 0x004 || The object update permission (also seen as "delete permission") has been updated
 |-
-| <code>MODIFICATION_FLAG_PERIOD</code> || 0x008 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_PERIOD</code> || 0x008 || The object period has been updated. This also extends the objects validity period by this number of days starting from the call time
 |-
-| <code>MODIFICATION_FLAG_METABINARY</code> || 0x010 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_METABINARY</code> || 0x010 || The [[#Object MetaBinary]] has been updated
 |-
-| <code>MODIFICATION_FLAG_TAGS</code> || 0x020 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_TAGS</code> || 0x020 || The [[#Object Tags]] have been updated
 |-
-| <code>MODIFICATION_FLAG_UPDATED_TIME</code> || 0x040 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_UPDATED_TIME</code> || 0x040 || Forces the server to update the objects "updated time". This also extends the objects validity period by either the current period, or the new period if <code>MODIFICATION_FLAG_PERIOD</code> is also set
 |-
-| <code>MODIFICATION_FLAG_DATA_TYPE</code> || 0x080 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_DATA_TYPE</code> || 0x080 || The [[#Object Data Type]] has been updated
 |-
 | Unknown || 0x100 || The object reference count has been updated
 |-
-| <code>MODIFICATION_FLAG_STATUS</code> || 0x200 || The object access permission has been updated
+| <code>MODIFICATION_FLAG_STATUS</code> || 0x200 || The object [[#DataStatus]] has been updated
 |}
 
 === ComparisonFlag ===
