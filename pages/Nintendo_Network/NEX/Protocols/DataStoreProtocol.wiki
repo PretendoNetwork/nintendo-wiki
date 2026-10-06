@@ -1096,7 +1096,7 @@ Rates multiple object rating slots. Only users with access permissions can perfo
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |-
@@ -1196,7 +1196,7 @@ If a target rating slot has not been initialized, this method will initialize it
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization paramaters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
 |-
