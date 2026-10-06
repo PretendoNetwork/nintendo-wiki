@@ -2128,7 +2128,7 @@ Data for how to create a new rating, or update an existing one. See [[#Object Ra
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| SInt64 || ratingValue || The rating value. Can be negative
+| SInt32 || ratingValue || The rating value. Can be negative
 |-
 | UInt64 || accessPassword || [[#Object Passwords]]
 |}
