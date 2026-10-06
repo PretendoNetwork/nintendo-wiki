@@ -2366,7 +2366,7 @@ Data on which existing object metadata is compared to before updating the object
 |-
 | SInt32 || rangeMax || The maximum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MAX</code> is set. If an incoming rating is above this value, <code>DataStore::InvalidArgument</code> is thrown
 |-
-| UInt8 || periodHour || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
+| SInt8 || periodHour || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
 |-
 | SInt16 || periodDuration || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
 |}
