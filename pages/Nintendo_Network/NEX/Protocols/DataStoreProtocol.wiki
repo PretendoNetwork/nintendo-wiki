@@ -894,7 +894,7 @@ If the target user has no object in the slot, <code>DataStore::NotFound</code> i
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#DataStorePersistenceInfo]] || pPersistenceInfo || Information about the object stored in the target slot
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePersistenceInfo]]&gt; || pPersistenceInfo || Information about the object stored in the target slots
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>persistenceSlotIds</code> in the same order as in the request
 |}
