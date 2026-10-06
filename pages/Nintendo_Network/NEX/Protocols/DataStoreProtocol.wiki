@@ -1549,7 +1549,7 @@ Holds details for how the game server should update an existing objects metadata
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt32 || dataId || The [[#Object Data ID]] being updated
+| UInt64 || dataId || The [[#Object Data ID]] being updated
 |-
 | [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
 |-
