@@ -1664,7 +1664,7 @@ Holds details for [[#Object Ratings]] in a given slot.
 |-
 | SInt64 || totalValue || The current total value of all ratings combined
 |-
-| UInt64 || count || The total number of ratings
+| UInt32 || count || The total number of ratings
 |-
 | SInt64 || initialValue || The slots initial rating value when the object was created
 |}
