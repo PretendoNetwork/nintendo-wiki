@@ -91,8 +91,12 @@ When <code>RATING_FLAG_MODIFIABLE</code> is used, and/or any lock type besides <
 
 Certain operations on an object count as "referencing" said object. The game server keeps track of the number of times an object has been referenced, incrementing the value by 1 each time, and referencing an object can be used to extend its [[#Validity Period]]. These operations include:
 
-* Whenever the object is downloaded via the various "*GetObject*" methods
+* Whenever the object is downloaded via the various "*GetObject*" methods, such as [[#PrepareGetObjectV1]], [[#PrepareGetObject]] and [[#PrepareGetObjectOrMetaBinary]]
 * Whenever [[#TouchObject]] is called on the object
+
+This applies no matter who the caller is, including when access is given through the [[#Object Passwords|access password]], when the object is targeted through its [[#Object Persistence]] slot, or when the owner downloads their own object while it is under review. Only a successful call counts as a reference. A call which is refused, such as with <code>DataStore::PermissionDenied</code>, or with <code>DataStore::AlreadyLocked</code> because another lock ID holds the [[#Object Lock ID|read lock]], leaves both the reference count and the referred time alone.
+
+No other method counts as a reference, even if it returns the object. This includes reading the objects metadata ([[#GetMeta]], [[#GetMetas]], [[#GetMetasMultipleParam]], [[#GetSpecificMetaV1]], [[#GetSpecificMeta]]), finding it through [[#SearchObject]], rating it or reading its ratings, changing its metadata, updating its data, persisting it, reading its passwords, and receiving an [[#Object Notifications|object notification]] for it. A new object starts with a reference count of 0, and its referred time is set to the time it was created.
 
 The reference count can also be set directly with [[#ChangeMeta]] using the reference count [[#ModificationFlag]] (<code>0x100</code>). Any value can be set, regardless of how many times the object has actually been referenced, and the count can be both raised and lowered. Later references continue counting from the value that was set, not from what the count was before. For example, if an object has been referenced 3 times and its count is then set to 1, the next reference brings the count to 2.
 
