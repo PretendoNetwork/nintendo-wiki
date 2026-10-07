@@ -1074,6 +1074,8 @@ Updates multiple objects metadata. Only users with update permissions can perfor
 
 If <code>dataIds</code> is populated, <code>params</code> must contain only a single entry which is applied to all targets in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. If <code>dataIds</code> is empty, the targets are defined in <code>params</code>. If <code>dataIds</code> is populated and <code>params</code> has more than a single entry, <code>DataStore::InvalidArgument</code> is thrown regardless of <code>transactional</code>. Duplicate targets are not filtered out or ignored.
 
+Targets are updated one at a time, in the order they appear in the request. Since [[#DataStoreChangeMetaCompareParam]] compares against the current state of the object, updating the same object more than once in a single request can affect the comparisons made for it. Each comparison sees the changes made by the targets before it, not the object as it was before the request. For example, if the same object is targeted twice with a <code>params</code> entry which changes its name from <code>before</code> to <code>after</code> and compares its name against <code>before</code>, the first update succeeds and the second fails with <code>DataStore::ValueNotEqual</code>, as the name is already <code>after</code> by then.
+
 ==== Request ====
 
 {| class="wikitable"
@@ -1553,7 +1555,14 @@ Holds the information for an object the client wishes to delete.
 
 === DataStoreChangeMetaParamV1 ===
 
-Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, its value is in a "zeroed" state. This was replaced by [[#DataStoreChangeMetaParam]] in later versions.
+Holds details for how the game server should update an existing objects metadata. This was replaced by [[#DataStoreChangeMetaParam]] in later versions.
+
+The fields being updated are determined by <code>modifiesFlag</code>. Every field is always sent, but only the fields named in <code>modifiesFlag</code> are applied. If a field is not being updated, its value is in a "zeroed" state. Undefined bits in <code>modifiesFlag</code> are ignored. If <code>modifiesFlag</code> is <code>MODIFICATION_FLAG_NONE</code>, nothing is changed but the request still succeeds.
+
+Unlike [[#DataStoreChangeMetaParam]], this version has no fields for the reference count, data type or status. <code>modifiesFlag</code> can still name them, but they are not all handled the same way:
+
+* The reference count flag (<code>0x100</code>) and <code>MODIFICATION_FLAG_STATUS</code> are accepted, but do nothing
+* <code>MODIFICATION_FLAG_DATA_TYPE</code> is refused with <code>DataStore::InvalidArgument</code>
 
 {| class="wikitable"
 ! Type !! Name !! Description
@@ -1579,7 +1588,17 @@ Holds details for how the game server should update an existing objects metadata
 
 === DataStoreChangeMetaParam ===
 
-Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, its value is in a "zeroed" state. Newer version of [[#DataStoreChangeMetaParamV1]].
+Holds details for how the game server should update an existing objects metadata. Newer version of [[#DataStoreChangeMetaParamV1]].
+
+The fields being updated are determined by <code>modifiesFlag</code>. Every field is always sent, but only the fields named in <code>modifiesFlag</code> are applied. If a field is not being updated, its value is typically in a "zeroed" state, though the game server ignores it entirely and does not validate it, so even an invalid value is accepted. Undefined bits in <code>modifiesFlag</code> are ignored. If <code>modifiesFlag</code> is <code>MODIFICATION_FLAG_NONE</code>, nothing is changed but the request still succeeds.
+
+<code>compareParam</code> works independently of <code>modifiesFlag</code>. The fields being compared are determined only by <code>compareParam.comparisonFlag</code>, so a comparison is still made when <code>modifiesFlag</code> is <code>MODIFICATION_FLAG_NONE</code> or does not include the field being compared. In other words, <code>modifiesFlag</code> decides which new values are validated and applied, and <code>comparisonFlag</code> decides which current values must match before anything is applied. See [[#DataStoreChangeMetaCompareParam]] for how values are compared.
+
+The checks are made in this order, and the first one to fail is thrown:
+
+# The caller must have update permission for the object, otherwise <code>DataStore::PermissionDenied</code>. See [[#Object Passwords]]
+# The new values named in <code>modifiesFlag</code> must be valid, otherwise <code>DataStore::InvalidArgument</code>. This happens even if the comparison would not match
+# The fields named in <code>compareParam.comparisonFlag</code> must match the current state of the object, otherwise <code>DataStore::ValueNotEqual</code>
 
 <tabs items="Original,Revision 1" storagekey="DataStoreChangeMetaParam">
 	<tab name="Original">
@@ -2331,6 +2350,12 @@ Used to insert an object being created into a users [[#Object Persistence]] stor
 === DataStoreChangeMetaCompareParam ===
 
 Data on which existing object metadata is compared to before updating the objects metadata. If any fields on this class do not match the corresponding metadata for the object prior to update, <code>DataStore::ValueNotEqual</code> is thrown.
+
+Only the fields named in <code>comparisonFlag</code> are compared, the rest are ignored regardless of their value. Undefined bits in <code>comparisonFlag</code> are ignored. The comparison is made against the object as it is before the change is applied, so comparing against the value being set in the same request does not match. When comparing:
+
+* [[#Object Tags]] match regardless of their order
+* Permissions only match if both the permission level and the recipient list match
+* The status is the objects current status, so an object still under review is compared as <code>DATA_STATUS_PENDING</code>
 
 {| class="wikitable"
 ! Type !! Name !! Description
