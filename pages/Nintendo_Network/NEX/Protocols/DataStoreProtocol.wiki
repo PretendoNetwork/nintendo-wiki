@@ -111,6 +111,15 @@ The lock is cleared only if another call is made to interact with the object usi
 
 Every object may have <code>NUM_TAG_SLOT</code> number of tags. Tags are used to add extra metadata about an object that can be used later for searching/filtering purposes. If more than <code>NUM_TAG_SLOT</code> tags are uploaded, <code>DataStore::InvalidArgument</code> is thrown. Each tag can be up to <code>MAX_TAG_LENGTH</code> characters long. If any tag has more than <code>MAX_TAG_LENGTH</code> characters, <code>DataStore::InvalidArgument</code> is thrown. When uploaded, tags are sorted by byte value rather than alphabetically, so digits come before uppercase letters and uppercase letters come before lowercase ones (for example, <code>9nine</code>, <code>banana</code>, <code>1one</code>, <code>Apple</code> are stored as <code>1one</code>, <code>9nine</code>, <code>Apple</code>, <code>banana</code>). They are not trimmed of any leading/trailing white space. If the tag list contains a duplicate string, <code>DataStore::InvalidArgument</code> is thrown.
 
+== Object Strings ==
+
+Object names and [[#Object Tags]] are sent as UTF-8, but the game server processes them as UTF-16. This leads to a few general rules:
+
+* Any character in the Basic Multilingual Plane is accepted and stored unchanged, regardless of script
+* Characters outside of the Basic Multilingual Plane (such as emoji, which would need a surrogate pair) cannot be converted. The whole request fails with <code>PythonCore::ConversionError</code> before any DataStore checks are done
+* Length limits such as <code>MAX_NAME_LENGTH</code> and <code>MAX_TAG_LENGTH</code> count characters, not bytes. For example, a name may be 64 kanji long, even though each one takes 3 bytes in UTF-8
+* Control characters (such as tabs and newlines) are allowed in object names, but any tag containing one is rejected with <code>DataStore::InvalidArgument</code>
+
 == Object Extra Data ==
 
 Starting in NEX 3.5, each object may have a list of associated "extra data". This seems to be internal data, as it is not exposed back to any clients after creation. The official servers seemed to have no limits/checks for this data, allowing for any arbitrary input. This data is likely used for internal tracking systems.
