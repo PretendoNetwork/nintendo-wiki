@@ -1280,11 +1280,11 @@ Used to request download information for objects stored in the [[#External File 
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is ignored
 		|-
 		| UInt32 || lockId || [[#Object Lock ID]]
 		|-
-		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is preferred
 		|-
 		| UInt64 || accessPassword || [[#Object Passwords]]
 		|}
@@ -1293,11 +1293,11 @@ Used to request download information for objects stored in the [[#External File 
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		| UInt64 || dataId || The target [[#Object Data ID]] to download. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is ignored
 		|-
 		| UInt32 || lockId || [[#Object Lock ID]]
 		|-
-		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Targets a specific users specific [[#Object Persistence]] slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is preferred
 		|-
 		| UInt64 || accessPassword || [[#Object Passwords]]
 		|-
@@ -1608,7 +1608,7 @@ Holds details for how the game server should update an existing objects metadata
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| UInt64 || dataId || The [[#Object Data ID]] being updated. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is preferred
+		| UInt64 || dataId || The [[#Object Data ID]] being updated. If <code>INVALID_DATAID</code>, use the data from <code>persistenceTarget</code>. If both fields are set, this field is ignored
 		|-
 		| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
 		|-
@@ -1634,7 +1634,7 @@ Holds details for how the game server should update an existing objects metadata
 		|-
 		| [[#DataStoreChangeMetaCompareParam]] || compareParam || Data on which existing fields to compare to before updating the object
 		|-
-		| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot, updating the metadata of the object in that slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is ignored
+		| [[#DataStorePersistenceTarget]] || persistenceTarget || Target [[#Object Persistence]] slot, updating the metadata of the object in that slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used, use the data from <code>dataId</code>. If both fields are set, this field is preferred
 		|}
 	</tab>
 </tabs>
