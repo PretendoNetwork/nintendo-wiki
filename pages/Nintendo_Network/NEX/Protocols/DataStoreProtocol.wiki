@@ -2355,10 +2355,12 @@ A single object permission setting. Each object has a permission setting for acc
 
 Initializes a specific [[#Object Ratings]] rating slot with the given settings.
 
+Each slot can only be initialized once per object. If a list of these contains more than one entry for the same slot, <code>DataStore::OperationNotAllowed</code> is thrown, rather than the last entry being used.
+
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| SInt8 || slot || The slot to initialize
+| SInt8 || slot || The slot to initialize. Must be between 0 and <code>RATING_SLOT_MAX</code>, otherwise <code>DataStore::InvalidArgument</code> is thrown
 |-
 | [[#DataStoreRatingInitParam]] || param || Slot settings
 |}
