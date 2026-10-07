@@ -2470,7 +2470,7 @@ enum Permission : uint8_t {
 
 === DataStatus ===
 
-Determines the availability status of an object.
+Determines the availability status of an object. All other values throw <code>DataStore::InvalidArgument</code> when they try to be used.
 
 <pre>
 enum DataStatus : uint8_t {
@@ -2483,7 +2483,13 @@ enum DataStatus : uint8_t {
 |-
 | <code>DATA_STATUS_NONE</code> || 0 || The object has been successfully uploaded and is available to anyone with access permissions. See [[#DataStorePermission]]
 |-
+| Unknown || 1 || Purpose unknown. Can be set through [[#ChangeMeta]], after which the object can no longer be found by anyone, including the owner (<code>DataStore::NotFound</code>)
+|-
 | <code>DATA_STATUS_PENDING</code> || 2 || The object is uploaded but pending review. This state is automatically set when an object is uploaded with <code>DATA_FLAG_NEED_REVIEW</code> set. The object can only be seen by the owner until review is finished. Anyone besides the owner who tries to query for objects under review will result in <code>DataStore::UnderReviewing</code>
+|-
+| Unknown || 3 || Purpose unknown. Can be set through [[#ChangeMeta]], after which the object can no longer be found by anyone, including the owner (<code>DataStore::NotFound</code>)
+|-
+| Unknown || 4 || Purpose unknown. Can be set through [[#ChangeMeta]], after which the object can no longer be found by anyone, including the owner (<code>DataStore::NotFound</code>)
 |-
 | <code>DATA_STATUS_REJECTED</code> || 5 || The object has failed review and has been rejected. The object is not available to anyone, including the owner, and behaves as if the object does not exist (<code>DataStore::NotFound</code>). The only exception to this is if the owner uses [[#SearchObject]] or [[#SearchObjectLight]] with either <code>SEARCH_TYPE_OWN_REJECTED</code> or <code>SEARCH_TYPE_OWN_ALL</code>
 |}
