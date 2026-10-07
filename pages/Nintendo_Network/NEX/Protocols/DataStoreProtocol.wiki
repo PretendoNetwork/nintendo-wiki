@@ -901,6 +901,8 @@ Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewA
 
 Requests minimal metadata about an object. Only users with access permissions can perform this operation. Newer version of [[#GetSpecificMetaV1]].
 
+Objects with a size of 0 are left out of <code>pMetaInfos</code> entirely.
+
 ==== Request ====
 
 {| class="wikitable"
