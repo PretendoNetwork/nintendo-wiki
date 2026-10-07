@@ -2472,6 +2472,8 @@ enum Permission : uint8_t {
 
 Determines the availability status of an object. All other values throw <code>DataStore::InvalidArgument</code> when they try to be used.
 
+The status can be changed with [[#ChangeMeta]] using <code>MODIFICATION_FLAG_STATUS</code>. This is not limited to the object owner, anyone with update permissions for the object can change its status, including rejecting someone elses object.
+
 <pre>
 enum DataStatus : uint8_t {
   ...
