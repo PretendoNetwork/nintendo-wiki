@@ -718,6 +718,8 @@ Requests minimal metadata about an object. Only users with access permissions ca
 
 Creates an object that is not stored in the [[#External File Server]]. These objects only exist on the game server, their contents are stored in the [[#Object MetaBinary]] and they cannot be retrieved/managed through methods which interact with the [[#External File Server]].
 
+There is no file to upload, so the object is available as soon as it is posted, unless <code>DATA_FLAG_NEED_COMPLETION</code> is used (see [[#DataFlag]]). <code>DATA_FLAG_NOT_USE_FILESERVER</code> is always added to the objects flags. The <code>size</code> field must be 0, even if the [[#Object MetaBinary]] is not empty, otherwise <code>DataStore::InvalidArgument</code> is thrown. The objects size is always stored as 0.
+
 ==== Request ====
 
 {| class="wikitable"
@@ -1458,7 +1460,7 @@ Holds details for an object the client would like to upload. Newer version of [[
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| UInt32 || size || The size of the object being uploaded. Empty files are allowed
+		| UInt32 || size || The size of the object being uploaded. Empty files are allowed. Must be 0 when used with [[#PostMetaBinary]]
 		|-
 		| [[Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
 		|-
@@ -1487,7 +1489,7 @@ Holds details for an object the client would like to upload. Newer version of [[
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| UInt32 || size || The size of the object being uploaded. Empty files are allowed
+		| UInt32 || size || The size of the object being uploaded. Empty files are allowed. Must be 0 when used with [[#PostMetaBinary]]
 		|-
 		| [[Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
 		|-
@@ -2827,13 +2829,13 @@ enum DataFlag : uint32_t {
 |-
 | <code>DATA_FLAG_USE_READ_LOCK</code> || 0x04 || Enables object read locking. See [[#Object Lock ID]]
 |-
-| <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> || 0x08 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished uploading. This cannot be used with objects that do not use the [[#External File Server]]
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> || 0x08 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished uploading. This can also be used with objects that do not use the [[#External File Server]], in which case the notification is created as soon as the object is posted with [[#PostMetaBinary]]
 |-
-| <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> || 0x10 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished updating. This cannot be used with objects that do not use the [[#External File Server]]
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> || 0x10 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished updating. This cannot be used with objects that do not use the [[#External File Server]], as they can never be updated. Using it with [[#PostMetaBinary]] results in <code>DataStore::InvalidArgument</code>
 |-
-| <code>DATA_FLAG_NOT_USE_FILESERVER</code> || 0x20 || The object does not use the [[#External File Server]] and only exists as [[#Object MetaBinary]] on the game server. This flag can NOT be set by the caller, it is automatically assigned to objects by the server. Attempting to set this flag manually will result in <code>DataStore::InvalidArgument</code>
+| <code>DATA_FLAG_NOT_USE_FILESERVER</code> || 0x20 || The object does not use the [[#External File Server]] and only exists as [[#Object MetaBinary]] on the game server. This flag is automatically assigned to every object posted with [[#PostMetaBinary]] by the server. It can be set by the caller when using [[#PostMetaBinary]], which changes nothing, but setting it when posting an object which does use the [[#External File Server]] (such as with [[#PreparePostObject]]) will result in <code>DataStore::InvalidArgument</code>
 |-
-| <code>DATA_FLAG_NEED_COMPLETION</code> || 0x40 || The object must have "completion" called when uploading/updating. Objects with this flag set will return <code>DataStore::NotFound</code> when queried for until upload/update is completed. Objects which have not been marked as "completed" will be deleted a few hours after upload, and the owner will no longer be able to mark them as "completed". In practice this flag seems to be ignored, and ALL objects (regardless of this flag) require "completion" to be called?
+| <code>DATA_FLAG_NEED_COMPLETION</code> || 0x40 || Requires an object which does not use the [[#External File Server]] to be "completed" before it becomes available. Objects which use the [[#External File Server]] always need to be completed once their upload has finished, so this flag changes nothing for them. Objects posted with [[#PostMetaBinary]] have nothing to upload, so they are normally available straight away and cannot be completed. With this flag set they behave like objects on the [[#External File Server]] instead, returning <code>DataStore::NotFound</code> when queried for until [[#CompletePostObject]], [[#CompletePostObjectV1]] or [[#CompletePostObjects]] is called on them. Objects which have not been marked as "completed" will be deleted a few hours after upload, and the owner will no longer be able to mark them as "completed"
 |}
 
 === ModificationFlag ===
