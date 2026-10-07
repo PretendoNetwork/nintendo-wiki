@@ -20,6 +20,31 @@ Additionally, not many tools/providers support the required TLS/certificate requ
 
 When an object has [[#DataFlag]] <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and/or <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> set, the recipients of the object will get given a "notification" when the object has finished uploading/updating. These are not live notifications like as seen in [[Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]] or [[Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]], nor are they instant messages like as seen in [[Nintendo_Network/NEX/Protocols/MessagingProtocol|MessagingProtocol]] or [[Nintendo_Network/NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]. Instead, these notifications simply point the receiver to the object which created the notification.
 
+A notification for a post is only created once the object actually exists. For objects which use the [[#External File Server]] this is when the upload is completed with [[#CompletePostObjectV1]], [[#CompletePostObject]] or [[#CompletePostObjects]], not when it is prepared, and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Objects posted with [[#PostMetaBinary]] create theirs straight away, unless <code>DATA_FLAG_NEED_COMPLETION</code> is set, in which case it is created when they are completed. Objects which need review still create notifications, despite still being pending.
+
+A notification for an update is created when the update is completed with [[#CompleteUpdateObject]], not when it is prepared with [[#PrepareUpdateObject]], and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Updates notify the same users as posts do, including a recipient who made the update themselves. Changing an objects metadata with [[#ChangeMeta]] never creates an update notification, even with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set.
+
+Who is notified depends on the objects access permission, but not its delete permission:
+
+{| class="wikitable"
+|-
+! Permission !! Notified users
+|-
+| <code>PERMISSION_PUBLIC</code> || Nobody
+|-
+| <code>PERMISSION_FRIEND</code> || Every friend of the owner
+|-
+| <code>PERMISSION_SPECIFIED</code> || Every recipient, including the owner if they are listed
+|-
+| <code>PERMISSION_PRIVATE</code> || Nobody
+|-
+| <code>PERMISSION_SPECIFIED_FRIEND</code> || Every recipient who is a friend of the owner
+|}
+
+Reading notifications with [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]] does not remove them by itself, the same notifications are returned until the client passes a later <code>lastNotificationId</code> (see [[#DataStoreGetNewArrivedNotificationsParam]]).
+
+Notifications only last as long as the object they are for. Whenever an object is deleted, every notification for it is deleted too. This includes [[#DeleteObject]] and [[#DeleteObjects]], as well as replacing or removing the object in an [[#Object Persistence]] slot with <code>deleteLastObject</code> set, through [[#PostMetaBinary]], [[#PreparePostObject]], [[#PerpetuateObject]] or [[#UnperpetuateObject]]. A delete which is refused, or a transactional [[#DeleteObjects]] which is rolled back, leaves the notifications alone. Changes which only hide the object or take it away from its recipients do not touch the notifications (meaning, an object which has its status changed will not delete notifications for recipients, and a user who received a notification will not have the notification removed if they are removed as an access recipient from the object). This includes rejecting it or giving it any other [[#DataStatus]] with [[#ChangeMeta]], changing its period to 0, and changing its access permission, even to <code>PERMISSION_PRIVATE</code>. Changing the access permission also does not notify any new recipients.
+
 Each notification is given a unique ID called the "notification ID". Each notification is tied to an [[#Object Data ID]]. Only one notification per object per user may exist, with older ones for the same object for the same user being deleted when a new notification for the object is created for that user (for example, if both <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> are set and the owner updates the object before the recipient has checked their notifications, they will only see the notification for the update not the creation). This ID is an incrementing value with the first notification having the ID 1. The creation and deletion of notifications will create gaps in the notification IDs returned by the game server, this is normal and expected.
 
 Additionally, each call to [[#GetNotificationUrl]] creates a new notification using <code>INVALID_DATAID</code> for the user. The purpose of this notification is unknown, as it is not possible to download the notification data for these notifications.
@@ -2159,7 +2184,7 @@ Used by [[#GetNewArrivedNotificationsV1]] and [[#GetNewArrivedNotifications]] to
 |-
 | UInt64 || lastNotificationId || The last notification ID the client got from the server, or 0 if they have never seen any notifications. The game server only returns notifications for the user sent after this ID. The game server considers all notifications for the user prior to this ID as "read" and will no longer return them in future requests, even if future requests use a lower notification ID again
 |-
-| UInt16 || limit || The maximum number of notifications to return. Can be any value. 0 means no limit
+| UInt16 || limit || The maximum number of notifications to return, oldest first. Any value from 1 to 99 is used as is. 0, or any value of 100 or more, returns at most 20. When more notifications remain, <code>pHasNext</code> is set in the response
 |}
 
 === DataStoreNotificationV1 ===
