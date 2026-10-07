@@ -402,7 +402,7 @@ If <code>dataIds</code> is populated, <code>params</code> must contain only a si
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === GetMeta ===
@@ -1082,7 +1082,7 @@ If <code>dataIds</code> is populated, <code>params</code> must contain only a si
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === RateObjects ===
