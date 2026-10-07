@@ -93,6 +93,10 @@ Certain operations on an object count as "referencing" said object. The game ser
 * Whenever the object is downloaded via the various "*GetObject*" methods
 * Whenever [[#TouchObject]] is called on the object
 
+The reference count can also be set directly with [[#ChangeMeta]] using the reference count [[#ModificationFlag]] (<code>0x100</code>). Any value can be set, regardless of how many times the object has actually been referenced, and the count can be both raised and lowered. Later references continue counting from the value that was set, not from what the count was before. For example, if an object has been referenced 3 times and its count is then set to 1, the next reference brings the count to 2.
+
+The reference count is a UInt32. Once it reaches <code>4294967295</code>, further references leave it there rather than wrapping back around to 0.
+
 == Object Passwords ==
 
 When an object is uploaded, the server assigns it a randomly generated set of passwords known as the "access password" and "update password". The object owner can get their objects passwords via [[#GetPasswordInfo]] and [[#GetPasswordInfos]]. The "access password" is used in read-only contexts (viewing metadata, downloading an object, etc.). The "update password" is used in write-contexts (updating metadata, updating the object data, deleting an object, etc.). The "update password" can be changed in the metadata, but the "access password" cannot.
