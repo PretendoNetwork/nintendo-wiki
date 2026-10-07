@@ -2444,7 +2444,7 @@ Only the fields named in <code>comparisonFlag</code> are compared, the rest are 
 |-
 | <code>MAX_METABIN_SIZE</code> || UInt32 || 1024 || The max length an [[#Object MetaBinary]] can be
 |-
-| <code>DATASTOREPERMISSION_RECIPIENTIDS_MAX</code> || UInt32 || 100 || The max number of recipients that can be assigned in a [[#DataStorePermission]]
+| <code>DATASTOREPERMISSION_RECIPIENTIDS_MAX</code> || UInt32 || 100 || The max number of recipients that can be assigned in a [[#DataStorePermission]]. This does not seem to be enforced in Pokemon Bank, possibly added in later NEX versions?
 |-
 | <code>INVALID_DATAID</code> || UInt64 || 0 || Invalid object [[#Object Data ID|DataID]]. This is used when either in "zeroed" data or when a value is not needed
 |-
