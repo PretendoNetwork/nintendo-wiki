@@ -99,7 +99,7 @@ When an object is uploaded, the server assigns it a randomly generated set of pa
 
 The owner of an object can share these passwords with other users. All permission checks are bypassed if the password matches the given context. Using a password, effectively, treats the request as if it was coming from the object owner.
 
-If a password is used (meaning, its value is not <code>INVALID_PASSWORD</code>) and does not match the given context, <code>DataStore::InvalidPassword</code> is thrown.
+A password is only checked when it is needed, meaning when the caller would otherwise be denied by the objects permission settings. If the caller already has permission (such as the object owner), the password is ignored entirely, even if it is wrong. If the caller does not have permission and a password is used (meaning, its value is not <code>INVALID_PASSWORD</code>) which does not match the given context, <code>DataStore::InvalidPassword</code> is thrown. If no password is used, <code>DataStore::PermissionDenied</code> is thrown as normal.
 
 == Object Lock ID ==
 
