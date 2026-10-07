@@ -793,6 +793,14 @@ Begins an object upload to the [[#External File Server]]. Newer version of [[#Pr
 
 Requests the information needed to download an object from the [[#External File Server]]. Only users with access permissions can perform this operation. Newer version of [[#PrepareGetObjectV1]].
 
+The object can be targeted either by its [[#Object Data ID]] or by the [[#Object Persistence]] slot it is stored in, using <code>persistenceTarget</code>. If <code>persistenceTarget</code> uses a slot other than <code>INVALID_PERSISTENCE_SLOT_ID</code>, the slot is always used and <code>dataId</code> is ignored entirely, even if the slot turns out to be empty. When targeting a slot:
+
+* An <code>ownerId</code> of 0 is treated as the literal [[Nintendo_Network/NEX/Types#PID|PID]] 0, not as the caller. Since PID 0 has no objects, this always results in <code>DataStore::NotFound</code>. This differs from [[#GetPersistenceInfo]] and [[#GetPersistenceInfos]], which treat an <code>ownerId</code> of 0 as the caller
+* If the slot is empty, <code>DataStore::NotFound</code> is thrown. It does not fall back on <code>dataId</code>
+* A slot of <code>NUM_PERSISTENCE_SLOT</code> or above is treated as an empty slot and results in <code>DataStore::NotFound</code>, rather than <code>DataStore::InvalidArgument</code> like in [[#GetPersistenceInfo]]
+
+If neither <code>dataId</code> nor <code>persistenceTarget</code> are used, <code>DataStore::NotFound</code> is thrown.
+
 ==== Request ====
 
 {| class="wikitable"
@@ -873,16 +881,16 @@ Requests minimal metadata about an object. Only users with access permissions ca
 
 Requests information on which object is stored in a specific persistence slot on a specific user. Only users with access permissions can perform this operation. See [[#Object Persistence]].
 
-If the target user has no object in the slot, <code>DataStore::NotFound</code> is thrown.
+If the target user has no object in the slot, <code>DataStore::NotFound</code> is thrown. If <code>persistenceSlotId</code> is not a valid slot (<code>NUM_PERSISTENCE_SLOT</code> or above, including <code>INVALID_PERSISTENCE_SLOT_ID</code>), <code>DataStore::InvalidArgument</code> is thrown.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user
+| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
 |-
-| UInt16 || persistenceSlotId || Target persistence slot
+| UInt16 || persistenceSlotId || Target persistence slot. Must be between 0 and <code>NUM_PERSISTENCE_SLOT</code> - 1
 |}
 
 ==== Response ====
@@ -897,16 +905,18 @@ If the target user has no object in the slot, <code>DataStore::NotFound</code> i
 
 Requests information on which object is stored in multiple persistence slots on a specific user. Only users with access permissions can perform this operation. See [[#Object Persistence]].
 
-If the target user has no object in the slot, <code>DataStore::NotFound</code> is used as the result for that object.
+Each slot succeeds or fails on its own. If the target user has no object in a slot, <code>DataStore::NotFound</code> is used as the result for that slot, and its entry in <code>pPersistenceInfo</code> has a <code>dataId</code> of <code>INVALID_DATAID</code>. A slot holding an object the caller does not have access permissions for also only fails its own entry. However if any slot in <code>persistenceSlotIds</code> is not a valid slot (<code>NUM_PERSISTENCE_SLOT</code> or above, including <code>INVALID_PERSISTENCE_SLOT_ID</code>), <code>DataStore::InvalidArgument</code> is thrown for the whole request instead.
+
+If <code>persistenceSlotIds</code> is empty, every slot from 0 to <code>NUM_PERSISTENCE_SLOT</code> - 1 is returned in order, including empty slots. Otherwise the slots are returned in the order they were requested. The same slot can be requested more than once, and is returned once for each time it appears. Because of this, <code>persistenceSlotIds</code> may contain more than <code>NUM_PERSISTENCE_SLOT</code> entries.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user
+| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || persistenceSlotIds || Target persistence slots
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || persistenceSlotIds || Target persistence slots. If empty, every slot is targeted
 |}
 
 ==== Response ====
@@ -914,9 +924,9 @@ If the target user has no object in the slot, <code>DataStore::NotFound</code> i
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePersistenceInfo]]&gt; || pPersistenceInfo || Information about the object stored in the target slots
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePersistenceInfo]]&gt; || pPersistenceInfo || Information about the object stored in the target slots. One per target in <code>persistenceSlotIds</code> in the same order as in the request, or one per slot if <code>persistenceSlotIds</code> is empty
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>persistenceSlotIds</code> in the same order as in the request
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per entry in <code>pPersistenceInfo</code>, in the same order
 |}
 
 === PerpetuateObject ===
