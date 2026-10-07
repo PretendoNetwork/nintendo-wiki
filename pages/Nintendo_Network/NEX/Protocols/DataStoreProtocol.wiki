@@ -37,6 +37,7 @@ Objects can have both their metadata and underying object data updated. Changing
 
 * Whenever the underlying object data is updated
 * Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
+* Whenever the object is removed from an [[#Object Persistence]] slot with [[#UnperpetuateObject]] without being deleted
 
 Each update to the objects underlying object data increments the object version number by 1 (all objects start at version 1 initially). Only the latest version of an object is available by normal clients, though the official servers store each version as its own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
 
@@ -954,6 +955,8 @@ This method does not return anything.
 Removes an object from the callers [[#Object Persistence]] slots.
 
 If the target slot is already empty, <code>DataStore::NotFound</code> is thrown.
+
+If the object is kept, its modified time is set to the time it was removed from the slot, and its [[#Validity Period]] is counted from then. See [[#Object Updates]].
 
 ==== Request ====
 
