@@ -396,7 +396,14 @@ This method does not return anything.
 
 Updates multiple objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. This was replaced by [[#ChangeMetas]] in later versions.
 
-If <code>dataIds</code> is populated, <code>params</code> must contain only a single entry which is applied to all targets in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. If <code>dataIds</code> is empty, the targets are defined in <code>params</code>. If <code>dataIds</code> is populated and <code>params</code> has more than a single entry, <code>DataStore::InvalidArgument</code> is thrown regardless of <code>transactional</code>. Duplicate targets are not filtered out or ignored.
+A request must take one of two shapes:
+
+* <code>dataIds</code> is populated and <code>params</code> contains exactly one entry. That entry is applied to every target in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. A target of <code>INVALID_DATAID</code> in <code>dataIds</code> fails with <code>DataStore::NotFound</code>, it does not fall back on the [[#Object Data ID]] defined on the entry
+* <code>dataIds</code> is empty and <code>params</code> is populated. Each entry targets the object named by its own [[#Object Data ID]]
+
+Any other combination throws <code>DataStore::InvalidArgument</code> regardless of <code>transactional</code>. This includes <code>dataIds</code> being populated alongside more than one entry in <code>params</code>, <code>dataIds</code> being populated with no entries in <code>params</code>, and both lists being empty. Whichever list holds the targets may contain up to <code>BATCH_PROCESSING_CAPACITY</code> entries. Going over this throws <code>DataStore::OverCapacity</code>, also regardless of <code>transactional</code>.
+
+Targets are updated one at a time, in the order they appear in the request. Duplicate targets are not filtered out or ignored, so an object targeted more than once is updated more than once and keeps the last change made to it. When <code>transactional</code> is true and more than one target fails, the error thrown is the one for the first failing target in the list.
 
 ==== Request ====
 
@@ -1076,9 +1083,16 @@ This method does not return anything.
 
 Updates multiple objects metadata. Only users with update permissions can perform this operation. See also [[#Object Updates]]. Newer version of [[#ChangeMetasV1]].
 
-If <code>dataIds</code> is populated, <code>params</code> must contain only a single entry which is applied to all targets in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. If <code>dataIds</code> is empty, the targets are defined in <code>params</code>. If <code>dataIds</code> is populated and <code>params</code> has more than a single entry, <code>DataStore::InvalidArgument</code> is thrown regardless of <code>transactional</code>. Duplicate targets are not filtered out or ignored.
+A request must take one of two shapes:
 
-Targets are updated one at a time, in the order they appear in the request. Since [[#DataStoreChangeMetaCompareParam]] compares against the current state of the object, updating the same object more than once in a single request can affect the comparisons made for it. Each comparison sees the changes made by the targets before it, not the object as it was before the request. For example, if the same object is targeted twice with a <code>params</code> entry which changes its name from <code>before</code> to <code>after</code> and compares its name against <code>before</code>, the first update succeeds and the second fails with <code>DataStore::ValueNotEqual</code>, as the name is already <code>after</code> by then.
+* <code>dataIds</code> is populated and <code>params</code> contains exactly one entry. That entry is applied to every target in <code>dataIds</code>, and the [[#Object Data ID]] defined on the entry is ignored. A target of <code>INVALID_DATAID</code> in <code>dataIds</code> fails with <code>DataStore::NotFound</code>, it does not fall back on the [[#Object Data ID]] defined on the entry
+* <code>dataIds</code> is empty and <code>params</code> is populated. Each entry targets the object named by its own [[#Object Data ID]]
+
+Any other combination throws <code>DataStore::InvalidArgument</code> regardless of <code>transactional</code>. This includes <code>dataIds</code> being populated alongside more than one entry in <code>params</code>, <code>dataIds</code> being populated with no entries in <code>params</code>, and both lists being empty. Whichever list holds the targets may contain up to <code>BATCH_PROCESSING_CAPACITY</code> entries. Going over this throws <code>DataStore::OverCapacity</code>, also regardless of <code>transactional</code>.
+
+Targets are updated one at a time, in the order they appear in the request. Duplicate targets are not filtered out or ignored, so an object targeted more than once is updated more than once and keeps the last change made to it. When <code>transactional</code> is true and more than one target fails, the error thrown is the one for the first failing target in the list.
+
+Since [[#DataStoreChangeMetaCompareParam]] compares against the current state of the object, updating the same object more than once in a single request can affect the comparisons made for it. Each comparison sees the changes made by the targets before it, not the object as it was before the request. For example, if the same object is targeted twice with a <code>params</code> entry which changes its name from <code>before</code> to <code>after</code> and compares its name against <code>before</code>, the first update succeeds and the second fails with <code>DataStore::ValueNotEqual</code>, as the name is already <code>after</code> by then.
 
 ==== Request ====
 
