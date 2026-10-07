@@ -146,7 +146,7 @@ For example, this "extra data" sample comes from Animal Crossing: New Leaf:
 
 == Validity Period ==
 
-Each object is assigned a <code>period</code> value, which is the number of days after upload that the object will remain valid for before becoming expired. An objects validity period must be between 0 and <code>MAX_PERIOD</code>, inclusive. See [[#Object Persistence]] for how to prevent an object from expiring. Expired objects are no longer accessible even by the original uploader, and are presumed deleted. An object can have its validity period extended by its <code>period</code> value under the following circumstances:
+Each object is assigned a <code>period</code> value, which is the number of days after upload that the object will remain valid for before becoming expired. An objects validity period must be between 0 and <code>MAX_PERIOD</code>, inclusive. A period of 0 is accepted, but the object is treated as already expired and can never be accessed. This is the case both when an object is uploaded with a period of 0, and when its period is changed to 0 with <code>MODIFICATION_FLAG_PERIOD</code>. See [[#Object Persistence]] for how to prevent an object from expiring. Expired objects are no longer accessible even by the original uploader, and are presumed deleted. An object can have its validity period extended by its <code>period</code> value under the following circumstances:
 
 * Whenever the object is downloaded via the various "*GetObject*" methods and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> set
 * Whenever [[#TouchObject]] is called on the object and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> set
