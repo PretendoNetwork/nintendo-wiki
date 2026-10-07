@@ -2801,7 +2801,7 @@ enum SearchResultTotalCountType : uint8_t {
 
 === DataFlag ===
 
-General object flags.
+General object flags. When uploading an object, setting any bit which is not listed here throws <code>DataStore::InvalidArgument</code>, rather than the bit being ignored.
 
 <pre>
 enum DataFlag : uint32_t {
