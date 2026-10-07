@@ -64,7 +64,7 @@ Objects can have both their metadata and underying object data updated. Changing
 * Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
 * Whenever the object is removed from an [[#Object Persistence]] slot with [[#UnperpetuateObject]] without being deleted
 
-Each update to the objects underlying object data increments the object version number by 1 (all objects start at version 1 initially). Only the latest version of an object is available by normal clients, though the official servers store each version as its own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
+All objects start at version 1. Each call to [[#PrepareUpdateObject]] hands out the next unused version number, and the object only moves to that version once the update is completed with [[#CompleteUpdateObject]]. A version which is handed out is never handed out again, even if its update fails or is never completed, so the versions an object goes through are not always consecutive. Only the latest version of an object is available by normal clients, though the official servers store each version as its own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
 
 == Object Data ID ==
 
@@ -501,7 +501,15 @@ Requests metadata for multiple objects. Only users with access permissions can p
 
 === PrepareUpdateObject ===
 
-Requests information needed to update an objects data on the [[#External File Server]]. Only users with update permissions can perform this operation.
+Requests information needed to update an objects data on the [[#External File Server]]. Only users with update permissions can perform this operation. See [[#Object Passwords]].
+
+Preparing an update only reserves the next version of the object (see [[#Object Updates]]). The objects version, size, modified time and [[#Validity Period]] are left alone until the update is completed with [[#CompleteUpdateObject]]. An update which has not been completed does not stop another one from being prepared, which gets the version after it. Preparing an update does not count as referencing the object (see [[#Object Referencing]]).
+
+* If the object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is thrown
+* If the object does not use the [[#External File Server]], <code>DataStore::OperationNotAllowed</code> is thrown
+* If the object is under review, only the owner can update it. Anyone else gets <code>DataStore::UnderReviewing</code>
+* A rejected object can still be updated by its owner
+* The [[#Object Lock ID|read lock]] does not apply, the object can be updated while someone else holds it
 
 ==== Request ====
 
@@ -521,9 +529,9 @@ Requests information needed to update an objects data on the [[#External File Se
 
 === CompleteUpdateObject ===
 
-Tells the game server the [[#External File Server]] update request has finished. Only users with update permissions can perform this operation.
+Tells the game server the [[#External File Server]] update request has finished. Only the user who prepared the update with [[#PrepareUpdateObject]] can complete it. Anyone else gets <code>DataStore::PermissionDenied</code>, even if they have update permissions.
 
-Calling this method for an object that has already been marked as completed will result in <code>DataStore::Unknown</code> being thrown.
+Completing the update moves the object to the new version and size, and updates its modified time and [[#Validity Period]] (see [[#Object Updates]]). Reporting a failed upload (<code>isSuccess = false</code>) changes nothing, and the same version can still be completed afterwards. A version which was never handed out results in <code>DataStore::NotFound</code>. Completing a version which is already completed, or which is older than the objects current version, is not an error, but changes nothing.
 
 ==== Request ====
 
@@ -1828,7 +1836,7 @@ Tells the server that the client would like to update the underlying object file
 		|-
 		| UInt32 || dataId || The [[#Object Data ID]] being updated
 		|-
-		| UInt32 || size || New file size
+		| UInt32 || size || New file size. Unlike when posting an object, which is limited to 10MiB, the game server does not limit this. The upload it hands out requires exactly this many bytes, and the file server accepts it, so an update can make an object larger than 10MiB
 		|}
 	</tab>
 	<tab name="NEX 3.0-3.4">
@@ -1837,7 +1845,7 @@ Tells the server that the client would like to update the underlying object file
 		|-
 		| UInt64 || dataId || The [[#Object Data ID]] being updated
 		|-
-		| UInt32 || size || New file size
+		| UInt32 || size || New file size. Unlike when posting an object, which is limited to 10MiB, the game server does not limit this. The upload it hands out requires exactly this many bytes, and the file server accepts it, so an update can make an object larger than 10MiB
 		|-
 		| UInt64 || updatePassword || [[#Object Passwords]]
 		|}
@@ -1848,7 +1856,7 @@ Tells the server that the client would like to update the underlying object file
 		|-
 		| UInt64 || dataId || The [[#Object Data ID]] being updated
 		|-
-		| UInt32 || size || New file size
+		| UInt32 || size || New file size. Unlike when posting an object, which is limited to 10MiB, the game server does not limit this. The upload it hands out requires exactly this many bytes, and the file server accepts it, so an update can make an object larger than 10MiB
 		|-
 		| UInt64 || updatePassword || [[#Object Passwords]]
 		|-
@@ -1905,7 +1913,7 @@ Tells the game server that the update upload request to the [[#External File Ser
 		|-
 		| UInt32 || dataId || The [[#Object Data ID]] that is being updated
 		|-
-		| UInt16 || version || The new object version number as sent by the server. If this does not match the current latest version, <code>DataStore::NotFound</code> is thrown
+		| UInt16 || version || The new object version number as handed out by [[#PrepareUpdateObject]]. If this version was never handed out, <code>DataStore::NotFound</code> is thrown
 		|-
 		| Boolean || isSuccess || Whether or not the upload completed successfully
 		|}
@@ -1916,7 +1924,7 @@ Tells the game server that the update upload request to the [[#External File Ser
 		|-
 		| UInt64 || dataId || The [[#Object Data ID]] that is being updated
 		|-
-		| UInt32 || version || The new object version number as sent by the server. If this does not match the current latest version, <code>DataStore::NotFound</code> is thrown
+		| UInt32 || version || The new object version number as handed out by [[#PrepareUpdateObject]]. If this version was never handed out, <code>DataStore::NotFound</code> is thrown
 		|-
 		| Boolean || isSuccess || Whether or not the upload completed successfully
 		|}
