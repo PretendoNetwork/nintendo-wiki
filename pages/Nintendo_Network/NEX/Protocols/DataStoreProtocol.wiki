@@ -24,7 +24,7 @@ Each notification is given a unique ID called the "notification ID". Each notifi
 
 Additionally, each call to [[#GetNotificationUrl]] creates a new notification using <code>INVALID_DATAID</code> for the user. The purpose of this notification is unknown, as it is not possible to download the notification data for these notifications.
 
-In order for a client to check it's notifications, it must locate them from the game server. There are 2 ways for a client do this:
+In order for a client to check its notifications, it must locate them from the game server. There are 2 ways for a client to do this:
 
 # [[#GetNotificationUrl]]
 # [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]
@@ -38,7 +38,7 @@ Objects can have both their metadata and underying object data updated. Changing
 * Whenever the underlying object data is updated
 * Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set
 
-Each update to the objects underlying object data increments the object version number by 1 (all objects start at version 1 initially). Only the latest version of an object is available by normal clients, though the official servers store each version as it's own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
+Each update to the objects underlying object data increments the object version number by 1 (all objects start at version 1 initially). Only the latest version of an object is available by normal clients, though the official servers store each version as its own object in S3 (rather than overwriting the existing data), suggesting Nintendo kept older versions.
 
 == Object Data ID ==
 
@@ -66,7 +66,7 @@ Every object is assigned a "data type". Think of this as a categorization system
 
 == Object Persistence ==
 
-By default all objects, whether it uses the [[#External File Server]] or not, will expire. See [[#Validity Period]] for details. However a user can choose to mark a object they own (and ONLY objects they own) as "persistent". A persistent object will not expire so long as it remains in a slot. Each user has <code>NUM_PERSISTENCE_SLOT</code> number of persistent object slots to store an object in. Each slot may only contain one object. When a user tries to persist an object into a slot that already contains an object, they can choose to delete the existing object or not. If yes, the existing object is immediately deleted. If no, the existing object has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used as the slot ID, object persistence is not being used.
+By default all objects, whether it uses the [[#External File Server]] or not, will expire. See [[#Validity Period]] for details. However a user can choose to mark an object they own (and ONLY objects they own) as "persistent". A persistent object will not expire so long as it remains in a slot. Each user has <code>NUM_PERSISTENCE_SLOT</code> number of persistent object slots to store an object in. Each slot may only contain one object. When a user tries to persist an object into a slot that already contains an object, they can choose to delete the existing object or not. If yes, the existing object is immediately deleted. If no, the existing object has its [[#Validity Period]] timer started again, starting from the moment it was removed from the slot. If <code>INVALID_PERSISTENCE_SLOT_ID</code> is used as the slot ID, object persistence is not being used.
 
 == Object Ratings ==
 
@@ -88,7 +88,7 @@ When <code>RATING_FLAG_MODIFIABLE</code> is used, and/or any lock type besides <
 
 == Object Referencing ==
 
-Certain operations on an object count as "referencing" said object. The game server keeps track of the number of times an object has been referenced, incrementing the value by 1 each time, and referencing an object can be used to extend it's [[#Validity Period]]. These operations include:
+Certain operations on an object count as "referencing" said object. The game server keeps track of the number of times an object has been referenced, incrementing the value by 1 each time, and referencing an object can be used to extend its [[#Validity Period]]. These operations include:
 
 * Whenever the object is downloaded via the various "*GetObject*" methods
 * Whenever [[#TouchObject]] is called on the object
@@ -99,7 +99,7 @@ When an object is uploaded, the server assigns it a randomly generated set of pa
 
 The owner of an object can share these passwords with other users. All permission checks are bypassed if the password matches the given context. Using a password, effectively, treats the request as if it was coming from the object owner.
 
-If a password is used (meaning, it's value is not <code>INVALID_PASSWORD</code>) and does not match the given context, <code>DataStore::InvalidPassword</code> is thrown.
+If a password is used (meaning, its value is not <code>INVALID_PASSWORD</code>) and does not match the given context, <code>DataStore::InvalidPassword</code> is thrown.
 
 == Object Lock ID ==
 
@@ -109,7 +109,7 @@ The lock is cleared only if another call is made to interact with the object usi
 
 == Object Tags ==
 
-Every object may have <code>NUM_TAG_SLOT</code> number of tags. Tags are used to add extra metadata about an object that can be used later for searching/filtering purposes. If more than <code>NUM_TAG_SLOT</code> tags are uploaded, <code>DataStore::InvalidArgument</code> is thrown. Each tag can be up to <code>MAX_TAG_LENGTH</code> characters long. If any tag has more than code>MAX_TAG_LENGTH</code> characters, <code>DataStore::InvalidArgument</code> is thrown. When uploaded, tags are reordered in alphabetical order, and they are not trimmed of any leading/trailing white space. If the tag list contains a duplicate string, <code>DataStore::InvalidArgument</code> is thrown.
+Every object may have <code>NUM_TAG_SLOT</code> number of tags. Tags are used to add extra metadata about an object that can be used later for searching/filtering purposes. If more than <code>NUM_TAG_SLOT</code> tags are uploaded, <code>DataStore::InvalidArgument</code> is thrown. Each tag can be up to <code>MAX_TAG_LENGTH</code> characters long. If any tag has more than <code>MAX_TAG_LENGTH</code> characters, <code>DataStore::InvalidArgument</code> is thrown. When uploaded, tags are reordered in alphabetical order, and they are not trimmed of any leading/trailing white space. If the tag list contains a duplicate string, <code>DataStore::InvalidArgument</code> is thrown.
 
 == Object Extra Data ==
 
@@ -137,15 +137,15 @@ For example, this "extra data" sample comes from Animal Crossing: New Leaf:
 
 == Validity Period ==
 
-Each object is assigned a <code>period</code> value, which is the number of days after upload that the object will remain valid for before becoming expired. An objects validity period must be between 0 and <code>MAX_PERIOD</code>, inclusive. See [[#Object Persistence]] for how to prevent an object from expiring. Expired objects are no longer accessible even by the original uploader, and are presumed deleted. An object can have it's validity period extended by its <code>period</code> value under the following circumstances:
+Each object is assigned a <code>period</code> value, which is the number of days after upload that the object will remain valid for before becoming expired. An objects validity period must be between 0 and <code>MAX_PERIOD</code>, inclusive. See [[#Object Persistence]] for how to prevent an object from expiring. Expired objects are no longer accessible even by the original uploader, and are presumed deleted. An object can have its validity period extended by its <code>period</code> value under the following circumstances:
 
-* Whenever the object is downloaded via the various "*GetObject*" methods and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
-* Whenever [[#TouchObject]] is called on the object and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> is set
+* Whenever the object is downloaded via the various "*GetObject*" methods and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> set
+* Whenever [[#TouchObject]] is called on the object and the object has <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> set
 * Whenever the underlying object data is updated
-* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set. If <code>MODIFICATION_FLAG_PERIOD</code> is used at the same time, use the new period
-* Whenever the objects metadata is update with <code>MODIFICATION_FLAG_PERIOD</code> set
+* Whenever the objects metadata is updated with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set. If <code>MODIFICATION_FLAG_PERIOD</code> is used at the same time, use the new period
+* Whenever the objects metadata is updated with <code>MODIFICATION_FLAG_PERIOD</code> set. Unlike the others, the new expiry is counted from when the object was last updated, not from the time of the call
 
-For example, if an object is uploaded on January 1st with a <code>period</code> of 90 days (the default), the object will expire on April 1st (or March 31st on a leap year). If on February 15th (45 days after upload) the object has it's validity period extended, it will now be set to expire <code>period</code> days after February 15th, which is May 16th (or May 15th on a leap year).
+For example, if an object is uploaded on January 1st with a <code>period</code> of 90 days (the default), the object will expire on April 1st (or March 31st on a leap year). If on February 15th (45 days after upload) the object has its validity period extended, it will now be set to expire <code>period</code> days after February 15th, which is May 16th (or May 15th on a leap year).
 
 == Common Errors ==
 
@@ -156,7 +156,7 @@ For example, if an object is uploaded on January 1st with a <code>period</code> 
 |-
 | <code>DataStore::NotFound</code> || The object being targeted either does not exist or is not available
 |-
-| <code>DataStore::OperationNotAllowed</code> || The caller is not to perform the operation, but is not a permissions issue. Such as trying to rate an object the caller owns which has self ratings disabled
+| <code>DataStore::OperationNotAllowed</code> || The caller is not allowed to perform the operation, but is not a permissions issue. Such as trying to rate an object the caller owns which has self ratings disabled
 |-
 | <code>DataStore::PermissionDenied</code> || The caller did not have permission to perform the operation. Such as trying to delete an object the caller does not have permission to manage
 |-
@@ -711,7 +711,7 @@ Creates an object that is not stored in the [[#External File Server]]. These obj
 
 === TouchObject ===
 
-References an object without returning any metadata or download information, to update it's reference count/[[#Validity Period]]. Only users with access permissions can perform this operation. See [[#Object Referencing]].
+References an object without returning any metadata or download information, to update its reference count/[[#Validity Period]]. Only users with access permissions can perform this operation. See [[#Object Referencing]].
 
 ==== Request ====
 
@@ -912,7 +912,7 @@ Adds an object to the callers [[#Object Persistence]] slots. Only the object own
 |-
 | UInt64 || dataId || [[#Object Data ID]] to be stored in <code>persistenceSlotId</code>
 |-
-| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has its [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
 |}
 
 ==== Response ====
@@ -932,7 +932,7 @@ If the target slot is already empty, <code>DataStore::NotFound</code> is thrown.
 |-
 | UInt16 || persistenceSlotId || Target [[#Object Persistence]] storage slot ID to clear
 |-
-| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has its [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
 |}
 
 ==== Response ====
@@ -1005,7 +1005,7 @@ Requests a multiple objects [[#Object Passwords]]. Only the object owner can per
 
 === GetMetasMultipleParam ===
 
-Requests metadata for multiple objects using different paramaters for each object. Only users with access permissions can perform this operation.
+Requests metadata for multiple objects using different parameters for each object. Only users with access permissions can perform this operation.
 
 ==== Request ====
 
@@ -1198,7 +1198,7 @@ If a target rating slot has not been initialized, this method will initialize it
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization paramaters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization parameters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |-
@@ -1544,7 +1544,7 @@ Holds the information for an object the client wishes to delete.
 
 === DataStoreChangeMetaParamV1 ===
 
-Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, it's value is in a "zeroed" state. This was replaced by [[#DataStoreChangeMetaParam]] in later versions.
+Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, its value is in a "zeroed" state. This was replaced by [[#DataStoreChangeMetaParam]] in later versions.
 
 {| class="wikitable"
 ! Type !! Name !! Description
@@ -1570,7 +1570,7 @@ Holds details for how the game server should update an existing objects metadata
 
 === DataStoreChangeMetaParam ===
 
-Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, it's value is in a "zeroed" state. Newer version of [[#DataStoreChangeMetaParamV1]].
+Holds details for how the game server should update an existing objects metadata. The fields being updated are determined by <code>modifiesFlag</code>. If a field is not being updated, its value is in a "zeroed" state. Newer version of [[#DataStoreChangeMetaParamV1]].
 
 <tabs items="Original,Revision 1" storagekey="DataStoreChangeMetaParam">
 	<tab name="Original">
@@ -1599,7 +1599,7 @@ Holds details for how the game server should update an existing objects metadata
 		|-
 		| UInt16 || dataType || New [[#Object Data Type]]
 		|-
-		| [[#DataStatus]] || status || New availablity status
+		| [[#DataStatus]] || status || New availability status
 		|-
 		| [[#DataStoreChangeMetaCompareParam]] || compareParam || Data on which existing fields to compare to before updating the object
 		|}
@@ -1630,7 +1630,7 @@ Holds details for how the game server should update an existing objects metadata
 		|-
 		| UInt16 || dataType || New [[#Object Data Type]]
 		|-
-		| [[#DataStatus]] || status || New availablity status
+		| [[#DataStatus]] || status || New availability status
 		|-
 		| [[#DataStoreChangeMetaCompareParam]] || compareParam || Data on which existing fields to compare to before updating the object
 		|-
@@ -2080,7 +2080,7 @@ URL data for where the users latest [[#Object Notifications]] notification infor
 |-
 | [[Nintendo_Network/NEX/Types#String|String]] || key || The [[#External File Server]] key. This uses a different namespace than regular objects, and is treated as the request path. For example, <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> where <code>01880099407</code> is the decimal PID of the user, padded
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || query || Query paramaters for the request. For example, <code>?AWSAccessKeyId=AKIAIZIRU4FPYFNKPX3A&Expires=2092069557&Signature=5Y0vXYtxyXQXB%2Fu2Sowv%2Fm1AC8E%3D</code>
+| [[Nintendo_Network/NEX/Types#String|String]] || query || Query parameters for the request. For example, <code>?AWSAccessKeyId=AKIAIZIRU4FPYFNKPX3A&Expires=2092069557&Signature=5Y0vXYtxyXQXB%2Fu2Sowv%2Fm1AC8E%3D</code>
 |-
 | [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 |}
@@ -2316,7 +2316,7 @@ Used to insert an object being created into a users [[#Object Persistence]] stor
 |-
 | UInt16 || persistenceSlotId || Target [[#Object Persistence]] storage slot ID
 |-
-| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has it's [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
+| Boolean || deleteLastObject || If true, the object already stored in <code>persistenceSlotId</code> (if there is one) is immediately deleted. If false, the object already stored in <code>persistenceSlotId</code> (if there is one) has its [[#Validity Period]] timer started again, starting from the moment it was removed from the slot
 |}
 
 === DataStoreChangeMetaCompareParam ===
@@ -2402,7 +2402,7 @@ Data on which existing object metadata is compared to before updating the object
 |-
 | <code>NUM_RATING_SLOT</code> || UInt32 || 16 || The max number of [[#Object Ratings|rating]] slots an object may have
 |-
-| <code>MAX_TAG_LENGTH</code> || UInt32 || 24 || The max length an [object tag] can be
+| <code>MAX_TAG_LENGTH</code> || UInt32 || 24 || The max length an [[#Object Tags|object tag]] can be
 |-
 | <code>DEFAULT_PERIOD</code> || UInt16 || 90 || The default object [[#Validity Period]], in days
 |-
@@ -2461,7 +2461,7 @@ enum Permission : uint8_t {
 
 === DataStatus ===
 
-Determines the availablity status of an object.
+Determines the availability status of an object.
 
 <pre>
 enum DataStatus : uint8_t {
@@ -2538,7 +2538,7 @@ enum SearchTarget : uint8_t {
 |-
 | <code>SEARCH_TARGET_FRIEND</code> || 1 || Objects owned by the friends of the current user
 |-
-| Unknown || 2 || Exclude objects owned by the users specified in the search paramaters
+| Unknown || 2 || Exclude objects owned by the users specified in the search parameters
 |}
 
 === SearchSortColumn ===
@@ -2562,7 +2562,7 @@ enum SearchSortColumn : uint8_t {
 |-
 | Unknown || 3 || Sort by [[#Object Data Type]]
 |-
-| Unknown || 4 || Sort by object [[#Object Referencing|refernece count]]
+| Unknown || 4 || Sort by object [[#Object Referencing|reference count]]
 |-
 | <code>SEARCH_SORT_COLUMN_CREATED_TIME</code> || 5 || Sort by object creation time
 |-
@@ -2684,8 +2684,6 @@ enum RatingLockPeriod : int16_t {
 </pre>
 
 {| class="wikitable"
-! SInt16
-|-
 ! Name !! Value !! Description
 |-
 | <code>RATING_LOCK_PERIOD_DAY1</code> || -17 || Unlocks on the first day of the following month
@@ -2746,13 +2744,13 @@ enum DataFlag : uint32_t {
 |-
 | <code>DATA_FLAG_NEED_REVIEW</code> || 0x01 || The object needs to be reviewed before it becomes available. See [[#DataStatus]]
 |-
-| <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> || 0x02 || The object can have it's [[#Validity Period]] extended when referenced
+| <code>DATA_FLAG_PERIOD_FROM_LAST_REFERRED</code> || 0x02 || The object can have its [[#Validity Period]] extended when referenced
 |-
 | <code>DATA_FLAG_USE_READ_LOCK</code> || 0x04 || Enables object read locking. See [[#Object Lock ID]]
 |-
-| <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> || 0x08 || Creates a [[#Object Notifications]] for the object recipients when the object has finished uploading. This cannot be used with objects that do not use the [[#External File Server]]
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> || 0x08 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished uploading. This cannot be used with objects that do not use the [[#External File Server]]
 |-
-| <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> || 0x10 || Creates a [[#Object Notifications]] for the object recipients when the object has finished updating. This cannot be used with objects that do not use the [[#External File Server]]
+| <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> || 0x10 || Creates an [[#Object Notifications|object notification]] for the object recipients when the object has finished updating. This cannot be used with objects that do not use the [[#External File Server]]
 |-
 | <code>DATA_FLAG_NOT_USE_FILESERVER</code> || 0x20 || The object does not use the [[#External File Server]] and only exists as [[#Object MetaBinary]] on the game server. This flag can NOT be set by the caller, it is automatically assigned to objects by the server. Attempting to set this flag manually will result in <code>DataStore::InvalidArgument</code>
 |-
@@ -2780,7 +2778,7 @@ enum ModificationFlag : uint32_t {
 |-
 | <code>MODIFICATION_FLAG_UPDATE_PERMISSION</code> || 0x004 || The object update permission (also seen as "delete permission") has been updated
 |-
-| <code>MODIFICATION_FLAG_PERIOD</code> || 0x008 || The object period has been updated. This also extends the objects validity period by this number of days starting from the call time
+| <code>MODIFICATION_FLAG_PERIOD</code> || 0x008 || The object period has been updated. The object then expires this number of days after it was last updated, rather than after the time of the call
 |-
 | <code>MODIFICATION_FLAG_METABINARY</code> || 0x010 || The [[#Object MetaBinary]] has been updated
 |-
@@ -2870,7 +2868,7 @@ enum RatingFlag : uint8_t {
 |-
 | <code>RATING_FLAG_ROUND_MINUS</code> || 0x08 || When set, ratings less than 0 are rounded to 0
 |-
-| <code>RATING_FLAG_DISABLE_SELF_RATING</code> || 0x10 || When set, disables the ability for the object owner to rate the object. If the owner tries to rate the object, <code>ataStore::OperationNotAllowed</code> is thrown
+| <code>RATING_FLAG_DISABLE_SELF_RATING</code> || 0x10 || When set, disables the ability for the object owner to rate the object. If the owner tries to rate the object, <code>DataStore::OperationNotAllowed</code> is thrown
 |}
 
 === RatingInternalFlag ===
