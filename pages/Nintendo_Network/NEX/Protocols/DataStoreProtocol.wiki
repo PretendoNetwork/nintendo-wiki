@@ -1105,12 +1105,14 @@ Requests a multiple objects [[#Object Passwords]]. Only the object owner can per
 
 Requests metadata for multiple objects using different parameters for each object. Only users with access permissions can perform this operation.
 
+Each param is looked up exactly as [[#GetMeta]] would look it up, including its own <code>persistenceTarget</code>, <code>resultOption</code> and <code>accessPassword</code>, and fails on its own. A failed param gets its error in <code>pResults</code>, and an entry in <code>pMetaInfo</code> with every field zeroed. Only going over <code>BATCH_PROCESSING_CAPACITY</code> fails the whole request, with <code>DataStore::OverCapacity</code>. Every param is returned in the order it was given, including duplicate params.
+
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreGetMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreGetMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
 |}
 
 ==== Response ====
@@ -1118,7 +1120,7 @@ Requests metadata for multiple objects using different parameters for each objec
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each <code>dataIds</code>, in the order they were requested
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each entry in <code>params</code>, in the order they were requested
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
 |}
