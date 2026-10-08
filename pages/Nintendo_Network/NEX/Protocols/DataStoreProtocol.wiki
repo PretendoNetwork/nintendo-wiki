@@ -479,14 +479,23 @@ Requests an objects metadata. Only users with access permissions can perform thi
 
 Requests metadata for multiple objects. Only users with access permissions can perform this operation.
 
+Each object is looked up in order the same way as [[#GetMeta]], using the same <code>param</code> for every object, and fails on its own. A failed object gets its error in <code>pResults</code>, and an entry in <code>pMetaInfo</code> with every field zeroed. Only going over <code>BATCH_PROCESSING_CAPACITY</code> fails the whole request, with <code>DataStore::OverCapacity</code>. Every object is returned in the order it was requested, including objects which are requested more than once.
+
+As <code>param</code> is shared, some of its fields work differently than they do in [[#GetMeta]]:
+
+* <code>dataId</code> is ignored entirely. Only <code>dataIds</code> decides which objects are looked up
+* If <code>persistenceTarget</code> is used, every entry is the object in that slot, whatever its <code>dataIds</code> entry was. It does not add an entry when <code>dataIds</code> is empty. If the slot has no owner or no object in it, every entry fails with <code>DataStore::NotFound</code>
+* <code>resultOption</code> applies to every entry
+* <code>accessPassword</code> is checked against every entry. It only matches the object it belongs to, so every other object the caller has no access to fails with <code>DataStore::InvalidPassword</code> rather than <code>DataStore::PermissionDenied</code>
+
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
 |-
-| [[#DataStoreGetMetaParam]] || param || Details on what data to return
+| [[#DataStoreGetMetaParam]] || param || Details on what data to return, shared by every target
 |}
 
 ==== Response ====
