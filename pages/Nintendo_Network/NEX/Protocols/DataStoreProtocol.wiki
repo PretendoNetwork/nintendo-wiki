@@ -735,7 +735,11 @@ Removes all rating entries and logs for for all slots of the targets. Only users
 
 === GetSpecificMetaV1 ===
 
-Requests minimal metadata about an object. Only users with access permissions can perform this operation. This was replaced by [[#GetSpecificMeta]] in later versions.
+Requests minimal metadata about multiple objects. This was replaced by [[#GetSpecificMeta]] in later versions.
+
+This behaves the same as [[#GetSpecificMeta]], with no access permission or [[#DataStatus]] checks, unavailable objects still being returned, and the results sorted by [[#Object Data ID]] with no duplicates. The only difference is the size. Objects which do not use the [[#External File Server]] are given their stored size of 0 rather than the length of their [[#Object MetaBinary]], and objects with a size of 0 are returned rather than left out. Only an [[#Object Data ID]] which does not exist is left out of <code>pMetaInfos</code>.
+
+Reading the metadata this way does not count as referencing the objects (see [[#Object Referencing]]).
 
 ==== Request ====
 
@@ -750,7 +754,7 @@ Requests minimal metadata about an object. Only users with access permissions ca
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfoV1]]&gt; || pMetaInfos || Minimal object metadatas. One per target in <code>dataIds</code> in the same order as in the request
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfoV1]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
 |}
 
 === PostMetaBinary ===
@@ -905,9 +909,14 @@ Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewA
 
 === GetSpecificMeta ===
 
-Requests minimal metadata about an object. Only users with access permissions can perform this operation. Newer version of [[#GetSpecificMetaV1]].
+Requests minimal metadata about multiple objects. Newer version of [[#GetSpecificMetaV1]].
 
-Objects with a size of 0 are left out of <code>pMetaInfos</code> entirely.
+Unlike the other metadata methods, this does not check the objects access permission or [[#DataStatus]], so anyone can get the minimal metadata of any object, including private, rejected and pending objects. It also does not check whether the object is still available, so deleted objects, objects which were never completed, and expired objects are all returned too. There are no per-object results, so objects which are not returned are simply left out of <code>pMetaInfos</code>. Objects are left out when:
+
+* The [[#Object Data ID]] does not exist
+* The object has a size of 0 (see [[#DataStoreSpecificMetaInfo]] for how the size is worked out)
+
+Reading the metadata this way does not count as referencing the objects (see [[#Object Referencing]]).
 
 ==== Request ====
 
@@ -922,7 +931,7 @@ Objects with a size of 0 are left out of <code>pMetaInfos</code> entirely.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfo]]&gt; || pMetaInfos || Minimal object metadatas. One per target in <code>dataIds</code> in the same order as in the request
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfo]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
 |}
 
 === GetPersistenceInfo ===
@@ -2258,7 +2267,7 @@ Holds a list of [[#Object Data ID]]s to download minimal metadata for. This was 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt32&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt32&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
 |}
 
 === DataStoreGetSpecificMetaParam ===
@@ -2268,7 +2277,7 @@ Holds a list of [[#Object Data ID]]s to download minimal metadata for. Newer ver
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
 |}
 
 === DataStoreSpecificMetaInfoV1 ===
@@ -2282,7 +2291,7 @@ Minimal object metadata. This was replaced by [[#DataStoreSpecificMetaInfo]] in 
 |-
 | [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
 |-
-| UInt32 || size || Object size
+| UInt32 || size || Object size. Unlike [[#DataStoreSpecificMetaInfo]], this is the stored size for every object, so objects which do not use the [[#External File Server]] have a size of 0
 |-
 | UInt16 || dataType || [[#Object Data Type]]
 |-
@@ -2300,7 +2309,7 @@ Minimal object metadata. Newer version of [[#DataStoreSpecificMetaInfoV1]].
 |-
 | [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
 |-
-| UInt32 || size || Object size
+| UInt32 || size || Object size. For objects which do not use the [[#External File Server]], this is the length of the [[#Object MetaBinary]] instead, even though [[#DataStoreMetaInfo]] gives their size as 0. An object which does not use the [[#External File Server]] and was posted with an empty [[#Object MetaBinary]] has a size of <code>4294967295</code> here, but one whose [[#Object MetaBinary]] was posted with a non-zero length and was later changed to empty is treated as having a size 0
 |-
 | UInt16 || dataType || [[#Object Data Type]]
 |-
