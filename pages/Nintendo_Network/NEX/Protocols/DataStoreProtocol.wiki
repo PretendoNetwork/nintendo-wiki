@@ -22,7 +22,7 @@ When an object has [[#DataFlag]] <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code>
 
 A notification for a post is only created once the object actually exists. For objects which use the [[#External File Server]] this is when the upload is completed with [[#CompletePostObjectV1]], [[#CompletePostObject]] or [[#CompletePostObjects]], not when it is prepared, and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Objects posted with [[#PostMetaBinary]] create theirs straight away, unless <code>DATA_FLAG_NEED_COMPLETION</code> is set, in which case it is created when they are completed. Objects which need review still create notifications, despite still being pending.
 
-A notification for an update is created when the update is completed with [[#CompleteUpdateObject]], not when it is prepared with [[#PrepareUpdateObject]], and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Updates notify the same users as posts do, including a recipient who made the update themselves. Changing an objects metadata with [[#ChangeMeta]] never creates an update notification, even with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set.
+A notification for an update is created when the update is completed with [[#CompleteUpdateObject]], not when it is prepared with [[#PrepareUpdateObject]], and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Updates notify the same users as posts do, including a recipient who made the update themselves. Every successful call to [[#CompleteUpdateObject]] creates a new notification, even one which completes the same version again or an older version and so does not change the object. Changing an objects metadata with [[#ChangeMeta]] never creates an update notification, even with <code>MODIFICATION_FLAG_UPDATED_TIME</code> set.
 
 Who is notified depends on the objects access permission, but not its delete permission:
 
@@ -529,9 +529,15 @@ Preparing an update only reserves the next version of the object (see [[#Object 
 
 === CompleteUpdateObject ===
 
-Tells the game server the [[#External File Server]] update request has finished. Only the user who prepared the update with [[#PrepareUpdateObject]] can complete it. Anyone else gets <code>DataStore::PermissionDenied</code>, even if they have update permissions.
+Tells the game server the [[#External File Server]] update request has finished. Only the user who prepared the update with [[#PrepareUpdateObject]] can complete it. Anyone else gets <code>DataStore::PermissionDenied</code>, even the object owner or someone else with update permissions. The preparers update permission and the objects status are not checked again, so the preparer can still complete their update after losing update permission, or after the object is put under review or rejected, and the status is left as it is.
 
-Completing the update moves the object to the new version and size, and updates its modified time and [[#Validity Period]] (see [[#Object Updates]]). Reporting a failed upload (<code>isSuccess = false</code>) changes nothing, and the same version can still be completed afterwards. A version which was never handed out results in <code>DataStore::NotFound</code>. Completing a version which is already completed, or which is older than the objects current version, is not an error, but changes nothing.
+Completing the update moves the object to the new version and size, and updates its modified time and [[#Validity Period]] from the time of completion, not the time it was prepared (see [[#Object Updates]]). An object in an [[#Object Persistence]] slot stays persistent. Completing an update does not count as referencing the object (see [[#Object Referencing]]).
+
+* Reporting a failed upload (<code>isSuccess = false</code>) changes nothing, and the same version can still be completed afterwards. Reporting a failure after the version was completed does not undo the update
+* Completing the same version again is not an error, and counts as updating the object again. The modified time and [[#Validity Period]] move again, and an update notification is sent again
+* Completing a version which is older than the objects current version is not an error. The object is left at its current version, with its current size and modified time, but an update notification is still sent
+* A version which was never handed out results in <code>DataStore::NotFound</code>. This includes 0 and the objects current version
+* If the object does not exist, has not been completed, does not use the [[#External File Server]], or was deleted after the update was prepared, <code>DataStore::NotFound</code> is thrown
 
 ==== Request ====
 
