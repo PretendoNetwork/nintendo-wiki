@@ -775,7 +775,15 @@ This method does not return anything.
 
 === ResetRatings ===
 
-Removes all rating entries and logs for for all slots of the targets. Only users with update permissions can perform this operation. See [[#Object Ratings]].
+Removes all rating entries and logs for all slots of the targets. Only users with update permissions can perform this operation. See [[#Object Ratings]].
+
+Each object is reset the same way as [[#ResetRating]] resets a slot, for every slot it has, which also lifts every users [[#Rating Locks|rating locks]] on all of them. An object which has no slots, or whose slots have never been rated, has nothing to reset. The same object may be listed more than once.
+
+* If an object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is used for it. This includes <code>INVALID_DATAID</code>
+* If an object is under review or rejected, nobody can reset it this way, not even the owner. The owner gets <code>DataStore::NotFound</code>, and anyone else gets <code>DataStore::UnderReviewing</code>
+* The access permission and the [[#Object Lock ID|read lock]] do not apply
+
+When <code>transactional</code> is true and more than one object fails, the error thrown is the one for the first failing object in the list. Going over <code>BATCH_PROCESSING_CAPACITY</code> results in <code>DataStore::OverCapacity</code>, regardless of <code>transactional</code>, and nothing is reset.
 
 ==== Request ====
 
