@@ -747,7 +747,17 @@ Every object is returned in the order it was requested, including objects which 
 
 === ResetRating ===
 
-Removes all rating entries and logs for the target rating slot. Only users with update permissions can perform this operation. See [[#Object Ratings]].
+Removes all rating entries and logs for the target rating slot. Only users with update permissions can perform this operation. See [[#Object Ratings]] and [[#Object Passwords]].
+
+The slots total goes back to its initial value with nothing counted, including when <code>RATING_FLAG_ROUND_MINUS</code> had rounded a negative initial value up to 0. Removing the logs lifts every users [[#Rating Locks|rating lock]] on the slot, regardless of lock type. With <code>RATING_FLAG_MODIFIABLE</code>, the next rating from a user is a new entry rather than a change to their old one. Only the target slot is reset, the objects other slots keep their ratings and logs. Resetting a slot which has never been rated is not an error.
+
+* If the object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is thrown
+* If the slot was not initialised when the object was posted, or is not a slot at all (outside 0 to <code>RATING_SLOT_MAX</code>), <code>DataStore::InvalidArgument</code> is thrown
+* If the object is under review or rejected, only the owner can reset it. Anyone else gets <code>DataStore::UnderReviewing</code>, whatever their update permission is
+* The access permission and the [[#Object Lock ID|read lock]] do not apply
+* The slots settings do not apply either, so the owner can reset a slot with <code>RATING_FLAG_DISABLE_SELF_RATING</code>
+
+Resetting a slot does not count as referencing the object (see [[#Object Referencing]]), nor as updating it, so it changes none of the objects times or its [[#Validity Period]].
 
 ==== Request ====
 
