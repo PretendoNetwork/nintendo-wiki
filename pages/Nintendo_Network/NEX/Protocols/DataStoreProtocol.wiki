@@ -683,7 +683,16 @@ Creates or modifies an object rating entry. Only users with access permissions c
 
 === GetRating ===
 
-Requests the current rating information for a given objects slot. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+Requests the current rating information for a given objects slot. Only users with access permissions can perform this operation. See [[#Object Ratings]] and [[#Object Passwords]].
+
+* If the object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is thrown
+* If the slot was not initialised when the object was posted, or is not a slot at all (outside 0 to <code>RATING_SLOT_MAX</code>), <code>DataStore::InvalidArgument</code> is thrown
+* If the object is under review or rejected, only the owner can read its ratings. Anyone else gets <code>DataStore::UnderReviewing</code>
+* The [[#Object Lock ID|read lock]] does not apply
+
+The slots settings only decide who may rate it and how, so none of them stop anyone reading it. A user who is locked out of the slot (see [[#Rating Locks]]), or the owner of a slot with <code>RATING_FLAG_DISABLE_SELF_RATING</code>, can still read it. A slot with <code>RATING_FLAG_ROUND_MINUS</code> is only rounded when it is rated, so a negative initial value returns as a negative total value until the first rating is sent.
+
+Reading the ratings does not count as referencing the object (see [[#Object Referencing]]).
 
 ==== Request ====
 
