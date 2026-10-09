@@ -714,14 +714,23 @@ Reading the ratings does not count as referencing the object (see [[#Object Refe
 
 === GetRatings ===
 
-Requests the current rating information for all slots of multiple objects. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+Requests the current rating information for all slots of multiple objects. Only users with access permissions can perform this operation. See [[#Object Ratings]] and [[#Object Passwords]].
+
+Each object is looked up the same way as [[#GetRating]], and fails on its own. A failed object gets its error in <code>pResults</code>, and an empty list of slots in <code>pRatings</code>. Only two things fail the whole request:
+
+* More than 512 <code>dataIds</code>, which results in <code>DataStore::OverCapacity</code>.
+* An <code>INVALID_DATAID</code> anywhere in <code>dataIds</code>, which results in <code>DataStore::InvalidArgument</code>. Any other <code>dataIds</code> entry which does not name an object only fails its own entry, with <code>DataStore::NotFound</code>
+
+Every object is returned in the order it was requested, including objects which are requested more than once. Each objects slots are the ones it was posted with, sorted by slot rather than in the order they were posted. An object posted without any slots has an empty list.
+
+<code>accessPassword</code> is used for every object. It only matches the object it belongs to, so every other object the caller has no access to fails with <code>DataStore::InvalidPassword</code> rather than <code>DataStore::PermissionDenied</code>.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to 512 targets. An empty list is allowed, and returns nothing
 |-
 | UInt64 || accessPassword || [[#Object Passwords]]
 |}
@@ -731,7 +740,7 @@ Requests the current rating information for all slots of multiple objects. Only 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt;&gt; || pRatings || All slot ratings. One for each <code>dataIds</code>, in the order they were requested
+| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt;&gt; || pRatings || All slot ratings. One for each <code>dataIds</code>, in the order they were requested, with each objects slots sorted by slot
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>pRatings</code> in the same order as in the request
 |}
