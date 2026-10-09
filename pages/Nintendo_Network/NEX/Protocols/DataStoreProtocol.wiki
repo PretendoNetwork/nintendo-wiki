@@ -98,15 +98,21 @@ By default all objects, whether it uses the [[#External File Server]] or not, wi
 
 Every object, whether it uses the [[#External File Server]] or not, can be "rated". Each object has <code>NUM_RATING_SLOT</code> number of "rating slots" (IDs 0-15), which are each configured independently and track their own separate rating values/counts. The meaning behind these ratings is game/context-specific. For details on these configurations, see [[#DataStoreRatingInitParam]].
 
-Each user rating for an object slot is tracked as a separate entry, rather than accumulating on a single value. If <code>RATING_FLAG_MODIFIABLE</code> is used, then each user can only have a single rating entry for each of an objects slots, and subsequent ratings simply update that existing entry. Otherwise subsequent ratings create additional entries. The rating slots count is the total number of rating entries for the slot, and the total value is the combined total of all the entries starting from the slots initial value defined in [[#DataStoreRatingInitParam]]. Negative rating values are allowed.
+Each user rating for an object slot is tracked as a separate entry, rather than accumulating on a single value. If <code>RATING_FLAG_MODIFIABLE</code> is used, then each user can only have a single rating entry for each of an objects slots, and subsequent ratings simply update that existing entry. Otherwise subsequent ratings create additional entries. The rating slots count is the total number of rating entries for the slot, and the total value is the combined total of all the entries starting from the slots initial value defined in [[#DataStoreRatingInitParam]]. Negative rating values are allowed. A rating of 0 still counts as an entry. Each rating is an SInt32, but the total is an SInt64, so the total can grow past what a single rating can hold. A rating which would take the total past what an SInt64 can hold, in either direction, is not counted and results in <code>PythonCore::Exception</code> rather than wrapping around.
 
 === Rating Locks ===
 
 Each rating slot may be configured to use a "rating lock". When used, these locks prevent a user from rating that objects slot again for an amount of time. The amount of time is determined by the locks configuration.
 
-When <code>RATING_LOCK_INTERVAL</code> is used, <code>periodDuration</code> is used as the number of seconds (positive) until the lock is lifted.
+Each user has their own lock on each slot, so a user being locked out of a slot does not stop other users rating it, nor stop the same user rating the objects other slots. A user who is locked out gets <code>DataStore::OperationNotAllowed</code>, even when <code>RATING_FLAG_MODIFIABLE</code> is used and they are only changing their rating. Only a rating which is counted sets the lock. A rating which is refused, such as one outside the slots range, does not lock the user, and a rating refused because of a lock does not extend it.
+
+When <code>RATING_LOCK_INTERVAL</code> is used, <code>periodDuration</code> is used as the number of seconds until the lock is lifted, at a granularity of one second. A <code>periodDuration</code> of 0 never locks anyone. A negative <code>periodDuration</code> results in <code>DataStore::InvalidArgument</code> when the object is posted.
+
+When <code>RATING_LOCK_PERMANENT</code> is used, the user can never rate the slot again.
 
 When <code>RATING_LOCK_PERIOD</code> is used, the lock is set to be lifted at a specific date and time. The date and time is determined based on <code>periodHour</code> and <code>periodDuration</code>. <code>periodHour</code> is the hour of the day the lock will be lifted. The range of hours is between negative and positive 23, with negative values going into the previous day and 0 being midnight. <code>periodDuration</code> determines which specific day the lock is lifted, and must be a valid [[#RatingLockPeriod]]. For example, if a rating slot is configured to use <code>RATING_LOCK_PERIOD_TUE</code> and <code>periodHour</code> is set to 0, and a user rates the slot on March 7th 2024, the lock expiration time is set to 12-3-2024 0:00:00 (the following Tuesday at midnight). Additionally, using <code>RATING_LOCK_PERIOD_DAY1</code> with a negative <code>periodHour</code> will target the last day of the current month.
+
+The lock settings are checked when the object is posted, but only for the lock type which uses them. <code>periodDuration</code> and <code>periodHour</code> are not checked at all for <code>RATING_LOCK_NONE</code> and <code>RATING_LOCK_PERMANENT</code>, and <code>periodHour</code> is not checked for <code>RATING_LOCK_INTERVAL</code>. For <code>RATING_LOCK_PERIOD</code>, <code>periodDuration</code> must be a [[#RatingLockPeriod]] or a value from 0 to 365, presumably a number of days, and <code>periodHour</code> must be between -23 and 23. Otherwise <code>DataStore::InvalidArgument</code> is thrown. <code>RATING_LOCK_PERIOD_DAY1</code> is seemingly only supported from NEX 3.5, see [[#RatingLockPeriod]].
 
 === Rating Logs ===
 
@@ -634,26 +640,45 @@ Requests the users unread [[#Object Notifications]]. This was replaced by [[#Get
 
 === RateObject ===
 
-Creates or modifies an object rating entry. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+Creates or modifies an object rating entry. Only users with access permissions can perform this operation. See [[#Object Ratings]] and [[#Object Passwords]].
+
+* If the object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is thrown
+* If the slot was not initialised when the object was posted, or is not a slot at all (outside 0 to <code>RATING_SLOT_MAX</code>), <code>DataStore::InvalidArgument</code> is thrown
+* If the object is under review or rejected, only the owner can rate it. Anyone else gets <code>DataStore::UnderReviewing</code>
+* The [[#Object Lock ID|read lock]] does not apply, the object can be rated while someone else holds it
+* Ratings are guarded behind the access permissions
 
 ==== Request ====
 
-{| class="wikitable"
-! Type !! Name !! Description
-|-
-| [[#DataStoreRatingTarget]] || target || The target object and rating slot to apply the rating to
-|-
-| [[#DataStoreRateObjectParam]] || param || The rating to apply to the object slot
-|-
-| Boolean || fetchRatings || If true, populate <code>pRating</code>
-|}
+<tabs items="Original,NEX 3.5+" storagekey="RateObject">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#DataStoreRatingTarget]] || target || The target object and rating slot to apply the rating to
+		|-
+		| [[#DataStoreRateObjectParam]] || param || The rating to apply to the object slot
+		|}
+	</tab>
+	<tab name="NEX 3.5+">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#DataStoreRatingTarget]] || target || The target object and rating slot to apply the rating to
+		|-
+		| [[#DataStoreRateObjectParam]] || param || The rating to apply to the object slot
+		|-
+		| Boolean || fetchRatings || If true, populate <code>pRating</code>
+		|}
+	</tab>
+</tabs>
 
 ==== Response ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#DataStoreRatingInfo]] || pRating || Slots rating information after the rating was applied. Only populated if <code>fetchRatings</code> is true
+| [[#DataStoreRatingInfo]] || pRating || Slots rating information after the rating was applied. Before NEX 3.5 this is always populated. From NEX 3.5, it is only populated if <code>fetchRatings</code> is true
 |}
 
 === GetRating ===
@@ -2494,11 +2519,11 @@ Only the fields named in <code>comparisonFlag</code> are compared, the rest are 
 |-
 | [[#RatingLockType]] || lockType || The type of rating lock applied to a user when they rate the slot
 |-
-| SInt64 || initialValue || The initial value the slots total rating starts at
+| SInt64 || initialValue || The initial value the slots total rating starts at. This is not checked against <code>rangeMin</code> and <code>rangeMax</code>, so the total can start outside the range
 |-
-| SInt32 || rangeMin || The minimum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MIN</code> is set. If an incoming rating is below this value, <code>DataStore::InvalidArgument</code> is thrown
+| SInt32 || rangeMin || The minimum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MIN</code> is set. If an incoming rating is below this value, <code>DataStore::InvalidArgument</code> is thrown and the rating is not counted. A rating equal to this value is allowed. If both range flags are set and this is above <code>rangeMax</code>, <code>DataStore::InvalidArgument</code> is thrown when the object is posted
 |-
-| SInt32 || rangeMax || The maximum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MAX</code> is set. If an incoming rating is above this value, <code>DataStore::InvalidArgument</code> is thrown
+| SInt32 || rangeMax || The maximum value an incoming rating can be. Only respected when <code>RATING_INTERNAL_FLAG_USE_RANGE_MAX</code> is set. If an incoming rating is above this value, <code>DataStore::InvalidArgument</code> is thrown and the rating is not counted. A rating equal to this value is allowed
 |-
 | SInt8 || periodHour || Used as part of the rating lock expiration calculation. See [[#Rating Locks]] for details
 |-
@@ -2828,7 +2853,7 @@ enum RatingLockPeriod : int16_t {
 {| class="wikitable"
 ! Name !! Value !! Description
 |-
-| <code>RATING_LOCK_PERIOD_DAY1</code> || -17 || Unlocks on the first day of the following month
+| <code>RATING_LOCK_PERIOD_DAY1</code> || -17 || Unlocks on the first day of the following month. Assumed to have been added in NEX 3.5. Before then, posting an object which uses it results in <code>PythonCore::Exception</code>
 |-
 | <code>RATING_LOCK_PERIOD_SUN</code> || -7 || Unlocks on the Sunday of the following week
 |-
@@ -3008,10 +3033,12 @@ enum RatingFlag : uint8_t {
 |-
 | <code>RATING_FLAG_MODIFIABLE</code> || 0x04 || When set, each user can only have one rating per slot. If the user has already rated the slot, update the existing rating rather than creating another rating entry
 |-
-| <code>RATING_FLAG_ROUND_MINUS</code> || 0x08 || When set, ratings less than 0 are rounded to 0
+| <code>RATING_FLAG_ROUND_MINUS</code> || 0x08 || When set, the total is kept at 0 or above. The rating itself is not rounded, instead a rating which would take the total below 0 leaves the total at 0. This happens on every rating, so a slot with a negative initial value has its total rounded up to 0 as soon as it is rated, even by a rating of 0. When used with <code>RATING_FLAG_MODIFIABLE</code>, changing a rating takes the old rating away from the total as it was given, not as it was rounded, so the total can end up higher than every rating added together. For example, if a user rates -10 (the total is rounded to 0), another user rates 3 (the total is 3), and the first user changes their rating to 1, the total becomes <code>3 - (-10) + 1 = 14</code>
 |-
-| <code>RATING_FLAG_DISABLE_SELF_RATING</code> || 0x10 || When set, disables the ability for the object owner to rate the object. If the owner tries to rate the object, <code>DataStore::OperationNotAllowed</code> is thrown
+| <code>RATING_FLAG_DISABLE_SELF_RATING</code> || 0x10 || When set, disables the ability for the object owner to rate the object. If the owner tries to rate the object, <code>DataStore::OperationNotAllowed</code> is thrown, even if they use the [[#Object Passwords|access password]]
 |}
+
+A slot can be posted with any bits set, including bits no flag uses, but some of those bits make the slot impossible to rate. Every rating of a slot with flags <code>0x02</code> or <code>0x20</code> set results in <code>DataStore::InvalidArgument</code>, and every rating of a slot with <code>0x01</code> set results in <code>PythonCore::Exception</code>. <code>0x40</code> and <code>0x80</code> are ignored.
 
 === RatingInternalFlag ===
 
