@@ -47,7 +47,7 @@ Notifications only last as long as the object they are for. Whenever an object i
 
 Each notification is given a unique ID called the "notification ID". Each notification is tied to an [[#Object Data ID]]. Only one notification per object per user may exist, with older ones for the same object for the same user being deleted when a new notification for the object is created for that user (for example, if both <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> are set and the owner updates the object before the recipient has checked their notifications, they will only see the notification for the update not the creation). This ID is an incrementing value with the first notification having the ID 1. The creation and deletion of notifications will create gaps in the notification IDs returned by the game server, this is normal and expected.
 
-Additionally, each call to [[#GetNotificationUrl]] creates a new notification using <code>INVALID_DATAID</code> for the user. The purpose of this notification is unknown, as it is not possible to download the notification data for these notifications.
+Additionally, each call to [[#GetNotificationUrl]] creates a new notification using <code>INVALID_DATAID</code> for the user. As with any other object, the user only ever has one of these, so each call replaces the notification made by the previous one. The purpose of this notification is unknown, as it is not possible to download the notification data for these notifications.
 
 In order for a client to check its notifications, it must locate them from the game server. There are 2 ways for a client to do this:
 
@@ -604,7 +604,7 @@ Whenever a user receives a new notification, that notification is stored in the 
 84935077,1870537598,1479103557
 </pre>
 
-Additionally, each call to this method creates a notification for the user using [[#Object Data ID]] <code>INVALID_DATAID</code>.
+Additionally, each call to this method creates a notification for the user using [[#Object Data ID]] <code>INVALID_DATAID</code>, replacing the one made by the previous call. Nobody else is notified.
 
 ==== Request ====
 
@@ -624,7 +624,7 @@ Additionally, each call to this method creates a notification for the user using
 
 === GetNewArrivedNotificationsV1 ===
 
-Requests the users unread [[#Object Notifications]]. This was replaced by [[#GetNewArrivedNotifications]] in later versions. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them.
+Requests the users unread [[#Object Notifications]]. This was replaced by [[#GetNewArrivedNotifications]] in later versions. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them. Notifications are returned oldest first. Both versions of this method read the same notifications, so reading them with one also reads them for the other.
 
 ==== Request ====
 
@@ -972,7 +972,7 @@ This method does not return anything.
 
 === GetNewArrivedNotifications ===
 
-Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewArrivedNotificationsV1]]. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them.
+Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewArrivedNotificationsV1]]. Notifications are not considered "read" until after the ID is sent in <code>param</code>, meaning this method can return the same notifications multiple times until the client tells the server it has read them. Notifications are returned oldest first. Both versions of this method read the same notifications, so reading them with one also reads them for the other.
 
 ==== Request ====
 
@@ -2268,7 +2268,7 @@ Used by [[#GetNotificationUrl]] to request the URL where the users latest [[#Obj
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before
+| [[Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before. Seems to be ignored, at least in Pokemon Bank?
 |}
 
 === DataStoreReqGetNotificationUrlInfo ===
@@ -2294,7 +2294,7 @@ Used by [[#GetNewArrivedNotificationsV1]] and [[#GetNewArrivedNotifications]] to
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || lastNotificationId || The last notification ID the client got from the server, or 0 if they have never seen any notifications. The game server only returns notifications for the user sent after this ID. The game server considers all notifications for the user prior to this ID as "read" and will no longer return them in future requests, even if future requests use a lower notification ID again
+| UInt64 || lastNotificationId || The last notification ID the client got from the server, or 0 if they have never seen any notifications. The game server only returns notifications for the user sent after this ID. The game server considers all notifications for the user up to and including this ID as "read", and removes them, so they are no longer returned in future requests, even if future requests use a lower notification ID again. Only notifications which already exist are removed. A notification which arrives later is still returned, even if this ID was higher than it
 |-
 | UInt16 || limit || The maximum number of notifications to return, oldest first. Any value from 1 to 99 is used as is. 0, or any value of 100 or more, returns at most 20. When more notifications remain, <code>pHasNext</code> is set in the response
 |}
