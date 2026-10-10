@@ -574,7 +574,22 @@ This method does not return anything.
 
 === SearchObject ===
 
-Performs a complex, fine-grained, search for objects.
+Performs a complex, fine-grained, search for objects. The [[#SearchType]] (<code>searchTarget</code>) decides which objects can be found at all, and every other field of [[#DataStoreSearchParam]] narrows those down. Only objects whose upload has completed are found, so objects which were never completed, failed or were deleted are not, not even by their owner. Objects which are pending review or rejected are only found by their owner, through <code>SEARCH_TYPE_OWN_PENDING</code>, <code>SEARCH_TYPE_OWN_REJECTED</code> and <code>SEARCH_TYPE_OWN_ALL</code>. A search always sees objects as they are at the time, so changes made with [[#ChangeMeta]], such as new tags, recipients or an approval, apply straight away. An object whose update has been prepared but not completed is found as it was before the update. Finding an object does not count as a reference, see [[#Object Referencing]].
+
+* <code>ownerIds</code> and <code>ownerType</code>:
+** With <code>SEARCH_TARGET_ANYBODY</code>, only objects owned by one of the users in <code>ownerIds</code> are found, out of the ones the search type finds. With <code>SEARCH_TARGET_ANYBODY_EXCLUDE_SPECIFIED</code>, objects owned by those users are left out instead. An empty list does not filter anything, and there is no limit on how many users can be listed
+** <code>SEARCH_TARGET_FRIEND</code> can only be used with <code>SEARCH_TYPE_PUBLIC</code>, <code>SEARCH_TYPE_FRIEND</code>, <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> and <code>SEARCH_TYPE_RECEIVED</code>, and only with an empty <code>ownerIds</code>. Otherwise <code>DataStore::InvalidArgument</code> is thrown
+** <code>SEARCH_TYPE_OWN</code>, <code>SEARCH_TYPE_OWN_PENDING</code>, <code>SEARCH_TYPE_OWN_REJECTED</code> and <code>SEARCH_TYPE_OWN_ALL</code> throw <code>DataStore::InvalidArgument</code> if <code>ownerIds</code> lists anyone, even the caller
+* <code>destinationIds</code> only finds objects specified to at least one of the users listed, using either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>. Objects without recipients are left out, and an object is only found once even if many of its recipients are listed. There is no limit on how many users can be listed. With <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> and <code>SEARCH_TYPE_RECEIVED</code> the list must either be empty or hold only the caller, once. Anything else throws <code>DataStore::InvalidArgument</code>
+* The date filters find objects created or updated at exactly the time given, as well as after or before it depending on the field. A time of <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code> leaves the filter unset. Any other time is a real date, including <code>[[Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. A time which is not a real date, such as month 13, April 31, hour 24 or year 0, throws <code>PythonCore::ConversionError</code>. February 29 is only a real date in leap years, so it is refused in years such as 2021 and 1900, but not 2020 or 2000
+** If both ends of the created range, or both ends of the updated range, are set and the range ends before it starts, <code>DataStore::InvalidArgument</code> is thrown. The created range is never compared with the updated range
+* <code>tags</code> finds objects which have every tag listed, even if the matched object has more tags than listed in the search parameters. The order of the list, and tags repeated in it, make no difference. Tags are matched exactly: case and accents matter, nothing is a wildcard, and a tag does not match part of another. The only exception is spaces at the end of a tag, which are ignored on both sides, so <code>abc</code> and <code>abc </code> match each other. The length of each tag is not checked, a tag too long to post just matches nothing. Up to <code>NUM_TAG_SLOT</code> tags can be listed, counting repeats, more throws <code>DataStore::InvalidArgument</code>
+** In NEX 3.4, using any tags with <code>SEARCH_TYPE_RECEIVED</code> throws <code>PythonCore::Exception</code>. This is presumably a bug but has not been tested on other versions
+* <code>resultRange</code> must ask for between 1 and <code>MAX_SEARCH_RESULT_SIZE</code> results, otherwise <code>DataStore::InvalidArgument</code> is thrown. An offset past the last match returns no results. With an offset of <code>RESULTRANGE_ANY_OFFSET</code>, between 1 and <code>MAX_SEARCH_ANY_RESULT_SIZE</code> results can be asked for, and the matches are picked at random and returned in no particular order, regardless of the sort settings
+* <code>resultOption</code> decides whether the tags, [[#Object Ratings|rating slots]] and meta binary of each object are filled in. Bits which are not [[#ResultFlag]] values are ignored. The permission and delete permission of each object are always returned without their recipients, even with <code>RESULT_FLAG_PERMITTED_IDS</code>. Rating slots are returned in slot order
+* <code>totalCount</code> is how many objects matched, whatever <code>resultRange</code> is, but only so many matches are counted: the first 1000, or the first <code>offset + 5 * size</code> of <code>resultRange</code> if that is more. When more objects match than were counted, <code>totalCount</code> is how many were counted and <code>totalCountType</code> is <code>SEARCH_RESULT_TOTAL_MINIMUM</code>. Otherwise it is <code>SEARCH_RESULT_TOTAL_EXACT</code>. With <code>RESULTRANGE_ANY_OFFSET</code> the first 1000 are counted. Matches past the ones counted can still be returned by paging to them
+
+See [[#SearchSortColumn]] for how results are sorted.
 
 ==== Request ====
 
@@ -2054,27 +2069,27 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
-		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated for the object to be found. The slot is the one <code>resultOrderColumn</code> sorts on, so this must be 0 unless <code>resultOrderColumn</code> is a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, otherwise <code>DataStore::InvalidArgument</code> is thrown
 		|}
 	</tab>
 	<tab name="Revision 1">
@@ -2091,27 +2106,27 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
-		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated for the object to be found. The slot is the one <code>resultOrderColumn</code> sorts on, so this must be 0 unless <code>resultOrderColumn</code> is a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, otherwise <code>DataStore::InvalidArgument</code> is thrown
 		|-
 		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
 		|}
@@ -2130,27 +2145,27 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
-		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated for the object to be found. The slot is the one <code>resultOrderColumn</code> sorts on, so this must be 0 unless <code>resultOrderColumn</code> is a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, otherwise <code>DataStore::InvalidArgument</code> is thrown
 		|-
 		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
 		|-
@@ -2171,27 +2186,27 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
-		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated for the object to be found. The slot is the one <code>resultOrderColumn</code> sorts on, so this must be 0 unless <code>resultOrderColumn</code> is a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, otherwise <code>DataStore::InvalidArgument</code> is thrown
 		|-
 		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
 		|-
@@ -2216,27 +2231,27 @@ Holds information on how the client would like to search for objects.
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated after this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated before this time. If code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter
+		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| UInt32 || referDataId || Only return objects with this associated [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
+		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]
+		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return
+		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
-		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated in order to be considered valid. Ignored if <code>resultOrderColumn</code> is not a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, which also determines which rating slot to check the count of
+		| UInt32 || minimalRatingFrequency || The minimum number of times a given [[#Object Ratings|rating slot]] must be rated for the object to be found. The slot is the one <code>resultOrderColumn</code> sorts on, so this must be 0 unless <code>resultOrderColumn</code> is a <code>SEARCH_SORT_COLUMN_RATING</code> or <code>SEARCH_SORT_COLUMN_RATING_AVERAGE</code> value, otherwise <code>DataStore::InvalidArgument</code> is thrown
 		|-
 		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
 		|-
@@ -2254,7 +2269,7 @@ Holds the results of a search operation.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt32 || totalCount || The search result count. See <code>totalCountType</code> for how to interpret this value. Always 0 if the total count is disabled
+| UInt32 || totalCount || How many objects the search matched, whatever <code>resultRange</code> is. See <code>totalCountType</code> for how to interpret this value, and [[#SearchObject]] for how many matches are counted. Always 0 if the total count is disabled
 |-
 | [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || result || Search results
 |-
@@ -2268,7 +2283,7 @@ Used by [[#GetNotificationUrl]] to request the URL where the users latest [[#Obj
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before. Seems to be ignored, at least in Pokemon Bank?
+| [[Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before. The game server does not use this
 |}
 
 === DataStoreReqGetNotificationUrlInfo ===
@@ -2699,7 +2714,7 @@ enum DataStatus : uint8_t {
 
 === SearchType ===
 
-Determines the type of objects allowed to be returned when using [[#DataStoreSearchParam]].
+Determines the type of objects allowed to be returned when using [[#DataStoreSearchParam]]. Objects which are pending review or rejected are only found by the search types which name those statuses. Any value not listed throws <code>DataStore::InvalidArgument</code>.
 
 <pre>
 enum SearchType : uint8_t {
@@ -2722,9 +2737,9 @@ enum SearchType : uint8_t {
 |-
 | <code>SEARCH_TYPE_FRIEND</code> || 6 || Objects owned by the friends of the current user which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>
 |-
-| <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> || 7 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient
+| <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> || 7 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient. <code>PERMISSION_SPECIFIED_FRIEND</code> objects are only found if the current user is also a friend of the owner
 |-
-| <code>SEARCH_TYPE_RECEIVED</code> || 8 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient, or objects owned by the friends of the current user which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>
+| <code>SEARCH_TYPE_RECEIVED</code> || 8 || Objects which have their access [[#Permission]] set to either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code> and which have the current user set as a recipient, or objects owned by the friends of the current user which have their access [[#Permission]] set to <code>PERMISSION_FRIEND</code>. <code>PERMISSION_SPECIFIED_FRIEND</code> objects are only found if the current user is also a friend of the owner
 |-
 | <code>SEARCH_TYPE_PRIVATE</code> || 9 || Objects owned by the current user and which have their access [[#Permission]] set to <code>PERMISSION_PRIVATE</code>
 |-
@@ -2741,7 +2756,7 @@ enum SearchType : uint8_t {
 
 === SearchTarget ===
 
-Determines the target object owner type when using [[#DataStoreSearchParam]].
+Determines the target object owner type when using [[#DataStoreSearchParam]]. Any value not listed throws <code>DataStore::InvalidArgument</code>. See [[#SearchObject]] for which search types each can be used with.
 
 <pre>
 enum SearchTarget : uint8_t {
@@ -2752,16 +2767,18 @@ enum SearchTarget : uint8_t {
 {| class="wikitable"
 ! Name !! Value !! Description
 |-
-| <code>SEARCH_TARGET_ANYBODY</code> || 0 || Objects owned by anyone
+| <code>SEARCH_TARGET_ANYBODY</code> || 0 || Objects owned by anyone. If <code>ownerIds</code> is not empty, only objects owned by one of the users listed
 |-
-| <code>SEARCH_TARGET_FRIEND</code> || 1 || Objects owned by the friends of the current user
+| <code>SEARCH_TARGET_FRIEND</code> || 1 || Objects owned by the friends of the current user. <code>ownerIds</code> must be empty
 |-
-| Unknown || 2 || Exclude objects owned by the users specified in the search parameters
+| Unknown || 2 || Objects owned by anyone except the users listed in <code>ownerIds</code>
 |}
 
 === SearchSortColumn ===
 
-Determines the database column to sort search results by.
+Determines the database column to sort search results by. Any value not listed throws <code>DataStore::InvalidArgument</code>.
+
+Ties are broken by the [[#Object Data ID]], lowest first, whichever the [[#SearchSortOrder]]. Names are compared ignoring case and accents, so <code>e</code>, <code>E</code> and <code>é</code> sort the same. The rating columns only find objects which have the [[#Object Ratings|rating slot]] the column is for, and leave out every other object. The total of a slot includes its initial value, but the average does not: it is the total of the ratings given divided by how many there were, and is not rounded (<code>(total_rating - initial_value) / rating_count</code>). A slot which has not been rated averages 0.
 
 <pre>
 enum SearchSortColumn : uint8_t {
@@ -2785,6 +2802,8 @@ enum SearchSortColumn : uint8_t {
 | <code>SEARCH_SORT_COLUMN_CREATED_TIME</code> || 5 || Sort by object creation time
 |-
 | <code>SEARCH_SORT_COLUMN_UPDATED_TIME</code> || 6 || Sort by object [[#Object Updates|modified time]]
+|-
+| Unknown || 7 || Sort by the [[Nintendo_Network/NEX/Types#PID|PID]] of the object owner
 |-
 | <code>SEARCH_SORT_COLUMN_RATING0</code> || 64 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 0
 |-
@@ -2853,7 +2872,7 @@ enum SearchSortColumn : uint8_t {
 
 === SearchSortOrder ===
 
-Determines the direction to order search results.
+Determines the direction to order search results. Any value not listed throws <code>DataStore::InvalidArgument</code>.
 
 <pre>
 enum SearchSortOrder : uint8_t {
