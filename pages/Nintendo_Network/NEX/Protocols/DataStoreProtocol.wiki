@@ -2169,7 +2169,7 @@ Holds information on how the client would like to search for objects.
 		|-
 		| Boolean || useCache || If true, return results from previously cached search results. Otherwise hit the database
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		| Boolean || totalCountEnabled || If true, return the total count and total count type fields. Otherwise disable the total count
 		|}
 	</tab>
 	<tab name="Revision 3">
@@ -2265,6 +2265,8 @@ Holds information on how the client would like to search for objects.
 === DataStoreSearchResult ===
 
 Holds the results of a search operation.
+
+In NEX versions without <code>totalCountEnabled</code>, always return the data.
 
 {| class="wikitable"
 ! Type !! Name !! Description
