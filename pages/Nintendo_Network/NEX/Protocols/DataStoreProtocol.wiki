@@ -112,11 +112,17 @@ When <code>RATING_LOCK_PERMANENT</code> is used, the user can never rate the slo
 
 When <code>RATING_LOCK_PERIOD</code> is used, the lock is set to be lifted at a specific date and time. The date and time is determined based on <code>periodHour</code> and <code>periodDuration</code>. <code>periodHour</code> is the hour of the day the lock will be lifted. The range of hours is between negative and positive 23, with negative values going into the previous day and 0 being midnight. <code>periodDuration</code> determines which specific day the lock is lifted, and must be a valid [[#RatingLockPeriod]]. For example, if a rating slot is configured to use <code>RATING_LOCK_PERIOD_TUE</code> and <code>periodHour</code> is set to 0, and a user rates the slot on March 7th 2024, the lock expiration time is set to 12-3-2024 0:00:00 (the following Tuesday at midnight). Additionally, using <code>RATING_LOCK_PERIOD_DAY1</code> with a negative <code>periodHour</code> will target the last day of the current month.
 
-The lock settings are checked when the object is posted, but only for the lock type which uses them. <code>periodDuration</code> and <code>periodHour</code> are not checked at all for <code>RATING_LOCK_NONE</code> and <code>RATING_LOCK_PERMANENT</code>, and <code>periodHour</code> is not checked for <code>RATING_LOCK_INTERVAL</code>. For <code>RATING_LOCK_PERIOD</code>, <code>periodDuration</code> must be a [[#RatingLockPeriod]] or a value from 0 to 365, presumably a number of days, and <code>periodHour</code> must be between -23 and 23. Otherwise <code>DataStore::InvalidArgument</code> is thrown. <code>RATING_LOCK_PERIOD_DAY1</code> is seemingly only supported from NEX 3.5, see [[#RatingLockPeriod]].
+The lock is lifted the next time it is that day at that hour, which can be later on the same day the user rated. For example, rating at 22:30 on a Friday with <code>RATING_LOCK_PERIOD_FRI</code> and a <code>periodHour</code> of 23 lifts the lock at 23:00 that same day, while a <code>periodHour</code> of 0 lifts it at midnight the following Friday. A negative <code>periodHour</code> counts back from midnight of the given day, so <code>RATING_LOCK_PERIOD_MON</code> with a <code>periodHour</code> of -1 lifts the lock at 23:00 on the Sunday before.
+
+<code>periodDuration</code> may also be a number of days, from 0 to 365. The lock is then lifted that many days after the next time it is <code>periodHour</code>. For example, rating at 22:30 with a <code>periodDuration</code> of 0 and a <code>periodHour</code> of 23 lifts the lock at 23:00 that same day, and with a <code>periodDuration</code> of 1 and a <code>periodHour</code> of 5 it lifts the lock at 05:00 the day after tomorrow. A negative <code>periodHour</code> cannot be used with a number of days.
+
+The lock settings are checked when the object is posted, but only for the lock type which uses them. <code>periodDuration</code> and <code>periodHour</code> are not checked at all for <code>RATING_LOCK_NONE</code> and <code>RATING_LOCK_PERMANENT</code>, and <code>periodHour</code> is not checked for <code>RATING_LOCK_INTERVAL</code>. For <code>RATING_LOCK_PERIOD</code>, <code>periodDuration</code> must be a [[#RatingLockPeriod]] or a number of days from 0 to 365, and <code>periodHour</code> must be between -23 and 23, and not negative when <code>periodDuration</code> is a number of days. Otherwise <code>DataStore::InvalidArgument</code> is thrown. <code>RATING_LOCK_PERIOD_DAY1</code> is seemingly only supported from NEX 3.5, see [[#RatingLockPeriod]].
 
 === Rating Logs ===
 
-When <code>RATING_FLAG_MODIFIABLE</code> is used, and/or any lock type besides <code>RATING_LOCK_NONE</code> is used, a "rating log" is created when a user rates an objects slot. Trying to query for logs for a slot which do not use these settings will result in <code>DataStore::OperationNotAllowed</code>. The rating log tracks whether or not the caller has rated the slot already, when the lock expires if using a lock, and what the most recent rating value from the caller is.
+When <code>RATING_FLAG_MODIFIABLE</code> is used, and/or any lock type besides <code>RATING_LOCK_NONE</code> is used, a "rating log" is created when a user rates an objects slot. This includes a <code>RATING_LOCK_INTERVAL</code> lock with a <code>periodDuration</code> of 0, which never locks anyone. Slots with the [[#RatingFlag]] bits <code>0x01</code> or <code>0x02</code> set also have rating logs, even though they cannot be rated. Trying to query for logs for a slot which do not use these settings will result in <code>DataStore::OperationNotAllowed</code>, whether or not it has been rated. The rating log tracks whether or not the caller has rated the slot already, when the lock expires if using a lock, and what the most recent rating value from the caller is.
+
+See [[#DataStoreRatingLog]] for what a log holds before and after rating. Once a user has rated the slot, their log keeps saying so, even after their lock has lifted. Resetting the slot (see [[#ResetRating]] and [[#ResetRatings]]) removes every users log, so they are back to not having rated it.
 
 == Object Referencing ==
 
@@ -867,7 +873,16 @@ This method does not return anything.
 
 === GetRatingWithLog ===
 
-Requests the current rating information for a given objects slot, and returns the latest rating log for the caller if applicable. Only users with access permissions can perform this operation. See [[#Object Ratings]].
+Requests the current rating information for a given objects slot, and returns the latest rating log for the caller if applicable. Only users with access permissions can perform this operation. See [[#Object Ratings]], [[#Rating Logs]] and [[#Object Passwords]].
+
+<code>pRating</code> is the same as [[#GetRating]] would return. If the slot does not keep rating logs, <code>DataStore::OperationNotAllowed</code> is thrown. Otherwise the target, access and status are checked the same way as [[#GetRating]]:
+
+* If the object does not exist, has not been completed, or has expired, <code>DataStore::NotFound</code> is thrown
+* If the slot was not initialised when the object was posted, or is not a slot at all (outside 0 to <code>RATING_SLOT_MAX</code>), <code>DataStore::InvalidArgument</code> is thrown
+* If the object is under review or rejected, only the owner can read it. Anyone else gets <code>DataStore::UnderReviewing</code>
+* The [[#Object Lock ID|read lock]] does not apply
+
+Reading the rating log does not count as referencing the object (see [[#Object Referencing]]).
 
 ==== Request ====
 
@@ -2409,13 +2424,13 @@ Information about the status of a users rating of a given slot. [[#Rating Logs]]
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| Boolean || isRated || Whether or not the user has rated the slot. True if <code>RATING_FLAG_MODIFIABLE</code> is used and the user has rated the slot in the past, or if a rating lock is used and the users lock is still in place
+| Boolean || isRated || Whether or not the user has rated the slot
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pid || The user the log is for
+| [[Nintendo_Network/NEX/Types#PID|PID]] || pid || The user the log is for, which is always the caller, even when they have not rated the slot
 |-
-| SInt32 || ratingValue || The users most recent rating value they applied to the slot
+| SInt32 || ratingValue || The users most recent rating value they applied to the slot. -1 if they have not rated it
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the rating lock expires, if a rating lock is in place. <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> otherwise
+| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the users rating lock expires, if a rating lock is in place. See [[#Rating Locks]]. <code>RATING_LOCK_PERMANENT</code> uses <code>[[Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. If the user has not rated the slot, or the slot has no lock, this is a DateTime of 0. The time is kept after the lock has lifted, until the slot is rated again or reset
 |}
 
 === DataStorePersistenceInfo ===
@@ -2891,19 +2906,19 @@ enum RatingLockPeriod : int16_t {
 |-
 | <code>RATING_LOCK_PERIOD_DAY1</code> || -17 || Unlocks on the first day of the following month. Assumed to have been added in NEX 3.5. Before then, posting an object which uses it results in <code>PythonCore::Exception</code>
 |-
-| <code>RATING_LOCK_PERIOD_SUN</code> || -7 || Unlocks on the Sunday of the following week
+| <code>RATING_LOCK_PERIOD_SUN</code> || -7 || Unlocks the next time it is Sunday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_SAT</code> || -6 || Unlocks on the Saturday of the following week
+| <code>RATING_LOCK_PERIOD_SAT</code> || -6 || Unlocks the next time it is Saturday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_FRI</code> || -5 || Unlocks on the Friday of the following week
+| <code>RATING_LOCK_PERIOD_FRI</code> || -5 || Unlocks the next time it is Friday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_THU</code> || -4 || Unlocks on the Thursday of the following week
+| <code>RATING_LOCK_PERIOD_THU</code> || -4 || Unlocks the next time it is Thursday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_WED</code> || -3 || Unlocks on the Wednesday of the following week
+| <code>RATING_LOCK_PERIOD_WED</code> || -3 || Unlocks the next time it is Wednesday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_TUE</code> || -2 || Unlocks on the Tuesday of the following week
+| <code>RATING_LOCK_PERIOD_TUE</code> || -2 || Unlocks the next time it is Tuesday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |-
-| <code>RATING_LOCK_PERIOD_MON</code> || -1 || Unlocks on the Monday of the following week
+| <code>RATING_LOCK_PERIOD_MON</code> || -1 || Unlocks the next time it is Monday at <code>periodHour</code>, which can be later the same day. See [[#Rating Locks]]
 |}
 
 === SearchResultTotalCountType ===
