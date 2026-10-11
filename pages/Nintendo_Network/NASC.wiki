@@ -1,6 +1,6 @@
 == Overview ==
 
-NASC ('''N'''intendo '''A'''uthentication '''S'''erver '''C'''TR) is an evolution of the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]], but for the 3DS family of consoles. It is more-or-less the same server as the original, but slightly modified to fit some of specific needs of the 3DS, such as the newly introduced [[Nintendo_Network/NEX|NEX]] system for multiplayer. The server still includes the same endpoints and methods as the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]], though they may not always work the same way the original did. This page should '''NOT''' be used as a reference for the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]].
+NASC ('''N'''intendo '''A'''uthentication '''S'''erver '''C'''TR) is an evolution of the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]], but for the 3DS family of consoles. It is more-or-less the same server as the original, but slightly modified to fit some of specific needs of the 3DS, such as the newly introduced [[NEX|NEX]] system for multiplayer. The server still includes the same endpoints and methods as the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]], though they may not always work the same way the original did. This page should '''NOT''' be used as a reference for the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]].
 
 {{Noticebox|''This page only refers to the server used by 3DS titles which do not use NNIDs. See [[Nintendo_Network/NNAS|NNAS]] for titles which use NNIDs.''}}
 
@@ -261,13 +261,13 @@ This action serves 2 purposes, registering new game server accounts and loging i
 
 ===== Request =====
 
-Before making the request, the console first checks if there is a local user created with save data from the [[Nintendo_Network/NEX|NEX]] friends server. If not (such as after a factory reset), the console silently creates a new [[Nintendo_Network/NEX|NEX]] user account in the background:
+Before making the request, the console first checks if there is a local user created with save data from the [[NEX|NEX]] friends server. If not (such as after a factory reset), the console silently creates a new [[NEX|NEX]] user account in the background:
 
 {| class="wikitable"
 |-
 ! Field !! Description
 |-
-| <code>passwd</code> || Password for the new [[Nintendo_Network/NEX|NEX]] account. Always 16 characters, using any character between <code>\x21-\x5B</code> and <code>\x5D-\x7D</code>
+| <code>passwd</code> || Password for the new [[NEX|NEX]] account. Always 16 characters, using any character between <code>\x21-\x5B</code> and <code>\x5D-\x7D</code>
 |-
 | <code>ingamesn</code> || Nickname provided by the current title. Remnant of the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]]. Does not seem to affect how any online titles operate. Almost always an empty string, though this option ''is'' exposed to titles should they want to use it
 |}
@@ -282,7 +282,7 @@ If a local user does exist with save data from the friends server, or if a conso
 |-
 | <code>uidhmac</code> || Hash of <code>userid</code> as provided by the friends server during account creation. The exact hashing algorithm is only known by the server. Always 8 UTF-16 characters, truncated if the friends server sends more. Officially Nintendo only used lowercase hex characters, however any character works
 |-
-| <code>userid</code> || Username of the [[Nintendo_Network/NEX|NEX]] account. Always the account PID
+| <code>userid</code> || Username of the [[NEX|NEX]] account. Always the account PID
 |-
 | <code>ingamesn</code> || Nickname provided by the current title. Remnant of the original [[Nintendo_Wi-Fi_Connection/NAS|NAS]]. Does not seem to affect how any online titles operate. Almost always an empty string, though this option ''is'' exposed to titles should they want to use it
 |}
@@ -318,7 +318,7 @@ This action requests a service token for an independent service. An independent 
 |-
 | <code>uidhmac</code> || Hash of <code>userid</code> as provided by the friends server during account creation. The exact hashing algorithm is only known by the server. Always 8 UTF-16 characters, truncated if the friends server sends more. Officially Nintendo only used lowercase hex characters, however any character works
 |-
-| <code>userid</code> || Username of the [[Nintendo_Network/NEX|NEX]] account. Always the account PID
+| <code>userid</code> || Username of the [[NEX|NEX]] account. Always the account PID
 |-
 | <code>keyhash</code> || Unique ID assigned to the title(s). This differs from the title ID as a game can have multiple title IDs (at least 1 per region), whereas this does not change per region. This is the precursor to the <code>client_id</code> used by [[Nintendo_Network/NNAS|NNAS]] for it's service token endpoint
 |-

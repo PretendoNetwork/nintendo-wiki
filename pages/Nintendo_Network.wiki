@@ -9,7 +9,7 @@ Nintendo Network is made up of many different services, all providing specific f
 |-
 | [[Nintendo_Network/Connection_Test|Connection Test]] || Connection test
 |-
-| [[Nintendo_Network/NEX|NEX]] || Online games using Nintendo's multiplayer framework
+| [[NEX|NEX]] || Online games using Nintendo's multiplayer framework
 |-
 | [[Nintendo_Network/NNCS|NNCS]] || NAT check
 |-

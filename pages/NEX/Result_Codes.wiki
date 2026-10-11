@@ -1,6 +1,6 @@
 == Overview ==
 
-Result codes are UInt32 values used throughout [[Nintendo_Network/NEX|NEX]] to indicate the outcome of an operation. They are often represented using the [[Nintendo_Network/NEX/Types#Result|Result]] type. If the MSB is set, the result code indicates a error. Most results are used as errors. Some result codes are only triggered by the client, and are not sent from a server.
+Result codes are UInt32 values used throughout [[NEX|NEX]] to indicate the outcome of an operation. They are often represented using the [[NEX/Types#Result|Result]] type. If the MSB is set, the result code indicates a error. Most results are used as errors. Some result codes are only triggered by the client, and are not sent from a server.
 
 Result codes are structured as follows:
 
@@ -147,9 +147,9 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 |-
 | <code>0x000300D4</code> || <code>RendezVous::NotParticipatedGathering</code> || The user has not yet joined the specified gathering
 |-
-| <code>0x000300D5</code> || <code>RendezVous::MatchmakeSessionUserPasswordUnmatch</code> || The [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] user password was incorrect
+| <code>0x000300D5</code> || <code>RendezVous::MatchmakeSessionUserPasswordUnmatch</code> || The [[NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] user password was incorrect
 |-
-| <code>0x000300D6</code> || <code>RendezVous::MatchmakeSessionSystemPasswordUnmatch</code> || The [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] system password was incorrect
+| <code>0x000300D6</code> || <code>RendezVous::MatchmakeSessionSystemPasswordUnmatch</code> || The [[NEX/Protocols/MatchMakingProtocol/Types#MatchmakeSession|MatchmakeSession]] system password was incorrect
 |-
 | <code>0x000300D7</code> || <code>RendezVous::UserIsOffline</code> || The user is offline
 |-
@@ -178,7 +178,7 @@ Original/stock Rendez-Vous result codes. These could be seen in Rendez-Vous game
 
 === PythonCore ===
 
-[[Nintendo_Network/NEX|NEX]]/Rendez-Vous were partially written in Python. These errors usually indicate that the recipient was able to parse the incoming data, but something has gone wrong with the type system. These errors are also common in pre-[[Nintendo_Network/NEX|NEX]]v2 titles as they tend to lack input validation.
+[[NEX|NEX]]/Rendez-Vous were partially written in Python. These errors usually indicate that the recipient was able to parse the incoming data, but something has gone wrong with the type system. These errors are also common in pre-[[NEX|NEX]]v2 titles as they tend to lack input validation.
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -215,7 +215,7 @@ General transport/connection related result codes.
 |-
 | <code>0x00050002</code> || <code>Transport::ConnectionFailure</code> || Network connection was unable to be established
 |-
-| <code>0x00050003</code> || <code>Transport::InvalidUrl</code> || The URL contained in the [[Nintendo_Network/NEX/Types#StationURL|StationURL]] is invalid. The syntax may be incorrect
+| <code>0x00050003</code> || <code>Transport::InvalidUrl</code> || The URL contained in the [[NEX/Types#StationURL|StationURL]] is invalid. The syntax may be incorrect
 |-
 | <code>0x00050004</code> || <code>Transport::InvalidKey</code> || The key used to authenticate a given station is invalid. The secure transport layer uses secret-key based cryptography to ensure the integrity and confidentiality of data sent across the network
 |-
@@ -278,7 +278,7 @@ General transport/connection related result codes.
 
 === DOCore ===
 
-Likely related to [[Nintendo_Network/NEX/NetZ|NetZ]] ("DO" = DuplicateObject).
+Likely related to [[NEX/NetZ|NetZ]] ("DO" = DuplicateObject).
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -330,7 +330,7 @@ Likely related to [[Nintendo_Network/NEX/NetZ|NetZ]] ("DO" = DuplicateObject).
 
 === UbiAuthentication ===
 
-Ubisoft-specific authentication result codes. Possibly used in [[Nintendo_Network/NEX/Protocols/UbiAccountManagementProtocol|UbiAccountManagementProtocol]]?
+Ubisoft-specific authentication result codes. Possibly used in [[NEX/Protocols/UbiAccountManagementProtocol|UbiAccountManagementProtocol]]?
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -352,7 +352,7 @@ Ubisoft-specific authentication result codes. Possibly used in [[Nintendo_Networ
 
 === Privilege ===
 
-Possibly results specific to [[Nintendo_Network/NEX/Protocols/PrivilegesProtocol|PrivilegesProtocol]]?
+Possibly results specific to [[NEX/Protocols/PrivilegesProtocol|PrivilegesProtocol]]?
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -378,7 +378,7 @@ Possibly results specific to [[Nintendo_Network/NEX/Protocols/PrivilegesProtocol
 
 === Tracking ===
 
-Possibly results specific to [[Nintendo_Network/NEX/Protocols/TrackingProtocol3|TrackingProtocol3]]?
+Possibly results specific to [[NEX/Protocols/TrackingProtocol3|TrackingProtocol3]]?
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -390,7 +390,7 @@ Possibly results specific to [[Nintendo_Network/NEX/Protocols/TrackingProtocol3|
 
 === News ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/NewsProtocol|NewsProtocol]].
+Results specific to [[NEX/Protocols/NewsProtocol|NewsProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -416,7 +416,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/NewsProtocol|NewsProtocol]]
 
 === Friends ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+Results specific to [[NEX/Protocols/FriendsProtocol|FriendsProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -460,7 +460,7 @@ The system which uses these result codes is not known. Ubisoft-specific?
 
 === GameSession ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
+Results specific to [[NEX/Protocols/GameSessionProtocol|GameSessionProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -494,7 +494,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/GameSessionProtocol|GameSes
 
 === SubAccountManagement ===
 
-Possibly results specific to the "sub account management" [[Nintendo_Network/NEX/Protocols|NEX protocol]]?
+Possibly results specific to the "sub account management" [[NEX/Protocols|NEX protocol]]?
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -506,7 +506,7 @@ Possibly results specific to the "sub account management" [[Nintendo_Network/NEX
 
 === TitleStorage ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/TitleStorageProtocol|TitleStorageProtocol]]/[[Nintendo_Network/NEX/Protocols/TitleStorageAdminProtocol|TitleStorageAdminProtocol]].
+Results specific to [[NEX/Protocols/TitleStorageProtocol|TitleStorageProtocol]]/[[NEX/Protocols/TitleStorageAdminProtocol|TitleStorageAdminProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -528,7 +528,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/TitleStorageProtocol|TitleS
 
 === UbiFriends ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/UbiFriends|Ubi friends]].
+Results specific to [[NEX/Protocols/UbiFriends|Ubi friends]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -552,7 +552,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/UbiFriends|Ubi friends]].
 
 === UplayWin ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/UplayWinProtocol|UplayWinProtocol]].
+Results specific to [[NEX/Protocols/UplayWinProtocol|UplayWinProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -608,7 +608,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/UplayWinProtocol|UplayWinPr
 
 === FPD ===
 
-Results specific to the [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]]/[[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] protocols.
+Results specific to the [[NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]]/[[NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] protocols.
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -702,7 +702,7 @@ Results specific to the [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceP
 
 === Ranking ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/RankingProtocol|RankingProtocol]].
+Results specific to [[NEX/Protocols/RankingProtocol|RankingProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -784,7 +784,7 @@ Likely triggered by [[Nintendo_Network/NASC|NASC]]/[[Nintendo_Network/NNAS|NNAS]
 
 === DataStore ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/DataStoreProtocol|DataStoreProtocol]].
+Results specific to [[NEX/Protocols/DataStoreProtocol|DataStoreProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -813,12 +813,12 @@ Results specific to [[Nintendo_Network/NEX/Protocols/DataStoreProtocol|DataStore
 |-
 | <code>0x0069000C</code> || <code>DataStore::InvalidPassword</code> || The provided password was incorrect
 |-
-| <code>0x0069000D</code> || <code>DataStore::ValueNotEqual</code> || The [[Nintendo_Network/NEX/Protocols/DataStoreProtocol#DataStoreChangeMetaCompareParam|DataStoreChangeMetaCompareParam]] check failed
+| <code>0x0069000D</code> || <code>DataStore::ValueNotEqual</code> || The [[NEX/Protocols/DataStoreProtocol#DataStoreChangeMetaCompareParam|DataStoreChangeMetaCompareParam]] check failed
 |}
 
 === ServiceItem ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/ServiceItemProtocol|ServiceItemProtocol]].
+Results specific to [[NEX/Protocols/ServiceItemProtocol|ServiceItemProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -840,7 +840,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/ServiceItemProtocol|Service
 
 === MatchmakeReferee ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/MatchmakeRefereeProtocol|MatchmakeRefereeProtocol]].
+Results specific to [[NEX/Protocols/MatchmakeRefereeProtocol|MatchmakeRefereeProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -866,7 +866,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/MatchmakeRefereeProtocol|Ma
 
 === Subscriber ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/SubscriberProtocol|SubscriberProtocol]].
+Results specific to [[NEX/Protocols/SubscriberProtocol|SubscriberProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -882,7 +882,7 @@ Results specific to [[Nintendo_Network/NEX/Protocols/SubscriberProtocol|Subscrib
 
 === Ranking2 ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/Ranking2Protocol|Ranking2Protocol]].
+Results specific to [[NEX/Protocols/Ranking2Protocol|Ranking2Protocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description
@@ -944,7 +944,7 @@ Results specific to NSO voice chat (ZNC/Coral). TODO - Move this to the Nintendo
 
 === Screening ===
 
-Results specific to [[Nintendo_Network/NEX/Protocols/ScreeningProtocol|ScreeningProtocol]].
+Results specific to [[NEX/Protocols/ScreeningProtocol|ScreeningProtocol]].
 
 {| class="wikitable"
 ! Value !! Name !! Description

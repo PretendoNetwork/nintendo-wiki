@@ -86,11 +86,11 @@ Internally most games treat a PID exactly the same as its underlying type, with 
 
 === Result ===
 
-A UInt32 that specifically represents the result of an operation, similar to an [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status HTTP status code]. In NEX, if an [[Nintendo_Network/NEX/RMC|RMC]] fails, the server sends the client back an error result code. Some methods may also return various result codes as part of otherwise successful responses.
+A UInt32 that specifically represents the result of an operation, similar to an [https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status HTTP status code]. In NEX, if an [[NEX/RMC|RMC]] fails, the server sends the client back an error result code. Some methods may also return various result codes as part of otherwise successful responses.
 
 If the MSB is set, the result code triggers error handling.
 
-For a full list of result codes, see [[Nintendo_Network/NEX/Result_Codes|Result Codes]].
+For a full list of result codes, see [[NEX/Result_Codes|Result Codes]].
 
 === DateTime ===
 
@@ -122,7 +122,7 @@ A UInt64 that specifically represents a date/time as a timestamp. This is not a 
 |-
 | <code>INVALID_DATE_TIME</code> || 31-12-9999 23:59:59 || Invalid. This is used when either in "zeroed" data, and can indicate the argument should be ignored
 |-
-| <code>PERMANENT_DATE_TIME</code> || 31-12-9999 0:00:00 || Indicates a permanent timeframe, for example [[Nintendo_Network/NEX/Protocols/DataStoreProtocol|DataStoreProtocol]] objects which never expire
+| <code>PERMANENT_DATE_TIME</code> || 31-12-9999 0:00:00 || Indicates a permanent timeframe, for example [[NEX/Protocols/DataStoreProtocol|DataStoreProtocol]] objects which never expire
 |}
 
 === StationURL ===
@@ -167,13 +167,13 @@ Following the scheme are a series of parameters about the target. These help the
 |-
 | <code>type</code> || UInt8 || Station type flags (see [[#Station Type Flags]])
 |-
-| <code>sid</code> || UInt8 || Stream ID (see [[Nintendo_Network/NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
+| <code>sid</code> || UInt8 || Stream ID (see [[NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
 |-
-| <code>stream</code> || UInt8 || Stream type (see [[Nintendo_Network/NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
+| <code>stream</code> || UInt8 || Stream type (see [[NEX/PRUDP#Virtual_Ports|PRUDP#Virtual_Ports]])
 |-
 | <code>NodeId</code> || UInt16 || Node ID. Unknown use
 |-
-| <code>PID</code> || UInt64 || [[#PID]] of the target. See also [[Nintendo_Network/NEX#Accounts|NEX#Accounts]]
+| <code>PID</code> || UInt64 || [[#PID]] of the target. See also [[NEX#Accounts|NEX#Accounts]]
 |-
 | <code>CID</code> || UInt32 || Connection ID. Unclear how this differs from <code>RVCID</code>
 |-
@@ -350,7 +350,7 @@ For example, <code>nn::nex::AnyObjectHolder<nn::nex::Data, nn::nex::String></cod
 
 Once a "Holder" is defined using AnyObjectHolder, the newly created template can then be further used as a base for even more specific encapsulation, where a new root is defined. "Holders" defined this way will only accept classes which inherit from the new root, but no others, even if both the root and a child share a common root. See the below example.
 
-[[Nintendo_Network/NEX/DDL|DDLs]] will often define "Holder" types using generic types like <code>any</code>, or as simply the root class, with no additional type information. Thus, further reverse engineering is required to manually determine how to handle any given "Holder".
+[[NEX/DDL|DDLs]] will often define "Holder" types using generic types like <code>any</code>, or as simply the root class, with no additional type information. Thus, further reverse engineering is required to manually determine how to handle any given "Holder".
 
 '''Example:'''
 
@@ -476,7 +476,7 @@ Some types are defined as a class. These are referred to as <code>DDLClass</code
 
 A <code>DDLClass</code> type can also inherit from another <code>DDLClass</code> type. In order to do this, the parent is encoded first and is immediately followed by the child data, each with their own class header (if applicable).
 
-In some cases you may see a class documented with its real class field names. These field names, along with the names of the classes themselves, come from a mix of leftover debugging data as well as from a games [[Nintendo_Network/NEX/DDL|DDLs]].
+In some cases you may see a class documented with its real class field names. These field names, along with the names of the classes themselves, come from a mix of leftover debugging data as well as from a games [[NEX/DDL|DDLs]].
 
 === Header ===
 

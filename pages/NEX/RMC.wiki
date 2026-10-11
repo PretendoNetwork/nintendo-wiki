@@ -1,6 +1,6 @@
 == Overview ==
 
-[[Nintendo_Network/NEX/PRUDP|PRUDP]] packets may have optional payloads. These payloads may contain any data, however <code>DATA</code> packets typically use RMC (Remote Method Call), a standardized protocol for invoking methods on remote services.
+[[NEX/PRUDP|PRUDP]] packets may have optional payloads. These payloads may contain any data, however <code>DATA</code> packets typically use RMC (Remote Method Call), a standardized protocol for invoking methods on remote services.
 
 The variation in use is known to both the client and server ahead of time. Some games may further customize the RMC message structure, however the same basic principles apply to all versions.
 
@@ -12,8 +12,8 @@ The variation in use is known to both the client and server ahead of time. Some 
 
 This page only documents the standard RMC message structure used by NEX games. The following games are known to customize their RMC message structure:
 
-* [[Nintendo_Network/NEX/RMC/HPP|All HPP servers]]
-* [[Nintendo_Network/NEX/RMC/WATCH_DOGS (Wii U)|WATCH_DOGS (Wii U)]]
+* [[NEX/RMC/HPP|All HPP servers]]
+* [[NEX/RMC/WATCH_DOGS (Wii U)|WATCH_DOGS (Wii U)]]
 
 == Request Format ==
 
@@ -22,9 +22,9 @@ This page only documents the standard RMC message structure used by NEX games. T
 |-
 | UInt32 || Size, excluding this field
 |-
-| UInt8 || [[Nintendo_Network/NEX/Protocols|Protocol ID]], ORed with <code>0x80</code>
+| UInt8 || [[NEX/Protocols|Protocol ID]], ORed with <code>0x80</code>
 |-
-| UInt16 || Extended [[Nintendo_Network/NEX/Protocols|protocol ID]]. '''Only present if the [[Nintendo_Network/NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
+| UInt16 || Extended [[NEX/Protocols|protocol ID]]. '''Only present if the [[NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
 |-
 | UInt32 || Call ID. An incrementing value used to match responses to their corresponding requests
 |-
@@ -40,9 +40,9 @@ This page only documents the standard RMC message structure used by NEX games. T
 |-
 | UInt32 || Size, excluding this field
 |-
-| UInt8 || [[Nintendo_Network/NEX/Protocols|Protocol ID]]
+| UInt8 || [[NEX/Protocols|Protocol ID]]
 |-
-| UInt16 || Extended [[Nintendo_Network/NEX/Protocols|protocol ID]]. '''Only present if the [[Nintendo_Network/NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
+| UInt16 || Extended [[NEX/Protocols|protocol ID]]. '''Only present if the [[NEX/Protocols|protocol ID]] is <code>0x7F</code>'''
 |-
 | Bool || Success flag
 |}
@@ -64,7 +64,7 @@ This page only documents the standard RMC message structure used by NEX games. T
 {| class="wikitable"
 ! Type !! Description
 |-
-| UInt32 || Error code. See [[Nintendo_Network/NEX/Result_Codes|Result Codes]]
+| UInt32 || Error code. See [[NEX/Result_Codes|Result Codes]]
 |-
 | UInt32 || Call ID of the request
 |}

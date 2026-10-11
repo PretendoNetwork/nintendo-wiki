@@ -1,6 +1,6 @@
 == Overview ==
 
-As an alternative to [[Nintendo_Network/NEX/PRUDP|PRUDP]], Nintendo provides an HTTP server that can be used to invoke [[Nintendo_Network/NEX|NEX]] methods. Most games have this disabled. If enabled, the server is located at:
+As an alternative to [[NEX/PRUDP|PRUDP]], Nintendo provides an HTTP server that can be used to invoke [[NEX|NEX]] methods. Most games have this disabled. If enabled, the server is located at:
 
 <code><nowiki>https://hpp-</nowiki><game server ID>-<environment>.n.app.nintendo.net/hpp/</code>
 
@@ -21,16 +21,16 @@ The following headers are included in all requests:
 |-
 | <code>signature1</code> || HMAC-MD5 over the request body. The key for this signature is the game server access key (decoded as hex), zero-padded to 8 bytes
 |-
-| <code>signature2</code> || HMAC-MD5 over the request body. The key for this signature is derived from the users game server account password using [[Nintendo_Network/NEX/Kerberos#Key_Derivation|Kerberos key derivation]]
+| <code>signature2</code> || HMAC-MD5 over the request body. The key for this signature is derived from the users game server account password using [[NEX/Kerberos#Key_Derivation|Kerberos key derivation]]
 |-
 | <code>Priority-Type</code> || Unknown. Always <code>2</code>
 |}
 
-The request is a single file <code>multipart/form-data</code> <code>POST</code> request, where the <code>file</code> is a standard [[Nintendo_Network/NEX/RMC|RMC]] request.
+The request is a single file <code>multipart/form-data</code> <code>POST</code> request, where the <code>file</code> is a standard [[NEX/RMC|RMC]] request.
 
 == Responses ==
 
-The response is a <code>application/octet-stream</code> sending back an [[Nintendo_Network/NEX/RMC/HPP|HPP RMC]] response.
+The response is a <code>application/octet-stream</code> sending back an [[NEX/RMC/HPP|HPP RMC]] response.
 
 == Known Servers ==
 

@@ -1,8 +1,8 @@
 == Overview ==
 
-'''NATTraversalReportInternalProtocol''' is one of the [[Nintendo_Network/NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, though its method IDs are.
+'''NATTraversalReportInternalProtocol''' is one of the [[NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, though its method IDs are.
 
-All three of its methods share their names with the reporting methods of [[Nintendo_Network/NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], and take nearly identical parameters. This, plus the protocols name, suggests this is an internal counterpart of [[Nintendo_Network/NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], letting servers report a users NAT properties to each other, though it is not known how these results would be identified to a specific user?
+All three of its methods share their names with the reporting methods of [[NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], and take nearly identical parameters. This, plus the protocols name, suggests this is an internal counterpart of [[NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], letting servers report a users NAT properties to each other, though it is not known how these results would be identified to a specific user?
 
 == Methods ==
 
@@ -18,7 +18,7 @@ All three of its methods share their names with the reporting methods of [[Ninte
 
 === ReportNATTraversalResult ===
 
-Presumed to be the internal counterpart of [[Nintendo_Network/NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResult|NATTraversalProtocol#ReportNATTraversalResult]].
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResult|NATTraversalProtocol#ReportNATTraversalResult]].
 
 ==== Request ====
 
@@ -36,7 +36,7 @@ This method does not return anything.
 
 === ReportNATProperties ===
 
-Presumed to be the internal counterpart of [[Nintendo_Network/NEX/Protocols/NATTraversalProtocol#ReportNATProperties|NATTraversalProtocol#ReportNATProperties]].
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATProperties|NATTraversalProtocol#ReportNATProperties]].
 
 ==== Request ====
 
@@ -56,7 +56,7 @@ This method does not return anything.
 
 === ReportNATTraversalResultDetail ===
 
-Presumed to be the internal counterpart of [[Nintendo_Network/NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResultDetail|NATTraversalProtocol#ReportNATTraversalResultDetail]].
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResultDetail|NATTraversalProtocol#ReportNATTraversalResultDetail]].
 
 ==== Request ====
 

@@ -28,7 +28,7 @@ In NEX 2 and NEX 4 onwards, the extra data field is enforced and must be valid. 
 
 Grants a connection ticket using only the connecting clients username. Usernames are not case sensitive. If the username does not exist, the <code>%retval%</code> field is set to <code>RendezVous::InvalidUsername</code> and the other fields are left with empty values.
 
-While this may seem insecure, clients which use this method must use the [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] method when connecting to the secure server, which requires additional authentication information which is validated against the ticket granted by this method.
+While this may seem insecure, clients which use this method must use the [[NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] method when connecting to the secure server, which requires additional authentication information which is validated against the ticket granted by this method.
 
 In NEX 2 and 4+ this method is disabled. If used <code>%retval%</code> is set to <code>Authentication::ValidationFailed</code> and the remaining fields are set to empty values. In NEX 1 and 3, this method is available.
 
@@ -49,7 +49,7 @@ The server build name identifies the build of the game server. While most Ninten
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strUserName || Game server account username. In NEX this is always the users PID, unless the guest account is used. In which case <code>guest</code> is the username.
+| [[NEX/Types#String|String]] || strUserName || Game server account username. In NEX this is always the users PID, unless the guest account is used. In which case <code>guest</code> is the username.
 |}
 
 ==== Response ====
@@ -57,15 +57,15 @@ The server build name identifies the build of the game server. While most Ninten
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+| [[NEX/Types#PID|PID]] || pidPrincipal || [[NEX/Types#PID|PID]] of the connecting user
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+| [[NEX/Types#Buffer|Buffer]] || pbufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
-| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+| [[NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
+| [[NEX/Types#String|String]] || strReturnMsg || Server build name
 |}
 
 === ValidateAndRequestTicket ===
@@ -76,7 +76,7 @@ This method is the same as [[#Login]]. It shares the same method ID and paramete
 
 Grants a connection ticket using the connecting clients username and authentication information. Usernames are not case sensitive. If the username does not exist, the <code>%retval%</code> field is set to <code>RendezVous::InvalidUsername</code> and the other fields are left with empty values.
 
-When this method is used, the connecting client may freely use either the [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] or [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]] methods when connecting to the secure server, as the user will have passed both authentication checks in this method.
+When this method is used, the connecting client may freely use either the [[NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]] or [[NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]] methods when connecting to the secure server, as the user will have passed both authentication checks in this method.
 
 If authentication information is invalid, <code>%retval%</code> is set to <code>Authentication::ValidationFailed</code> and the remaining fields are set to empty values.
 
@@ -99,9 +99,9 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strUserName || Game server account username. In NEX this is always the users PID
+| [[NEX/Types#String|String]] || strUserName || Game server account username. In NEX this is always the users PID
 |-
-| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || oExtraData || Authentication info. In NEX this is [[#AuthenticationInfo]]
+| [[NEX/Types#DataHolder|DataHolder]] || oExtraData || Authentication info. In NEX this is [[#AuthenticationInfo]]
 |}
 
 ==== Response ====
@@ -111,15 +111,15 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+		| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+		| [[NEX/Types#PID|PID]] || pidPrincipal || [[NEX/Types#PID|PID]] of the connecting user
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || pbufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+		| [[NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
+		| [[NEX/Types#String|String]] || strReturnMsg || Server build name
 		|}
 	</tab>
 
@@ -127,17 +127,17 @@ In NEX part of the <code>oExtraData</code> is the expected server version. The s
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+		| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+		| [[NEX/Types#PID|PID]] || pidPrincipal || [[NEX/Types#PID|PID]] of the connecting user
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || pbufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
+		| [[NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server.<br>NEX 4 allows the secure server to be at the same address as the authentication server. In that case, the secure server station url points to 0.0.0.1 with port 1
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || strReturnMsg || Server build name
+		| [[NEX/Types#String|String]] || strReturnMsg || Server build name
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
+		| [[NEX/Types#String|String]] || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
 		|}
 	</tab>
 </tabs>
@@ -159,9 +159,9 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 |-
 | UInt8 || platformType || '''Only present on games with crossplay between Switch and 3DS/Wii U.''' [[#Platform_type]]
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || idSource || The PID the ticket is to be granted for. Typically matches the connecting user
+| [[NEX/Types#PID|PID]] || idSource || The PID the ticket is to be granted for. Typically matches the connecting user
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || idTarget || The PID the ticket is for connecting to. In NEX this is always the games secure server
+| [[NEX/Types#PID|PID]] || idTarget || The PID the ticket is for connecting to. In NEX this is always the games secure server
 |}
 
 ==== Response ====
@@ -171,9 +171,9 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+		| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || bufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|}
 	</tab>
 
@@ -181,11 +181,11 @@ If either PID invalid, the <code>%retval%</code> field is set to <code>Core::Acc
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+		| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || bufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
+		| [[NEX/Types#String|String]] || pSourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
 		|}
 	</tab>
 </tabs>
@@ -199,7 +199,7 @@ Returns the PID of the game server account based on the accounts username. Usern
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strUserName || Username
+| [[NEX/Types#String|String]] || strUserName || Username
 |}
 
 ==== Response ====
@@ -207,7 +207,7 @@ Returns the PID of the game server account based on the accounts username. Usern
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || %retval% || PID
+| [[NEX/Types#PID|PID]] || %retval% || PID
 |}
 
 === GetName ===
@@ -219,7 +219,7 @@ Returns the username of the game server account based on the accounts PID. In NE
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || id || PID
+| [[NEX/Types#PID|PID]] || id || PID
 |}
 
 ==== Response ====
@@ -227,7 +227,7 @@ Returns the username of the game server account based on the accounts PID. In NE
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || %retval% || Username
+| [[NEX/Types#String|String]] || %retval% || Username
 |}
 
 === LoginWithContext ===
@@ -239,7 +239,7 @@ Grants a connection ticket using only authentication information. This is simila
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#LoginData]]&gt; || loginData || The data used to login
+| [[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#LoginData]]&gt; || loginData || The data used to login
 |}
 
 ==== Response ====
@@ -247,13 +247,13 @@ Grants a connection ticket using only authentication information. This is simila
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || [[Nintendo_Network/NEX/Types#Result|Result]] code
+| [[NEX/Types#Result|Result]] || %retval% || [[NEX/Types#Result|Result]] code
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pidPrincipal || [[Nintendo_Network/NEX/Types#PID|PID]] of the connecting user
+| [[NEX/Types#PID|PID]] || pidPrincipal || [[NEX/Types#PID|PID]] of the connecting user
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || pbufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+| [[NEX/Types#Buffer|Buffer]] || pbufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 |-
-| [[Nintendo_Network/NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
+| [[NEX/Types#RVConnectionData|RVConnectionData]] || pConnectionData || Connection info for secure server
 |}
 
 === ValidateAndRequestTicketWithParam ===
@@ -280,7 +280,7 @@ Grants a connection ticket using the connecting clients username and authenticat
 
 === AuthenticationInfo ===
 
-{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
+{{ClassInherits|path=Online/NEX/Types|Data}}
 
 This class represents the authentication information used by NEX when logging in using methods which require more than just the username.
 
@@ -289,7 +289,7 @@ This class represents the authentication information used by NEX when logging in
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || m_authToken || Token, as received from the account server
+		| [[NEX/Types#String|String]] || m_authToken || Token, as received from the account server
 		|-
 		| UInt32 || m_ngsVersion || NEX major version
 		|}
@@ -299,7 +299,7 @@ This class represents the authentication information used by NEX when logging in
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || m_authToken || Token, as received from the account server
+		| [[NEX/Types#String|String]] || m_authToken || Token, as received from the account server
 		|-
 		| UInt32 || m_ngsVersion || NEX major version
 		|-
@@ -312,7 +312,7 @@ This class represents the authentication information used by NEX when logging in
 
 === LoginData ===
 
-{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
+{{ClassInherits|path=Online/NEX/Types|Data}}
 
 This class represents a form of authentication data. Only seems to be officially used with [[#LoginWithContext]].
 
@@ -321,7 +321,7 @@ This class represents a form of authentication data. Only seems to be officially
 |-
 | SInt8 || m_principalType || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || m_userName || Game server account username. In NEX this is always the users PID
+| [[NEX/Types#String|String]] || m_userName || Game server account username. In NEX this is always the users PID
 |-
 | UInt64 || m_context || Unknown
 |-
@@ -339,9 +339,9 @@ This class is effectively an upgraded version of [[#AuthenticationInfo]], which 
 		|-
 		| UInt32 || platformType || [[#Platform_type|Platform type]]
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || userName || Game server account username. In NEX this is always the users PID
+		| [[NEX/Types#String|String]] || userName || Game server account username. In NEX this is always the users PID
 		|-
-		| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[Nintendo_Network/NEX/Types#NullData|NullData]] if no data is being sent
+		| [[NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[NEX/Types#NullData|NullData]] if no data is being sent
 		|-
 		| Boolean || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
 		|-
@@ -357,9 +357,9 @@ This class is effectively an upgraded version of [[#AuthenticationInfo]], which 
 		|-
 		| UInt32 || platformType || [[#Platform_type|Platform type]]
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || userName || Game server account username. In NEX this is always the users PID
+		| [[NEX/Types#String|String]] || userName || Game server account username. In NEX this is always the users PID
 		|-
-		| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[Nintendo_Network/NEX/Types#NullData|NullData]] if no data is being sent
+		| [[NEX/Types#DataHolder|DataHolder]] || extraData || Authentication info. In NEX this is [[#AuthenticationInfo]]. May be [[NEX/Types#NullData|NullData]] if no data is being sent
 		|-
 		| Boolean || ignoreApiVersionCheck || If set, the authentication server does not validate the API fields
 		|-
@@ -381,17 +381,17 @@ This class is effectively an upgraded version of the login method responses, whi
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for
+		| [[NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || bufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
+		| [[NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || currentUtcTime || Server time
+		| [[NEX/Types#DateTime|DateTime]] || currentUtcTime || Server time
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || returnMsg || Server build name
+		| [[NEX/Types#String|String]] || returnMsg || Server build name
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
+		| [[NEX/Types#String|String]] || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
 		|}
 	</tab>
 
@@ -399,19 +399,19 @@ This class is effectively an upgraded version of the login method responses, whi
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for. This value may not always match the real PID for the game server account. See <code>platformPid</code> for additional details.
+		| [[NEX/Types#PID|PID]] || sourcePid || The PID the ticket is to be granted for. This value may not always match the real PID for the game server account. See <code>platformPid</code> for additional details.
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || bufResponse || [[Nintendo_Network/NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
+		| [[NEX/Types#Buffer|Buffer]] || bufResponse || [[NEX/Kerberos#Kerberos_Tickets|Kerberos ticket]]
 		|-
-		| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
+		| [[NEX/Types#StationURL|StationURL]] || serviceNodeUrl || Secure server location
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || currentUtcTime || Server time
+		| [[NEX/Types#DateTime|DateTime]] || currentUtcTime || Server time
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || returnMsg || Server build name
+		| [[NEX/Types#String|String]] || returnMsg || Server build name
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
+		| [[NEX/Types#String|String]] || sourceKey || If this is a non-empty hex string, the typical key derivation used for encrypting the Kerberos ticket is skipped and this string is used as the key. '''While this can enable the ability to use a static key for all users/connections, this is not recommended in a production setting as it will effectively disable ticket authentication once the key is known'''
 		|-
-		| [[Nintendo_Network/NEX/Types#PID|PID]] || platformPid || User id of the matching [[#Platform_type|platform]].<br>For example, a 3DS user will have its original PID here, while the <code>sourcePid</code> will be a different 64-bit PID
+		| [[NEX/Types#PID|PID]] || platformPid || User id of the matching [[#Platform_type|platform]].<br>For example, a 3DS user will have its original PID here, while the <code>sourcePid</code> will be a different 64-bit PID
 		|}
 	</tab>
 </tabs>

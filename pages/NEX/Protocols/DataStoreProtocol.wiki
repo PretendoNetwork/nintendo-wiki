@@ -18,7 +18,7 @@ Additionally, not many tools/providers support the required TLS/certificate requ
 
 == Object Notifications ==
 
-When an object has [[#DataFlag]] <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and/or <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> set, the recipients of the object will get given a "notification" when the object has finished uploading/updating. These are not live notifications like as seen in [[Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]] or [[Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]], nor are they instant messages like as seen in [[Nintendo_Network/NEX/Protocols/MessagingProtocol|MessagingProtocol]] or [[Nintendo_Network/NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]. Instead, these notifications simply point the receiver to the object which created the notification.
+When an object has [[#DataFlag]] <code>DATA_FLAG_USE_NOTIFICATION_ON_POST</code> and/or <code>DATA_FLAG_USE_NOTIFICATION_ON_UPDATE</code> set, the recipients of the object will get given a "notification" when the object has finished uploading/updating. These are not live notifications like as seen in [[NEX/Protocols/NotificationProtocol|NotificationProtocol]] or [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]], nor are they instant messages like as seen in [[NEX/Protocols/MessagingProtocol|MessagingProtocol]] or [[NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]. Instead, these notifications simply point the receiver to the object which created the notification.
 
 A notification for a post is only created once the object actually exists. For objects which use the [[#External File Server]] this is when the upload is completed with [[#CompletePostObjectV1]], [[#CompletePostObject]] or [[#CompletePostObjects]], not when it is prepared, and reporting a failed upload (<code>isSuccess = false</code>) creates no notification. Objects posted with [[#PostMetaBinary]] create theirs straight away, unless <code>DATA_FLAG_NEED_COMPLETION</code> is set, in which case it is created when they are completed. Objects which need review still create notifications, despite still being pending.
 
@@ -405,7 +405,7 @@ Deletes multiple objects. Only users with update permissions can perform this op
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreDeleteParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> deletion targets
+| [[NEX/Types#List|List]]&lt;[[#DataStoreDeleteParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> deletion targets
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |}
@@ -415,7 +415,7 @@ Deletes multiple objects. Only users with update permissions can perform this op
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === ChangeMetaV1 ===
@@ -452,9 +452,9 @@ Targets are updated one at a time, in the order they appear in the request. Dupl
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParamV1]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
+| [[NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParamV1]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |}
@@ -464,7 +464,7 @@ Targets are updated one at a time, in the order they appear in the request. Dupl
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === GetMeta ===
@@ -505,7 +505,7 @@ As <code>param</code> is shared, some of its fields work differently than they d
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
 |-
 | [[#DataStoreGetMetaParam]] || param || Details on what data to return, shared by every target
 |}
@@ -515,9 +515,9 @@ As <code>param</code> is shared, some of its fields work differently than they d
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each <code>dataIds</code>, in the order they were requested
+| [[NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each <code>dataIds</code>, in the order they were requested
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
 |}
 
 === PrepareUpdateObject ===
@@ -581,7 +581,7 @@ Performs a complex, fine-grained, search for objects. The [[#SearchType]] (<code
 ** <code>SEARCH_TARGET_FRIEND</code> can only be used with <code>SEARCH_TYPE_PUBLIC</code>, <code>SEARCH_TYPE_FRIEND</code>, <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> and <code>SEARCH_TYPE_RECEIVED</code>, and only with an empty <code>ownerIds</code>. Otherwise <code>DataStore::InvalidArgument</code> is thrown
 ** <code>SEARCH_TYPE_OWN</code>, <code>SEARCH_TYPE_OWN_PENDING</code>, <code>SEARCH_TYPE_OWN_REJECTED</code> and <code>SEARCH_TYPE_OWN_ALL</code> throw <code>DataStore::InvalidArgument</code> if <code>ownerIds</code> lists anyone, even the caller
 * <code>destinationIds</code> only finds objects specified to at least one of the users listed, using either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>. Objects without recipients are left out, and an object is only found once even if many of its recipients are listed. There is no limit on how many users can be listed. With <code>SEARCH_TYPE_RECEIVED_SPECIFIED</code> and <code>SEARCH_TYPE_RECEIVED</code> the list must either be empty or hold only the caller, once. Anything else throws <code>DataStore::InvalidArgument</code>
-* The date filters find objects created or updated at exactly the time given, as well as after or before it depending on the field. A time of <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code> leaves the filter unset. Any other time is a real date, including <code>[[Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. A time which is not a real date, such as month 13, April 31, hour 24 or year 0, throws <code>PythonCore::ConversionError</code>. February 29 is only a real date in leap years, so it is refused in years such as 2021 and 1900, but not 2020 or 2000
+* The date filters find objects created or updated at exactly the time given, as well as after or before it depending on the field. A time of <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code> leaves the filter unset. Any other time is a real date, including <code>[[NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. A time which is not a real date, such as month 13, April 31, hour 24 or year 0, throws <code>PythonCore::ConversionError</code>. February 29 is only a real date in leap years, so it is refused in years such as 2021 and 1900, but not 2020 or 2000
 ** If both ends of the created range, or both ends of the updated range, are set and the range ends before it starts, <code>DataStore::InvalidArgument</code> is thrown. The created range is never compared with the updated range
 * <code>tags</code> finds objects which have every tag listed, even if the matched object has more tags than listed in the search parameters. The order of the list, and tags repeated in it, make no difference. Tags are matched exactly: case and accents matter, nothing is a wildcard, and a tag does not match part of another. The only exception is spaces at the end of a tag, which are ignored on both sides, so <code>abc</code> and <code>abc </code> match each other. The length of each tag is not checked, a tag too long to post just matches nothing. Up to <code>NUM_TAG_SLOT</code> tags can be listed, counting repeats, more throws <code>DataStore::InvalidArgument</code>
 ** In NEX 3.4, using any tags with <code>SEARCH_TYPE_RECEIVED</code> throws <code>PythonCore::Exception</code>. This is presumably a bug but has not been tested on other versions
@@ -609,11 +609,11 @@ See [[#SearchSortColumn]] for how results are sorted.
 
 === GetNotificationUrl ===
 
-Requests the users [[#Object Notifications]] URL. This differs from [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]] in that this is a URL that points to an object in the [[#External File Server]], but under a different namespace than UGC objects, and that it will continue to return data even after the notification has been "read". Each user has a unique "notification file" associated with their [[Nintendo_Network/NEX/Types#PID|PID]]. The key for this file is always <code>{number}.{platform}_{game_code}_datastore/ds/1/notify/{pid}</code>, for example <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> is used by Pokemon Bank for the user with [[Nintendo_Network/NEX/Types#PID|PID]] 1880099407, though this is just convention. The game server provides this location, and the game client simply stores it for later use.
+Requests the users [[#Object Notifications]] URL. This differs from [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]] in that this is a URL that points to an object in the [[#External File Server]], but under a different namespace than UGC objects, and that it will continue to return data even after the notification has been "read". Each user has a unique "notification file" associated with their [[NEX/Types#PID|PID]]. The key for this file is always <code>{number}.{platform}_{game_code}_datastore/ds/1/notify/{pid}</code>, for example <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> is used by Pokemon Bank for the user with [[NEX/Types#PID|PID]] 1880099407, though this is just convention. The game server provides this location, and the game client simply stores it for later use.
 
 Once stored, the game client may not always request a new URL, and will instead reuse the one it already has.
 
-Whenever a user receives a new notification, that notification is stored in the game server and the file this URL points to is updated to contain only the latest notification information. For getting more than just the latest notification, see [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]. The file is a plain text file and contains the notification ID, recipient [[Nintendo_Network/NEX/Types#PID|PID]] and game-specific unix timestamp, comma-delimited. The unix timestamp seems to correlate to around when the game was released, and is always the same for all users in the same game (but differs between games). For example, from Swapdoodle:
+Whenever a user receives a new notification, that notification is stored in the game server and the file this URL points to is updated to contain only the latest notification information. For getting more than just the latest notification, see [[#GetNewArrivedNotificationsV1]] / [[#GetNewArrivedNotifications]]. The file is a plain text file and contains the notification ID, recipient [[NEX/Types#PID|PID]] and game-specific unix timestamp, comma-delimited. The unix timestamp seems to correlate to around when the game was released, and is always the same for all users in the same game (but differs between games). For example, from Swapdoodle:
 
 <pre>
 84935077,1870537598,1479103557
@@ -654,7 +654,7 @@ Requests the users unread [[#Object Notifications]]. This was replaced by [[#Get
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreNotificationV1]]&gt; || pResult || Unread notifications
+| [[NEX/Types#List|List]]&lt;[[#DataStoreNotificationV1]]&gt; || pResult || Unread notifications
 |-
 | Boolean || pHasNext || If true, there are more unread notifications past what was returned
 |}
@@ -751,7 +751,7 @@ Every object is returned in the order it was requested, including objects which 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to 512 targets. An empty list is allowed, and returns nothing
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to 512 targets. An empty list is allowed, and returns nothing
 |-
 | UInt64 || accessPassword || [[#Object Passwords]]
 |}
@@ -761,9 +761,9 @@ Every object is returned in the order it was requested, including objects which 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt;&gt; || pRatings || All slot ratings. One for each <code>dataIds</code>, in the order they were requested, with each objects slots sorted by slot
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt;&gt; || pRatings || All slot ratings. One for each <code>dataIds</code>, in the order they were requested, with each objects slots sorted by slot
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>pRatings</code> in the same order as in the request
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>pRatings</code> in the same order as in the request
 |}
 
 === ResetRating ===
@@ -811,7 +811,7 @@ When <code>transactional</code> is true and more than one object fails, the erro
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |}
@@ -821,7 +821,7 @@ When <code>transactional</code> is true and more than one object fails, the erro
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === GetSpecificMetaV1 ===
@@ -845,7 +845,7 @@ Reading the metadata this way does not count as referencing the objects (see [[#
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfoV1]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
+| [[NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfoV1]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
 |}
 
 === PostMetaBinary ===
@@ -945,7 +945,7 @@ Requests the information needed to download an object from the [[#External File 
 
 The object can be targeted either by its [[#Object Data ID]] or by the [[#Object Persistence]] slot it is stored in, using <code>persistenceTarget</code>. If <code>persistenceTarget</code> uses a slot other than <code>INVALID_PERSISTENCE_SLOT_ID</code>, the slot is always used and <code>dataId</code> is ignored entirely, even if the slot turns out to be empty. When targeting a slot:
 
-* An <code>ownerId</code> of 0 is treated as the literal [[Nintendo_Network/NEX/Types#PID|PID]] 0, not as the caller. Since PID 0 has no objects, this always results in <code>DataStore::NotFound</code>. This differs from [[#GetPersistenceInfo]] and [[#GetPersistenceInfos]], which treat an <code>ownerId</code> of 0 as the caller
+* An <code>ownerId</code> of 0 is treated as the literal [[NEX/Types#PID|PID]] 0, not as the caller. Since PID 0 has no objects, this always results in <code>DataStore::NotFound</code>. This differs from [[#GetPersistenceInfo]] and [[#GetPersistenceInfos]], which treat an <code>ownerId</code> of 0 as the caller
 * If the slot is empty, <code>DataStore::NotFound</code> is thrown. It does not fall back on <code>dataId</code>
 * A slot of <code>NUM_PERSISTENCE_SLOT</code> or above is treated as an empty slot and results in <code>DataStore::NotFound</code>, rather than <code>DataStore::InvalidArgument</code> like in [[#GetPersistenceInfo]]
 
@@ -1002,7 +1002,7 @@ Requests the users unread [[#Object Notifications]]. Newer version of [[#GetNewA
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreNotification]]&gt; || pResult || Unread notifications
+| [[NEX/Types#List|List]]&lt;[[#DataStoreNotification]]&gt; || pResult || Unread notifications
 |-
 | Boolean || pHasNext || If true, there are more unread notifications past what was returned
 |}
@@ -1031,7 +1031,7 @@ Reading the metadata this way does not count as referencing the objects (see [[#
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfo]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
+| [[NEX/Types#List|List]]&lt;[[#DataStoreSpecificMetaInfo]]&gt; || pMetaInfos || Minimal object metadatas, sorted by [[#Object Data ID]] rather than in the order they were requested. Each object is returned at most once, even if it is requested more than once, and objects which are left out have no entry
 |}
 
 === GetPersistenceInfo ===
@@ -1045,7 +1045,7 @@ If the target user has no object in the slot, <code>DataStore::NotFound</code> i
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
+| [[NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
 |-
 | UInt16 || persistenceSlotId || Target persistence slot. Must be between 0 and <code>NUM_PERSISTENCE_SLOT</code> - 1
 |}
@@ -1071,9 +1071,9 @@ If <code>persistenceSlotIds</code> is empty, every slot from 0 to <code>NUM_PERS
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
+| [[NEX/Types#PID|PID]] || ownerId || Target user. If 0, the caller is used
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || persistenceSlotIds || Target persistence slots. If empty, every slot is targeted
+| [[NEX/Types#List|List]]&lt;UInt16&gt; || persistenceSlotIds || Target persistence slots. If empty, every slot is targeted
 |}
 
 ==== Response ====
@@ -1081,9 +1081,9 @@ If <code>persistenceSlotIds</code> is empty, every slot from 0 to <code>NUM_PERS
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePersistenceInfo]]&gt; || pPersistenceInfo || Information about the object stored in the target slots. One per target in <code>persistenceSlotIds</code> in the same order as in the request, or one per slot if <code>persistenceSlotIds</code> is empty
+| [[NEX/Types#List|List]]&lt;[[#DataStorePersistenceInfo]]&gt; || pPersistenceInfo || Information about the object stored in the target slots. One per target in <code>persistenceSlotIds</code> in the same order as in the request, or one per slot if <code>persistenceSlotIds</code> is empty
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per entry in <code>pPersistenceInfo</code>, in the same order
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per entry in <code>pPersistenceInfo</code>, in the same order
 |}
 
 === PerpetuateObject ===
@@ -1179,7 +1179,7 @@ Requests a multiple objects [[#Object Passwords]]. Only the object owner can per
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> target [[#Object Data ID]]s
 |}
 
 ==== Response ====
@@ -1187,9 +1187,9 @@ Requests a multiple objects [[#Object Passwords]]. Only the object owner can per
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePasswordInfo]]&gt; || pPasswordInfos || [[#Object Passwords]]. One per target in <code>dataIds</code> in the same order as in the request
+| [[NEX/Types#List|List]]&lt;[[#DataStorePasswordInfo]]&gt; || pPasswordInfos || [[#Object Passwords]]. One per target in <code>dataIds</code> in the same order as in the request
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
 |}
 
 === GetMetasMultipleParam ===
@@ -1203,7 +1203,7 @@ Each param is looked up exactly as [[#GetMeta]] would look it up, including its 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreGetMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
+| [[NEX/Types#List|List]]&lt;[[#DataStoreGetMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets. An empty list is allowed, and returns nothing
 |}
 
 ==== Response ====
@@ -1211,9 +1211,9 @@ Each param is looked up exactly as [[#GetMeta]] would look it up, including its 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each entry in <code>params</code>, in the order they were requested
+| [[NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || pMetaInfo || Object metadatas. One for each entry in <code>params</code>, in the order they were requested
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of each query. One for each <code>pMetaInfo</code>, in the order they were requested
 |}
 
 === CompletePostObjects ===
@@ -1227,7 +1227,7 @@ Calling this method for an object that has already been marked as completed will
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> targets
 |}
 
 ==== Response ====
@@ -1270,9 +1270,9 @@ Since [[#DataStoreChangeMetaCompareParam]] compares against the current state of
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> update targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
+| [[NEX/Types#List|List]]&lt;[[#DataStoreChangeMetaParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY</code> update details/targets
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |}
@@ -1282,7 +1282,7 @@ Since [[#DataStoreChangeMetaCompareParam]] compares against the current state of
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations, one per target in the same order as in the request. When <code>dataIds</code> is populated there is one result per entry in <code>dataIds</code>, otherwise there is one result per entry in <code>params</code>. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === RateObjects ===
@@ -1294,9 +1294,9 @@ Rates multiple object rating slots. Only users with access permissions can perfo
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || params || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |-
@@ -1308,9 +1308,9 @@ Rates multiple object rating slots. Only users with access permissions can perfo
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === PostMetaBinaryWithDataId ===
@@ -1340,9 +1340,9 @@ Presumably creates multiple objects that do not use the [[#External File Server]
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> predefined [[#Object Data ID]]s
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> predefined [[#Object Data ID]]s
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || params || Details on the objects the client wants to upload. Presumably must be the same length as <code>dataIds</code>, in the same order
+| [[NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || params || Details on the objects the client wants to upload. Presumably must be the same length as <code>dataIds</code>, in the same order
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |}
@@ -1352,7 +1352,7 @@ Presumably creates multiple objects that do not use the [[#External File Server]
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === RateObjectWithPosting ===
@@ -1394,11 +1394,11 @@ If a target rating slot has not been initialized, this method will initialize it
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingTarget]]&gt; || targets || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating targets
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRateObjectParam]]&gt; || rateParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> rating values to apply to the targets. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the rating is applied to every target
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization parameters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
+| [[NEX/Types#List|List]]&lt;[[#DataStorePreparePostParam]]&gt; || postParams || Up to <code>BATCH_PROCESSING_CAPACITY_POST_OBJECT</code> initialization parameters. This list MUST be either length 1 or the same length as <code>targets</code>. If only a single value, the initialization is applied to every target
 |-
 | Boolean || transactional || If true, all operations must succeed or all changes are rolled back and an RMC error is returned on the first error. If false, errors do not roll back all changes and simply fail for those objects and the results are returned in <code>pResults</code>
 |-
@@ -1410,9 +1410,9 @@ If a target rating slot has not been initialized, this method will initialize it
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInfo]]&gt; || pRatings || Ratings for the targets after the ratings were applied. One per target in <code>targets</code> in the same order as in the request. Only populated when <code>fetchRatings</code> is true
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per object in <code>params</code> in the same order as in the request. Only populated when <code>transactional</code> is false, otherwise it is assumed every operation succeeded
 |}
 
 === GetObjectInfos ===
@@ -1424,7 +1424,7 @@ Requests the download information for multiple objects. Only users with access p
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> download targets
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Up to <code>BATCH_PROCESSING_CAPACITY</code> download targets
 |}
 
 ==== Response ====
@@ -1432,9 +1432,9 @@ Requests the download information for multiple objects. Only users with access p
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreReqGetInfo]]&gt; || pInfos || Download information. One per target in <code>dataIds</code> in the same order as in the request
+| [[NEX/Types#List|List]]&lt;[[#DataStoreReqGetInfo]]&gt; || pInfos || Download information. One per target in <code>dataIds</code> in the same order as in the request
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#Result|Result]]&gt; || pResults || Results of the operations. One per target in <code>dataIds</code> in the same order as in the request
 |}
 
 === SearchObjectLight ===
@@ -1501,7 +1501,7 @@ Used to request download information for objects stored in the [[#External File 
 		|-
 		| UInt64 || accessPassword || [[#Object Passwords]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
 		|}
 	</tab>
 </tabs>
@@ -1513,13 +1513,13 @@ Tells the client where and how to download an objects data from the [[#External 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+| [[NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 |-
 | UInt32 || size || The size of the object file
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 |}
 
 === DataStoreReqGetInfo ===
@@ -1531,26 +1531,26 @@ Tells the client where and how to download an objects data from the [[#External 
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+		| [[NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 		|-
 		| UInt32 || size || The size of the object file
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 		|}
 	</tab>
 	<tab name="NEX 3.5+">
 		{| class="wikitable"
 		! Type !! Name !! Description
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
+		| [[NEX/Types#String|String]] || url || Download URL. On official servers this is always an S3 presigned GET
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 		|-
 		| UInt32 || size || The size of the object file
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 		|-
 		| UInt64 || dataId || [[#Object Data ID]] for the object being downloaded
 		|}
@@ -1564,13 +1564,13 @@ Used exclusively by [[#PrepareGetObjectOrMetaBinary]] to populate data for objec
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+| [[NEX/Types#PID|PID]] || ownerId || Object owner
 |-
 | UInt16 || dataType || [[#Object Data Type]]
 |-
 | UInt16 || version || Object version. [[#Object Updates]]
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
 |}
 
 === DataStorePreparePostParamV1 ===
@@ -1582,11 +1582,11 @@ Holds details for an object the client would like to upload. This was replaced b
 |-
 | UInt32 || size || The size of the object being uploaded. Empty files are allowed
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+| [[NEX/Types#String|String]] || name || Name of the object
 |-
 | UInt16 || dataType || [[#Object Data Type]]
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
 |-
 | [[#DataStorePermission]] || permission || Permission level settings for accessing the object
 |-
@@ -1598,9 +1598,9 @@ Holds details for an object the client would like to upload. This was replaced b
 |-
 | UInt32 || referDataId || The [[#Object Data ID]] of a related object
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
 |}
 
 === DataStorePreparePostParam ===
@@ -1614,11 +1614,11 @@ Holds details for an object the client would like to upload. Newer version of [[
 		|-
 		| UInt32 || size || The size of the object being uploaded. Empty files are allowed. Must be 0 when used with [[#PostMetaBinary]]
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+		| [[NEX/Types#String|String]] || name || Name of the object
 		|-
 		| UInt16 || dataType || [[#Object Data Type]]
 		|-
-		| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+		| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
 		|-
 		| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
 		|-
@@ -1630,9 +1630,9 @@ Holds details for an object the client would like to upload. Newer version of [[
 		|-
 		| UInt32 || referDataId || The [[#Object Data ID]] of a related object
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
 		|-
 		| [[#DataStorePersistenceInitParam]] || persistenceInitParam || [[#Object Persistence]] settings
 		|}
@@ -1643,11 +1643,11 @@ Holds details for an object the client would like to upload. Newer version of [[
 		|-
 		| UInt32 || size || The size of the object being uploaded. Empty files are allowed. Must be 0 when used with [[#PostMetaBinary]]
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || name || Name of the object
+		| [[NEX/Types#String|String]] || name || Name of the object
 		|-
 		| UInt16 || dataType || [[#Object Data Type]]
 		|-
-		| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+		| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
 		|-
 		| [[#DataStorePermission]] || permission || Permission level settings for accessing the object
 		|-
@@ -1659,13 +1659,13 @@ Holds details for an object the client would like to upload. Newer version of [[
 		|-
 		| UInt32 || referDataId || The [[#Object Data ID]] of a related object
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || [[#Object Tags]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInitParamWithSlot]]&gt; || ratingInitParams || Settings for how to setup the [[#Object Ratings]] slots
 		|-
 		| [[#DataStorePersistenceInitParam]] || persistenceInitParam || [[#Object Persistence]] settings
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
 		|}
 	</tab>
 </tabs>
@@ -1679,13 +1679,13 @@ Tells the client where and how to upload an objects data from the [[#External Fi
 |-
 | UInt32 || dataId || The newly created [[#Object Data ID]]
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+| [[NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 |}
 
 === DataStoreReqPostInfo ===
@@ -1697,13 +1697,13 @@ Tells the client where and how to upload an objects data from the [[#External Fi
 |-
 | UInt64 || dataId || The newly created [[#Object Data ID]]
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+| [[NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 |}
 
 === DataStoreCompletePostParamV1 ===
@@ -1760,7 +1760,7 @@ Unlike [[#DataStoreChangeMetaParam]], this version has no fields for the referen
 |-
 | [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || name || New object name
+| [[NEX/Types#String|String]] || name || New object name
 |-
 | [[#DataStorePermission]] || permission || New permission level settings for accessing the object
 |-
@@ -1768,9 +1768,9 @@ Unlike [[#DataStoreChangeMetaParam]], this version has no fields for the referen
 |-
 | UInt16 || period || New [[#Validity Period]]
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
 |-
 | UInt64 || updatePassword || [[#Object Passwords]]
 |}
@@ -1798,7 +1798,7 @@ The checks are made in this order, and the first one to fail is thrown:
 		|-
 		| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || name || New object name
+		| [[NEX/Types#String|String]] || name || New object name
 		|-
 		| [[#DataStorePermission]] || permission || New permission level settings for accessing the object
 		|-
@@ -1806,9 +1806,9 @@ The checks are made in this order, and the first one to fail is thrown:
 		|-
 		| UInt16 || period || New [[#Validity Period]]
 		|-
-		| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+		| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
 		|-
 		| UInt64 || updatePassword || [[#Object Passwords]]
 		|-
@@ -1829,7 +1829,7 @@ The checks are made in this order, and the first one to fail is thrown:
 		|-
 		| [[#ModificationFlag]] || modifiesFlag || Which fields are being updated
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || name || New object name
+		| [[NEX/Types#String|String]] || name || New object name
 		|-
 		| [[#DataStorePermission]] || permission || New permission level settings for accessing the object
 		|-
@@ -1837,9 +1837,9 @@ The checks are made in this order, and the first one to fail is thrown:
 		|-
 		| UInt16 || period || New [[#Validity Period]]
 		|-
-		| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
+		| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || New [[#Object MetaBinary]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || New [[#Object Tags]]
 		|-
 		| UInt64 || updatePassword || [[#Object Passwords]]
 		|-
@@ -1911,19 +1911,19 @@ An objects metadata. Not all data will be populated depending on what the client
 |-
 | UInt32 || size || Size of the objects data
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || name || Object name
+| [[NEX/Types#String|String]] || name || Object name
 |-
 | UInt16 || dataType || [[#Object Data Type]]
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
+| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]]
 |-
 | [[#DataStorePermission]] || permission || Permission level settings for accessing the object
 |-
 | [[#DataStorePermission]] || delPermission || Permission level settings for updating the object
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdTime || The time the object was created
+| [[NEX/Types#DateTime|DateTime]] || createdTime || The time the object was created
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedTime || The time the object was last updated. See [[#Object Updates]]
+| [[NEX/Types#DateTime|DateTime]] || updatedTime || The time the object was last updated. See [[#Object Updates]]
 |-
 | UInt16 || period || [[#Validity Period]]
 |-
@@ -1935,13 +1935,13 @@ An objects metadata. Not all data will be populated depending on what the client
 |-
 | [[#DataFlag]] || flag || Object flags
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || referredTime || The most recent time the object was referenced. See [[#Object Referencing]]
+| [[NEX/Types#DateTime|DateTime]] || referredTime || The most recent time the object was referenced. See [[#Object Referencing]]
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || expireTime || The object expiration time. See [[#Validity Period]]. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code> is used, the object is persistent. See [[#Object Persistence]]
+| [[NEX/Types#DateTime|DateTime]] || expireTime || The object expiration time. See [[#Validity Period]]. If <code>[[NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code> is used, the object is persistent. See [[#Object Persistence]]
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Object tags
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Object tags
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt; || ratings || Slot rating details
+| [[NEX/Types#List|List]]&lt;[[#DataStoreRatingInfoWithSlot]]&gt; || ratings || Slot rating details
 |}
 
 === DataStorePrepareUpdateParam ===
@@ -1979,7 +1979,7 @@ Tells the server that the client would like to update the underlying object file
 		|-
 		| UInt64 || updatePassword || [[#Object Passwords]]
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || extraData || [[#Object Extra Data]]
 		|}
 	</tab>
 </tabs>
@@ -1995,13 +1995,13 @@ Tells the client where and how to update an object on the [[#External File Serve
 		|-
 		| UInt16 || version || The new object version number
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+		| [[NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 		|}
 	</tab>
 	<tab name="NEX 3+">
@@ -2010,13 +2010,13 @@ Tells the client where and how to update an object on the [[#External File Serve
 		|-
 		| UInt32 || version || The new object version number
 		|-
-		| [[Nintendo_Network/NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
+		| [[NEX/Types#String|String]] || url || Upload URL. On official servers this is always an S3 presigned POST
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || requestHeaders || Headers for the request to use
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
+		| [[NEX/Types#List|List]]&lt;[[#DataStoreKeyValue]]&gt; || formFields || Additional <code>multipart/form-data</code> fields. The client always uploads the object data in a <code>file</code> form field, so this list must NOT contain a <code>file</code> entry
 		|-
-		| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+		| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 		|}
 	</tab>
 </tabs>
@@ -2061,31 +2061,31 @@ Holds information on how the client would like to search for objects.
 		|-
 		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
 		|-
 		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
 		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
+		| [[NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
@@ -2098,31 +2098,31 @@ Holds information on how the client would like to search for objects.
 		|-
 		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
 		|-
 		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
 		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
+		| [[NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
@@ -2137,31 +2137,31 @@ Holds information on how the client would like to search for objects.
 		|-
 		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
 		|-
 		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
 		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
+		| [[NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
@@ -2178,31 +2178,31 @@ Holds information on how the client would like to search for objects.
 		|-
 		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
 		|-
 		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
 		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
+		| [[NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
@@ -2212,7 +2212,7 @@ Holds information on how the client would like to search for objects.
 		|-
 		| Boolean || totalCountEnabled || If true, return the total count and total count type fields. Otherwise disable the total count
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		| [[NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
 		|}
 	</tab>
 	<tab name="NEX 4+">
@@ -2223,31 +2223,31 @@ Holds information on how the client would like to search for objects.
 		|-
 		| [[#SearchType]] || searchTarget || The types of objects to target during the search based on accessibility
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || ownerIds || Specific object owners
 		|-
 		| [[#SearchTarget]] || ownerType || Determines how to filter objects based on ownership
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || destinationIds || Users specified as recipients
 		|-
 		| UInt16 || dataType || Only return objects with this [[#Object Data Type]]. If <code>INVALID_DATA_TYPE</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdAfter || Only return objects created at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || createdBefore || Only return objects created at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedAfter || Only return objects updated at or after this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
-		| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code> or <code>[[Nintendo_Network/NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
+		| [[NEX/Types#DateTime|DateTime]] || updatedBefore || Only return objects updated at or before this time. If <code>[[NEX/Types#DateTime Constants|Never]]</code> or <code>[[NEX/Types#DateTime Constants|INVALID_DATE_TIME]]</code>, don't filter. See [[#SearchObject]]
 		|-
 		| UInt32 || referDataId || Only return objects which refer to this [[#Object Data ID]]. If <code>INVALID_DATAID</code>, don't filter
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
+		| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || Only return objects which have these tags. This does not need to be a complete list of tags, but for an object to be considered valid it must contain ALL the tags in this list. For example, an object with tags ["one", "two", "three"] will be matched if this list is set to ["one", "three"], but NOT if this list is set to ["one", "four"]. See [[#SearchObject]] for how tags are compared
 		|-
 		| [[#SearchSortColumn]] || resultOrderColumn || What data to sort the search results by
 		|-
 		| [[#SearchSortOrder]] || resultOrder || What order to sort the search results by
 		|-
-		| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
+		| [[NEX/Types#ResultRange|ResultRange]] || resultRange || The offset and amount of objects to return. See [[#SearchObject]]
 		|-
 		| [[#ResultFlag]] || resultOption || What metadata fields the response should populate
 		|-
@@ -2257,7 +2257,7 @@ Holds information on how the client would like to search for objects.
 		|-
 		| Boolean || totalCountEnabled || If true, return the total count and total count type fields. Otherwise disable the total count
 		|-
-		| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
+		| [[NEX/Types#List|List]]&lt;UInt16&gt; || dataTypes || Additional [[#Object Data Type]]s to filter by. The combined total of this list plus <code>dataType</code> must not exceed <code>MAX_SEARCH_DATA_TYPE_SIZE</code>
 		|}
 	</tab>
 </tabs>
@@ -2273,7 +2273,7 @@ In NEX versions without <code>totalCountEnabled</code>, always return the data.
 |-
 | UInt32 || totalCount || How many objects the search matched, whatever <code>resultRange</code> is. See <code>totalCountType</code> for how to interpret this value, and [[#SearchObject]] for how many matches are counted. Always 0 if the total count is disabled
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || result || Search results
+| [[NEX/Types#List|List]]&lt;[[#DataStoreMetaInfo]]&gt; || result || Search results
 |-
 | [[#SearchResultTotalCountType]] || totalCountType || How to interpret <code>totalCount</code>
 |}
@@ -2285,7 +2285,7 @@ Used by [[#GetNotificationUrl]] to request the URL where the users latest [[#Obj
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before. The game server does not use this
+| [[NEX/Types#String|String]] || previousUrl || The last requested URL, or empty if not requested before. The game server does not use this
 |}
 
 === DataStoreReqGetNotificationUrlInfo ===
@@ -2295,13 +2295,13 @@ URL data for where the users latest [[#Object Notifications]] notification infor
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || url || Base URL. For example, <code>https://ctr-jtta-live.p.n.srv.nintendo.net/</code>
+| [[NEX/Types#String|String]] || url || Base URL. For example, <code>https://ctr-jtta-live.p.n.srv.nintendo.net/</code>
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || key || The [[#External File Server]] key. This uses a different namespace than regular objects, and is treated as the request path. For example, <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> where <code>01880099407</code> is the decimal PID of the user, padded
+| [[NEX/Types#String|String]] || key || The [[#External File Server]] key. This uses a different namespace than regular objects, and is treated as the request path. For example, <code>10.CTR_JTTA_datastore/ds/1/notify/01880099407</code> where <code>01880099407</code> is the decimal PID of the user, padded
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || query || Query parameters for the request. For example, <code>?AWSAccessKeyId=AKIAIZIRU4FPYFNKPX3A&Expires=2092069557&Signature=5Y0vXYtxyXQXB%2Fu2Sowv%2Fm1AC8E%3D</code>
+| [[NEX/Types#String|String]] || query || Query parameters for the request. For example, <code>?AWSAccessKeyId=AKIAIZIRU4FPYFNKPX3A&Expires=2092069557&Signature=5Y0vXYtxyXQXB%2Fu2Sowv%2Fm1AC8E%3D</code>
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
+| [[NEX/Types#Buffer|Buffer]] || rootCaCert || Root CA for the request. Can be left empty if not used
 |}
 
 === DataStoreGetNewArrivedNotificationsParam ===
@@ -2371,7 +2371,7 @@ Holds a list of [[#Object Data ID]]s to download minimal metadata for. This was 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt32&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
 |}
 
 === DataStoreGetSpecificMetaParam ===
@@ -2381,7 +2381,7 @@ Holds a list of [[#Object Data ID]]s to download minimal metadata for. Newer ver
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || dataIds || Target [[#Object Data ID]]s. Unlike other batch methods, this is not limited to <code>BATCH_PROCESSING_CAPACITY</code>. An empty list is allowed, and returns nothing
 |}
 
 === DataStoreSpecificMetaInfoV1 ===
@@ -2393,7 +2393,7 @@ Minimal object metadata. This was replaced by [[#DataStoreSpecificMetaInfo]] in 
 |-
 | UInt32 || dataId || [[#Object Data ID]]
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+| [[NEX/Types#PID|PID]] || ownerId || Object owner
 |-
 | UInt32 || size || Object size. Unlike [[#DataStoreSpecificMetaInfo]], this is the stored size for every object, so objects which do not use the [[#External File Server]] have a size of 0
 |-
@@ -2411,7 +2411,7 @@ Minimal object metadata. Newer version of [[#DataStoreSpecificMetaInfoV1]].
 |-
 | UInt64 || dataId || [[#Object Data ID]]
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || Object owner
+| [[NEX/Types#PID|PID]] || ownerId || Object owner
 |-
 | UInt32 || size || Object size. For objects which do not use the [[#External File Server]], this is the length of the [[#Object MetaBinary]] instead, even though [[#DataStoreMetaInfo]] gives their size as 0. An object which does not use the [[#External File Server]] and was posted with an empty [[#Object MetaBinary]] has a size of <code>4294967295</code> here, but one whose [[#Object MetaBinary]] was posted with a non-zero length and was later changed to empty is treated as having a size 0
 |-
@@ -2443,11 +2443,11 @@ Information about the status of a users rating of a given slot. [[#Rating Logs]]
 |-
 | Boolean || isRated || Whether or not the user has rated the slot
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pid || The user the log is for, which is always the caller, even when they have not rated the slot
+| [[NEX/Types#PID|PID]] || pid || The user the log is for, which is always the caller, even when they have not rated the slot
 |-
 | SInt32 || ratingValue || The users most recent rating value they applied to the slot. -1 if they have not rated it
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the users rating lock expires, if a rating lock is in place. See [[#Rating Locks]]. <code>RATING_LOCK_PERMANENT</code> uses <code>[[Nintendo_Network/NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. If the user has not rated the slot, or the slot has no lock, this is a DateTime of 0. The time is kept after the lock has lifted, until the slot is rated again or reset
+| [[NEX/Types#DateTime|DateTime]] || lockExpirationTime || When the users rating lock expires, if a rating lock is in place. See [[#Rating Locks]]. <code>RATING_LOCK_PERMANENT</code> uses <code>[[NEX/Types#DateTime Constants|PERMANENT_DATE_TIME]]</code>. If the user has not rated the slot, or the slot has no lock, this is a DateTime of 0. The time is kept after the lock has lifted, until the slot is rated again or reset
 |}
 
 === DataStorePersistenceInfo ===
@@ -2457,7 +2457,7 @@ Information about which objects are in which [[#Object Persistence]] slots for a
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || The object owner
+| [[NEX/Types#PID|PID]] || ownerId || The object owner
 |-
 | UInt16 || persistenceSlotId || [[#Object Persistence]] storage slot ID
 |-
@@ -2485,21 +2485,21 @@ Targets an object in a specific users specific [[#Object Persistence]] slot.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || ownerId || The owner shose slot is being targeted
+| [[NEX/Types#PID|PID]] || ownerId || The owner shose slot is being targeted
 |-
 | UInt16 || persistenceSlotId || [[#Object Persistence]] storage slot ID to target
 |}
 
 === DataStoreKeyValue ===
 
-A key-value pair. Used in [[Nintendo_Network/NEX/Types#List|List]] types to effectively create a [[Nintendo_Network/NEX/Types#Map|Map]]&lt;[[Nintendo_Network/NEX/Types#String|String]], [[Nintendo_Network/NEX/Types#String|String]]&gt;.
+A key-value pair. Used in [[NEX/Types#List|List]] types to effectively create a [[NEX/Types#Map|Map]]&lt;[[NEX/Types#String|String]], [[NEX/Types#String|String]]&gt;.
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || key || Pair key
+| [[NEX/Types#String|String]] || key || Pair key
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || value || Pair value
+| [[NEX/Types#String|String]] || value || Pair value
 |}
 
 === DataStorePermission ===
@@ -2511,7 +2511,7 @@ A single object permission setting. Each object has a permission setting for acc
 |-
 | [[#Permission]] || permission || The permission level
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || recipientIds || Specific users who are given permission to perform operations. Only usable when using either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>, otherwise <code>DataStore::InvalidArgument</code> is thrown
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || recipientIds || Specific users who are given permission to perform operations. Only usable when using either <code>PERMISSION_SPECIFIED</code> or <code>PERMISSION_SPECIFIED_FRIEND</code>, otherwise <code>DataStore::InvalidArgument</code> is thrown
 |}
 
 === DataStoreRatingInitParamWithSlot ===
@@ -2555,7 +2555,7 @@ Only the fields named in <code>comparisonFlag</code> are compared, the rest are 
 |-
 | [[#ComparisonFlag]] || comparisonFlag || Determines which fields to compare
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || name || Name to compare, or empty if not comparing
+| [[NEX/Types#String|String]] || name || Name to compare, or empty if not comparing
 |-
 | [[#DataStorePermission]] || permission || Access permission level settings to compare, or empty if not comparing
 |-
@@ -2563,9 +2563,9 @@ Only the fields named in <code>comparisonFlag</code> are compared, the rest are 
 |-
 | UInt16 || period || Period to compare, or empty if not comparing
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]] to compare, or empty if not comparing
+| [[NEX/Types#qBuffer|qBuffer]] || metaBinary || [[#Object MetaBinary]] to compare, or empty if not comparing
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || tags || [[#Object Tags]] to compare, or empty if not comparing
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || tags || [[#Object Tags]] to compare, or empty if not comparing
 |-
 | UInt32 || referredCnt || Reference count to compare, or empty if not comparing
 |-
@@ -2655,9 +2655,9 @@ Only the fields named in <code>comparisonFlag</code> are compared, the rest are 
 |-
 | <code>BATCH_PROCESSING_CAPACITY</code> || UInt32 || 100 || The max number of objects allowed in non-posting "batch" methods (such as [[#GetMetas]]) in a single RMC
 |-
-| <code>RESULTRANGE_ANY_OFFSET</code> || UInt64 || 4294967295 || If used on a [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]], the server picks a random offset
+| <code>RESULTRANGE_ANY_OFFSET</code> || UInt64 || 4294967295 || If used on a [[NEX/Types#ResultRange|ResultRange]], the server picks a random offset
 |-
-| <code>RESULTRANGE_DEFAULT_SIZE</code> || UInt32 || 20 || The default number of entries a [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] can return
+| <code>RESULTRANGE_DEFAULT_SIZE</code> || UInt32 || 20 || The default number of entries a [[NEX/Types#ResultRange|ResultRange]] can return
 |}
 
 == Enums ==
@@ -2805,7 +2805,7 @@ enum SearchSortColumn : uint8_t {
 |-
 | <code>SEARCH_SORT_COLUMN_UPDATED_TIME</code> || 6 || Sort by object [[#Object Updates|modified time]]
 |-
-| Unknown || 7 || Sort by the [[Nintendo_Network/NEX/Types#PID|PID]] of the object owner
+| Unknown || 7 || Sort by the [[NEX/Types#PID|PID]] of the object owner
 |-
 | <code>SEARCH_SORT_COLUMN_RATING0</code> || 64 || Sort by the total combined ratings in [[#Object Ratings|rating slot]] 0
 |-

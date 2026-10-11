@@ -2,7 +2,7 @@
 
 '''UtilityProtocol''' provides a set of general utility functions that can be used between other protocols.
 
-{{Noticebox|''Prior to NEX 3.0.0, this was the [[Nintendo_Network/NEX/Protocols/StorageManagerProtocol|StorageManagerProtocol]].''}}
+{{Noticebox|''Prior to NEX 3.0.0, this was the [[NEX/Protocols/StorageManagerProtocol|StorageManagerProtocol]].''}}
 
 == Unique IDs ==
 
@@ -12,7 +12,7 @@ Unique IDs can also be optionally secured with a password, which is also cryptog
 
 Each unique ID can only be associated with one user at a time. When a unique ID is secured by a password, that password MUST be sent when associating it with a user. If a unique ID is already associated with a user, and another user tries to associate the same ID with themselves, the operation will fail ''unless'' the user the unique ID is currently associated to is offline. Because offline users are vulnerable to unique ID reassociation, the server MUST ensure that unique ID values and their optional passwords are generated with sufficient entropy to resist guessing and brute-force attacks.
 
-The usage of a unique ID depends on the protocol consuming the ID, though typically they are used in place of a [[Nintendo_Network/NEX/Types#PID|PID]] when creating data. For example, normally each user may only have a single score per category in [[Nintendo_Network/NEX/Protocols/RankingProtocol|RankingProtocol]]. However a score can also be created with a unique ID associated with the caller, effectively allowing a user to create multiple scores per category.
+The usage of a unique ID depends on the protocol consuming the ID, though typically they are used in place of a [[NEX/Types#PID|PID]] when creating data. For example, normally each user may only have a single score per category in [[NEX/Protocols/RankingProtocol|RankingProtocol]]. However a score can also be created with a unique ID associated with the caller, effectively allowing a user to create multiple scores per category.
 
 When a unique ID is deleted, all data associated with that unique ID on the consuming game server is also deleted. A unique ID is deleted when it becomes unassociated from all users. When calling either [[#AssociateNexUniqueIdWithMyPrincipalId]] or [[#AssociateNexUniqueIdsWithMyPrincipalId]], all unique IDs already associated with the user, except for those also in the input, are unassociated from the caller and are replaced by the unique IDs in the input.
 
@@ -107,7 +107,7 @@ If a [[#Unique IDs|unique ID]] is associated with another user already and that 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#UniqueIdInfo]]&gt; || uniqueIdInfo || [[#Unique IDs]] to associate with the caller
+| [[NEX/Types#List|List]]&lt;[[#UniqueIdInfo]]&gt; || uniqueIdInfo || [[#Unique IDs]] to associate with the caller
 |}
 
 ==== Response ====
@@ -143,7 +143,7 @@ This method does not take any parameters.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#UniqueIdInfo]]&gt; || pUniqueIdInfo || All the callers [[#Unique IDs]]
+| [[NEX/Types#List|List]]&lt;[[#UniqueIdInfo]]&gt; || pUniqueIdInfo || All the callers [[#Unique IDs]]
 |}
 
 === GetIntegerSettings ===
@@ -163,12 +163,12 @@ Returns game-specific integer settings. Each game server can configure different
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Map|Map]]&lt;UInt32, SInt32&gt; || integerSettings || Settings
+| [[NEX/Types#Map|Map]]&lt;UInt32, SInt32&gt; || integerSettings || Settings
 |}
 
 === GetStringSettings ===
 
-Returns game-specific [[Nintendo_Network/NEX/Types#String|String]] settings. Each game server can configure different settings for different indexes, and the values are game-specific.
+Returns game-specific [[NEX/Types#String|String]] settings. Each game server can configure different settings for different indexes, and the values are game-specific.
 
 ==== Request ====
 
@@ -183,7 +183,7 @@ Returns game-specific [[Nintendo_Network/NEX/Types#String|String]] settings. Eac
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Map|Map]]&lt;UInt32, [[Nintendo_Network/NEX/Types#String|String]]&gt; || stringSettings || Settings
+| [[NEX/Types#Map|Map]]&lt;UInt32, [[NEX/Types#String|String]]&gt; || stringSettings || Settings
 |}
 
 == Classes ==

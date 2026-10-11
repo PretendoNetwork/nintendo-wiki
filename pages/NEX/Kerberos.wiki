@@ -1,6 +1,6 @@
 == Overview ==
 
-[[Nintendo_Network/NEX|NEX]] uses a simplified form of [https://en.wikipedia.org/wiki/Kerberos_(protocol) Kerberos authentication]. To connect to a game server, the client must first contact the authentication server, which only provides the [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. This protocol provides the location of the secure server along with a ticket required to establish a connection with it.
+[[NEX|NEX]] uses a simplified form of [https://en.wikipedia.org/wiki/Kerberos_(protocol) Kerberos authentication]. To connect to a game server, the client must first contact the authentication server, which only provides the [[NEX/Protocols/TicketGrantingProtocol|TicketGrantingProtocol]]. This protocol provides the location of the secure server along with a ticket required to establish a connection with it.
 
 On 3DS and Wii U servers, authentication is password-based. On Switch servers, clients must provide an ID token instead.
 
@@ -26,7 +26,7 @@ On 3DS and Wii U servers, authentication is password-based. On Switch servers, c
 
 == Credentials ==
 
-Game server accounts are separate from network accounts (Nintendo Network IDs, Nintendo Accounts, etc.). See [[Nintendo_Network/NEX#Accounts|NEX#Accounts]] for details on how they differ. In NEX, usernames and passwords are generated automatically and cannot be changed by the user. In Rendez-Vous, users may be able to change their own account details. Credentials for a game server account are obtained in a platform-specific manner.
+Game server accounts are separate from network accounts (Nintendo Network IDs, Nintendo Accounts, etc.). See [[NEX#Accounts|NEX#Accounts]] for details on how they differ. In NEX, usernames and passwords are generated automatically and cannot be changed by the user. In Rendez-Vous, users may be able to change their own account details. Credentials for a game server account are obtained in a platform-specific manner.
 
 In addition to user accounts, a set of [[#Special Accounts|special accounts]] exists on all game servers.
 
@@ -36,7 +36,7 @@ The 3DS predates the Nintendo Network ID system, and thus does not use them for 
 
 The console will first generate a 16 character password using characters between <code>\x21-\x5B</code> and <code>\x5D-\x7D</code>, and then will perform a [[Nintendo_Network/NASC#LOGIN_Action|LOGIN Action]] sending the newly generated password. If the request was succesful, [[Nintendo_Network/NASC|NASC]] will send back a token and the address of the friends server.
 
-The console then logs into the friends server using the <code>guest</code> account and calls [[Nintendo_Network/NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the devices <code>LocalFriendCodeSeed_B</code>, move count, and token from [[Nintendo_Network/NASC|NASC]]. If this is succesful, the console saves the previously generated password, game server account username (the string representation of the accounts PID in this case), and PID HMAC in a system save file, logs out of the <code>guest</code> account, and into the newly created account.
+The console then logs into the friends server using the <code>guest</code> account and calls [[NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the devices <code>LocalFriendCodeSeed_B</code>, move count, and token from [[Nintendo_Network/NASC|NASC]]. If this is succesful, the console saves the previously generated password, game server account username (the string representation of the accounts PID in this case), and PID HMAC in a system save file, logs out of the <code>guest</code> account, and into the newly created account.
 
 Now when the 3DS needs to go online in most games, it will simply perform another [[Nintendo_Network/NASC#LOGIN_Action|LOGIN Action]] with the game server account username and PID HMAC to get the token and address of the game server.
 
@@ -44,7 +44,7 @@ Certain 3DS titles do require the use of a Nintendo Network ID however, such as 
 
 === Wii U ===
 
-All online functionality now relies on Nintendo Network IDs. Once a Nintendo Network ID is registered, it is assigned a PID. After registration, the console then logs into the friends server using the <code>guest</code> account and calls [[Nintendo_Network/NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the details of the new Nintendo Network ID and the token from [[Nintendo_Network/NNAS|NNAS]]. If this is successful, the game server account is now tied to the Nintendo Network ID (they share the same PID) and the console logs out of the <code>guest</code> account, and into the newly created account.
+All online functionality now relies on Nintendo Network IDs. Once a Nintendo Network ID is registered, it is assigned a PID. After registration, the console then logs into the friends server using the <code>guest</code> account and calls [[NEX/Protocols/AccountManagementProtocol#NintendoCreateAccount|AccountManagementProtocol#NintendoCreateAccount]] with the details of the new Nintendo Network ID and the token from [[Nintendo_Network/NNAS|NNAS]]. If this is successful, the game server account is now tied to the Nintendo Network ID (they share the same PID) and the console logs out of the <code>guest</code> account, and into the newly created account.
 
 Now when the Wii U needs to go online in games, it will request the game server account credentials from [[Nintendo_Network/NNAS#GET_/v1/api/provider/nex_token/@me|/v1/api/provider/nex_token/@me]]. The console does store these credentials locally, however it will always request new ones at every login.
 
@@ -126,22 +126,22 @@ The client's password is never transmitted to the authentication server. Instead
 
 A ticket may be obtained using one of the following methods:
 
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#Login|TicketGrantingProtocol#Login]]
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]]
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]]
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]]
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]]
+* [[NEX/Protocols/TicketGrantingProtocol#Login|TicketGrantingProtocol#Login]]
+* [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]]
+* [[NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]]
+* [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]]
+* [[NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]]
 
-To determine whether a new ticket must be requested via [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]], NEX compares the '''target user''' ID in the decrypted ticket against the user ID in the secure server's connection info.
+To determine whether a new ticket must be requested via [[NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]], NEX compares the '''target user''' ID in the decrypted ticket against the user ID in the secure server's connection info.
 
 == Token Authentication ==
 
 On Switch servers, authentication differs slightly from the password-based approach. Special accounts such as <code>guest</code> continue to use [[#Password Authentication|password-based authentication]], but normal user accounts must provide an ID token. If no token is provided, or if the token is invalid, the server will refuse to issue a ticket and will return an error code.
 
-Because [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]] and [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] do not support ID token parameters, they cannot be used for normal user accounts on Switch servers. Instead, one of the following methods must be used depending on the NEX version:
+Because [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicket|TicketGrantingProtocol#ValidateAndRequestTicket]] and [[NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] do not support ID token parameters, they cannot be used for normal user accounts on Switch servers. Instead, one of the following methods must be used depending on the NEX version:
 
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] (prior to NEX 4.4.0) - The ID token is submitted in the [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]] parameter. If the token is valid, the server returns the '''source key''' alongside the ticket.
-* [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]] (NEX 4.4.0 and later) - Functionally equivalent to the above, but with revised request and response parameters.
+* [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] (prior to NEX 4.4.0) - The ID token is submitted in the [[NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]] parameter. If the token is valid, the server returns the '''source key''' alongside the ticket.
+* [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]] (NEX 4.4.0 and later) - Functionally equivalent to the above, but with revised request and response parameters.
 
 == Key Derivation ==
 
@@ -164,14 +164,14 @@ The [[#Kerberos Tickets|Kerberos ticket]] contains the following data, encrypted
 |-
 | Bytes || A random session key. Always 32 bytes in length, except in NEX 1 or when communicating with the 3DS / Wii U friends server, where it is 16 bytes
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || The PID of the '''target user'''
+| [[NEX/Types#PID|PID]] || The PID of the '''target user'''
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || [[#Internal Ticket Format|Internal ticket data]]
+| [[NEX/Types#Buffer|Buffer]] || [[#Internal Ticket Format|Internal ticket data]]
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || Optional null-terminated string containing [[#JSON Attributes|JSON attributes]] (present on newer game servers)
+| [[NEX/Types#Buffer|Buffer]] || Optional null-terminated string containing [[#JSON Attributes|JSON attributes]] (present on newer game servers)
 |}
 
-The optional string is not always present; the client determines its presence by checking whether additional data remains after the internal ticket. This field is supported in NEX 4.3.x and later, and only appears in tickets obtained via [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
+The optional string is not always present; the client determines its presence by checking whether additional data remains after the internal ticket. This field is supported in NEX 4.3.x and later, and only appears in tickets obtained via [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
 
 === Internal Ticket Format ===
 
@@ -182,7 +182,7 @@ The internal ticket format was revised at some point. In the original format, th
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
+| [[NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
 |}
 
 ==== Revised Format ====
@@ -190,9 +190,9 @@ The internal ticket format was revised at some point. In the original format, th
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || Random key. The final encryption key is computed as: <code>MD5(target_user_key + random_key)</code>
+| [[NEX/Types#Buffer|Buffer]] || Random key. The final encryption key is computed as: <code>MD5(target_user_key + random_key)</code>
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
+| [[NEX/Types#Buffer|Buffer]] || Encrypted [[#Ticket Info|Ticket Info]]
 |}
 
 === Ticket Info ===
@@ -202,14 +202,14 @@ This data is validated on the reciever.
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Ticket issued time. A ticket remains valid for exactly 2 minutes
+| [[NEX/Types#DateTime|DateTime]] || Ticket issued time. A ticket remains valid for exactly 2 minutes
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || The PID of the '''source user'''
+| [[NEX/Types#PID|PID]] || The PID of the '''source user'''
 |-
 | Bytes || The session key
 |}
 
-NEX 4 tickets were updated at some point to include additional data in tickets obtained via [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
+NEX 4 tickets were updated at some point to include additional data in tickets obtained via [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData|TicketGrantingProtocol#ValidateAndRequestTicketWithCustomData]] or [[NEX/Protocols/TicketGrantingProtocol#ValidateAndRequestTicketWithParam|TicketGrantingProtocol#ValidateAndRequestTicketWithParam]]. Tickets obtained via [[NEX/Protocols/TicketGrantingProtocol#RequestTicket|TicketGrantingProtocol#RequestTicket]] never contain this data.
 
 === JSON Attributes ===
 
@@ -235,7 +235,7 @@ The fields have the following meanings:
 |-
 | <code>v</code> || Version (always <code>1</code>)
 |-
-| <code>att</code> || Auth token type (see [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]])
+| <code>att</code> || Auth token type (see [[NEX/Protocols/TicketGrantingProtocol#AuthenticationInfo|AuthenticationInfo]])
 |-
 | <code>pid</code> || User ID
 |-

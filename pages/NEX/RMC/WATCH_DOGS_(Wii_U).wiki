@@ -9,15 +9,15 @@ WATCH_DOGS (Wii U) uses a customized RMC payload structure. Rather than identify
 |-
 | UInt32 || Size, excluding this field
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || [[Nintendo_Network/NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
+| [[NEX/Types#String|String]] || [[NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
 |-
 | Bool || Is request (always <code>true</code>)
 |-
 | UInt32 || Call ID. An incrementing value used to match responses to their corresponding requests
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || Protocol method name, prefixed with the [[Nintendo_Network/NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2</code>
+| [[NEX/Types#String|String]] || Protocol method name, prefixed with the [[NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2</code>
 |-
-| [[#ClassVersionContainer|ClassVersionContainer]] || Version information for any [[Nintendo_Network/NEX/Types#Classes|classes]] referenced in the request
+| [[#ClassVersionContainer|ClassVersionContainer]] || Version information for any [[NEX/Types#Classes|classes]] referenced in the request
 |-
 | || Method parameters
 |}
@@ -29,7 +29,7 @@ WATCH_DOGS (Wii U) uses a customized RMC payload structure. Rather than identify
 |-
 | UInt32 || Size, excluding this field
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || [[Nintendo_Network/NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
+| [[NEX/Types#String|String]] || [[NEX/Protocols|Protocol name]]. For example, <code>SimpleAuthenticationProtocol</code>
 |-
 | Bool || Is request (always <code>false</code>)
 |-
@@ -43,7 +43,7 @@ WATCH_DOGS (Wii U) uses a customized RMC payload structure. Rather than identify
 |-
 | UInt32 || Call ID of the request
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || Protocol method name, prefixed with the [[Nintendo_Network/NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2*</code>
+| [[NEX/Types#String|String]] || Protocol method name, prefixed with the [[NEX/Protocols|protocol name]]. For example, <code>SimpleAuthenticationProtocol::LoginWithToken_V2*</code>
 |-
 | || Response data
 |}
@@ -55,25 +55,25 @@ In all known cases, the method name string in responses is suffixed with <code>*
 {| class="wikitable"
 ! Type !! Description
 |-
-| UInt32 || Error code. See [[Nintendo_Network/NEX/Result_Codes|Result Codes]]
+| UInt32 || Error code. See [[NEX/Result_Codes|Result Codes]]
 |-
 | UInt32 || Call ID of the request
 |}
 
 == Classes ==
 
-Unlike standard NEX [[Nintendo_Network/NEX/Types#Classes|Classes]], WATCH_DOGS (Wii U) does not use a class header in any cases. Instead, the class version information is encoded directly into the RMC message via the [[ClassVersionContainer]]. Presumably this was done to save bandwidth when sending many of the same class, as the game only needs to encode the version information a single time per RMC.
+Unlike standard NEX [[NEX/Types#Classes|Classes]], WATCH_DOGS (Wii U) does not use a class header in any cases. Instead, the class version information is encoded directly into the RMC message via the [[ClassVersionContainer]]. Presumably this was done to save bandwidth when sending many of the same class, as the game only needs to encode the version information a single time per RMC.
 
 === ClassVersionContainer ===
 
-The <code>ClassVersionContainer</code> is a [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#ClassVersion|ClassVersion]]&gt;. Unlike the standard RMC format, where version information is optionally encoded as a header on each class, this variant declares version information once, prior to parsing the remainder of the message. Every request includes a <code>ClassVersionContainer</code>, even when it contains zero entries. Responses do not include a <code>ClassVersionContainer</code>, nor do they encode class headers.
+The <code>ClassVersionContainer</code> is a [[NEX/Types#List|List]]&lt;[[#ClassVersion|ClassVersion]]&gt;. Unlike the standard RMC format, where version information is optionally encoded as a header on each class, this variant declares version information once, prior to parsing the remainder of the message. Every request includes a <code>ClassVersionContainer</code>, even when it contains zero entries. Responses do not include a <code>ClassVersionContainer</code>, nor do they encode class headers.
 
 === ClassVersion ===
 
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || Class name
+| [[NEX/Types#String|String]] || Class name
 |-
 | UInt16 || Class version
 |}

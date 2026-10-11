@@ -14,7 +14,7 @@
 
 === PingDaemon ===
 
-Seems identical to [[Nintendo_Network/NEX/Protocols/HealthProtocol#PingDaemon|HealthProtocol#PingDaemon]].
+Seems identical to [[NEX/Protocols/HealthProtocol#PingDaemon|HealthProtocol#PingDaemon]].
 
 ==== Request ====
 
@@ -41,7 +41,7 @@ This method does not take any parameters.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#String|String]]&gt; || strValues || Cluster node names. The first value is the "master" node
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#String|String]]&gt; || strValues || Cluster node names. The first value is the "master" node
 |}
 
 ===== Example Results =====

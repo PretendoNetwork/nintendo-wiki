@@ -1,6 +1,6 @@
 == Overview ==
 
-'''DummyProtocol''' is one of the [[Nintendo_Network/NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, and neither are the method IDs of either of its methods.
+'''DummyProtocol''' is one of the [[NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, and neither are the method IDs of either of its methods.
 
 Both of its known methods relate to a user logging out, suggesting the protocol is used to tell a server that a client has left, and whether they left cleanly, or perhaps some way for servers to tell each other how to disconnect a user? The name "Dummy" could also suggest this is some sort of testing/default protocol?
 

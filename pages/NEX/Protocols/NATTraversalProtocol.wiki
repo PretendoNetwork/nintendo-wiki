@@ -24,14 +24,14 @@
 
 === RequestProbeInitiation ===
 
-Sent by the client to the server to begin NAT probing the local client at it's registered public address (see [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]]/[[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]]).
+Sent by the client to the server to begin NAT probing the local client at it's registered public address (see [[NEX/Protocols/SecureConnectionProtocol#Register|SecureConnectionProtocol#Register]]/[[NEX/Protocols/SecureConnectionProtocol#RegisterEx|SecureConnectionProtocol#RegisterEx]]).
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
 |}
 
 ==== Response ====
@@ -47,7 +47,7 @@ Sent by the server to a client that is being requested for probing by another cl
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address of the station that would like the receiver to probe it
+| [[NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address of the station that would like the receiver to probe it
 |}
 
 ==== Response ====
@@ -63,9 +63,9 @@ Sent by the client to the server to begin NAT probing the local client at the sp
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || urlTargetList || List of station addresses the local client wants the server to ask to probe it
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address the local client would like receivers to probe
+| [[NEX/Types#StationURL|StationURL]] || urlStationToProbe || The address the local client would like receivers to probe
 |}
 
 ==== Response ====
@@ -115,9 +115,9 @@ Sent by the client to the server to report the client's NAT properties.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt32 || natmapping || Client's [[Nintendo_Network/NEX/Types#NAT_Mapping|NAT mapping mode]]
+| UInt32 || natmapping || Client's [[NEX/Types#NAT_Mapping|NAT mapping mode]]
 |-
-| UInt32 || natfiltering || Client's [[Nintendo_Network/NEX/Types#NAT_Filtering|NAT filtering mode]]
+| UInt32 || natfiltering || Client's [[NEX/Types#NAT_Filtering|NAT filtering mode]]
 |-
 | UInt32 || rtt || The connections round-trip-time
 |}
@@ -141,9 +141,9 @@ This method does not take any parameters.
 |-
 | SInt32 || relayMode || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || currentUTCTime || The server's current UTC time
+| [[NEX/Types#DateTime|DateTime]] || currentUTCTime || The server's current UTC time
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || address || The address of the relay server
+| [[NEX/Types#String|String]] || address || The address of the relay server
 |-
 | UInt16 || port || The port of the relay server
 |-

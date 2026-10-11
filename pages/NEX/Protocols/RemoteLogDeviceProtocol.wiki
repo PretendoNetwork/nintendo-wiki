@@ -19,7 +19,7 @@ Sends a log line to the remote server.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strLine || The log line to send to the remote server
+| [[NEX/Types#String|String]] || strLine || The log line to send to the remote server
 |}
 
 ==== Response ====

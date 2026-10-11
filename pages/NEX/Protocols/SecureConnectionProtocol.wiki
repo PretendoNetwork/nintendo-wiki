@@ -4,7 +4,7 @@
 
 The following titles have custom extensions/modifications of this protocol:
 
-* [[Nintendo_Network/NEX/Protocols/SecureConnectionProtocol/Nintendo_Badge_Arcade|Nintendo Badge Arcade]]
+* [[NEX/Protocols/SecureConnectionProtocol/Nintendo_Badge_Arcade|Nintendo Badge Arcade]]
 
 == Methods ==
 
@@ -30,7 +30,7 @@ The following titles have custom extensions/modifications of this protocol:
 
 === Register ===
 
-Registers the client with the game server insecurely. Clients should never use this method unless [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
+Registers the client with the game server insecurely. Clients should never use this method unless [[NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
 
 The client sends the server it's current list of stations (should usually only contain the clients local station), and the server returns the clients public station.
 
@@ -39,7 +39,7 @@ The client sends the server it's current list of stations (should usually only c
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
 |}
 
 ==== Response ====
@@ -47,11 +47,11 @@ The client sends the server it's current list of stations (should usually only c
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+| [[NEX/Types#Result|Result]] || %retval% || Registration result
 |-
 | UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+| [[NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
 |}
 
 === RequestConnectionData ===
@@ -65,7 +65,7 @@ Requests connection data for a specific user. Seems to be only usable if already
 |-
 | UInt32 || cidTarget || The target's connection ID
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pidTarget || The target's [[Nintendo_Network/NEX/Types#PID|PID]]
+| [[NEX/Types#PID|PID]] || pidTarget || The target's [[NEX/Types#PID|PID]]
 |}
 
 ==== Response ====
@@ -75,14 +75,14 @@ Requests connection data for a specific user. Seems to be only usable if already
 |-
 | Boolean || %retval% || Result of the request
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#ConnectionData]]&gt; || pvecConnectionsData || List of the target's stations. Empty if <code>%retval%</code> is false
+| [[NEX/Types#List|List]]&lt;[[#ConnectionData]]&gt; || pvecConnectionsData || List of the target's stations. Empty if <code>%retval%</code> is false
 |}
 
 === RequestUrls ===
 
 Requests a specific user's station list. Seems to be only usable if already in a session with the target.
 
-Replaced with [[Nintendo_Network/NEX/Protocols/MatchMakingProtocol|MatchMakingProtocol#GetSessionURLs]] after NEX 1.
+Replaced with [[NEX/Protocols/MatchMakingProtocol|MatchMakingProtocol#GetSessionURLs]] after NEX 1.
 
 Unclear how this effectively differs from [[#RequestConnectionData]].
 
@@ -93,7 +93,7 @@ Unclear how this effectively differs from [[#RequestConnectionData]].
 |-
 | UInt32 || cidTarget || The target's connection ID
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || pidTarget || The target's [[Nintendo_Network/NEX/Types#PID|PID]]
+| [[NEX/Types#PID|PID]] || pidTarget || The target's [[NEX/Types#PID|PID]]
 |}
 
 ==== Response ====
@@ -103,12 +103,12 @@ Unclear how this effectively differs from [[#RequestConnectionData]].
 |-
 | Boolean || %retval% || Result of the request
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || plstURLs || List of the target's stations. Empty if <code>%retval%</code> is false
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || plstURLs || List of the target's stations. Empty if <code>%retval%</code> is false
 |}
 
 === RegisterEx ===
 
-Registers the client with the game server securely. Clients may use this method whether or not [[Nintendo_Network/NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
+Registers the client with the game server securely. Clients may use this method whether or not [[NEX/Protocols/TicketGrantingProtocol#LoginEx|TicketGrantingProtocol#LoginEx]] was used when connecting to the authentication server.
 
 The client sends the server it's current list of stations (should usually only contain the clients local station), and the server returns the clients public station.
 
@@ -117,9 +117,9 @@ The client sends the server it's current list of stations (should usually only c
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || Client's current station list
 |-
-| [[Nintendo_Network/NEX/Types#DataHolder|DataHolder]] || hCustomData || Login data. In NEX this is either [[#NintendoLoginData]] or [[#AccountExtraInfo]]
+| [[NEX/Types#DataHolder|DataHolder]] || hCustomData || Login data. In NEX this is either [[#NintendoLoginData]] or [[#AccountExtraInfo]]
 |}
 
 ==== Response ====
@@ -127,11 +127,11 @@ The client sends the server it's current list of stations (should usually only c
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Result|Result]] || %retval% || Registration result
+| [[NEX/Types#Result|Result]] || %retval% || Registration result
 |-
 | UInt32 || pidConnectionID || The client's station <code>RVCID</code> value
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
+| [[NEX/Types#StationURL|StationURL]] || urlPublic || Client's public station
 |}
 
 === TestConnectivity ===
@@ -155,7 +155,7 @@ Updates the clients station list to the provided list.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || New station list
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#StationURL|StationURL]]&gt; || vecMyURLs || New station list
 |}
 
 ==== Response ====
@@ -173,9 +173,9 @@ If the new station is missing <code>RVCID</code> or <code>PID</code>, it is adde
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || target || The station to replace
+| [[NEX/Types#StationURL|StationURL]] || target || The station to replace
 |-
-| [[Nintendo_Network/NEX/Types#StationURL|StationURL]] || url || New station
+| [[NEX/Types#StationURL|StationURL]] || url || New station
 |}
 
 ==== Response ====
@@ -186,7 +186,7 @@ This method does not return anything.
 
 Sends an arbitrary "report" to the server. Report data can be anything.
 
-Notably, games which use [[Nintendo_Network/NEX/PIA|PIA]] use this method to send [[Nintendo_Network/NEX/PIA/Protocols/MonitoringData|MonitoringData]] reports after matches.
+Notably, games which use [[NEX/PIA|PIA]] use this method to send [[NEX/PIA/Protocols/MonitoringData|MonitoringData]] reports after matches.
 
 ==== Request ====
 
@@ -195,7 +195,7 @@ Notably, games which use [[Nintendo_Network/NEX/PIA|PIA]] use this method to sen
 |-
 | UInt32 || reportId || Report "ID". This does not appear to be unique per report, so it is likely something such as a "report category"?
 |-
-| [[Nintendo_Network/NEX/Types#qBuffer|qBuffer]] || reportData || Report data
+| [[NEX/Types#qBuffer|qBuffer]] || reportData || Report data
 |}
 
 ==== Response ====
@@ -211,31 +211,31 @@ This class holds information on a users station.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || m_StationUrl || One of the users stations
+| [[NEX/Types#String|String]] || m_StationUrl || One of the users stations
 |-
 | UInt32 || m_ConnectionID || Users connection ID
 |}
 
 === NintendoLoginData ===
 
-{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
+{{ClassInherits|path=Online/NEX/Types|Data}}
 
 This class holds the users login. It is identical to [[#AccountExtraInfo]], just renamed.
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || token || Login token from the account server
+| [[NEX/Types#String|String]] || token || Login token from the account server
 |}
 
 === AccountExtraInfo ===
 
-{{ClassInherits|path=Online/Nintendo_Network/NEX/Types|Data}}
+{{ClassInherits|path=Online/NEX/Types|Data}}
 
 This class holds the users login. It is identical to [[#NintendoLoginData]], just renamed.
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || token || Login token from the account server
+| [[NEX/Types#String|String]] || token || Login token from the account server
 |}

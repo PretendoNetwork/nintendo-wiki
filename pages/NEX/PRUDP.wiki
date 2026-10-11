@@ -146,9 +146,9 @@ PRUDPLite will only be used on NEX game servers on the Nintendo Switch, and is t
 
 == Endpoints / Stations ==
 
-PRUDP does not use the traditional concept of a "server", where there is a clear separation of "server" and "client" in terms of operation, implementation, and responsibilities. In reality, the "server" is more analogous to another client. This is because "server" code can often be found inside clients, PRUDP clients locate/connect to "servers" using the same mechanisms they use to locate/connect to each other (though the underlying transport may differ, see [[Nintendo_Network/NEX/P2P]] for details), and the PRUDP connection/[[Nintendo_Network/NEX/Kerberos|Kerberos]] ticket targets an internal server user (see [[Nintendo_Network/NEX#Accounts]] for details). For simplicity, these documents will simply refer to any Station (see below) which is not explicitly another client as a server.
+PRUDP does not use the traditional concept of a "server", where there is a clear separation of "server" and "client" in terms of operation, implementation, and responsibilities. In reality, the "server" is more analogous to another client. This is because "server" code can often be found inside clients, PRUDP clients locate/connect to "servers" using the same mechanisms they use to locate/connect to each other (though the underlying transport may differ, see [[NEX/P2P]] for details), and the PRUDP connection/[[NEX/Kerberos|Kerberos]] ticket targets an internal server user (see [[NEX#Accounts]] for details). For simplicity, these documents will simply refer to any Station (see below) which is not explicitly another client as a server.
 
-A "Station" refers to any connectable entity in Rendez-Vous/NEX. Stations are assigned one or more [[Nintendo_Network/NEX/Types#StationURL|StationURLs]] (for other clients, this is usually both a "public" URL with the users public IP address and a "private" URL with the users local IP address).
+A "Station" refers to any connectable entity in Rendez-Vous/NEX. Stations are assigned one or more [[NEX/Types#StationURL|StationURLs]] (for other clients, this is usually both a "public" URL with the users public IP address and a "private" URL with the users local IP address).
 
 A PRUDPEndPoint (official name, simply "Endpoint" for short) represents a connection target on a Station. Each open Endpoint is assigned a [[#Virtual Ports|Virtual Port]]. A server has at least one Endpoint open at all times, but may have as many as there are [[#Virtual Ports]] available. For example, NEX on the Nintendo Wii U/3DS utilizes 2 different physical servers per game, each with their own address; the authentication server and secure server. Each server has a single Endpoint open, each using stream type "RVSecure" and stream ID 1. In contrast, NEX on the Nintendo Switch uses a single physical server for both authentication and secure connections. This server has 2 Endpoints open on the same address, both using stream type "RVSecure" and stream IDs 1 and 2 for the authentication and secure connections respectively.
 
@@ -196,7 +196,7 @@ Every connection is assigned a stream type. The stream type provides context for
 |-
 ! Stream type !! Name !! Description
 |-
-| 1 || DO || "Duplicate Object". Used for P2P connections using [[Nintendo_Network/NEX/P2P/NetZ|NetZ]]
+| 1 || DO || "Duplicate Object". Used for P2P connections using [[NEX/P2P/NetZ|NetZ]]
 |-
 | 2 || RVAuthentication || Unknown
 |-
@@ -204,7 +204,7 @@ Every connection is assigned a stream type. The stream type provides context for
 |-
 | 4 || SandBoxMgmt || Unknown
 |-
-| 5 || NAT || Used for NAT traversal between users using [[Nintendo_Network/NEX/P2P/NetZ|NetZ]]
+| 5 || NAT || Used for NAT traversal between users using [[NEX/P2P/NetZ|NetZ]]
 |-
 | 6 || SessionDiscovery || Unknown
 |-
@@ -320,7 +320,7 @@ Packet flags provide additional metadata about how the packet should be processe
 
 Each connection from the client is a unique session. The client chooses its own session ID locally. The server also chooses a session ID, which does not have to match the ID of the client. These IDs are not globally unique, and are picked at random.
 
-Each session is secured with a session key. This is obtained from the [[Nintendo_Network/NEX/Kerberos|Kerberos]] ticket during login. The session key is used as the starting RC4 key for packet encryption in NEX.
+Each session is secured with a session key. This is obtained from the [[NEX/Kerberos|Kerberos]] ticket during login. The session key is used as the starting RC4 key for packet encryption in NEX.
 
 == Packet Signature ==
 
@@ -559,9 +559,9 @@ In connections to the secure server, the payload of the client <code>CONNECT</co
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || [[Nintendo_Network/NEX/Kerberos|Kerberos]] ticket data, obtained from the authentication server
+| [[NEX/Types#Buffer|Buffer]] || [[NEX/Kerberos|Kerberos]] ticket data, obtained from the authentication server
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || User verification data. This data is [[Nintendo_Network/NEX/Kerberos|Kerberos]] encrypted using the session key
+| [[NEX/Types#Buffer|Buffer]] || User verification data. This data is [[NEX/Kerberos|Kerberos]] encrypted using the session key
 |}
 
 The user verification data is as follows:
@@ -569,7 +569,7 @@ The user verification data is as follows:
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || PID of the connecting user
+| [[NEX/Types#PID|PID]] || PID of the connecting user
 |-
 | UInt32 || CID of the secure server [[#Endpoints / Stations|station]]
 |-
@@ -583,7 +583,7 @@ The payload of the server <code>CONNECT</code> acknowledgement packet should con
 {| class="wikitable"
 ! Type !! Description
 |-
-| [[Nintendo_Network/NEX/Types#Buffer|Buffer]] || Response check value + 1
+| [[NEX/Types#Buffer|Buffer]] || Response check value + 1
 |}
 
 The client validates this check value to ensure the server has correctly interpreted and accepted the ticket/verification data. If either end has any issues with the other's data, the connection is aborted.
@@ -592,11 +592,11 @@ The client validates this check value to ensure the server has correctly interpr
 
 {{Noticebox|''Like everything else in Rendez-Vous, payload contents and the available encryption/compression algorithms/order may differ between games. Additional reverse engineering may be required for some games.''}}
 
-Once the PRUDP handshake has been completed, each end of the connection may begin sending <code>DATA</code> packets to each other. These packets carry the actual application data. Payloads contain [[Nintendo_Network/NEX/RMC|RMCs]]. In Rendez-Vous/NEX PRUDPv0 the size of the packet payload is set in the [[#Packet Specific Data]]. If the payload is not explicitly set, it can be inferred based on the amount of remaining data in the packet + the configured checksum size (if applicable), but that is not always reliable as the socket may receive multiple PRUDP packets per network message. NEX PRUDPv1/PRUDPLite always encodes the payload size in the main packet data.
+Once the PRUDP handshake has been completed, each end of the connection may begin sending <code>DATA</code> packets to each other. These packets carry the actual application data. Payloads contain [[NEX/RMC|RMCs]]. In Rendez-Vous/NEX PRUDPv0 the size of the packet payload is set in the [[#Packet Specific Data]]. If the payload is not explicitly set, it can be inferred based on the amount of remaining data in the packet + the configured checksum size (if applicable), but that is not always reliable as the socket may receive multiple PRUDP packets per network message. NEX PRUDPv1/PRUDPLite always encodes the payload size in the main packet data.
 
 Payloads cannot be any size. If a payload's size exceeds the maximum length (BEFORE ENCRYPTION/COMPRESSION), the payload is split between multiple packets. The maximum size of a payload depends on the client settings and PRUDP variation. See [[#Fragmentation]] for details.
 
-Either end may send the other request [[Nintendo_Network/NEX/RMC|RMCs]]. Typically the server only sends the client a request when sending a notification (see [[Nintendo_Network/NEX/Protocols/NotificationProtocol|NotificationProtocol]] and [[Nintendo_Network/NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for details), however the client always has functionality for handling requests for all methods in all protocols.
+Either end may send the other request [[NEX/RMC|RMCs]]. Typically the server only sends the client a request when sending a notification (see [[NEX/Protocols/NotificationProtocol|NotificationProtocol]] and [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for details), however the client always has functionality for handling requests for all methods in all protocols.
 
 ==== Payload Compression ====
 
@@ -634,7 +634,7 @@ When connecting to the authentication [[#Endpoints / Stations|Endpoint]], the ke
 
 Each connection has separate incoming and outgoing RC4 streams for each of its reliable [[#Substreams]]. The streams are not reset, unlike Rendez-Vous, and packets must be processed in [[#Sequence ID]] order.
 
-The initial key is the [[#Sessions|session]] key obtained from the [[Nintendo_Network/NEX/Kerberos|Kerberos]] ticket during login. For all additional [[#Substreams]], the key is calculated using the previous substreams key as a base, starting with the initial substreams key. The key generation algorithm is as follows:
+The initial key is the [[#Sessions|session]] key obtained from the [[NEX/Kerberos|Kerberos]] ticket during login. For all additional [[#Substreams]], the key is calculated using the previous substreams key as a base, starting with the initial substreams key. The key generation algorithm is as follows:
 
 <pre>
 def modify_key(key):
@@ -804,7 +804,7 @@ The least significant byte of this field describes the minor version of the prot
 |-
 | 2 || The second version of aggregate [[#Acknowledgment]] is now available, and a new signature method is added
 |-
-| 3 || [[Nintendo_Network/NEX/Types#Classes|Classes]] now have headers
+| 3 || [[NEX/Types#Classes|Classes]] now have headers
 |-
 | 4 || Unknown
 |-

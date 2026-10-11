@@ -2,7 +2,7 @@
 
 '''FriendsProtocol''' is the stock Rendez-Vous friends system. It provides a way for players to add each other as friends, block each other, and manage the resulting relationships.
 
-Even though this protocol is implemented on Nintendo's game servers, it is never actually used. Instead Nintendo implemented their own friends services, [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]] (3DS) and [[Nintendo_Network/NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] (Wii U).
+Even though this protocol is implemented on Nintendo's game servers, it is never actually used. Instead Nintendo implemented their own friends services, [[NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]] (3DS) and [[NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] (Wii U).
 
 == Methods ==
 
@@ -38,18 +38,18 @@ Even though this protocol is implemented on Nintendo's game servers, it is never
 
 === AddFriend ===
 
-Sends a friend request to a player by their [[Nintendo_Network/NEX/Types#PID|PID]].
+Sends a friend request to a player by their [[NEX/Types#PID|PID]].
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player to add
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to add
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
 |}
 
 ==== Response ====
@@ -69,11 +69,11 @@ Sends a friend request to a player by their game server account username.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
 |}
 
 ==== Response ====
@@ -93,11 +93,11 @@ Identical to [[#AddFriend]], but returns the resulting relationship rather than 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player to add
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to add
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
 |}
 
 ==== Response ====
@@ -117,11 +117,11 @@ Identical to [[#AddFriendByName]], but returns the resulting relationship rather
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
 |}
 
 ==== Response ====
@@ -141,7 +141,7 @@ Accepts a pending friend request from a player.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player whose request is being accepted
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose request is being accepted
 |}
 
 ==== Response ====
@@ -161,7 +161,7 @@ Declines a pending friend request from a player.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player whose request is being declined
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose request is being declined
 |}
 
 ==== Response ====
@@ -174,14 +174,14 @@ Declines a pending friend request from a player.
 
 === BlackList ===
 
-Blocks a player by their [[Nintendo_Network/NEX/Types#PID|PID]].
+Blocks a player by their [[NEX/Types#PID|PID]].
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player to block
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to block
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |}
@@ -203,7 +203,7 @@ Blocks a player by their game server account username.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || strPlayerName || Game server account username of the player to block
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to block
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |}
@@ -225,7 +225,7 @@ Removes any relationship the caller has with a player. Used to both remove frien
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player to clear the relationship with
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to clear the relationship with
 |}
 
 ==== Response ====
@@ -245,7 +245,7 @@ Updates the details stored on an existing relationship.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || uiPlayer || [[Nintendo_Network/NEX/Types#PID|PID]] of the player whose relationship is being updated
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose relationship is being updated
 |-
 | [[#RelationshipDetails]] || uiDetails || Unknown
 |}
@@ -260,7 +260,7 @@ Updates the details stored on an existing relationship.
 
 === GetList ===
 
-Returns the [[Nintendo_Network/NEX/Types#PID|PIDs]] of every player the caller has a given relationship with.
+Returns the [[NEX/Types#PID|PIDs]] of every player the caller has a given relationship with.
 
 ==== Request ====
 
@@ -277,12 +277,12 @@ Returns the [[Nintendo_Network/NEX/Types#PID|PIDs]] of every player the caller h
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || lstFriendsList || [[Nintendo_Network/NEX/Types#PID|PIDs]] of the matching players
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || lstFriendsList || [[NEX/Types#PID|PIDs]] of the matching players
 |}
 
 === GetDetailedList ===
 
-Identical to [[#GetList]], but returns the full details of each player rather than only their [[Nintendo_Network/NEX/Types#PID|PID]].
+Identical to [[#GetList]], but returns the full details of each player rather than only their [[NEX/Types#PID|PID]].
 
 ==== Request ====
 
@@ -299,7 +299,7 @@ Identical to [[#GetList]], but returns the full details of each player rather th
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#FriendData]]&gt; || lstFriendsList || Details of the matching players
+| [[NEX/Types#List|List]]&lt;[[#FriendData]]&gt; || lstFriendsList || Details of the matching players
 |}
 
 === GetRelationships ===
@@ -311,7 +311,7 @@ Returns a list of relationships the player has, regardless of type.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#ResultRange|ResultRange]] || resultRange || Range of relationships to return
+| [[NEX/Types#ResultRange|ResultRange]] || resultRange || Range of relationships to return
 |}
 
 ==== Response ====
@@ -321,7 +321,7 @@ Returns a list of relationships the player has, regardless of type.
 |-
 | UInt32 || uiTotalCount || Total number of relationships the caller has
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#RelationshipData]]&gt; || lstRelationshipsList || The relationships within the requested range
+| [[NEX/Types#List|List]]&lt;[[#RelationshipData]]&gt; || lstRelationshipsList || The relationships within the requested range
 |}
 
 == Classes ==
@@ -333,15 +333,15 @@ Details about a player the caller has a relationship with.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || m_pid || [[Nintendo_Network/NEX/Types#PID|PID]] of the player
+| [[NEX/Types#PID|PID]] || m_pid || [[NEX/Types#PID|PID]] of the player
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || m_strName || Game server account username of the player
+| [[NEX/Types#String|String]] || m_strName || Game server account username of the player
 |-
 | [[#RelationshipType]] || m_byRelationship || The relationship between the player and the caller
 |-
 | [[#RelationshipDetails]] || m_uiDetails || Unknown
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || m_strStatus || Unknown. The players status message? There doesn't seem to be any method to update this this, however. [https://github.com/michal-kapala/acb-rdv/blob/227ca6ac2b1da42c8e9857312f92d2ea5ac0cda5/QuazalWV/RMC/Services/FriendsService/Response/RMCPacketResponseFriendsService_GetDetailedList.cs#L36 <code>acb-rdv</code> always sets this to "Online"]
+| [[NEX/Types#String|String]] || m_strStatus || Unknown. The players status message? There doesn't seem to be any method to update this this, however. [https://github.com/michal-kapala/acb-rdv/blob/227ca6ac2b1da42c8e9857312f92d2ea5ac0cda5/QuazalWV/RMC/Services/FriendsService/Response/RMCPacketResponseFriendsService_GetDetailedList.cs#L36 <code>acb-rdv</code> always sets this to "Online"]
 |}
 
 === RelationshipData ===
@@ -351,9 +351,9 @@ Details about a single relationship.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || m_pid || [[Nintendo_Network/NEX/Types#PID|PID]] of the other player in the relationship
+| [[NEX/Types#PID|PID]] || m_pid || [[NEX/Types#PID|PID]] of the other player in the relationship
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || m_strName || Game server account username of the other player
+| [[NEX/Types#String|String]] || m_strName || Game server account username of the other player
 |-
 | [[#RelationshipType]] || m_byRelationship || The type of the relationship
 |-

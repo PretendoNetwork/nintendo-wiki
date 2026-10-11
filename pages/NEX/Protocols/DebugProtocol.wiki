@@ -73,11 +73,11 @@ Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disa
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[Nintendo_Network/NEX/Types#PID|PID]]&gt; || Unknown || Target users to request logs for
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || Unknown || Target users to request logs for
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created after this time. Seconds value is ignored. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created after this time. Seconds value is ignored. If <code>[[NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created before this time. Seconds value is ignored. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Only return logs created before this time. Seconds value is ignored. If <code>[[NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
 |}
 
 ==== Response ====
@@ -85,7 +85,7 @@ Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disa
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#ApiCall]]&gt; || Unknown || API logs
+| [[NEX/Types#List|List]]&lt;[[#ApiCall]]&gt; || Unknown || API logs
 |}
 
 === GetApiCallSummary ===
@@ -99,11 +99,11 @@ Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disa
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || Unknown || Target user to request summaries for
+| [[NEX/Types#PID|PID]] || Unknown || Target user to request summaries for
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created after this time. Seconds value is ignored. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created after this time. Seconds value is ignored. If <code>[[NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created before this time. Seconds value is ignored. If <code>[[Nintendo_Network/NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Only return summaries created before this time. Seconds value is ignored. If <code>[[NEX/Types#DateTime Constants|Never]]</code>, ignore this argument
 |-
 | Boolean || Unknown || If true only return summaries for methods that the target user has gone over the max call count for, otherwise also return summaries of methods below the max call count
 |}
@@ -113,7 +113,7 @@ Throws <code>RendezVous::InvalidConfiguration</code> if the API recorder is disa
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#List|List]]&lt;[[#ApiCallSummary]]&gt; || Unknown || API call summaries
+| [[NEX/Types#List|List]]&lt;[[#ApiCallSummary]]&gt; || Unknown || API call summaries
 |}
 
 == Classes ==
@@ -125,11 +125,11 @@ A log of a single call to a single method made by a specific user.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
+| [[NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || The time the call was made
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The time the call was made
 |-
-| [[Nintendo_Network/NEX/Types#PID|PID]] || Unknown || The user who made the call
+| [[NEX/Types#PID|PID]] || Unknown || The user who made the call
 |}
 
 === ApiCallSummary ===
@@ -139,7 +139,7 @@ A summary of the stats of all calls to a specific method made by a specific user
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[Nintendo_Network/NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
+| [[NEX/Types#String|String]] || Unknown || The method name, including the protocol, formatted as <code>ProtocolName::MethodName</code>. For example, <code>DebugProtocol::IsApiRecorderEnabled</code>
 |-
 | UInt32 || Unknown || 0 if the caller is under the max call count for this method in the current timer, 1 if the caller has gone over the max call count
 |-
@@ -147,7 +147,7 @@ A summary of the stats of all calls to a specific method made by a specific user
 |-
 | UInt32 || Unknown || The max number of calls that can be made to this method. If the caller makes more than this number of requests in a given timer, they are marked. If 0, the caller will always be marked
 |-
-| [[Nintendo_Network/NEX/Types#DateTime|DateTime]] || Unknown || The time the timer was started
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The time the timer was started
 |-
 | UInt32 || Unknown || Seems to be the number of times the method was called after being marked?
 |-

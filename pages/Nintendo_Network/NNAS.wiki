@@ -184,7 +184,7 @@ The official NNAS seems to largely ignore the device certificate however. Most e
 
 == PIDs ==
 
-Every NNID is assigned a unique ID known as a "Principal ID" (PID). This PID is the same as the PID for the [[Nintendo_Network/NEX#Accounts|NEX account]] associated with the NNID. Once Nintendo released NNAS and the NNID system, the PID counter was set to 1800000000 and counts down for every new account made. This means the first valid PID on Nintendo Network after the introduction of NNIDs is 1799999999 (username <code>prodtest1</code>), though there are many [[Nintendo_Network/NEX#Accounts|NEX accounts]] with higher PIDs created prior to NNIDs. PIDs are used to reference NNIDs in many situations.
+Every NNID is assigned a unique ID known as a "Principal ID" (PID). This PID is the same as the PID for the [[NEX#Accounts|NEX account]] associated with the NNID. Once Nintendo released NNAS and the NNID system, the PID counter was set to 1800000000 and counts down for every new account made. This means the first valid PID on Nintendo Network after the introduction of NNIDs is 1799999999 (username <code>prodtest1</code>), though there are many [[NEX#Accounts|NEX accounts]] with higher PIDs created prior to NNIDs. PIDs are used to reference NNIDs in many situations.
 
 == Password Hashing ==
 
@@ -224,11 +224,11 @@ When linking a NNID to a console, several pieces of metadata are sent about the 
 |-
 | <code>transferable_id_base_common</code> || Unknown
 |-
-| <code>ctr_nex_account</code> || '''Only sent by the 3DS'''. The [[Nintendo_Network/NEX#Accounts|NEX account]] identifer for the console in the form <code>[[#Environments|ENVIRONMENT]]_[[#PIDs|PID]]</code>. For example <code>L1_1799999999</code>
+| <code>ctr_nex_account</code> || '''Only sent by the 3DS'''. The [[NEX#Accounts|NEX account]] identifer for the console in the form <code>[[#Environments|ENVIRONMENT]]_[[#PIDs|PID]]</code>. For example <code>L1_1799999999</code>
 |-
-| <code>ctr_nex_password</code> || '''Only sent by the 3DS'''. The [[Nintendo_Network/NEX#Accounts|NEX account]] password
+| <code>ctr_nex_password</code> || '''Only sent by the 3DS'''. The [[NEX#Accounts|NEX account]] password
 |-
-| <code>ctr_nex_environment</code> || '''Only sent by the 3DS'''. The [[Nintendo_Network/NEX#Accounts|NEX account]] [[#Environments|environment label]]
+| <code>ctr_nex_environment</code> || '''Only sent by the 3DS'''. The [[NEX#Accounts|NEX account]] [[#Environments|environment label]]
 |}
 
 Additionally, if the list is in the response of a request an optional <code>created_date</code> tag is added to each object containing the date/time the attribute was linked to the NNID in the format <code><created_date>2023-03-07T14:49:03</created_date></code>.
@@ -3438,7 +3438,7 @@ Checks if a NNID is valid for registration. Checks details like username require
 
 === GET /v1/api/provider/nex_token/@me ===
 
-Gets the login information for a title using the [[Nintendo_Network/NEX|NEX]] framework for online play. Titles which do not use this framework will have their own custom means of locating game servers and logging into them.
+Gets the login information for a title using the [[NEX|NEX]] framework for online play. Titles which do not use this framework will have their own custom means of locating game servers and logging into them.
 
 ==== Request ====
 
@@ -3462,7 +3462,7 @@ Gets the login information for a title using the [[Nintendo_Network/NEX|NEX]] fr
 
 ===== Body =====
 
-Login details for the game server. See [[Nintendo_Network/NEX]] for details on how NEX operates.
+Login details for the game server. See [[NEX]] for details on how NEX operates.
 
 {| class="wikitable"
 ! Field !! Description
