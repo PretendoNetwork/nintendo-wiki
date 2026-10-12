@@ -1,6 +1,6 @@
 == Overview ==
 
-NEX is Nintendo's networking library for game servers. All first party online 3DS and Wii U titles use NEX. 3rd party developers could also use NEX for their 3DS and Wii U games if they wished. Nintendo continued to use NEX into the Nintendo Switch era, however it was replaced with [[Nintendo_Switch_Online/NPLN|NPLN]] in 2021. See [[Nintendo_Switch_Online/NEX|NEX (NSO)]] for details on the Nintendo Switch's implementation of NEX.
+NEX is Nintendo's networking library for game servers. All first party online 3DS and Wii U titles use NEX. 3rd party developers could also use NEX for their 3DS and Wii U games if they wished. Nintendo continued to use NEX into the Nintendo Switch era, however it was replaced with [[Nintendo_Switch_Online/NPLN|NPLN]] in 2021.
 
 NEX was not made from scratch by Nintendo. It is based on [http://web.archive.org/web/20180823162719/http://quazal.com/rendez-vous.htm Quazal Rendez-Vous] (also seen as '''RDV'''). Nintendo licensed Rendez-Vous and, over time, made their own modifications/extensions to the libraries to fit their own needs. Since anyone could license a copy of Rendez-Vous from Quazal, however, many concepts seen in NEX can also been seen in other non-Nintendo titles and on non-Nintendo platforms, such as games made by Ubisoft (who bought Quazal in 2010), Test Drive Unlimited on the PlayStation 2, etc. An incomplete list of games which use Rendez-Vous can be found at https://www.mobygames.com/group/8210/middleware-rendez-vous.
 
