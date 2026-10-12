@@ -1,0 +1,757 @@
+== Overview ==
+
+'''NintendoFriendPresenceV2Protocol''' is the friends service used by the Wii U. It provides a way for users to manage their friends list, friend requests and blacklist, as well as to share their presence, Mii, status message and preferences with their friends. It is the Wii U counterpart of [[NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]], which is used by the 3DS, and is used in place of the stock [[NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+
+The server notifies clients about changes made by other users through [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]].
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#UpdateAndGetAllInformation]]
+|-
+| 2 || [[#AddFriend]]
+|-
+| 3 || [[#AddFriendByName]]
+|-
+| 4 || [[#RemoveFriend]]
+|-
+| 5 || [[#AddFriendRequest]]
+|-
+| 6 || [[#CancelFriendRequest]]
+|-
+| 7 || [[#AcceptFriendRequest]]
+|-
+| 8 || [[#DeleteFriendRequest]]
+|-
+| 9 || [[#DenyFriendRequest]]
+|-
+| 10 || [[#MarkFriendRequestsAsReceived]]
+|-
+| 11 || [[#AddBlackList]]
+|-
+| 12 || [[#RemoveBlackList]]
+|-
+| 13 || [[#UpdatePresence]]
+|-
+| 14 || [[#UpdateMii]]
+|-
+| 15 || [[#UpdateComment]]
+|-
+| 16 || [[#UpdatePreference]]
+|-
+| 17 || [[#GetBasicInfo]]
+|-
+| 18 || [[#DeletePersistentNotification]]
+|-
+| 19 || [[#CheckSettingStatus]]
+|-
+| 20 || [[#GetRequestBlockSettings]]
+|}
+
+=== UpdateAndGetAllInformation ===
+
+Updates the callers account information and presence, and returns everything related to the callers friends list. This includes the callers own preferences and status message, their friends, their sent and received friend requests, their blacklist and their notifications.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || The callers network account information
+|-
+| [[#NintendoPresenceV2]] || Unknown || The callers presence
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The callers birthday
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalPreference]] || Unknown || The callers preferences
+|-
+| [[#Comment]] || Unknown || The callers status message
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendInfo]]&gt; || Unknown || The callers friends
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || Friend requests sent by the caller
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || Friend requests received by the caller
+|-
+| [[NEX/Types#List|List]]&lt;[[#BlacklistedPrincipal]]&gt; || Unknown || The callers blacklist
+|-
+| Boolean || Unknown || Unknown
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The callers notifications
+|-
+| Boolean || Unknown || Unknown
+|}
+
+=== AddFriend ===
+
+Adds a user as a friend by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to add
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting friend request
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information
+|}
+
+=== AddFriendByName ===
+
+Adds a user as a friend by their name.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || Unknown || Name of the user to add
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting friend request
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information
+|}
+
+=== RemoveFriend ===
+
+Removes a user from the callers friends list by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to remove
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AddFriendRequest ===
+
+Sends a friend request to a user by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to send the friend request to
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || Message sent along with the friend request
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || Unknown
+|-
+| [[#GameKey]] || Unknown || Game key sent along with the friend request
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting friend request
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information
+|}
+
+=== CancelFriendRequest ===
+
+Cancels a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || ID of the friend request to cancel
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AcceptFriendRequest ===
+
+Accepts a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || ID of the friend request to accept
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information
+|}
+
+=== DeleteFriendRequest ===
+
+Deletes a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || ID of the friend request to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== DenyFriendRequest ===
+
+Denies a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || ID of the friend request to deny
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The resulting blacklist entry
+|}
+
+=== MarkFriendRequestsAsReceived ===
+
+Marks a list of friend requests as received by their IDs.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the friend requests to mark as received
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AddBlackList ===
+
+Adds a user to the callers blacklist.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The user to add to the blacklist
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The resulting blacklist entry
+|}
+
+=== RemoveBlackList ===
+
+Removes a user from the callers blacklist by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to remove
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== UpdatePresence ===
+
+Updates the callers presence.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NintendoPresenceV2]] || Unknown || The callers new presence
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== UpdateMii ===
+
+Updates the callers Mii.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MiiV2]] || Unknown || The callers new Mii
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+|}
+
+=== UpdateComment ===
+
+Updates the callers status message.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#Comment]] || Unknown || The callers new status message
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was updated
+|}
+
+=== UpdatePreference ===
+
+Updates the callers preferences.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalPreference]] || Unknown || The callers new preferences
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== GetBasicInfo ===
+
+Returns the basic information of a list of users by their [[NEX/Types#PID|PIDs]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || Unknown || [[NEX/Types#PID|PIDs]] of the users to get the basic information of
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PrincipalBasicInfo]]&gt; || Unknown || Basic information of the requested users
+|}
+
+=== DeletePersistentNotification ===
+
+Deletes a list of persistent notifications.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The notifications to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== CheckSettingStatus ===
+
+Checks the status of the callers settings. It is not known what the returned value represents.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt8 || Unknown || Unknown
+|}
+
+=== GetRequestBlockSettings ===
+
+Returns a list of friend request block settings.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || Unknown || Unknown
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || Unknown || The resulting friend request block settings
+|}
+
+== Classes ==
+
+=== BlacklistedPrincipal ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds an entry of a users blacklist.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the blacklisted user
+|-
+| [[#GameKey]] || Unknown || Game key of the blacklist entry
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the user was blacklisted
+|}
+
+=== Comment ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a users status message.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || The status message
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was last changed
+|}
+
+=== FriendInfo ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the information of a friend.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || Network account information of the friend
+|-
+| [[#NintendoPresenceV2]] || Unknown || Presence of the friend
+|-
+| [[#Comment]] || Unknown || Status message of the friend
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the users became friends
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend was last online
+|-
+| UInt64 || Unknown || Unknown
+|}
+
+=== FriendRequest ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the information of a friend request.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the user
+|-
+| [[#FriendRequestMessage]] || Unknown || Message of the friend request
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request was sent
+|}
+
+=== FriendRequestMessage ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the message of a [[#FriendRequest]], along with additional details about the friend request itself.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || ID of the friend request
+|-
+| UInt8 || Unknown || Whether or not the friend request has been received
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || The message
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || Unknown
+|-
+| [[#GameKey]] || Unknown || Game key of the friend request
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request expires
+|}
+
+=== GameKey ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class identifies a specific version of a title.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || Title ID
+|-
+| UInt16 || Unknown || Title version
+|}
+
+=== MiiV2 ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a users Mii.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || Unknown || Name
+|-
+| UInt8 || Unknown || Unknown
+|-
+| UInt8 || Unknown || Unknown
+|-
+| [[NEX/Types#Buffer|Buffer]] || Unknown || Mii data (<code>FFLStoreData</code>)
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+|}
+
+=== NintendoPresenceV2 ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a users presence.
+
+The purpose of several fields is not known. These fields are numbered so that they can be told apart, as some of them are referred to by [[#ChangedFlags]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#ChangedFlags]] || Unknown || Which fields changed their value recently
+|-
+| Boolean || Unknown || Whether or not the user is online
+|-
+| [[#GameKey]] || Unknown || Game key
+|-
+| UInt8 || Unknown || Unknown (1)
+|-
+| [[NEX/Types#String|String]] || Unknown || Message
+|-
+| UInt32 || Unknown || Unknown (2)
+|-
+| UInt8 || Unknown || Unknown (3)
+|-
+| UInt32 || Unknown || Game server ID
+|-
+| UInt32 || Unknown || Unknown (4)
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]]
+|-
+| UInt32 || Unknown || Gathering ID
+|-
+| [[NEX/Types#Buffer|Buffer]] || Unknown || Application data
+|-
+| UInt8 || Unknown || Unknown (5)
+|-
+| UInt8 || Unknown || Unknown (6)
+|-
+| UInt8 || Unknown || Unknown (7)
+|}
+
+=== NNAInfo ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the information of a users network account.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the user
+|-
+| UInt8 || Unknown || Unknown
+|-
+| UInt8 || Unknown || Unknown
+|}
+
+=== PersistentNotification ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a persistent notification. The meaning of its fields is not known.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || Unknown
+|-
+| UInt32 || Unknown || Unknown
+|-
+| UInt32 || Unknown || Unknown
+|-
+| UInt32 || Unknown || Unknown
+|-
+| [[NEX/Types#String|String]] || Unknown || Unknown
+|}
+
+=== PersistentNotificationList ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a list of [[#PersistentNotification|PersistentNotifications]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The notifications
+|}
+
+=== PrincipalBasicInfo ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the basic information of a user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user
+|-
+| [[NEX/Types#String|String]] || Unknown || NNID of the user
+|-
+| [[#MiiV2]] || Unknown || Mii of the user
+|-
+| UInt8 || Unknown || Unknown
+|}
+
+=== PrincipalPreference ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a users preferences.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || Unknown || Whether or not to show the users online presence
+|-
+| Boolean || Unknown || Whether or not to show the title the user is currently playing
+|-
+| Boolean || Unknown || Whether or not to block friend requests
+|}
+
+=== PrincipalRequestBlockSetting ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the friend request block setting of a user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user
+|-
+| Boolean || Unknown || Whether or not friend requests are blocked
+|}
+
+== Flags ==
+
+=== ChangedFlags ===
+
+{{Noticebox|''The real name of this type is not known, and neither are the names of its flags. Only their values are known.''}}
+
+Specifies which fields of a [[#NintendoPresenceV2]] changed their value recently.
+
+<pre>
+enum ChangedFlags : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| Unknown || 0x004 || Unknown (1) changed
+|-
+| Unknown || 0x008 || Unknown (2) changed
+|-
+| Unknown || 0x010 || The game server ID changed
+|-
+| Unknown || 0x020 || Unknown (4) changed
+|-
+| Unknown || 0x040 || The [[NEX/Types#PID|PID]] changed
+|-
+| Unknown || 0x080 || The gathering ID changed
+|-
+| Unknown || 0x100 || The application data changed
+|}
