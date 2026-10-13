@@ -481,11 +481,11 @@ This class holds a users status message.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || Unknown || The <code>cafe.language</code> value used for <code>pComment</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
-| [[NEX/Types#String|String]] || Unknown || The status message
+| [[NEX/Types#String|String]] || pComment || The status message. May be empty. May be at most 16 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was last changed
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was last changed. Always <code>0</code> when sent by the client to the server
 |}
 
 === FriendInfo ===
