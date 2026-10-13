@@ -693,7 +693,7 @@ This class holds the basic information of a user.
 |-
 | [[#MiiV2]] || Unknown || Mii of the user
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || Unknown || Always <code>2</code>, or <code>0</code> when used in the blacklist
 |}
 
 === PrincipalPreference ===
