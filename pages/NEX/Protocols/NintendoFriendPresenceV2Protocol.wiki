@@ -507,7 +507,7 @@ This class holds the information of a friend.
 |-
 | [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend was last online
 |-
-| UInt64 || Unknown || Unknown
+| UInt64 || Unknown || Unknown. Doesn't seem to be read by the client, and is always 0 from the server?
 |}
 
 === FriendRequest ===
