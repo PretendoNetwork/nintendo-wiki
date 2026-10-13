@@ -594,40 +594,42 @@ This class holds a users Mii.
 
 This class holds a users presence.
 
-The purpose of several fields is not known. These fields are numbered so that they can be told apart, as some of them are referred to by [[#ChangedFlags]].
+This is an updated version of [[NEX/Protocols/NintendoFriendPresenceProtocol#NintendoPresence|NintendoPresence]].
+
+The names of the fields come from a mix of the original [[NEX/Protocols/NintendoFriendPresenceProtocol#NintendoPresence|NintendoPresence]] field names and debug strings for the IPC functions.
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#ChangedFlags]] || Unknown || Which fields changed their value recently
+| [[#ChangedFlags]] || Unknown. Likely <code>m_changedBitFlag</code> || Which fields changed their value recently
 |-
 | Boolean || Unknown || Whether or not the user is online
 |-
-| [[#GameKey]] || Unknown || Game key
+| [[#GameKey]] || pGameKey, could also be <code>m_gameKey</code> || The title the user is playing
 |-
-| UInt8 || Unknown || Unknown (1)
+| UInt8 || Unknown || Set to the <code>cafe.language</code> value of the users console at login. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
-| [[NEX/Types#String|String]] || Unknown || Message
+| [[NEX/Types#String|String]] || pDescription, could also be <code>m_gameModeDescription</code> || Game mode description. This value is supplied by the title, and may technically be anything. May be empty. May be at most 127 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
 |-
-| UInt32 || Unknown || Unknown (2)
+| UInt32 || Unknown. Likely <code>m_joinAvailabilityFlag</code> || Whether or not the user can be joined. <code>0</code> if the user cannot be joined, <code>1</code> or <code>2</code> if the user can be joined, <code>0x65</code> or <code>0x66</code> if only invited users can join. This value is supplied by the title
 |-
-| UInt8 || Unknown || Unknown (3)
+| UInt8 || Unknown. Likely <code>m_matchmakeSystemType</code> || [[NEX/Protocols/MatchMakingProtocol#MatchmakeSystemType|MatchmakeSystemType]]. Must not be <code>MATCHMAKE_SYSTEM_TYPE_INVALID</code> for the user to be joinable. If <code>2</code>, only friends of the user in the [[NEX/Types#PID|PID]] field can join. This value is supplied by the title
 |-
-| UInt32 || Unknown || Game server ID
+| UInt32 || joinGameId, could also be <code>m_joinGameID</code> || Game server ID
 |-
-| UInt32 || Unknown || Unknown (4)
+| UInt32 || Unknown. Likely <code>m_joinGameMode</code> || Must be less than <code>64</code> for the user to be joinable. This value is supplied by the title
 |-
-| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]]
+| [[NEX/Types#PID|PID]] || Unknown. Likely <code>m_ownerPrincipalID</code> || [[NEX/Types#PID|PID]] of a user. This value is supplied by the title. If only invited users can join, this is the number of invited users instead
 |-
-| UInt32 || Unknown || Gathering ID
+| UInt32 || Unknown. Likely <code>m_joinGroupID</code> || Gathering ID. Must not be <code>0</code> for the user to be joinable
 |-
-| [[NEX/Types#Buffer|Buffer]] || Unknown || Application data
+| [[NEX/Types#Buffer|Buffer]] || Unknown. Likely <code>m_applicationArg</code> || Application data. This value is supplied by the title, and may technically be anything. Always 20 bytes. If only invited users can join, this is a list of up to 5 UInt32 [[NEX/Types#PID|PIDs]] of the invited users instead
 |-
-| UInt8 || Unknown || Unknown (5)
+| UInt8 || Unknown || The region of the users console. <code>1</code> for JPN, <code>2</code> for USA, <code>3</code> for EUR, <code>5</code> for CHN, <code>6</code> for KOR, <code>7</code> for TWN
 |-
-| UInt8 || Unknown || Unknown (6)
+| UInt8 || Unknown || The <code>cafe.language</code> value of the users console. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
-| UInt8 || Unknown || Unknown (7)
+| UInt8 || Unknown || Always <code>3</code>?
 |}
 
 === NNAInfo ===
@@ -743,13 +745,17 @@ enum ChangedFlags : uint32_t {
 {| class="wikitable"
 ! Name !! Value !! Description
 |-
-| Unknown || 0x004 || Unknown (1) changed
+| Unknown || 0x001 || <code>pGameKey</code> changed
 |-
-| Unknown || 0x008 || Unknown (2) changed
+| Unknown || 0x002 || <code>pDescription</code> changed
 |-
-| Unknown || 0x010 || The game server ID changed
+| Unknown || 0x004 || <code>m_joinAvailabilityFlag</code> changed
 |-
-| Unknown || 0x020 || Unknown (4) changed
+| Unknown || 0x008 || <code>m_matchmakeSystemType</code> changed
+|-
+| Unknown || 0x010 || <code>joinGameId</code> changed
+|-
+| Unknown || 0x020 || <code>m_joinGameMode</code> changed
 |-
 | Unknown || 0x040 || The [[NEX/Types#PID|PID]] changed
 |-
