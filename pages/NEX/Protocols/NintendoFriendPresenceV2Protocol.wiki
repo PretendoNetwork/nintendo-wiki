@@ -689,7 +689,7 @@ This class holds the basic information of a user.
 |-
 | [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user
 |-
-| [[NEX/Types#String|String]] || Unknown || NNID of the user
+| [[NEX/Types#String|String]] || Unknown || NNID of the user. May be at most 16 codepoints long
 |-
 | [[#MiiV2]] || Unknown || Mii of the user
 |-
