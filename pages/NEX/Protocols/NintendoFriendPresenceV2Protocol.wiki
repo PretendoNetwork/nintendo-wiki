@@ -161,19 +161,19 @@ Sends a friend request to a user by their [[NEX/Types#PID|PID]].
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to send the friend request to
+| [[NEX/Types#PID|PID]] || principalId || Target user to send the friend request to
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || messageLanguage || The <code>cafe.language</code> value used for <code>pMessage</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
-| [[NEX/Types#String|String]] || Unknown || Message sent along with the friend request
+| [[NEX/Types#String|String]] || pMessage || Message to send in the friend request. May be empty. May be at most 63 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || inGameNameLanguage ||  The <code>cafe.language</code> value used for <code>pInGameName</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
-| [[NEX/Types#String|String]] || Unknown || Unknown
+| [[NEX/Types#String|String]] || pInGameName || An in-game name associated with the friend request. This value is supplied by the game sending the friend request, and may technically be anything. For example, Xenoblade Chronicles X sets this to the senders in-game name, not their NNID. May be empty. May be at most 16 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
 |-
-| [[#GameKey]] || Unknown || Game key sent along with the friend request
+| [[#GameKey]] || Unknown || The title the sender was playing when the users played together. If the users did not play together, this is either the title the sender is currently playing or zeroed out
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the users played together. If the users did not play together, this is either the time the friend request was sent or <code>2000-01-01 00:00:00</code>
 |}
 
 ==== Response ====
