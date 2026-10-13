@@ -577,15 +577,15 @@ This class holds a users Mii.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#String|String]] || Unknown || Name
+| [[NEX/Types#String|String]] || pScreenName || Name of the Mii. May be empty. May be at most 10 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
 |-
-| UInt8 || Unknown || Unknown
+| Boolean || Unknown || If true the name of the Mii is replaced with <code>???</code>. Likely a profanity filter
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || Unknown || The font used for the name of the Mii. <code>0</code> on JPN, USA and EUR consoles, <code>1</code> on CHN consoles, <code>2</code> on KOR consoles, <code>3</code> on TWN consoles
 |-
-| [[NEX/Types#Buffer|Buffer]] || Unknown || Mii data (<code>FFLStoreData</code>)
+| [[NEX/Types#Buffer|Buffer]] || pMiiData || Mii data (<code>FFLStoreData</code>)
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+| [[NEX/Types#DateTime|DateTime]] || Unknown || When <code>pMiiData</code> was updated. Always <code>0</code> when sent by the client to the server
 |}
 
 === NintendoPresenceV2 ===
