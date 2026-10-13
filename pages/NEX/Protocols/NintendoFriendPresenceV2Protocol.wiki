@@ -4,6 +4,8 @@
 
 The server notifies clients about changes made by other users through [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]].
 
+{{Noticebox|''The real names of most fields in this protocol are not known. The names which are listed do not come from [[NEX/DDL|DDL information]]. They come from leftover debugging strings in the Wii U's friends system module (<code>FPD</code>), where they name the parameters of the <code>nn::fp</code> functions whose values are sent in these methods. The names used by the protocol itself may differ.''}}
+
 == Methods ==
 
 {| class="wikitable"
@@ -114,14 +116,14 @@ Adds a user as a friend by their [[NEX/Types#PID|PID]].
 
 === AddFriendByName ===
 
-Adds a user as a friend by their name.
+Adds a user as a friend by their NNID.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#String|String]] || Unknown || Name of the user to add
+| [[NEX/Types#String|String]] || pAccountId || NNID of the user to add. The client only allows this to be up to 16 characters long
 |}
 
 ==== Response ====
