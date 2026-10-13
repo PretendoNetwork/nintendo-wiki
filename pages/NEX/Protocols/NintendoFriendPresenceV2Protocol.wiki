@@ -643,9 +643,9 @@ This class holds the information of a users network account.
 |-
 | [[#PrincipalBasicInfo]] || Unknown || Basic information of the user
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || Unknown || Country ID of the user. This is the first byte of the users [[Nintendo_Network/Region_IDs|Region ID]]
 |-
-| UInt8 || Unknown || Unknown
+| UInt8 || Unknown || Area of the user within their country. This is the second byte of the users [[Nintendo_Network/Region_IDs|Region ID]]
 |}
 
 === PersistentNotification ===
