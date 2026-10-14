@@ -54,7 +54,7 @@ The server notifies clients about changes made by other users through [[NEX/Prot
 
 === UpdateAndGetAllInformation ===
 
-Updates the callers account information and presence, and returns everything related to the callers friends list. This includes the callers own preferences and status message, their friends, their sent and received friend requests, their blacklist and their notifications.
+Updates the callers account information and presence, and returns everything related to the callers friends list. This includes the callers own preferences and status message, their friends, their outgoing and incoming friend requests, their blacklist and their notifications.
 
 ==== Request ====
 
@@ -79,9 +79,9 @@ Updates the callers account information and presence, and returns everything rel
 |-
 | [[NEX/Types#List|List]]&lt;[[#FriendInfo]]&gt; || Unknown || The callers friends
 |-
-| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || Friend requests sent by the caller
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || The callers outgoing friend requests (sent by the caller)
 |-
-| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || Friend requests received by the caller
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || The callers incoming friend requests (sent to the caller)
 |-
 | [[NEX/Types#List|List]]&lt;[[#BlacklistedPrincipal]]&gt; || Unknown || The callers blacklist
 |-
@@ -260,14 +260,14 @@ Denies a friend request by its ID.
 
 === MarkFriendRequestsAsReceived ===
 
-Marks a list of friend requests as received by their IDs.
+Marks a list of incoming friend requests as seen by their IDs. This acts as a read receipt, and is used by the client to tell new incoming friend requests apart from ones the user has already seen.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the friend requests to mark as received
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the incoming friend requests to mark as seen
 |}
 
 ==== Response ====
@@ -523,7 +523,7 @@ This class holds the information of a friend request.
 |-
 | [[#FriendRequestMessage]] || Unknown || Message of the friend request
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request was sent. In the response of [[#AddFriendRequest]] and in notifications of new friend requests, this is the time the friend request expires instead
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request was sent. In the response of [[#AddFriendRequest]] and in notifications of new incoming friend requests, this is the time the friend request expires instead
 |}
 
 === FriendRequestMessage ===
@@ -537,7 +537,7 @@ This class holds the message of a [[#FriendRequest]], along with additional deta
 |-
 | UInt64 || messageId || ID of the friend request
 |-
-| Boolean || Unknown || Whether or not the friend request has been received
+| Boolean || Unknown || Whether or not the recipient has marked the friend request as seen with [[#MarkFriendRequestsAsReceived]]
 |-
 | UInt8 || messageLanguage || The <code>cafe.language</code> value used for <code>pMessage</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
 |-
