@@ -6,6 +6,29 @@ The server notifies clients about changes made by other users through [[NEX/Prot
 
 {{Noticebox|''The real names of most fields in this protocol are not known. The names which are listed do not come from [[NEX/DDL|DDL information]]. They come from leftover debugging strings in the Wii U's friends system module (<code>FPD</code>), where they name the parameters of the <code>nn::fp</code> functions whose values are sent in these methods. The names used by the protocol itself may differ.''}}
 
+== Provisional Friends ==
+
+Like the 3DS, the Wii U supports provisional friends. Instead of sending a friend request with [[#AddFriendRequest]], a user can add another user directly with [[#AddFriend]] (by [[NEX/Types#PID|PID]]) or [[#AddFriendByName]] (by NNID). These methods do not send a message, an in-game name or a played-together title.
+
+If the other user has already added the caller, the users become friends immediately. Otherwise the caller gets a provisional friend entry, which is an outgoing [[#FriendRequest]] whose [[#FriendRequestMessage]] has a <code>messageId</code> of <code>0</code>, until the other user also attempts to add the caller, at which point they will become friends. Provisional friends, despite being outgoing friend requests for the caller, do not show as incoming friend requests for the other user.
+
+All three methods return both a [[#FriendRequest]] and a [[#FriendInfo]], and the client uses the [[NEX/Types#PID|PID]] in them to tell whether or not the new friend is provisional. If the [[#FriendRequest]] has a non-zero [[NEX/Types#PID|PID]], it is stored as a provisional friend as an outgoing friend request. Otherwise, if the [[#FriendInfo]] has a non-zero [[NEX/Types#PID|PID]], it is stored as a new friend.
+
+A provisional friend is a mix of a friendship and a friend request. It is returned with the callers outgoing friend requests in [[#UpdateAndGetAllInformation]], but it is removed with [[#RemoveFriend]] rather than [[#CancelFriendRequest]]. When [[#RemoveFriend]] succeeds, the client removes the friend with that [[NEX/Types#PID|PID]], or the outgoing entry with that [[NEX/Types#PID|PID]] if there is no such friend.
+
+The client treats provisional friend entries differently from outgoing friend requests:
+
+* They are not reported as friend requests. <code>nn::fp::GetFriendRelationship</code> returns <code>1</code> for provisional friends, <code>2</code> for outgoing friend requests and <code>3</code> for friends
+* The expiry time in the [[#FriendRequestMessage]] is ignored, and the time in the [[#FriendRequest]] is used instead
+
+The Wii U Friend List uses [[#AddFriendByName]] instead of [[#AddFriendRequest]] when:
+
+* The caller is under 13 years old
+* The other user blocks friend requests (see [[#GetRequestBlockSettings]])
+* The NNID could not be resolved to a [[NEX/Types#PID|PID]]
+
+The Wii U Friend List never uses [[#AddFriend]].
+
 == Methods ==
 
 {| class="wikitable"
@@ -94,7 +117,7 @@ Updates the callers account information and presence, and returns everything rel
 
 === AddFriend ===
 
-Adds a user as a friend by their [[NEX/Types#PID|PID]].
+Adds a user as a provisional friend by their [[NEX/Types#PID|PID]]. See [[#Provisional Friends]].
 
 ==== Request ====
 
@@ -109,14 +132,14 @@ Adds a user as a friend by their [[NEX/Types#PID|PID]].
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#FriendRequest]] || Unknown || The resulting friend request
+| [[#FriendRequest]] || Unknown || The resulting provisional friend entry. Has a [[NEX/Types#PID|PID]] of <code>0</code> if the users became friends
 |-
-| [[#FriendInfo]] || Unknown || The resulting friend information
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
 |}
 
 === AddFriendByName ===
 
-Adds a user as a friend by their NNID.
+Adds a user as a provisional friend by their NNID. See [[#Provisional Friends]].
 
 ==== Request ====
 
@@ -131,14 +154,14 @@ Adds a user as a friend by their NNID.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#FriendRequest]] || Unknown || The resulting friend request
+| [[#FriendRequest]] || Unknown || The resulting provisional friend entry. Has a [[NEX/Types#PID|PID]] of <code>0</code> if the users became friends
 |-
-| [[#FriendInfo]] || Unknown || The resulting friend information
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
 |}
 
 === RemoveFriend ===
 
-Removes a user from the callers friends list by their [[NEX/Types#PID|PID]].
+Removes a user from the callers friends list by their [[NEX/Types#PID|PID]]. Also used to remove provisional friends. See [[#Provisional Friends]].
 
 ==== Request ====
 
@@ -181,9 +204,9 @@ Sends a friend request to a user by their [[NEX/Types#PID|PID]].
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#FriendRequest]] || Unknown || The resulting friend request
+| [[#FriendRequest]] || Unknown || The resulting friend request. Zeroed out if the users became friends
 |-
-| [[#FriendInfo]] || Unknown || The resulting friend information
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
 |}
 
 === CancelFriendRequest ===
@@ -535,7 +558,7 @@ This class holds the message of a [[#FriendRequest]], along with additional deta
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || messageId || ID of the friend request
+| UInt64 || messageId || ID of the friend request. <code>0</code> for provisional friends, see [[#Provisional Friends]]
 |-
 | Boolean || Unknown || Whether or not the recipient has marked the friend request as seen with [[#MarkFriendRequestsAsReceived]]
 |-
