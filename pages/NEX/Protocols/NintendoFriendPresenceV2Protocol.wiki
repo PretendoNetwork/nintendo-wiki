@@ -586,9 +586,9 @@ This class identifies a specific version of a title.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || Unknown || Title ID
+| UInt64 || Unknown. Likely <code>m_gameCode</code> || Title ID. Zero if no game
 |-
-| UInt16 || Unknown || Title version
+| UInt16 || Unknown. Likely <code>m_gameVersion</code> || Title version
 |}
 
 === MiiV2 ===
