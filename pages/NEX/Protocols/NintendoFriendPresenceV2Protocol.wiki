@@ -459,14 +459,14 @@ This method does not take any parameters.
 
 === GetRequestBlockSettings ===
 
-Returns a list of friend request block settings.
+Checks whether or not someone has friend requests blocked. If a client wants to send a friend request to a user who is blocking friend requests, a [[#Provisional Friends|provisional friendship]] is created.
 
 ==== Request ====
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;UInt32&gt; || Unknown || Unknown
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || Unknown || List of users to check the settings of
 |}
 
 ==== Response ====
@@ -474,7 +474,7 @@ Returns a list of friend request block settings.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || Unknown || The resulting friend request block settings
+| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || Unknown || The friend request block settings of the requested users
 |}
 
 == Classes ==
