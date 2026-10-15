@@ -366,7 +366,7 @@ Updates the callers Mii.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Unknown
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the Mii was updated
 |}
 
 === UpdateComment ===
