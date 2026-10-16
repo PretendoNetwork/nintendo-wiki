@@ -611,6 +611,24 @@ This class holds a users Mii.
 | [[NEX/Types#DateTime|DateTime]] || Unknown || When <code>pMiiData</code> was updated. Always <code>0</code> when sent by the client to the server
 |}
 
+=== NintendoCreateAccountData ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds the data used to create a users friends account. This class is not used by this protocol, and is instead used by [[NEX/Protocols/AccountManagementProtocol|AccountManagementProtocol]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || Network account information of the user. In some cases only the [[NEX/Types#PID|PID]] is set
+|-
+| [[NEX/Types#String|String]] || Unknown || The users NEX token from the account server
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The users birthday. <code>0</code> in the same cases where only the [[NEX/Types#PID|PID]] is set in the [[#NNAInfo]]
+|-
+| UInt64 || Unknown || Always <code>0</code> when sent by the client
+|}
+
 === NintendoPresenceV2 ===
 
 {{ClassInherits|path=Online/NEX/Types|Data}}
