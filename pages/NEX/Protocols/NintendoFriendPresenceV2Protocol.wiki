@@ -427,7 +427,7 @@ Returns the basic information of a list of users by their [[NEX/Types#PID|PIDs]]
 
 === DeletePersistentNotification ===
 
-Deletes a list of persistent notifications.
+Deletes a list of persistent notifications. The client uses this to clear the new friend flag of users. See [[#PersistentNotification]].
 
 ==== Request ====
 
@@ -675,20 +675,24 @@ This class holds the information of a users network account.
 
 {{ClassInherits|path=Online/NEX/Types|Data}}
 
-This class holds a persistent notification. The meaning of its fields is not known.
+Certain events/actions will trigger the server to send a notification to the client, alerting them of the event. See [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for a list of events and their details.
+
+In order to still alert the user of these events while the user is offline, the server will sometimes store a record of the event and send its data to the user the next time they logon using [[#UpdateAndGetAllInformation]], and are not deleted until the client calls [[#DeletePersistentNotification]]. This class holds the notification paramaters for those notifications.
+
+The Wii U supports notification types with IDs between 10-36, inclusive, but [[#UpdateAndGetAllInformation]] seems to only have a handler for notification type <code>30</code>, which tells the client about any new friends that were added while they were offline.
 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || Unknown || Unknown
+| UInt64 || Unknown || Notification UInt64 paramater. Not read by the client. Always <code>0</code> when sent by the client to the server
 |-
-| UInt32 || Unknown || Unknown
+| UInt32 || Unknown || Notification UInt32 paramater 1. For type <code>30</code>, this is the [[NEX/Types#PID|PID]] of the new friend
 |-
-| UInt32 || Unknown || Unknown
+| UInt32 || Unknown || Notification UInt32 paramater 2. Not read by the client. For type <code>30</code>, this is the [[NEX/Types#PID|PID]] of the caller
 |-
-| UInt32 || Unknown || Unknown
+| UInt32 || Unknown || Type of the notification. See [[NEX/Protocols/NintendoNotificationEventProtocol#Notification_Types|Notification Types]]
 |-
-| [[NEX/Types#String|String]] || Unknown || Unknown
+| [[NEX/Types#String|String]] || Unknown || Notification string paramater. Not read by the client. Empty for type <code>30</code>
 |}
 
 === PersistentNotificationList ===
