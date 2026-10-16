@@ -96,9 +96,9 @@ Updates the callers account information and presence, and returns everything rel
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#PrincipalPreference]] || Unknown || The callers preferences
+| [[#PrincipalPreference]] || <code>pPreference</code> || The callers preferences
 |-
-| [[#Comment]] || Unknown || The callers status message
+| [[#Comment]] || <code>pComment</code> || The callers status message
 |-
 | [[NEX/Types#List|List]]&lt;[[#FriendInfo]]&gt; || Unknown || The callers friends
 |-
