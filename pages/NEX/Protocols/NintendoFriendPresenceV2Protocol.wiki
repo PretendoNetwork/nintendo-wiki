@@ -108,11 +108,11 @@ Updates the callers account information and presence, and returns everything rel
 |-
 | [[NEX/Types#List|List]]&lt;[[#BlacklistedPrincipal]]&gt; || Unknown || The callers blacklist
 |-
-| Boolean || Unknown || Unknown
+| Boolean || <code>isRequestBlockForced</code> || Whether or not friend requests are force-blocked for the caller. When <code>true</code>, <code>IsFriendRequestAllowed</code> returns <code>false</code>. Cleared by a type <code>34</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification event]]
 |-
 | [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The callers notifications
 |-
-| Boolean || Unknown || Unknown
+| Boolean || <code>pIsPreferenceValid</code> || Whether or not the caller has set their initial preferences with [[#UpdatePreference]]. Despite the field name, when <code>true</code> the client treats the preferences as invalid, and the Friend List asks the user to set them
 |}
 
 === AddFriend ===

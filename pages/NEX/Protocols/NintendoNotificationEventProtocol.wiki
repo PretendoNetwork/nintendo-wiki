@@ -135,6 +135,8 @@ This class holds data about a users profile.
 |-
 | 33 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend changed their comment. <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] the comment was updated, and <code>m_strParam</code> contains the new comment
 |-
+| 34 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || Unknown. Likely the callers friend request block setting has changed. The client only reads the "block friend requests" field, and sets its own preference to it. If it is <code>false</code>, the client also clears the forced friend request block from [[NEX/Protocols/NintendoFriendPresenceV2Protocol#UpdateAndGetAllInformation|UpdateAndGetAllInformation]]
+|-
 | 35 || || Wii U || || Unknown. Related to friend relationships?
 |-
 | 36 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PersistentNotificationList|PersistentNotificationList]] || Unknown. This seems to delete persistent notifications?
