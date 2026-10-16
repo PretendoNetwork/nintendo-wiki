@@ -773,6 +773,18 @@ This class holds the friend request block setting of a user.
 | Boolean || Unknown || Whether or not friend requests are blocked
 |}
 
+=== ReceivedMessage ===
+
+{{ClassInherits|path=Online/NEX/Types|Data}}
+
+This class holds a list of incoming friend request IDs.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the incoming friend requests which have been marked as received. See [[#MarkFriendRequestsAsReceived]]
+|}
+
 == Flags ==
 
 === ChangedFlags ===
