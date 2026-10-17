@@ -124,7 +124,7 @@ Adds a user as a provisional friend by their [[NEX/Types#PID|PID]]. See [[#Provi
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to add
+| [[NEX/Types#PID|PID]] || principalId || [[NEX/Types#PID|PID]] of the user to add
 |}
 
 ==== Response ====
