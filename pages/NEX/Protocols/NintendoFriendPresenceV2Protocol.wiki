@@ -466,7 +466,7 @@ Checks whether or not someone has friend requests blocked. If a client wants to 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || Unknown || List of users to check the settings of
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || pPidList || List of users to check the settings of
 |}
 
 ==== Response ====
@@ -474,7 +474,7 @@ Checks whether or not someone has friend requests blocked. If a client wants to 
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || Unknown || The friend request block settings of the requested users
+| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || pSettingList || The friend request block settings of the requested users. If a requested user has no entry, the client treats them as not blocking friend requests
 |}
 
 == Classes ==
