@@ -768,9 +768,9 @@ This class holds the friend request block setting of a user.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user. The client matches each entry to a requested [[NEX/Types#PID|PID]] by this field, so entries may be in any order
 |-
-| Boolean || Unknown || Whether or not friend requests are blocked
+| Boolean || Unknown || Whether or not the user blocks friend requests
 |}
 
 === ReceivedMessage ===
