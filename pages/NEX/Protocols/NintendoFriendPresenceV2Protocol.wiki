@@ -386,7 +386,7 @@ Updates the callers status message.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was updated
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was updated. The client only stores the new status message if this is later than the [[NEX/Types#DateTime|DateTime]] of the callers current [[#Comment]]
 |}
 
 === UpdatePreference ===
