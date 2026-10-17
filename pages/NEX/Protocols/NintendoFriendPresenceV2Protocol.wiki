@@ -270,7 +270,7 @@ Denies a friend request by its ID.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || Unknown || ID of the friend request to deny
+| UInt64 || messageId || ID of the friend request to deny
 |}
 
 ==== Response ====
