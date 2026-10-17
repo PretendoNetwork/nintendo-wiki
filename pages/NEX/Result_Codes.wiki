@@ -64,7 +64,7 @@ These result codes are usually used only by the client, or are returned by the s
 
 === DDL ===
 
-These errors are likely only triggered during debugging, when parsing a games [[Nintendo_Network/DDL|DDLs]].
+These errors are likely only triggered during debugging, when parsing a games [[NEX/DDL|DDLs]].
 
 {| class="wikitable"
 ! Value !! Name !! Description

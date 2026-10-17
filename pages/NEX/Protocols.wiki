@@ -135,7 +135,7 @@ Not all protocols are provided by Nintendo/NEX, but may be seen in other Quazal 
 |-
 | 109 || [[NEX/Protocols/MatchmakeExtensionProtocol|MatchmakeExtensionProtocol]]
 |-
-| 110 || [[NEX/Protocols/UtilityProtocol|UtilityProtocol]] / [[NEX/Protocols/StorageManager|Storage manager]]
+| 110 || [[NEX/Protocols/UtilityProtocol|UtilityProtocol]] / [[NEX/Protocols/StorageManagerProtocol|StorageManagerProtocol]]
 |-
 | 112 || [[NEX/Protocols/RankingProtocol|RankingProtocol]]
 |-

@@ -240,7 +240,7 @@ Identifies the mailbox a method operates on. This is either a single user or a [
 
 === UserMessage ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 Base class for all other message types. Can be seen used by itself in rare cases, but usually only child classes are used.
 

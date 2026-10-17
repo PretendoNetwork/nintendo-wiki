@@ -481,7 +481,7 @@ Checks whether or not someone has friend requests blocked. If a client wants to 
 
 === BlacklistedPrincipal ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds an entry of a users blacklist.
 
@@ -497,7 +497,7 @@ This class holds an entry of a users blacklist.
 
 === Comment ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a users status message.
 
@@ -513,7 +513,7 @@ This class holds a users status message.
 
 === FriendInfo ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the information of a friend.
 
@@ -535,7 +535,7 @@ This class holds the information of a friend.
 
 === FriendRequest ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the information of a friend request.
 
@@ -551,7 +551,7 @@ This class holds the information of a friend request.
 
 === FriendRequestMessage ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the message of a [[#FriendRequest]], along with additional details about the friend request itself.
 
@@ -579,7 +579,7 @@ This class holds the message of a [[#FriendRequest]], along with additional deta
 
 === GameKey ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class identifies a specific version of a title.
 
@@ -593,7 +593,7 @@ This class identifies a specific version of a title.
 
 === MiiV2 ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a users Mii.
 
@@ -613,7 +613,7 @@ This class holds a users Mii.
 
 === NintendoCreateAccountData ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the data used to create a users friends account. This class is not used by this protocol, and is instead used by [[NEX/Protocols/AccountManagementProtocol|AccountManagementProtocol]].
 
@@ -631,7 +631,7 @@ This class holds the data used to create a users friends account. This class is 
 
 === NintendoPresenceV2 ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a users presence.
 
@@ -675,7 +675,7 @@ The names of the fields come from a mix of the original [[NEX/Protocols/Nintendo
 
 === NNAInfo ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the information of a users network account.
 
@@ -691,7 +691,7 @@ This class holds the information of a users network account.
 
 === PersistentNotification ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 Certain events/actions will trigger the server to send a notification to the client, alerting them of the event. See [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for a list of events and their details.
 
@@ -715,7 +715,7 @@ The Wii U supports notification types with IDs between 10-36, inclusive, but [[#
 
 === PersistentNotificationList ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a list of [[#PersistentNotification|PersistentNotifications]]. Only used as the data of type <code>36</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
 
@@ -727,7 +727,7 @@ This class holds a list of [[#PersistentNotification|PersistentNotifications]]. 
 
 === PrincipalBasicInfo ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the basic information of a user.
 
@@ -745,7 +745,7 @@ This class holds the basic information of a user.
 
 === PrincipalPreference ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a users preferences.
 
@@ -761,7 +761,7 @@ This class holds a users preferences.
 
 === PrincipalRequestBlockSetting ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the friend request block setting of a user.
 
@@ -775,7 +775,7 @@ This class holds the friend request block setting of a user.
 
 === ReceivedMessage ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds a list of incoming friend request IDs. Only used as the data of type <code>35</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
 

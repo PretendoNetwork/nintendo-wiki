@@ -2,9 +2,9 @@
 
 {{Noticebox|''This page needs better descriptions of each of the data types and what they do.''}}
 
-When creating Rendez-Vous, Quazal designed a [https://en.wikipedia.org/wiki/Data_definition_language Data Definition Language] (DDL for short) for encoding metadata about the various [Online/NEX/Protocols|protocols] and other services. This metadata includes the real protocol name, real protocol method names, real protocol class names, and the method request, method response and class structures including data types and the real field names, though some data types lose information when encoded (e.g., the [Online/NEX/Types#PID|PID] type is often seen as just either a UInt32/UInt64). What this data does not include is the protocol ID, references to past protocol versions, enums/constants, etc.
+When creating Rendez-Vous, Quazal designed a [https://en.wikipedia.org/wiki/Data_definition_language Data Definition Language] (DDL for short) for encoding metadata about the various [[NEX/Protocols|protocols]] and other services. This metadata includes the real protocol name, real protocol method names, real protocol class names, and the method request, method response and class structures including data types and the real field names, though some data types lose information when encoded (e.g., the [[NEX/Types#PID|PID]] type is often seen as just either a UInt32/UInt64). What this data does not include is the protocol ID, references to past protocol versions, enums/constants, etc.
 
-It is believed that this data was used during development to automatically generate the client code needed to handle [Online/NEX/RMC|RMCs], however many clients have this metadata still in their code along with the (presumed) generated client code.
+It is believed that this data was used during development to automatically generate the client code needed to handle [[NEX/RMC|RMCs]], however many clients have this metadata still in their code along with the (presumed) generated client code.
 
 This data is also often seen referred to as "DDL Parse Trees", given the tree-like structure. For an example parser, see https://github.com/PretendoNetwork/ddl-parser and https://github.com/PretendoNetwork/nex-documentation-generator.
 

@@ -73,6 +73,6 @@ This page only documents the standard RMC message structure used by NEX games. T
 
 The following protocols never send an RMC response, regardless of whether an error occurred:
 
-* [[Notification Protocol]]
-* [[Nintendo Notification Event Protocol]]
-* [[Message Delivery Protocol]]
+* [[NEX/Protocols/NotificationProtocol|NotificationProtocol]]
+* [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]]
+* [[NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]

@@ -62,11 +62,11 @@ In all known cases, the method name string in responses is suffixed with <code>*
 
 == Classes ==
 
-Unlike standard NEX [[NEX/Types#Classes|Classes]], WATCH_DOGS (Wii U) does not use a class header in any cases. Instead, the class version information is encoded directly into the RMC message via the [[ClassVersionContainer]]. Presumably this was done to save bandwidth when sending many of the same class, as the game only needs to encode the version information a single time per RMC.
+Unlike standard NEX [[NEX/Types#Classes|Classes]], WATCH_DOGS (Wii U) does not use a class header in any cases. Instead, the class version information is encoded directly into the RMC message via the [[#ClassVersionContainer]]. Presumably this was done to save bandwidth when sending many of the same class, as the game only needs to encode the version information a single time per RMC.
 
 === ClassVersionContainer ===
 
-The <code>ClassVersionContainer</code> is a [[NEX/Types#List|List]]&lt;[[#ClassVersion|ClassVersion]]&gt;. Unlike the standard RMC format, where version information is optionally encoded as a header on each class, this variant declares version information once, prior to parsing the remainder of the message. Every request includes a <code>ClassVersionContainer</code>, even when it contains zero entries. Responses do not include a <code>ClassVersionContainer</code>, nor do they encode class headers.
+The <code>ClassVersionContainer</code> is a [[NEX/Types#List|List]]&lt;[[#ClassVersion]]&gt;. Unlike the standard RMC format, where version information is optionally encoded as a header on each class, this variant declares version information once, prior to parsing the remainder of the message. Every request includes a <code>ClassVersionContainer</code>, even when it contains zero entries. Responses do not include a <code>ClassVersionContainer</code>, nor do they encode class headers.
 
 === ClassVersion ===
 

@@ -218,7 +218,7 @@ This class holds information on a users station.
 
 === NintendoLoginData ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the users login. It is identical to [[#AccountExtraInfo]], just renamed.
 
@@ -230,7 +230,7 @@ This class holds the users login. It is identical to [[#AccountExtraInfo]], just
 
 === AccountExtraInfo ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds the users login. It is identical to [[#NintendoLoginData]], just renamed.
 

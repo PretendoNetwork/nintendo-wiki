@@ -46,7 +46,7 @@ This class holds the data about a given notification. The contents of <code>m_da
 
 === NintendoNotificationEventGeneral ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds generic data about a given notification. The meaning of the fields changes based on the context the notification is sent in, the notification type, etc.
 
@@ -64,7 +64,7 @@ This class holds generic data about a given notification. The meaning of the fie
 
 === NintendoNotificationEventProfile ===
 
-{{ClassInherits|path=Online/NEX/Types|Data}}
+{{ClassInherits|path=NEX/Types|Data}}
 
 This class holds data about a users profile.
 
