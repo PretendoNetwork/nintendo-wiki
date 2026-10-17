@@ -717,7 +717,7 @@ The Wii U supports notification types with IDs between 10-36, inclusive, but [[#
 
 {{ClassInherits|path=Online/NEX/Types|Data}}
 
-This class holds a list of [[#PersistentNotification|PersistentNotifications]].
+This class holds a list of [[#PersistentNotification|PersistentNotifications]]. Only used as the data of type <code>36</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
 
 {| class="wikitable"
 ! Type !! Name !! Description
@@ -777,7 +777,7 @@ This class holds the friend request block setting of a user.
 
 {{ClassInherits|path=Online/NEX/Types|Data}}
 
-This class holds a list of incoming friend request IDs.
+This class holds a list of incoming friend request IDs. Only used as the data of type <code>35</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
 
 {| class="wikitable"
 ! Type !! Name !! Description
