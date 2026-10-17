@@ -105,39 +105,41 @@ This class holds data about a users profile.
 |-
 | 10 || 1 || 3DS || [[#NintendoNotificationEventGeneral]] || A friend went offline. <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] that the user went offline
 |-
-| 10 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend went offline. <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] that the user went offline
+| 10 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend went offline. <code>m_pidSender</code> is the friend. <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] that the user went offline. The client clears the presence of the friend and stores <code>m_u64Param2</code> as the time they were last online
 |-
-| 21 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#NNAInfo|NNAInfo]] || A friends Mii has been modified
+| 21 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#NNAInfo|NNAInfo]] || A friends Mii or profile has been modified. The client replaces the network account information of the friend in <code>m_pidSender</code>, and treats it as a Mii change if the Mii data differs, and as a profile change if the country or area differs
 |-
-| 22 || || Wii U || || Unknown. Mii related?
+| 22 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalBasicInfo|PrincipalBasicInfo]] || A friends Mii has been modified. The client replaces the Mii of the friend in <code>m_pidSender</code>, and treats it as a Mii change if the Mii [[NEX/Types#DateTime|DateTime]] differs
 |-
-| 23 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || A friend updated their preferences
+| 23 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || The recipients preferences have been updated. <code>m_pidSender</code> is not read by the client. The client replaces its own preferences
 |-
-| 24 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#NintendoPresenceV2|NintendoPresenceV2]] || A friend updated their presence
+| 24 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#NintendoPresenceV2|NintendoPresenceV2]] || A friend updated their presence. <code>m_pidSender</code> is the friend
 |-
-| 25 || || Wii U || || Unknown. Friend request related?
+| 25 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] || A new outgoing friend request. Only handled if <code>m_pidSender</code> is the recipient, in which case the client adds it to the recipients outgoing friend requests. The [[NEX/Types#PID|PID]] in the [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] is the user the friend request is going to. Ignored if that user is already a friend of the recipient
 |-
-| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || An incoming friend request has been canceled. <code>m_u32Param</code> contains the [[NEX/Types#PID|PID]] the friend request was going to (the recipient of the notification), <code>m_u64Param1</code> contains the the friend request ID that was canceled and <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] the friend request was canceled
+| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || An incoming friend request has been canceled. Sent with a non-zero <code>m_u64Param1</code>. <code>m_pidSender</code> is the user who sent the friend request. The client only checks that it is not the recipient. <code>m_u32Param</code> contains the [[NEX/Types#PID|PID]] the friend request was going to (the recipient of the notification), <code>m_u64Param1</code> contains the the friend request ID that was canceled and <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] the friend request was canceled
 |-
-| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend has removed you from their friends list. <code>m_u32Param</code> contains the [[NEX/Types#PID|PID]] the user being removed (the recipient of the notification) and <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] when the friend removed you
+| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend has removed you from their friends list. Sent with an <code>m_u64Param1</code> of <code>0</code>. <code>m_pidSender</code> is the friend, and the client removes them from the recipients friends. <code>m_u32Param</code> contains the [[NEX/Types#PID|PID]] the user being removed (the recipient of the notification) and <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] when the friend removed you
 |-
-| 27 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] || New incoming friend request
+| 26 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || If <code>m_pidSender</code> is the recipient, the client removes the friend whose [[NEX/Types#PID|PID]] is in <code>m_u32Param</code>, or if there is none, the outgoing friend request to that user
 |-
-| 28 || || Wii U || || Unknown. Friend request related?
+| 27 || 2 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] || New incoming friend request. <code>m_pidSender</code> is the user who sent the friend request. The client uses the [[NEX/Types#PID|PID]] in the [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendRequest|FriendRequest]] rather than <code>m_pidSender</code>, and ignores the friend request if that user is already a friend or has an outgoing friend request from the recipient. If <code>m_pidSender</code> is the recipient, the client instead adds it to the recipients outgoing friend requests
 |-
-| 29 || || Wii U || || Unknown. Blacklist related?
+| 28 || || Wii U || [[#NintendoNotificationEventGeneral]] || An incoming friend request has been removed. <code>m_pidSender</code> is not read by the client. The client removes the incoming friend request whose ID is in <code>m_u64Param1</code>, the same as after [[NEX/Protocols/NintendoFriendPresenceV2Protocol#DeleteFriendRequest|DeleteFriendRequest]]
 |-
-| 30 || 1 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendInfo|FriendInfo]] || Your outgoing friend request has been accepted
+| 29 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#BlacklistedPrincipal|BlacklistedPrincipal]] || A user has been added to the recipients blacklist. <code>m_pidSender</code> is not read by the client. The client removes any incoming friend request from the user and adds them to the recipients blacklist, the same as after [[NEX/Protocols/NintendoFriendPresenceV2Protocol#AddBlackList|AddBlackList]]
 |-
-| 31 || || Wii U || || Unknown. Blacklist related?
+| 30 || 1 || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendInfo|FriendInfo]] || Your outgoing friend request has been accepted. <code>m_pidSender</code> is the user who accepted it, but is not read by the client. The client adds the user in the [[NEX/Protocols/NintendoFriendPresenceV2Protocol#FriendInfo|FriendInfo]] as a friend, removes any outgoing or incoming friend request between the users, and flags the user as a new friend. See [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PersistentNotification|PersistentNotification]]
 |-
-| 32 || || Wii U || || Unknown. Blacklist related?
+| 31 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#BlacklistedPrincipal|BlacklistedPrincipal]] || <code>m_pidSender</code> is not read by the client. The client adds the user to the recipients blacklist, or updates their entry if they are already blacklisted. Unlike type <code>29</code>, incoming friend requests from the user are not removed
 |-
-| 33 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend changed their comment. <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] the comment was updated, and <code>m_strParam</code> contains the new comment
+| 32 || || Wii U || || A user has been removed from the recipients blacklist. <code>m_pidSender</code> is not read by the client. The client removes the user whose [[NEX/Types#PID|PID]] is in the first UInt32 of <code>m_dataholder</code> from the recipients blacklist, the same as after [[NEX/Protocols/NintendoFriendPresenceV2Protocol#RemoveBlackList|RemoveBlackList]]
 |-
-| 34 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || Unknown. Likely the callers friend request block setting has changed. The client only reads the "block friend requests" field, and sets its own preference to it. If it is <code>false</code>, the client also clears the forced friend request block from [[NEX/Protocols/NintendoFriendPresenceV2Protocol#UpdateAndGetAllInformation|UpdateAndGetAllInformation]]
+| 33 || 1 || Wii U || [[#NintendoNotificationEventGeneral]] || A friend changed their comment. <code>m_pidSender</code> is the friend. <code>m_u32Param</code> contains the <code>cafe.language</code> value of the comment, <code>m_u64Param2</code> contains the [[NEX/Types#DateTime|DateTime]] the comment was updated, and <code>m_strParam</code> contains the new comment. If <code>m_pidSender</code> is the recipient, the client instead replaces its own comment, if <code>m_u64Param2</code> is newer than it
 |-
-| 35 || || Wii U || || Unknown. Related to friend relationships?
+| 34 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PrincipalPreference|PrincipalPreference]] || Unknown. Likely the recipients friend request block setting has changed. <code>m_pidSender</code> is not read by the client. The client only reads the "block friend requests" field, and sets its own preference to it. If it is <code>false</code>, the client also clears the forced friend request block from [[NEX/Protocols/NintendoFriendPresenceV2Protocol#UpdateAndGetAllInformation|UpdateAndGetAllInformation]]
 |-
-| 36 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PersistentNotificationList|PersistentNotificationList]] || Unknown. This seems to delete persistent notifications?
+| 35 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#ReceivedMessage|ReceivedMessage]] || Incoming friend requests have been marked as received. <code>m_pidSender</code> is not read by the client. The client marks the recipients incoming friend requests with the IDs in the list as received, the same as after [[NEX/Protocols/NintendoFriendPresenceV2Protocol#MarkFriendRequestsAsReceived|MarkFriendRequestsAsReceived]]
+|-
+| 36 || || Wii U || [[NEX/Protocols/NintendoFriendPresenceV2Protocol#PersistentNotificationList|PersistentNotificationList]] || Persistent notifications have been deleted. <code>m_pidSender</code> is not read by the client. For each type <code>30</code> notification in the list, the client clears the new friend flag of the user, the same as after [[NEX/Protocols/NintendoFriendPresenceV2Protocol#DeletePersistentNotification|DeletePersistentNotification]]
 |}
