@@ -414,7 +414,7 @@ Returns the basic information of a list of users by their [[NEX/Types#PID|PIDs]]
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || Unknown || [[NEX/Types#PID|PIDs]] of the users to get the basic information of
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || pPidList || [[NEX/Types#PID|PIDs]] of the users to get the basic information of
 |}
 
 ==== Response ====
@@ -422,7 +422,7 @@ Returns the basic information of a list of users by their [[NEX/Types#PID|PIDs]]
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;[[#PrincipalBasicInfo]]&gt; || Unknown || Basic information of the requested users
+| [[NEX/Types#List|List]]&lt;[[#PrincipalBasicInfo]]&gt; || pInfoList || Basic information of the requested users. The client matches each entry to a requested [[NEX/Types#PID|PID]] by its [[NEX/Types#PID|PID]], so entries may be in any order. If a requested user has no entry, the client uses an entry with a [[NEX/Types#PID|PID]] of <code>0</code>
 |}
 
 === DeletePersistentNotification ===
