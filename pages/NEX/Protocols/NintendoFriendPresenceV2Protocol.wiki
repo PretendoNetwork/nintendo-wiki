@@ -752,11 +752,11 @@ This class holds a users preferences.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| Boolean || Unknown || Whether or not to show the users online presence
+| Boolean || Unknown || Whether or not to show the users online presence to their friends, including when they were last online. When <code>false</code>, the client does not send [[#UpdatePresence]]
 |-
-| Boolean || Unknown || Whether or not to show the title the user is currently playing
+| Boolean || Unknown || Whether or not to show the title the user is currently playing to their friends. Only shown while the user is online
 |-
-| Boolean || Unknown || Whether or not to block friend requests
+| Boolean || Unknown || Whether or not to block friend requests. Users who block friend requests can only be added as provisional friends, see [[#Provisional Friends]]. Changed by type <code>34</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]]
 |}
 
 === PrincipalRequestBlockSetting ===
