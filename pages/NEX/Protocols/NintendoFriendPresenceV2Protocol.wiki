@@ -290,7 +290,7 @@ Marks a list of incoming friend requests as seen by their IDs. This acts as a re
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the incoming friend requests to mark as seen
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || pList || IDs of the incoming friend requests to mark as seen
 |}
 
 ==== Response ====
