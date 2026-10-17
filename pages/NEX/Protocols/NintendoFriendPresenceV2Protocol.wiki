@@ -398,7 +398,7 @@ Updates the callers preferences.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#PrincipalPreference]] || Unknown || The callers new preferences
+| [[#PrincipalPreference]] || pPreference || The callers new preferences
 |}
 
 ==== Response ====
