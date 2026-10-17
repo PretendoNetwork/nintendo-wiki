@@ -492,7 +492,7 @@ This class holds an entry of a users blacklist.
 |-
 | [[#GameKey]] || Unknown || Title associated with the blacklist entry. When sent by the client in [[#AddBlackList]], this is either supplied by the title, or is the title the caller is currently playing. Zeroed out in the response of [[#DenyFriendRequest]]
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the user was blacklisted. Always <code>0</code> when sent by the client in [[#AddBlackList]]
+| [[NEX/Types#DateTime|DateTime]] || Unknown. Likely <code>additionalTime</code> || Time the user was blacklisted. Always <code>0</code> when sent by the client in [[#AddBlackList]]
 |}
 
 === Comment ===
@@ -526,7 +526,7 @@ This class holds the information of a friend.
 |-
 | [[#Comment]] || Unknown || Status message of the friend
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the users became friends
+| [[NEX/Types#DateTime|DateTime]] || Unknown. Likely <code>approvalTime</code> || Time the users became friends
 |-
 | [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend was last online
 |-
