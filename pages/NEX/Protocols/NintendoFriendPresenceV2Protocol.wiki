@@ -454,7 +454,7 @@ This method does not take any parameters.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| Boolean || Unknown || Whether or not the caller needs to setup their initial preferences
+| Boolean || pStatus || Whether or not the caller needs to setup their initial preferences
 |}
 
 === GetRequestBlockSettings ===
