@@ -1,0 +1,4 @@
+<div style="background-color: {{#switch:{{{type|note}}}|warning=rgb(255, 243, 205)|danger=rgb(255, 220, 220)|rgb(234, 243, 255)}}; border-color: {{#switch:{{{type|note}}}|warning=rgb(255, 193, 7)|danger=rgb(255, 99, 99)|rgb(163, 202, 255)}}; border-style: solid; border-width: 1px; color: rgb(32, 33, 34); max-width: 800px; width: fit-content;">
+<div style="background-color: {{#switch:{{{type|note}}}|warning=rgb(255, 220, 100)|danger=rgb(255, 150, 150)|rgb(203, 214, 246)}}; font-size: 13px; font-weight: 600; height: 24px; line-height: 24px; text-transform: uppercase; padding: 5px; padding-left: 20px;">{{{title|{{#switch:{{{type|note}}}|warning=Warning|danger=Danger|Note}}}}}</div>
+<div style="padding: 5px;">{{{1}}}</div>
+</div>

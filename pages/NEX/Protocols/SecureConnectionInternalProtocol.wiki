@@ -1,0 +1,25 @@
+== Overview ==
+
+'''SecureConnectionInternalProtocol''' is one of the [[NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, and neither are the method IDs of any of its methods.
+
+Its methods closely mirror those of [[NEX/Protocols/SecureConnectionProtocol|SecureConnectionProtocol]], with [[#Methods|RequestURLs]], [[#Methods|TestConnectivity]] and [[#Methods|SendReport]] sharing their names outright and [[#Methods|InsertConnectionProperties]], [[#Methods|UpdateConnectionProperties]] and [[#Methods|ReplaceConnectionProperties]] likely being related to [[NEX/Protocols/SecureConnectionProtocol#Register|Register]], [[NEX/Protocols/SecureConnectionProtocol#UpdateURLs|UpdateURLs]] and [[NEX/Protocols/SecureConnectionProtocol#ReplaceURL|ReplaceURL]]? This, plus the protocols name, suggests this is an internal counterpart of [[NEX/Protocols/SecureConnectionProtocol|SecureConnectionProtocol]], letting servers read and modify the connection data of clients registered to other servers.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| ? || GetConnectionID
+|-
+| ? || InsertConnectionProperties
+|-
+| ? || RequestURLs
+|-
+| ? || TestConnectivity
+|-
+| ? || UpdateConnectionProperties
+|-
+| ? || ReplaceConnectionProperties
+|-
+| ? || SendReport
+|}

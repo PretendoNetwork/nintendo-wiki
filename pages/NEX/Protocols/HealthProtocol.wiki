@@ -1,0 +1,81 @@
+== Overview ==
+
+'''HealthProtocol''' is a simple protocol used to check the status of the game server.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#PingDaemon]]
+|-
+| 2 || [[#PingDatabase]]
+|-
+| 3 || [[#RunSanityCheck]]
+|-
+| 4 || [[#FixSanityErrors]]
+|}
+
+=== PingDaemon ===
+
+Checks if the game server daemon is reachable.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the daemon is reachable
+|}
+
+=== PingDatabase ===
+
+Checks if the game server database is reachable.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the database is reachable
+|}
+
+=== RunSanityCheck ===
+
+Checks to see if the game server passes sanity checks.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Presumed to be whether or not the server passes the sanity checks. It is not known if a <code>true</code> value means "checks passed" or "had errors"
+|}
+
+=== FixSanityErrors ===
+
+Tries to fix any sanity check errors if any exist.
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Presumed to be whether or not the fixes were applied successfully
+|}

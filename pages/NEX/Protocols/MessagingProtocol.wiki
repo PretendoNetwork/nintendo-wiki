@@ -1,0 +1,381 @@
+== Overview ==
+
+'''MessagingProtocol''' provides a mailbox-style messaging system. Messages are sent to either a single user or to every participant of a [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]], and are stored on the server until the recipient retrieves them.
+
+This protocol only handles receiving incoming messages from clients, storing them for later use. It does not handle the live delivery of messages. [[NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]] is used to deliver messages from the server to the recipient.
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#DeliverMessage]]
+|-
+| 2 || [[#GetNumberOfMessages]]
+|-
+| 3 || [[#GetMessagesHeaders]]
+|-
+| 4 || [[#RetrieveAllMessagesWithinRange]]
+|-
+| 5 || [[#RetrieveMessages]]
+|-
+| 6 || [[#DeleteMessages]]
+|-
+| 7 || [[#DeleteAllMessages]]
+|-
+| 8 || [[#DeliverMessageMultiTarget]]
+|}
+
+=== DeliverMessage ===
+
+Accepts a message to be stored in a recipients mailbox.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt; || oUserMessage || The incoming message
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt; || oModifiedMessage || The message as it was stored by the server, with the server-populated fields filled in
+|-
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || lstSandboxNodeId || Connection IDs (<code>RVCID</code>) of the recipients the message was delivered to
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || lstParticipants || [[NEX/Types#PID|PIDs]] of the recipients the message was delivered to. Nintendo's servers have been observed sending garbage values here?
+|}
+
+=== GetNumberOfMessages ===
+
+Returns the number of messages waiting for a recipient.
+
+If the caller is not allowed to access the recipient, the server returns <code>0</code> rather than an error.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to check
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || uiNbMessages || Number of messages waiting for the recipient
+|}
+
+=== GetMessagesHeaders ===
+
+Returns only the headers of the messages waiting for a recipient, without their bodies.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to check
+|-
+| [[NEX/Types#ResultRange|ResultRange]] || range || Range of messages to return
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#UserMessage]]&gt; || lstMsgHeaders || Headers of the messages in the requested range
+|}
+
+=== RetrieveAllMessagesWithinRange ===
+
+Returns the complete messages waiting for a recipient, bodies included.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to retrieve from
+|-
+| [[NEX/Types#ResultRange|ResultRange]] || range || Range of messages to return
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt;&gt; || lstMessages || The messages in the requested range
+|}
+
+=== RetrieveMessages ===
+
+Returns specific messages by their IDs.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to retrieve from
+|-
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || lstMsgIDs || IDs of the messages to retrieve
+|-
+| Boolean || bLeaveOnServer || If <code>false</code>, the retrieved messages are deleted from the server once they have been sent to the caller
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt;&gt; || lstMessages || The requested messages
+|}
+
+=== DeleteMessages ===
+
+Deletes specific messages by their IDs.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to delete from
+|-
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || lstMessagesToDelete || IDs of the messages to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== DeleteAllMessages ===
+
+Deletes every message waiting for a recipient.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MessageRecipient]] || recipient || The mailbox to empty
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || uiNbDeletedMessages || Number of messages which were deleted
+|}
+
+=== DeliverMessageMultiTarget ===
+
+Identical to [[#DeliverMessage]], but sends the same message to several recipients at once.
+
+Only [[NEX/Types#PID|PIDs]] can be targeted with this method. There seems to be no way to send to multiple [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gatherings]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || lstTarget || Users to send the message to
+|-
+| [[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt; || oUserMessage || The message being sent
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#CustomDataHolder|CustomDataHolder]]&lt;[[#UserMessage]]&gt; || oModifiedMessage || The message as it was stored by the server, with the server-populated fields filled in
+|-
+| [[NEX/Types#List|List]]&lt;UInt32&gt; || lstSandboxNodeId || Connection IDs (<code>RVCID</code>) of the recipients the message was delivered to
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || lstParticipants || [[NEX/Types#PID|PIDs]] of the recipients the message was delivered to. Nintendo's servers have been observed sending garbage values here?
+|}
+
+== Classes ==
+
+=== MessageRecipient ===
+
+Identifies the mailbox a method operates on. This is either a single user or a [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]], depending on <code>m_uiRecipientType</code>.
+
+<tabs items="Original,NEX 4.0.0+" storagekey="MessageRecipient">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || m_idRecipient || ID of the recipient. Either a [[NEX/Types#PID|PID]] or a [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID, depending on <code>m_uiRecipientType</code>
+		|-
+		| [[#RecipientType]] || m_uiRecipientType || The type of the recipient
+		|}
+	</tab>
+
+	<tab name="NEX 4.0.0+">
+		In NEX 4.0.0 the single recipient ID was split into two dedicated fields, one for each [[#RecipientType]].
+
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| [[#RecipientType]] || m_uiRecipientType || The type of the recipient
+		|-
+		| [[NEX/Types#PID|PID]] || m_principalId || [[NEX/Types#PID|PID]] of the recipient. Only used when <code>m_uiRecipientType</code> is <code>PrincipalID</code>
+		|-
+		| UInt32 || m_gatheringId || [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID of the recipient. Only used when <code>m_uiRecipientType</code> is <code>GatheringID</code>
+		|}
+	</tab>
+</tabs>
+
+=== UserMessage ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+Base class for all other message types. Can be seen used by itself in rare cases, but usually only child classes are used.
+
+Messages can be tied to other messages in a parent-child structure, forming the ability to create replies/comments/etc.
+
+Several fields are populated by the server rather than the sender, and are overwritten with the servers own values if the client sets them.
+
+<tabs items="Original,NEX 4.0.0+" storagekey="UserMessage">
+	<tab name="Original">
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || m_uiID || Unique ID of the message. Set by the server
+		|-
+		| UInt32 || m_idRecipient || ID of the recipient. Either a [[NEX/Types#PID|PID]] or a [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]] ID, depending on <code>m_uiRecipientType</code>
+		|-
+		| [[#RecipientType]] || m_uiRecipientType || The type of the recipient
+		|-
+		| UInt32 || m_uiParentID || Parent message ID
+		|-
+		| [[NEX/Types#PID|PID]] || m_pidSender || [[NEX/Types#PID|PID]] of the sender. Set by the server
+		|-
+		| [[NEX/Types#DateTime|DateTime]] || m_receptiontime || Time the server recieved the message. Set by the server
+		|-
+		| UInt32 || m_uiLifeTime || How long the server should keep the message around for before automatically deleting it?
+		|-
+		| [[#MessageFlag]] || m_uiFlags || How the message should be delivered
+		|-
+		| [[NEX/Types#String|String]] || m_strSubject || Subject of the message. May be at most <code>MAX_STR_SUBJECT_LENGTH</code> characters
+		|-
+		| [[NEX/Types#String|String]] || m_strSender || Username of the sender. Set by the server
+		|}
+	</tab>
+
+	<tab name="NEX 4.0.0+">
+		In NEX 4.0.0 the recipient fields were replaced with a [[#MessageRecipient]], moved to the end of the class.
+
+		{| class="wikitable"
+		! Type !! Name !! Description
+		|-
+		| UInt32 || m_uiID || Unique ID of the message. Set by the server
+		|-
+		| UInt32 || m_uiParentID || Parent message ID
+		|-
+		| [[NEX/Types#PID|PID]] || m_pidSender || [[NEX/Types#PID|PID]] of the sender. Set by the server
+		|-
+		| [[NEX/Types#DateTime|DateTime]] || m_receptiontime || Time the server recieved the message. Set by the server
+		|-
+		| UInt32 || m_uiLifeTime || How long the server should keep the message around for before automatically deleting it?
+		|-
+		| [[#MessageFlag]] || m_uiFlags || How the message should be delivered
+		|-
+		| [[NEX/Types#String|String]] || m_strSubject || Subject of the message. May be at most <code>MAX_STR_SUBJECT_LENGTH</code> characters
+		|-
+		| [[NEX/Types#String|String]] || m_strSender || Username of the sender. Set by the server
+		|-
+		| [[#MessageRecipient]] || m_messageRecipient || The recipient of the message
+		|}
+	</tab>
+</tabs>
+
+=== TextMessage ===
+
+{{ClassInherits|UserMessage}}
+
+A message whose body is a plain string.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || m_strTextBody || Contents of the message. May be at most <code>MAX_STRING_LENGTH</code> characters
+|}
+
+=== BinaryMessage ===
+
+{{ClassInherits|UserMessage}}
+
+A message whose body is arbitrary binary data.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#qBuffer|qBuffer]] || m_binaryBody || Contents of the message. May be at most <code>MAX_BINARY_SIZE</code> bytes
+|}
+
+== Constants ==
+
+{{Noticebox|''The real names of these constants are not known. The names used here follow the naming conventions of the equivalent [[NEX/Protocols/DataStoreProtocol#Constants|DataStoreProtocol]] constants. Only their values are known.''}}
+
+{| class="wikitable"
+! Name !! Type !! Value !! Description
+|-
+| <code>MAX_STR_SUBJECT_LENGTH</code> || UInt32 || 60 || The max length a [[#UserMessage]] subject can be. Longer subjects are truncated by the server rather than rejected
+|-
+| <code>MAX_STRING_LENGTH</code> || UInt32 || 256 || The max length a [[#TextMessage]] body can be
+|-
+| <code>MAX_BINARY_SIZE</code> || UInt32 || 512 || The max size a [[#BinaryMessage]] body can be
+|}
+
+== Enums ==
+
+=== RecipientType ===
+
+Determines what kind of recipient the message is intended for.
+
+<pre>
+enum RecipientType : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>PrincipalID</code> || 1 || A single user. The recipient ID is the users [[NEX/Types#PID|PID]]
+|-
+| <code>GatheringID</code> || 2 || A [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]. The recipient ID is the [[NEX/Protocols/MatchMakingProtocol/Types#Gathering|Gathering]]. The recipient ID is the gathering ID, and the message is available/sent to all participants of the gathering
+|}
+
+== Flags ==
+
+=== MessageFlag ===
+
+Determines how a message is delivered to its recipient.
+
+<pre>
+enum MessageFlag : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| <code>PersistentMessage</code> || 0x00 || The message is stored on the server until the recipient retrieves it
+|-
+| <code>InstantMessage</code> || 0x01 || The message is both stored on the server and immediately delivered to the recipient through [[NEX/Protocols/MessageDeliveryProtocol|MessageDeliveryProtocol]]
+|}

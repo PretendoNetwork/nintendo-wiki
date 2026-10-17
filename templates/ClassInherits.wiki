@@ -1,0 +1,1 @@
+{{Noticebox|title=Notice|This class inherits from [[{{{path|}}}#{{{1}}}|{{{1}}}]]}}

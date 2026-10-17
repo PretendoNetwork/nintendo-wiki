@@ -1,0 +1,75 @@
+== Overview ==
+
+'''NATTraversalReportInternalProtocol''' is one of the [[NEX/Protocols#Internal protocols|internal protocols]], used by the game servers to communicate with each other rather than by any game client. Its protocol ID is not known, though its method IDs are.
+
+All three of its methods share their names with the reporting methods of [[NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], and take nearly identical parameters. This, plus the protocols name, suggests this is an internal counterpart of [[NEX/Protocols/NATTraversalProtocol|NATTraversalProtocol]], letting servers report a users NAT properties to each other, though it is not known how these results would be identified to a specific user?
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#ReportNATTraversalResult]]
+|-
+| 2 || [[#ReportNATProperties]]
+|-
+| 3 || [[#ReportNATTraversalResultDetail]]
+|}
+
+=== ReportNATTraversalResult ===
+
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResult|NATTraversalProtocol#ReportNATTraversalResult]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || Unknown || Likely <code>cid</code>
+|-
+| UInt32 || Unknown || Likely <code>rtt</code>
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ReportNATProperties ===
+
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATProperties|NATTraversalProtocol#ReportNATProperties]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || Unknown || Likely <code>natmapping</code>
+|-
+| UInt32 || Unknown || Likely <code>natfiltering</code>
+|-
+| UInt32 || Unknown || Likely <code>rtt</code>
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== ReportNATTraversalResultDetail ===
+
+Presumed to be the internal counterpart of [[NEX/Protocols/NATTraversalProtocol#ReportNATTraversalResultDetail|NATTraversalProtocol#ReportNATTraversalResultDetail]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || Unknown || Likely <code>cid</code>
+|-
+| SInt32 || Unknown || Likely <code>detail</code>
+|-
+| UInt32 || Unknown || Likely <code>rtt</code>
+|}
+
+==== Response ====
+
+This method does not return anything.

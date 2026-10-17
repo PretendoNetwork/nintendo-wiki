@@ -1,0 +1,6 @@
+{
+    "require": {
+        "gitonomy/gitlib": "^1.5",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

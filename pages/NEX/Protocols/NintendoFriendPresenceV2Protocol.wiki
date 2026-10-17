@@ -1,0 +1,822 @@
+== Overview ==
+
+'''NintendoFriendPresenceV2Protocol''' is the friends service used by the Wii U. It provides a way for users to manage their friends list, friend requests and blacklist, as well as to share their presence, Mii, status message and preferences with their friends. It is the Wii U counterpart of [[NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]], which is used by the 3DS, and is used in place of the stock [[NEX/Protocols/FriendsProtocol|FriendsProtocol]].
+
+The server notifies clients about changes made by other users through [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]].
+
+{{Noticebox|''The real names of most fields in this protocol are not known. The names which are listed do not come from [[NEX/DDL|DDL information]]. They come from leftover debugging strings in the Wii U's friends system module (<code>FPD</code>), where they name the parameters of the <code>nn::fp</code> functions whose values are sent in these methods. The names used by the protocol itself may differ.''}}
+
+== Provisional Friends ==
+
+Like the 3DS, the Wii U supports provisional friends. Instead of sending a friend request with [[#AddFriendRequest]], a user can add another user directly with [[#AddFriend]] (by [[NEX/Types#PID|PID]]) or [[#AddFriendByName]] (by NNID). These methods do not send a message, an in-game name or a played-together title.
+
+If the other user has already added the caller, the users become friends immediately. Otherwise the caller gets a provisional friend entry, which is an outgoing [[#FriendRequest]] whose [[#FriendRequestMessage]] has a <code>messageId</code> of <code>0</code>, until the other user also attempts to add the caller, at which point they will become friends. Provisional friends, despite being outgoing friend requests for the caller, do not show as incoming friend requests for the other user.
+
+All three methods return both a [[#FriendRequest]] and a [[#FriendInfo]], and the client uses the [[NEX/Types#PID|PID]] in them to tell whether or not the new friend is provisional. If the [[#FriendRequest]] has a non-zero [[NEX/Types#PID|PID]], it is stored as a provisional friend as an outgoing friend request. Otherwise, if the [[#FriendInfo]] has a non-zero [[NEX/Types#PID|PID]], it is stored as a new friend.
+
+A provisional friend is a mix of a friendship and a friend request. It is returned with the callers outgoing friend requests in [[#UpdateAndGetAllInformation]], but it is removed with [[#RemoveFriend]] rather than [[#CancelFriendRequest]]. When [[#RemoveFriend]] succeeds, the client removes the friend with that [[NEX/Types#PID|PID]], or the outgoing entry with that [[NEX/Types#PID|PID]] if there is no such friend.
+
+The client treats provisional friend entries differently from outgoing friend requests:
+
+* They are not reported as friend requests. <code>nn::fp::GetFriendRelationship</code> returns <code>1</code> for provisional friends, <code>2</code> for outgoing friend requests and <code>3</code> for friends
+* The expiry time in the [[#FriendRequestMessage]] is ignored, and the time in the [[#FriendRequest]] is used instead
+
+The Wii U Friend List uses [[#AddFriendByName]] instead of [[#AddFriendRequest]] when:
+
+* The caller is under 13 years old
+* The other user blocks friend requests (see [[#GetRequestBlockSettings]])
+* The NNID could not be resolved to a [[NEX/Types#PID|PID]]
+
+The Wii U Friend List never uses [[#AddFriend]].
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#UpdateAndGetAllInformation]]
+|-
+| 2 || [[#AddFriend]]
+|-
+| 3 || [[#AddFriendByName]]
+|-
+| 4 || [[#RemoveFriend]]
+|-
+| 5 || [[#AddFriendRequest]]
+|-
+| 6 || [[#CancelFriendRequest]]
+|-
+| 7 || [[#AcceptFriendRequest]]
+|-
+| 8 || [[#DeleteFriendRequest]]
+|-
+| 9 || [[#DenyFriendRequest]]
+|-
+| 10 || [[#MarkFriendRequestsAsReceived]]
+|-
+| 11 || [[#AddBlackList]]
+|-
+| 12 || [[#RemoveBlackList]]
+|-
+| 13 || [[#UpdatePresence]]
+|-
+| 14 || [[#UpdateMii]]
+|-
+| 15 || [[#UpdateComment]]
+|-
+| 16 || [[#UpdatePreference]]
+|-
+| 17 || [[#GetBasicInfo]]
+|-
+| 18 || [[#DeletePersistentNotification]]
+|-
+| 19 || [[#CheckSettingStatus]]
+|-
+| 20 || [[#GetRequestBlockSettings]]
+|}
+
+=== UpdateAndGetAllInformation ===
+
+Updates the callers account information and presence, and returns everything related to the callers friends list. This includes the callers own preferences and status message, their friends, their outgoing and incoming friend requests, their blacklist and their notifications.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || The callers network account information
+|-
+| [[#NintendoPresenceV2]] || Unknown || The callers presence
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The callers birthday
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalPreference]] || <code>pPreference</code> || The callers preferences
+|-
+| [[#Comment]] || <code>pComment</code> || The callers status message
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendInfo]]&gt; || Unknown || The callers friends
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || The callers outgoing friend requests (sent by the caller)
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendRequest]]&gt; || Unknown || The callers incoming friend requests (sent to the caller)
+|-
+| [[NEX/Types#List|List]]&lt;[[#BlacklistedPrincipal]]&gt; || Unknown || The callers blacklist
+|-
+| Boolean || <code>isRequestBlockForced</code> || Whether or not friend requests are force-blocked for the caller. When <code>true</code>, <code>IsFriendRequestAllowed</code> returns <code>false</code>. Cleared by a type <code>34</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification event]]
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The callers notifications
+|-
+| Boolean || <code>pIsPreferenceValid</code> || Whether or not the caller has set their initial preferences with [[#UpdatePreference]]. Despite the field name, when <code>true</code> the client treats the preferences as invalid, and the Friend List asks the user to set them
+|}
+
+=== AddFriend ===
+
+Adds a user as a provisional friend by their [[NEX/Types#PID|PID]]. See [[#Provisional Friends]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || principalId || [[NEX/Types#PID|PID]] of the user to add
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting provisional friend entry. Has a [[NEX/Types#PID|PID]] of <code>0</code> if the users became friends
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
+|}
+
+=== AddFriendByName ===
+
+Adds a user as a provisional friend by their NNID. See [[#Provisional Friends]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || pAccountId || NNID of the user to add. The client only allows this to be up to 16 characters long
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting provisional friend entry. Has a [[NEX/Types#PID|PID]] of <code>0</code> if the users became friends
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
+|}
+
+=== RemoveFriend ===
+
+Removes a user from the callers friends list by their [[NEX/Types#PID|PID]]. Also used to remove provisional friends. See [[#Provisional Friends]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || principalId || [[NEX/Types#PID|PID]] of the user to remove
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AddFriendRequest ===
+
+Sends a friend request to a user by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || principalId || Target user to send the friend request to
+|-
+| UInt8 || messageLanguage || The <code>cafe.language</code> value used for <code>pMessage</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pMessage || Message to send in the friend request. May be empty. May be at most 63 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| UInt8 || inGameNameLanguage ||  The <code>cafe.language</code> value used for <code>pInGameName</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pInGameName || An in-game name associated with the friend request. This value is supplied by the game sending the friend request, and may technically be anything. For example, Xenoblade Chronicles X sets this to the senders in-game name, not their NNID. May be empty. May be at most 16 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| [[#GameKey]] || Unknown || The title the sender was playing when the users played together. If the users did not play together, this is either the title the sender is currently playing or zeroed out
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the users played together. If the users did not play together, this is either the time the friend request was sent or <code>2000-01-01 00:00:00</code>
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendRequest]] || Unknown || The resulting friend request. Zeroed out if the users became friends
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information. Zeroed out if the users did not become friends
+|}
+
+=== CancelFriendRequest ===
+
+Cancels a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || messageId || ID of the friend request to cancel
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AcceptFriendRequest ===
+
+Accepts a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || messageId || ID of the friend request to accept
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#FriendInfo]] || Unknown || The resulting friend information
+|}
+
+=== DeleteFriendRequest ===
+
+Deletes a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || messageId || ID of the friend request to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== DenyFriendRequest ===
+
+Denies a friend request by its ID.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || messageId || ID of the friend request to deny
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The resulting blacklist entry
+|}
+
+=== MarkFriendRequestsAsReceived ===
+
+Marks a list of incoming friend requests as seen by their IDs. This acts as a read receipt, and is used by the client to tell new incoming friend requests apart from ones the user has already seen.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || pList || IDs of the incoming friend requests to mark as seen
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== AddBlackList ===
+
+Adds a user to the callers blacklist.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The user to add to the blacklist
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#BlacklistedPrincipal]] || Unknown || The resulting blacklist entry
+|}
+
+=== RemoveBlackList ===
+
+Removes a user from the callers blacklist by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || principalId || [[NEX/Types#PID|PID]] of the user to remove
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== UpdatePresence ===
+
+Updates the callers presence.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NintendoPresenceV2]] || Unknown || The callers new presence
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== UpdateMii ===
+
+Updates the callers Mii.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#MiiV2]] || Unknown || The callers new Mii
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the Mii was updated
+|}
+
+=== UpdateComment ===
+
+Updates the callers status message.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#Comment]] || Unknown || The callers new status message
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was updated. The client only stores the new status message if this is later than the [[NEX/Types#DateTime|DateTime]] of the callers current [[#Comment]]
+|}
+
+=== UpdatePreference ===
+
+Updates the callers preferences.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalPreference]] || pPreference || The callers new preferences
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== GetBasicInfo ===
+
+Returns the basic information of a list of users by their [[NEX/Types#PID|PIDs]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || pPidList || [[NEX/Types#PID|PIDs]] of the users to get the basic information of
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PrincipalBasicInfo]]&gt; || pInfoList || Basic information of the requested users. The client matches each entry to a requested [[NEX/Types#PID|PID]] by its [[NEX/Types#PID|PID]], so entries may be in any order. If a requested user has no entry, the client uses an entry with a [[NEX/Types#PID|PID]] of <code>0</code>
+|}
+
+=== DeletePersistentNotification ===
+
+Deletes a list of persistent notifications. The client uses this to clear the new friend flag of users. See [[#PersistentNotification]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The notifications to delete
+|}
+
+==== Response ====
+
+This method does not return anything.
+
+=== CheckSettingStatus ===
+
+Checks whether or not the caller needs to setup their initial preferences. If <code>true</code>, then that means the caller has never configured their initial preferences with [[#UpdatePreference]].
+
+==== Request ====
+
+This method does not take any parameters.
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || pStatus || Whether or not the caller needs to setup their initial preferences
+|}
+
+=== GetRequestBlockSettings ===
+
+Checks whether or not someone has friend requests blocked. If a client wants to send a friend request to a user who is blocking friend requests, a [[#Provisional Friends|provisional friendship]] is created.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || pPidList || List of users to check the settings of
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PrincipalRequestBlockSetting]]&gt; || pSettingList || The friend request block settings of the requested users. If a requested user has no entry, the client treats them as not blocking friend requests
+|}
+
+== Classes ==
+
+=== BlacklistedPrincipal ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds an entry of a users blacklist.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the blacklisted user. When sent by the client in [[#AddBlackList]], only the [[NEX/Types#PID|PID]] is set
+|-
+| [[#GameKey]] || Unknown || Title associated with the blacklist entry. When sent by the client in [[#AddBlackList]], this is either supplied by the title, or is the title the caller is currently playing. Zeroed out in the response of [[#DenyFriendRequest]]
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown. Likely <code>additionalTime</code> || Time the user was blacklisted. Always <code>0</code> when sent by the client in [[#AddBlackList]]
+|}
+
+=== Comment ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a users status message.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt8 || Unknown || The <code>cafe.language</code> value used for <code>pComment</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pComment || The status message. May be empty. May be at most 16 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the status message was last changed. Always <code>0</code> when sent by the client to the server
+|}
+
+=== FriendInfo ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the information of a friend.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || Network account information of the friend
+|-
+| [[#NintendoPresenceV2]] || Unknown || Presence of the friend
+|-
+| [[#Comment]] || Unknown || Status message of the friend
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown. Likely <code>approvalTime</code> || Time the users became friends
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend was last online
+|-
+| UInt64 || Unknown || Unknown. Doesn't seem to be read by the client, and is always 0 from the server?
+|}
+
+=== FriendRequest ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the information of a friend request.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the user
+|-
+| [[#FriendRequestMessage]] || Unknown || Message of the friend request
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request was sent. In the response of [[#AddFriendRequest]] and in notifications of new incoming friend requests, this is the time the friend request expires instead
+|}
+
+=== FriendRequestMessage ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the message of a [[#FriendRequest]], along with additional details about the friend request itself.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || messageId || ID of the friend request. <code>0</code> for provisional friends, see [[#Provisional Friends]]
+|-
+| Boolean || Unknown || Whether or not the recipient has marked the friend request as seen with [[#MarkFriendRequestsAsReceived]]
+|-
+| UInt8 || messageLanguage || The <code>cafe.language</code> value used for <code>pMessage</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pMessage || The message. May be empty. May be at most 63 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| UInt8 || inGameNameLanguage || The <code>cafe.language</code> value used for <code>pInGameName</code>. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pInGameName || The in-game name sent in [[#AddFriendRequest]]. May be empty. May be at most 16 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| [[#GameKey]] || Unknown || The title the users played together, as sent in [[#AddFriendRequest]]
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the users played together, as sent in [[#AddFriendRequest]]
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the friend request expires. This is 30 days after the friend request was sent
+|}
+
+=== GameKey ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class identifies a specific version of a title.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown. Likely <code>m_gameCode</code> || Title ID. Zero if no game
+|-
+| UInt16 || Unknown. Likely <code>m_gameVersion</code> || Title version
+|}
+
+=== MiiV2 ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a users Mii.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || pScreenName || Name of the Mii. May be empty. May be at most 10 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| Boolean || Unknown || If true the name of the Mii is replaced with <code>???</code>. Likely a profanity filter
+|-
+| UInt8 || Unknown || The font used for the name of the Mii. <code>0</code> on JPN, USA and EUR consoles, <code>1</code> on CHN consoles, <code>2</code> on KOR consoles, <code>3</code> on TWN consoles
+|-
+| [[NEX/Types#Buffer|Buffer]] || pMiiData || Mii data (<code>FFLStoreData</code>)
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || When <code>pMiiData</code> was updated. Always <code>0</code> when sent by the client to the server
+|}
+
+=== NintendoCreateAccountData ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the data used to create a users friends account. This class is not used by this protocol, and is instead used by [[NEX/Protocols/AccountManagementProtocol|AccountManagementProtocol]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#NNAInfo]] || Unknown || Network account information of the user. In some cases only the [[NEX/Types#PID|PID]] is set
+|-
+| [[NEX/Types#String|String]] || Unknown || The users NEX token from the account server
+|-
+| [[NEX/Types#DateTime|DateTime]] || Unknown || The users birthday. <code>0</code> in the same cases where only the [[NEX/Types#PID|PID]] is set in the [[#NNAInfo]]
+|-
+| UInt64 || Unknown || Always <code>0</code> when sent by the client
+|}
+
+=== NintendoPresenceV2 ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a users presence.
+
+This is an updated version of [[NEX/Protocols/NintendoFriendPresenceProtocol#NintendoPresence|NintendoPresence]].
+
+The names of the fields come from a mix of the original [[NEX/Protocols/NintendoFriendPresenceProtocol#NintendoPresence|NintendoPresence]] field names and debug strings for the IPC functions.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#ChangedFlags]] || Unknown. Likely <code>m_changedBitFlag</code> || Which fields changed their value recently
+|-
+| Boolean || Unknown || Whether or not the user is online
+|-
+| [[#GameKey]] || pGameKey, could also be <code>m_gameKey</code> || The title the user is playing
+|-
+| UInt8 || Unknown || Set to the <code>cafe.language</code> value of the users console at login. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| [[NEX/Types#String|String]] || pDescription, could also be <code>m_gameModeDescription</code> || Game mode description. This value is supplied by the title, and may technically be anything. May be empty. May be at most 127 codepoints long (codepoints outside the Basic Multilingual Plane count as 2)
+|-
+| UInt32 || Unknown. Likely <code>m_joinAvailabilityFlag</code> || Whether or not the user can be joined. <code>0</code> if the user cannot be joined, <code>1</code> or <code>2</code> if the user can be joined, <code>0x65</code> or <code>0x66</code> if only invited users can join. This value is supplied by the title
+|-
+| UInt8 || Unknown. Likely <code>m_matchmakeSystemType</code> || [[NEX/Protocols/MatchMakingProtocol#MatchmakeSystemType|MatchmakeSystemType]]. Must not be <code>MATCHMAKE_SYSTEM_TYPE_INVALID</code> for the user to be joinable. If <code>2</code>, only friends of the user in the [[NEX/Types#PID|PID]] field can join. This value is supplied by the title
+|-
+| UInt32 || joinGameId, could also be <code>m_joinGameID</code> || Game server ID
+|-
+| UInt32 || Unknown. Likely <code>m_joinGameMode</code> || Must be less than <code>64</code> for the user to be joinable. This value is supplied by the title
+|-
+| [[NEX/Types#PID|PID]] || Unknown. Likely <code>m_ownerPrincipalID</code> || [[NEX/Types#PID|PID]] of a user. This value is supplied by the title. If only invited users can join, this is the number of invited users instead
+|-
+| UInt32 || Unknown. Likely <code>m_joinGroupID</code> || Gathering ID. Must not be <code>0</code> for the user to be joinable
+|-
+| [[NEX/Types#Buffer|Buffer]] || Unknown. Likely <code>m_applicationArg</code> || Application data. This value is supplied by the title, and may technically be anything. Always 20 bytes. If only invited users can join, this is a list of up to 5 UInt32 [[NEX/Types#PID|PIDs]] of the invited users instead
+|-
+| UInt8 || Unknown || The region of the users console. <code>1</code> for JPN, <code>2</code> for USA, <code>3</code> for EUR, <code>5</code> for CHN, <code>6</code> for KOR, <code>7</code> for TWN
+|-
+| UInt8 || Unknown || The <code>cafe.language</code> value of the users console. See [[Nintendo_Network/IDBE#Languages|IDBE#Languages]]
+|-
+| UInt8 || Unknown || Always <code>3</code>?
+|}
+
+=== NNAInfo ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the information of a users network account.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the user
+|-
+| UInt8 || Unknown || Country ID of the user. This is the first byte of the users [[Nintendo_Network/Region_IDs|Region ID]]
+|-
+| UInt8 || Unknown || Area of the user within their country. This is the second byte of the users [[Nintendo_Network/Region_IDs|Region ID]]
+|}
+
+=== PersistentNotification ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+Certain events/actions will trigger the server to send a notification to the client, alerting them of the event. See [[NEX/Protocols/NintendoNotificationEventProtocol|NintendoNotificationEventProtocol]] for a list of events and their details.
+
+In order to still alert the user of these events while the user is offline, the server will sometimes store a record of the event and send its data to the user the next time they logon using [[#UpdateAndGetAllInformation]], and are not deleted until the client calls [[#DeletePersistentNotification]]. This class holds the notification paramaters for those notifications.
+
+The Wii U supports notification types with IDs between 10-36, inclusive, but [[#UpdateAndGetAllInformation]] seems to only have a handler for notification type <code>30</code>, which tells the client about any new friends that were added while they were offline.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt64 || Unknown || Notification UInt64 paramater. Not read by the client. Always <code>0</code> when sent by the client to the server
+|-
+| UInt32 || Unknown || Notification UInt32 paramater 1. For type <code>30</code>, this is the [[NEX/Types#PID|PID]] of the new friend
+|-
+| UInt32 || Unknown || Notification UInt32 paramater 2. Not read by the client. For type <code>30</code>, this is the [[NEX/Types#PID|PID]] of the caller
+|-
+| UInt32 || Unknown || Type of the notification. See [[NEX/Protocols/NintendoNotificationEventProtocol#Notification_Types|Notification Types]]
+|-
+| [[NEX/Types#String|String]] || Unknown || Notification string paramater. Not read by the client. Empty for type <code>30</code>
+|}
+
+=== PersistentNotificationList ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a list of [[#PersistentNotification|PersistentNotifications]]. Only used as the data of type <code>36</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#PersistentNotification]]&gt; || Unknown || The notifications
+|}
+
+=== PrincipalBasicInfo ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the basic information of a user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user
+|-
+| [[NEX/Types#String|String]] || Unknown || NNID of the user. May be at most 16 codepoints long
+|-
+| [[#MiiV2]] || Unknown || Mii of the user
+|-
+| UInt8 || Unknown || Always <code>2</code>, or <code>0</code> when sent by the client in [[#AddBlackList]]
+|}
+
+=== PrincipalPreference ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a users preferences.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || Unknown || Whether or not to show the users online presence to their friends, including when they were last online. When <code>false</code>, the client does not send [[#UpdatePresence]]
+|-
+| Boolean || Unknown || Whether or not to show the title the user is currently playing to their friends. Only shown while the user is online
+|-
+| Boolean || Unknown || Whether or not to block friend requests. Users who block friend requests can only be added as provisional friends, see [[#Provisional Friends]]. Changed by type <code>34</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]]
+|}
+
+=== PrincipalRequestBlockSetting ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds the friend request block setting of a user.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user. The client matches each entry to a requested [[NEX/Types#PID|PID]] by this field, so entries may be in any order
+|-
+| Boolean || Unknown || Whether or not the user blocks friend requests
+|}
+
+=== ReceivedMessage ===
+
+{{ClassInherits|path=NEX/Types|Data}}
+
+This class holds a list of incoming friend request IDs. Only used as the data of type <code>35</code> [[NEX/Protocols/NintendoNotificationEventProtocol#Notification Types|notification events]].
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;UInt64&gt; || Unknown || IDs of the incoming friend requests which have been marked as received. See [[#MarkFriendRequestsAsReceived]]
+|}
+
+== Flags ==
+
+=== ChangedFlags ===
+
+{{Noticebox|''The real name of this type is not known, and neither are the names of its flags. Only their values are known.''}}
+
+Specifies which fields of a [[#NintendoPresenceV2]] changed their value recently.
+
+<pre>
+enum ChangedFlags : uint32_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Name !! Value !! Description
+|-
+| Unknown || 0x001 || <code>pGameKey</code> changed
+|-
+| Unknown || 0x002 || <code>pDescription</code> changed
+|-
+| Unknown || 0x004 || <code>m_joinAvailabilityFlag</code> changed
+|-
+| Unknown || 0x008 || <code>m_matchmakeSystemType</code> changed
+|-
+| Unknown || 0x010 || <code>joinGameId</code> changed
+|-
+| Unknown || 0x020 || <code>m_joinGameMode</code> changed
+|-
+| Unknown || 0x040 || The [[NEX/Types#PID|PID]] changed
+|-
+| Unknown || 0x080 || The gathering ID changed
+|-
+| Unknown || 0x100 || The application data changed
+|}

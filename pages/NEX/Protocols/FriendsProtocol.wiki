@@ -1,0 +1,397 @@
+== Overview ==
+
+'''FriendsProtocol''' is the stock Rendez-Vous friends system. It provides a way for players to add each other as friends, block each other, and manage the resulting relationships.
+
+Even though this protocol is implemented on Nintendo's game servers, it is never actually used. Instead Nintendo implemented their own friends services, [[NEX/Protocols/NintendoFriendPresenceProtocol|NintendoFriendPresenceProtocol]] (3DS) and [[NEX/Protocols/NintendoFriendPresenceV2Protocol|NintendoFriendPresenceV2Protocol]] (Wii U).
+
+== Methods ==
+
+{| class="wikitable"
+! Method ID !! Name
+|-
+| 1 || [[#AddFriend]]
+|-
+| 2 || [[#AddFriendByName]]
+|-
+| 3 || [[#AddFriendWithDetails]]
+|-
+| 4 || [[#AddFriendByNameWithDetails]]
+|-
+| 5 || [[#AcceptFriendship]]
+|-
+| 6 || [[#DeclineFriendship]]
+|-
+| 7 || [[#BlackList]]
+|-
+| 8 || [[#BlackListByName]]
+|-
+| 9 || [[#ClearRelationship]]
+|-
+| 10 || [[#UpdateDetails]]
+|-
+| 11 || [[#GetList]]
+|-
+| 12 || [[#GetDetailedList]]
+|-
+| 13 || [[#GetRelationships]]
+|}
+
+=== AddFriend ===
+
+Sends a friend request to a player by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to add
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|-
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the friend request was created
+|}
+
+=== AddFriendByName ===
+
+Sends a friend request to a player by their game server account username.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|-
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the friend request was created
+|}
+
+=== AddFriendWithDetails ===
+
+Identical to [[#AddFriend]], but returns the resulting relationship rather than only a flag.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to add
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|-
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#RelationshipData]] || relationshipData || The relationship which was created
+|}
+
+=== AddFriendByNameWithDetails ===
+
+Identical to [[#AddFriendByName]], but returns the resulting relationship rather than only a flag.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to add
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|-
+| [[NEX/Types#String|String]] || strMessage || Message sent along with the friend request
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#RelationshipData]] || relationshipData || The relationship which was created
+|}
+
+=== AcceptFriendship ===
+
+Accepts a pending friend request from a player.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose request is being accepted
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the request was accepted
+|}
+
+=== DeclineFriendship ===
+
+Declines a pending friend request from a player.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose request is being declined
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the request was declined
+|}
+
+=== BlackList ===
+
+Blocks a player by their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to block
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the player was blocked
+|}
+
+=== BlackListByName ===
+
+Blocks a player by their game server account username.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#String|String]] || strPlayerName || Game server account username of the player to block
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the player was blocked
+|}
+
+=== ClearRelationship ===
+
+Removes any relationship the caller has with a player. Used to both remove friends and unblock blocked players.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player to clear the relationship with
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the relationship was cleared
+|}
+
+=== UpdateDetails ===
+
+Updates the details stored on an existing relationship.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || uiPlayer || [[NEX/Types#PID|PID]] of the player whose relationship is being updated
+|-
+| [[#RelationshipDetails]] || uiDetails || Unknown
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| Boolean || %retval% || Whether or not the details were updated
+|}
+
+=== GetList ===
+
+Returns the [[NEX/Types#PID|PIDs]] of every player the caller has a given relationship with.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#RelationshipType]] || byRelationship || The type of relationship to filter by
+|-
+| Boolean || bReversed || If <code>true</code>, flip the direction of the relationship check. For example, this changes the meaning of the <code>Pending</code> to filter between outgoing/incoming friend requests.
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[NEX/Types#PID|PID]]&gt; || lstFriendsList || [[NEX/Types#PID|PIDs]] of the matching players
+|}
+
+=== GetDetailedList ===
+
+Identical to [[#GetList]], but returns the full details of each player rather than only their [[NEX/Types#PID|PID]].
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[#RelationshipType]] || byRelationship || The type of relationship to filter by
+|-
+| Boolean || bReversed || If <code>true</code>, flip the direction of the relationship check. For example, this changes the meaning of the <code>Pending</code> to filter between outgoing/incoming friend requests.
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#List|List]]&lt;[[#FriendData]]&gt; || lstFriendsList || Details of the matching players
+|}
+
+=== GetRelationships ===
+
+Returns a list of relationships the player has, regardless of type.
+
+==== Request ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#ResultRange|ResultRange]] || resultRange || Range of relationships to return
+|}
+
+==== Response ====
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| UInt32 || uiTotalCount || Total number of relationships the caller has
+|-
+| [[NEX/Types#List|List]]&lt;[[#RelationshipData]]&gt; || lstRelationshipsList || The relationships within the requested range
+|}
+
+== Classes ==
+
+=== FriendData ===
+
+Details about a player the caller has a relationship with.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || m_pid || [[NEX/Types#PID|PID]] of the player
+|-
+| [[NEX/Types#String|String]] || m_strName || Game server account username of the player
+|-
+| [[#RelationshipType]] || m_byRelationship || The relationship between the player and the caller
+|-
+| [[#RelationshipDetails]] || m_uiDetails || Unknown
+|-
+| [[NEX/Types#String|String]] || m_strStatus || Unknown. The players status message? There doesn't seem to be any method to update this this, however. [https://github.com/michal-kapala/acb-rdv/blob/227ca6ac2b1da42c8e9857312f92d2ea5ac0cda5/QuazalWV/RMC/Services/FriendsService/Response/RMCPacketResponseFriendsService_GetDetailedList.cs#L36 <code>acb-rdv</code> always sets this to "Online"]
+|}
+
+=== RelationshipData ===
+
+Details about a single relationship.
+
+{| class="wikitable"
+! Type !! Name !! Description
+|-
+| [[NEX/Types#PID|PID]] || m_pid || [[NEX/Types#PID|PID]] of the other player in the relationship
+|-
+| [[NEX/Types#String|String]] || m_strName || Game server account username of the other player
+|-
+| [[#RelationshipType]] || m_byRelationship || The type of the relationship
+|-
+| [[#RelationshipDetails]] || m_uiDetails || Unknown
+|-
+| UInt8 || m_byStatus || 1 = online, 0 = offline
+|}
+
+== Enums ==
+
+=== RelationshipType ===
+
+Determines the kind of relationship between two players.
+
+<pre>
+enum RelationshipType : uint8_t {
+  ...
+};
+</pre>
+
+{| class="wikitable"
+! Value !! Name !! Description
+|-
+| 1 || <code>Friend</code> || The players are friends
+|-
+| 2 || <code>Pending</code> || A friend request has been sent, but has not yet been accepted or declined
+|-
+| 3 || <code>Blocked</code> || One of the players has blocked the other
+|}
+
+== Flags ==
+
+=== RelationshipDetails ===
+
+<pre>
+enum RelationshipDetails : uint32_t {
+  ...
+};
+</pre>
+
+Every relationship carries a set of "details", set when the relationship is created and changed afterwards with [[#UpdateDetails]]. The values of these details are not currently known. Game-specific? Assumed flags, maybe enum.
