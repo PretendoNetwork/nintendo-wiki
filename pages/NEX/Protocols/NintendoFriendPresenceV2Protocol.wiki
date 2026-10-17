@@ -488,11 +488,11 @@ This class holds an entry of a users blacklist.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[#PrincipalBasicInfo]] || Unknown || Basic information of the blacklisted user
+| [[#PrincipalBasicInfo]] || Unknown || Basic information of the blacklisted user. When sent by the client in [[#AddBlackList]], only the [[NEX/Types#PID|PID]] is set
 |-
-| [[#GameKey]] || Unknown || Game key of the blacklist entry
+| [[#GameKey]] || Unknown || Title associated with the blacklist entry. When sent by the client in [[#AddBlackList]], this is either supplied by the title, or is the title the caller is currently playing. Zeroed out in the response of [[#DenyFriendRequest]]
 |-
-| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the user was blacklisted
+| [[NEX/Types#DateTime|DateTime]] || Unknown || Time the user was blacklisted. Always <code>0</code> when sent by the client in [[#AddBlackList]]
 |}
 
 === Comment ===
@@ -740,7 +740,7 @@ This class holds the basic information of a user.
 |-
 | [[#MiiV2]] || Unknown || Mii of the user
 |-
-| UInt8 || Unknown || Always <code>2</code>, or <code>0</code> when used in the blacklist
+| UInt8 || Unknown || Always <code>2</code>, or <code>0</code> when sent by the client in [[#AddBlackList]]
 |}
 
 === PrincipalPreference ===
