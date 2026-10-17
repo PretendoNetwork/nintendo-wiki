@@ -254,7 +254,7 @@ Deletes a friend request by its ID.
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| UInt64 || Unknown || ID of the friend request to delete
+| UInt64 || messageId || ID of the friend request to delete
 |}
 
 ==== Response ====
