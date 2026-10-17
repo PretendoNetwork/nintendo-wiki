@@ -168,7 +168,7 @@ Removes a user from the callers friends list by their [[NEX/Types#PID|PID]]. Als
 {| class="wikitable"
 ! Type !! Name !! Description
 |-
-| [[NEX/Types#PID|PID]] || Unknown || [[NEX/Types#PID|PID]] of the user to remove
+| [[NEX/Types#PID|PID]] || principalId || [[NEX/Types#PID|PID]] of the user to remove
 |}
 
 ==== Response ====
